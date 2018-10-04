@@ -1,4 +1,8 @@
-## Alexa APIs for NodeJS
+<p align="center">
+  <img src="https://m.media-amazon.com/images/G/01/mobile-apps/dex/avs/docs/ux/branding/mark1._TTH_.png">
+  <br/>
+  <h1 align="center">Alexa APIs for NodeJS</h1>
+</p>
 
 The Alexa APIs for NodeJS consists of JS and Typescript definitions that represent the request and response JSON of Alexa services. These models act as core dependency for the [Alexa Skills Kit NodeJS SDK](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs ).
 
