@@ -1,0 +1,35 @@
+{
+  "name": "ask-sdk-model",
+  "version": "1.7.0",
+  "description": "Model package for Alexa Skills Kit SDK",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "gulp": "./node_modules/.bin/gulp"
+  },
+  "author": "Amazon.com",
+  "contributors": [
+    {
+      "name": "Tianren Zhang",
+      "email": "tianrenz@amazon.com"
+    },
+    {
+      "name": "Tiantian Xie",
+      "email": "xtiantia@amazon.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "Alexa",
+    "Skill",
+    "SDK"
+  ],
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "typescript": "^2.8.1"
+  },
+  "repository": "github:alexa/alexa-apis-for-nodejs",
+  "bugs": "https://github.com/alexa/alexa-skill-sdk-for-nodejs/issues",
+  "homepage": "https://github.com/alexa/alexa-skill-sdk-for-nodejs#readme"
+}

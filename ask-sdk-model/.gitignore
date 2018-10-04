@@ -1,0 +1,4 @@
+node_modules
+index.*
+!index.ts
+package-lock.json
