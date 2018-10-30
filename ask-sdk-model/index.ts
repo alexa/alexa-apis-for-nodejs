@@ -238,6 +238,7 @@ export interface Context {
     'System': interfaces.system.SystemState;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerState;
     'Display'?: interfaces.display.DisplayState;
+    'Viewport'?: interfaces.viewport.ViewportState;
 }
 
 /**
@@ -259,7 +260,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.connections.SendRequestDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -296,7 +297,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | LaunchRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.listManagement.ListItemsDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | LaunchRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.listManagement.ListItemsDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -395,6 +396,7 @@ export type SlotConfirmationStatus = 'NONE' | 'DENIED' | 'CONFIRMED';
  * @interface
  */
 export interface SupportedInterfaces {
+    'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.AlexaPresentationAplInterface;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerInterface;
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
@@ -437,6 +439,58 @@ export namespace events.skillevents {
      */
     export interface PermissionBody {
         'acceptedPermissions'?: Array<events.skillevents.Permission>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaPresentationAplInterface {
+        'runtime'?: interfaces.alexa.presentation.apl.Runtime;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The alignment of the item after scrolling. Defaults to visible.
+     * @enum
+     */
+    export type Align = 'CENTER' | 'FIRST' | 'LAST' | 'VISIBLE';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+   /**
+    * A message that can change the visual or audio presentation of the content on the screen.
+    * @interface
+    */
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand;
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * How highlighting is applied: on a line-by-line basis, or to the entire block. Defaults to block.
+     * @enum
+     */
+    export type HighlightMode = 'BLOCK' | 'LINE';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Whether the value is a relative or absolute offset. Defaults to absolute.
+     * @enum
+     */
+    export type Position = 'ABSOLUTE' | 'RELATIVE';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Contains the runtime information for the interface.
+     * @interface
+     */
+    export interface Runtime {
+        'maxVersion'?: string;
     }
 }
 
@@ -995,7 +1049,7 @@ export namespace interfaces.monetization.v1 {
 
 export namespace interfaces.monetization.v1 {
     /**
-     * Response from purchase directives:   * ACCEPTED - User have accepted the offer to purchase the product   * DECLINED - User have declined the offer to purchase the product   * NOT_ENTITLED - User tries to cancel/return a product he/she is  not entitled to.    * ALREADY_PURCHASED - User has already purchased the product   * ERROR - An internal error occurred 
+     * Response from purchase directives:   * ACCEPTED - User have accepted the offer to purchase the product   * DECLINED - User have declined the offer to purchase the product   * NOT_ENTITLED - User tries to cancel/return a product he/she is  not entitled to.   * ALREADY_PURCHASED - User has already purchased the product   * ERROR - An internal error occurred 
      * @enum
      */
     export type PurchaseResult = 'ACCEPTED' | 'DECLINED' | 'NOT_ENTITLED' | 'ERROR' | 'ALREADY_PURCHASED';
@@ -1072,6 +1126,61 @@ export namespace interfaces.videoapp {
     export interface VideoItem {
         'source': string;
         'metadata'?: interfaces.videoapp.Metadata;
+    }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * An experience represents a viewing mode used to interact with the device.
+     * @interface
+     */
+    export interface Experience {
+        'arcMinuteWidth'?: number;
+        'arcMinuteHeight'?: number;
+        'canRotate'?: boolean;
+        'canResize'?: boolean;
+    }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * Represents a physical button input mechanism which can be used to interact with elements shown on the viewport.
+     * @enum
+     */
+    export type Keyboard = 'DIRECTION';
+}
+
+export namespace interfaces.viewport {
+    /**
+     * The shape of the viewport.
+     * @enum
+     */
+    export type Shape = 'RECTANGLE' | 'ROUND';
+}
+
+export namespace interfaces.viewport {
+    /**
+     * Represents a type of touch input suppported by the device.
+     * @enum
+     */
+    export type Touch = 'SINGLE';
+}
+
+export namespace interfaces.viewport {
+    /**
+     * This object contains the characteristics related to the device's viewport.
+     * @interface
+     */
+    export interface ViewportState {
+        'experiences'?: Array<interfaces.viewport.Experience>;
+        'shape'?: interfaces.viewport.Shape;
+        'pixelWidth'?: number;
+        'pixelHeight'?: number;
+        'dpi'?: number;
+        'currentPixelWidth'?: number;
+        'currentPixelHeight'?: number;
+        'touch'?: Array<interfaces.viewport.Touch>;
+        'keyboard'?: Array<interfaces.viewport.Keyboard>;
     }
 }
 
@@ -1831,6 +1940,97 @@ export namespace events.skillevents {
         'timestamp': string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Automatically progress through a series of pages displayed in a Pager component. The AutoPage command finishes after the last page has been displayed for the requested time period.
+     * @interface
+     */
+    export interface AutoPageCommand {
+        'type' : 'AutoPage';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId': string;
+        'count'?: number;
+        'duration'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Alexa.Presentation.APL.ExecuteCommands directive used to send APL commands to a device.
+     * @interface
+     */
+    export interface ExecuteCommandsDirective {
+        'type' : 'Alexa.Presentation.APL.ExecuteCommands';
+        'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        'token': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface RenderDocumentDirective {
+        'type' : 'Alexa.Presentation.APL.RenderDocument';
+        'token'?: string;
+        'document'?: { [key: string]: any; };
+        'datasources'?: { [key: string]: any; };
+        'packages'?: Array<any>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Change the page displayed in a Pager component. The SetPage command finishes when the item is fully in view.
+     * @interface
+     */
+    export interface SetPageCommand {
+        'type' : 'SetPage';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId': string;
+        'position'?: interfaces.alexa.presentation.apl.Position;
+        'value': number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Reads the contents of a single item on the screen. By default the item will be scrolled into view if it is not currently visible.
+     * @interface
+     */
+    export interface SpeakItemCommand {
+        'type' : 'SpeakItem';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'align'?: interfaces.alexa.presentation.apl.Align;
+        'componentId': string;
+        'highlightMode'?: interfaces.alexa.presentation.apl.HighlightMode;
+        'minimumDwellTime'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface UserEvent {
+        'type' : 'Alexa.Presentation.APL.UserEvent';
+        'requestId': string;
+        'timestamp': string;
+        'token'?: string;
+        'arguments'?: Array<any>;
+        'source'?: any;
+        'components'?: any;
     }
 }
 
