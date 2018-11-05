@@ -297,7 +297,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | LaunchRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.listManagement.ListItemsDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | LaunchRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.listManagement.ListItemsDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -320,6 +320,7 @@ export interface Response {
     'reprompt'?: ui.Reprompt;
     'directives'?: Array<Directive>;
     'shouldEndSession'?: boolean;
+    'canFulfillIntent'?: canfulfill.CanFulfillIntent;
 }
 
 /**
@@ -410,6 +411,52 @@ export interface User {
     'userId': string;
     'accessToken'?: string;
     'permissions'?: Permissions;
+}
+
+export namespace canfulfill {
+    /**
+     * CanFulfillIntent represents the response to canFulfillIntentRequest includes the details about whether the skill can understand and fulfill the intent request with detected slots.
+     * @interface
+     */
+    export interface CanFulfillIntent {
+        'canFulfill': canfulfill.CanFulfillIntentValues;
+        'slots'?: { [key: string]: canfulfill.CanFulfillSlot; };
+    }
+}
+
+export namespace canfulfill {
+    /**
+     * Overall if skill can understand and fulfill the intent with detected slots. Respond YES when skill understands all slots, can fulfill all slots, and can fulfill the request in its entirety. Respond NO when skill either cannot understand the intent, cannot understand all the slots, or cannot fulfill all the slots. Respond MAYBE when skill can understand the intent, can partially or fully understand the slots, and can partially or fully fulfill the slots. The only cases where should respond MAYBE is when skill partially understand the request and can potentially complete the request if skill get more data, either through callbacks or through a multi-turn conversation with the user.
+     * @enum
+     */
+    export type CanFulfillIntentValues = 'YES' | 'NO' | 'MAYBE';
+}
+
+export namespace canfulfill {
+    /**
+     * This represents skill's capability to understand and fulfill each detected slot.
+     * @interface
+     */
+    export interface CanFulfillSlot {
+        'canUnderstand': canfulfill.CanUnderstandSlotValues;
+        'canFulfill'?: canfulfill.CanFulfillSlotValues;
+    }
+}
+
+export namespace canfulfill {
+    /**
+     * This field indicates whether skill can fulfill relevant action for the slot, that has been partially or fully understood. The definition of fulfilling the slot is dependent on skill and skill is required to have logic in place to determine whether a slot value can be fulfilled in the context of skill or not. Return YES if Skill can certainly fulfill the relevant action for this slot value. Return NO if skill cannot fulfill the relevant action for this slot value. For specific recommendations to set the value refer to the developer docs for more details.
+     * @enum
+     */
+    export type CanFulfillSlotValues = 'YES' | 'NO';
+}
+
+export namespace canfulfill {
+    /**
+     * This field indicates whether skill has understood the slot value. In most typical cases, skills will do some form of entity resolution by looking up a catalog or list to determine whether they recognize the slot or not. Return YES if skill have a perfect match or high confidence match (for eg. synonyms) with catalog or list maintained by skill. Return NO if skill cannot understand or recognize the slot value. Return MAYBE if skill have partial confidence or partial match. This will be true when the slot value doesn’t exist as is, in the catalog, but a variation or a fuzzy match may exist. For specific recommendations to set the value refer to the developer docs for more details.
+     * @enum
+     */
+    export type CanUnderstandSlotValues = 'YES' | 'NO' | 'MAYBE';
 }
 
 export namespace events.skillevents {
@@ -1822,6 +1869,21 @@ export interface SessionEndedRequest {
     'reason': SessionEndedReason;
     'error'?: SessionEndedError;
     'locale': string;
+}
+
+export namespace canfulfill {
+    /**
+     * An object that represents a request made to skill to query whether the skill can understand and fulfill the intent request with detected slots, before actually asking the skill to take action. Skill should be aware this is not to actually take action, skill should handle this request without causing side-effect, skill should not modify some state outside its scope or has an observable interaction with its calling functions or the outside world besides returning a value, such as playing sound,turning on/off lights, committing a transaction or a charge.
+     * @interface
+     */
+    export interface CanFulfillIntentRequest {
+        'type' : 'CanFulfillIntentRequest';
+        'requestId': string;
+        'timestamp': string;
+        'dialogState'?: DialogState;
+        'intent': Intent;
+        'locale'?: string;
+    }
 }
 
 export namespace dialog {
