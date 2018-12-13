@@ -1088,6 +1088,14 @@ export namespace interfaces.display {
 
 export namespace interfaces.geolocation {
     /**
+     * A string representing if Alexa has access to location services running on the hostOS of device.
+     * @enum
+     */
+    export type Access = 'ENABLED' | 'DISABLED' | 'UNKNOWN';
+}
+
+export namespace interfaces.geolocation {
+    /**
      * An object containing the altitude information of the device.
      * @interface
      */
@@ -1150,8 +1158,8 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface LocationServices {
-        'status': interfaces.geolocation.locationServices.Status;
-        'access': interfaces.geolocation.locationServices.Access;
+        'status': interfaces.geolocation.Status;
+        'access': interfaces.geolocation.Access;
     }
 }
 
@@ -1166,15 +1174,7 @@ export namespace interfaces.geolocation {
     }
 }
 
-export namespace interfaces.geolocation.locationServices {
-    /**
-     * A string representing if Alexa has access to location services running on the hostOS of device.
-     * @enum
-     */
-    export type Access = 'ENABLED' | 'DISABLED' | 'UNKNOWN';
-}
-
-export namespace interfaces.geolocation.locationServices {
+export namespace interfaces.geolocation {
     /**
      * A string representing the status of whether location services is currently running or not on the host OS of device.
      * @enum
