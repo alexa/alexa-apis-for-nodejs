@@ -238,6 +238,7 @@ export interface Context {
     'System': interfaces.system.SystemState;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerState;
     'Display'?: interfaces.display.DisplayState;
+    'Geolocation'?: interfaces.geolocation.GeolocationState;
     'Viewport'?: interfaces.viewport.ViewportState;
 }
 
@@ -401,6 +402,7 @@ export interface SupportedInterfaces {
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerInterface;
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
+    'Geolocation'?: interfaces.geolocation.GeolocationInterface;
 }
 
 /**
@@ -1084,6 +1086,102 @@ export namespace interfaces.display {
     export type TextField = interfaces.display.RichText | interfaces.display.PlainText;
 }
 
+export namespace interfaces.geolocation {
+    /**
+     * An object containing the altitude information of the device.
+     * @interface
+     */
+    export interface Altitude {
+        'altitudeInMeters': number;
+        'accuracyInMeters': number;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     * An object containing the location information of the device.
+     * @interface
+     */
+    export interface Coordinate {
+        'latitudeInDegrees': number;
+        'longitudeInDegrees': number;
+        'accuracyInMeters': number;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     *
+     * @interface
+     */
+    export interface GeolocationInterface {
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     *
+     * @interface
+     */
+    export interface GeolocationState {
+        'timestamp'?: string;
+        'coordinate'?: interfaces.geolocation.Coordinate;
+        'altitude'?: interfaces.geolocation.Altitude;
+        'heading'?: interfaces.geolocation.Heading;
+        'speed'?: interfaces.geolocation.Speed;
+        'locationServices'?: interfaces.geolocation.LocationServices;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     * An object containing the heading direction information of the device.
+     * @interface
+     */
+    export interface Heading {
+        'directionInDegrees': number;
+        'accuracyInDegrees'?: number;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     * An object containing status and access.
+     * @interface
+     */
+    export interface LocationServices {
+        'status': interfaces.geolocation.locationServices.Status;
+        'access': interfaces.geolocation.locationServices.Access;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     * An object containing the speed information of the device.
+     * @interface
+     */
+    export interface Speed {
+        'speedInMetersPerSecond': number;
+        'accuracyInMetersPerSecond'?: number;
+    }
+}
+
+export namespace interfaces.geolocation.locationServices {
+    /**
+     * A string representing if Alexa has access to location services running on the hostOS of device.
+     * @enum
+     */
+    export type Access = 'ENABLED' | 'DISABLED' | 'UNKNOWN';
+}
+
+export namespace interfaces.geolocation.locationServices {
+    /**
+     * A string representing the status of whether location services is currently running or not on the host OS of device.
+     * @enum
+     */
+    export type Status = 'RUNNING' | 'STOPPED';
+}
+
 export namespace interfaces.monetization.v1 {
     /**
      * Entity to define In Skill Product over which actions will be performed.
@@ -1427,6 +1525,7 @@ export namespace services.gameEngine {
         'gadgetIds'?: Array<string>;
         'colors'?: Array<string>;
         'action'?: services.gameEngine.InputEventActionType;
+        'repeat'?: number;
     }
 }
 
@@ -1842,9 +1941,9 @@ export interface IntentRequest {
     'type' : 'IntentRequest';
     'requestId': string;
     'timestamp': string;
+    'locale'?: string;
     'dialogState': DialogState;
     'intent': Intent;
-    'locale': string;
 }
 
 /**
@@ -1855,7 +1954,7 @@ export interface LaunchRequest {
     'type' : 'LaunchRequest';
     'requestId': string;
     'timestamp': string;
-    'locale': string;
+    'locale'?: string;
 }
 
 /**
@@ -1866,9 +1965,9 @@ export interface SessionEndedRequest {
     'type' : 'SessionEndedRequest';
     'requestId': string;
     'timestamp': string;
+    'locale'?: string;
     'reason': SessionEndedReason;
     'error'?: SessionEndedError;
-    'locale': string;
 }
 
 export namespace canfulfill {
@@ -1880,9 +1979,9 @@ export namespace canfulfill {
         'type' : 'CanFulfillIntentRequest';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'dialogState'?: DialogState;
         'intent': Intent;
-        'locale'?: string;
     }
 }
 
@@ -1941,6 +2040,7 @@ export namespace events.skillevents {
         'type' : 'AlexaSkillEvent.SkillAccountLinked';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body': events.skillevents.AccountLinkedBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -1956,6 +2056,7 @@ export namespace events.skillevents {
         'type' : 'AlexaSkillEvent.SkillPermissionAccepted';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: events.skillevents.PermissionBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -1971,6 +2072,7 @@ export namespace events.skillevents {
         'type' : 'AlexaSkillEvent.SkillPermissionChanged';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: events.skillevents.PermissionBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -1986,6 +2088,7 @@ export namespace events.skillevents {
         'type' : 'AlexaSkillEvent.SkillDisabled';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
     }
@@ -2000,6 +2103,7 @@ export namespace events.skillevents {
         'type' : 'AlexaSkillEvent.SkillEnabled';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
     }
@@ -2089,6 +2193,7 @@ export namespace interfaces.alexa.presentation.apl {
         'type' : 'Alexa.Presentation.APL.UserEvent';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'token'?: string;
         'arguments'?: Array<any>;
         'source'?: any;
@@ -2367,10 +2472,10 @@ export namespace interfaces.audioplayer {
         'type' : 'AudioPlayer.PlaybackFailed';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'currentPlaybackState'?: interfaces.audioplayer.CurrentPlaybackState;
         'error'?: interfaces.audioplayer.Error;
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2383,9 +2488,9 @@ export namespace interfaces.audioplayer {
         'type' : 'AudioPlayer.PlaybackFinished';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2398,9 +2503,9 @@ export namespace interfaces.audioplayer {
         'type' : 'AudioPlayer.PlaybackNearlyFinished';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2413,9 +2518,9 @@ export namespace interfaces.audioplayer {
         'type' : 'AudioPlayer.PlaybackStarted';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2428,9 +2533,9 @@ export namespace interfaces.audioplayer {
         'type' : 'AudioPlayer.PlaybackStopped';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2453,9 +2558,9 @@ export namespace interfaces.connections {
         'type' : 'Connections.Request';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'name'?: string;
         'payload'?: { [key: string]: any; };
-        'locale': string;
     }
 }
 
@@ -2468,11 +2573,11 @@ export namespace interfaces.connections {
         'type' : 'Connections.Response';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'status'?: interfaces.connections.ConnectionsStatus;
         'name'?: string;
         'payload'?: { [key: string]: any; };
         'token'?: string;
-        'locale': string;
     }
 }
 
@@ -2688,8 +2793,8 @@ export namespace interfaces.display {
         'type' : 'Display.ElementSelected';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'token': string;
-        'locale': string;
     }
 }
 
@@ -2800,8 +2905,9 @@ export namespace interfaces.gameEngine {
         'type' : 'GameEngine.InputHandlerEvent';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
+        'originatingRequestId'?: string;
         'events'?: Array<services.gameEngine.InputHandlerEvent>;
-        'locale': string;
     }
 }
 
@@ -2839,6 +2945,7 @@ export namespace interfaces.messaging {
         'type' : 'Messaging.MessageReceived';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'message': { [key: string]: any; };
     }
 }
@@ -2852,7 +2959,7 @@ export namespace interfaces.playbackcontroller {
         'type' : 'PlaybackController.NextCommandIssued';
         'requestId': string;
         'timestamp': string;
-        'locale': string;
+        'locale'?: string;
     }
 }
 
@@ -2865,7 +2972,7 @@ export namespace interfaces.playbackcontroller {
         'type' : 'PlaybackController.PauseCommandIssued';
         'requestId': string;
         'timestamp': string;
-        'locale': string;
+        'locale'?: string;
     }
 }
 
@@ -2878,7 +2985,7 @@ export namespace interfaces.playbackcontroller {
         'type' : 'PlaybackController.PlayCommandIssued';
         'requestId': string;
         'timestamp': string;
-        'locale': string;
+        'locale'?: string;
     }
 }
 
@@ -2891,7 +2998,7 @@ export namespace interfaces.playbackcontroller {
         'type' : 'PlaybackController.PreviousCommandIssued';
         'requestId': string;
         'timestamp': string;
-        'locale': string;
+        'locale'?: string;
     }
 }
 
@@ -2904,9 +3011,9 @@ export namespace interfaces.system {
         'type' : 'System.ExceptionEncountered';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'error': interfaces.system.Error;
         'cause': interfaces.system.ErrorCause;
-        'locale': string;
     }
 }
 
@@ -2979,6 +3086,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ListCreated';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -2994,6 +3102,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ListDeleted';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3009,6 +3118,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ItemsCreated';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3024,6 +3134,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ItemsDeleted';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3039,6 +3150,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ItemsUpdated';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3054,6 +3166,7 @@ export namespace services.listManagement {
         'type' : 'AlexaHouseholdListEvent.ListUpdated';
         'requestId': string;
         'timestamp': string;
+        'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
