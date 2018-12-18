@@ -298,7 +298,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | LaunchRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.listManagement.ListItemsDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -1789,6 +1789,203 @@ export namespace services.monetization {
     export type PurchaseMode = 'TEST' | 'LIVE';
 }
 
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface Event {
+        'status'?: services.reminderManagement.Status;
+        'alertToken'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Response object for get reminders request
+     * @interface
+     */
+    export interface GetRemindersResponse {
+        'totalCount'?: string;
+        'alerts'?: Array<services.reminderManagement.Reminder>;
+        'links'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Reminder object
+     * @interface
+     */
+    export interface Reminder {
+        'alertToken'?: string;
+        'createdTime'?: string;
+        'updatedTime'?: string;
+        'status'?: services.reminderManagement.Status;
+        'trigger'?: services.reminderManagement.Trigger;
+        'alertInfo'?: services.reminderManagement.AlertInfo;
+        'pushNotification'?: services.reminderManagement.PushNotification;
+        'version'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderDeletedEvent {
+        'alertTokens'?: Array<string>;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Input request for creating a reminder
+     * @interface
+     */
+    export interface ReminderRequest {
+        'requestTime'?: string;
+        'trigger'?: services.reminderManagement.Trigger;
+        'alertInfo'?: services.reminderManagement.AlertInfo;
+        'pushNotification'?: services.reminderManagement.PushNotification;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Response object for post/put/delete reminder request
+     * @interface
+     */
+    export interface ReminderResponse {
+        'alertToken'?: string;
+        'createdTime'?: string;
+        'updatedTime'?: string;
+        'status'?: services.reminderManagement.Status;
+        'version'?: string;
+        'href'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Alert info for VUI / GUI
+     * @interface
+     */
+    export interface AlertInfo {
+        'spokenInfo'?: services.reminderManagement.AlertInfoSpokenInfo;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Parameters for VUI presentation of the reminder
+     * @interface
+     */
+    export interface AlertInfoSpokenInfo {
+        'content': Array<services.reminderManagement.SpokenText>;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Enable / disable reminders push notifications to Alexa mobile apps
+     * @interface
+     */
+    export interface PushNotification {
+        'status'?: services.reminderManagement.PushNotificationStatus;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Push notification status - Enabled/Disabled
+     * @enum
+     */
+    export type PushNotificationStatus = 'ENABLED' | 'DISABLED';
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Recurring date/time using the RFC 5545 standard in JSON object form
+     * @interface
+     */
+    export interface Recurrence {
+        'freq'?: services.reminderManagement.RecurrenceFreq;
+        'byDay'?: Array<services.reminderManagement.RecurrenceDay>;
+        'interval'?: number;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Day of recurrence
+     * @enum
+     */
+    export type RecurrenceDay = 'SU' | 'MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA';
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Frequency of recurrence
+     * @enum
+     */
+    export type RecurrenceFreq = 'WEEKLY' | 'DAILY';
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface SpokenText {
+        'locale'?: string;
+        'ssml'?: string;
+        'text'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Status of reminder
+     * @enum
+     */
+    export type Status = 'true' | 'COMPLETED';
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Trigger information for Reminder
+     * @interface
+     */
+    export interface Trigger {
+        'type'?: services.reminderManagement.TriggerType;
+        'scheduledTime'?: string;
+        'offsetInSeconds'?: number;
+        'timeZoneId'?: string;
+        'recurrence'?: services.reminderManagement.Recurrence;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Type of reminder - Absolute / Relative
+     * @enum
+     */
+    export type TriggerType = 'SCHEDULED_ABSOLUTE' | 'SCHEDULED_RELATIVE';
+}
+
 export namespace services.ups {
     /**
      *
@@ -3173,6 +3370,93 @@ export namespace services.listManagement {
     }
 }
 
+export namespace services.reminderManagement {
+    /**
+     * Response object for get reminder request
+     * @interface
+     */
+    export interface GetReminderResponse {
+        'alertToken'?: string;
+        'createdTime'?: string;
+        'updatedTime'?: string;
+        'status'?: services.reminderManagement.Status;
+        'trigger'?: services.reminderManagement.Trigger;
+        'alertInfo'?: services.reminderManagement.AlertInfo;
+        'pushNotification'?: services.reminderManagement.PushNotification;
+        'version'?: string;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderCreatedEventRequest {
+        'type' : 'Reminders.ReminderCreated';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body'?: services.reminderManagement.Event;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderDeletedEventRequest {
+        'type' : 'Reminders.ReminderDeleted';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body'?: services.reminderManagement.ReminderDeletedEvent;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderStartedEventRequest {
+        'type' : 'Reminders.ReminderStarted';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body'?: services.reminderManagement.Event;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderStatusChangedEventRequest {
+        'type' : 'Reminders.ReminderStatusChanged';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body'?: services.reminderManagement.Event;
+    }
+}
+
+export namespace services.reminderManagement {
+    /**
+     *
+     * @interface
+     */
+    export interface ReminderUpdatedEventRequest {
+        'type' : 'Reminders.ReminderUpdated';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body'?: services.reminderManagement.Event;
+    }
+}
+
 export namespace ui {
     /**
      *
@@ -3804,6 +4088,202 @@ export namespace services.monetization {
     }
 }
 
+export namespace services.reminderManagement {
+
+    /**
+     *
+     */
+    export class ReminderManagementServiceClient extends BaseServiceClient {
+        constructor(apiConfiguration : ApiConfiguration) {
+            super(apiConfiguration);
+        }
+
+        /**
+         *
+         * @param {string} alertToken 
+         */
+        async deleteReminder(alertToken : string) : Promise<void> {
+            const __operationId__ = 'deleteReminder';
+            // verify required parameter 'alertToken' is not null or undefined
+            if (alertToken == null) {
+                throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('alertToken', alertToken);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         * @param {string} alertToken 
+         */
+        async getReminder(alertToken : string) : Promise<services.reminderManagement.GetReminderResponse> {
+            const __operationId__ = 'getReminder';
+            // verify required parameter 'alertToken' is not null or undefined
+            if (alertToken == null) {
+                throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('alertToken', alertToken);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         * @param {string} alertToken 
+         * @param {services.reminderManagement.ReminderRequest} reminderRequest 
+         */
+        async updateReminder(alertToken : string, reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
+            const __operationId__ = 'updateReminder';
+            // verify required parameter 'alertToken' is not null or undefined
+            if (alertToken == null) {
+                throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'reminderRequest' is not null or undefined
+            if (reminderRequest == null) {
+                throw new Error(`Required parameter reminderRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('alertToken', alertToken);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(404, "NotFoundException e.g. Retured when reminder is not found");
+            errorDefinitions.set(409, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+                    pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
+        }
+        /**
+         *
+         */
+        async deleteReminders() : Promise<void> {
+            const __operationId__ = 'deleteReminders';
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         */
+        async getReminders() : Promise<services.reminderManagement.GetRemindersResponse> {
+            const __operationId__ = 'getReminders';
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         * @param {services.reminderManagement.ReminderRequest} reminderRequest 
+         */
+        async createReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
+            const __operationId__ = 'createReminder';
+            // verify required parameter 'reminderRequest' is not null or undefined
+            if (reminderRequest == null) {
+                throw new Error(`Required parameter reminderRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(403, "Forbidden");
+            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
+            errorDefinitions.set(500, "Internal Server Error");
+            errorDefinitions.set(503, "Service Unavailable");
+            errorDefinitions.set(504, "Gateway Timeout");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
+                    pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
+        }
+    }
+}
+
 export namespace services.ups {
 
     /**
@@ -4093,6 +4573,21 @@ export namespace services {
                 return new monetization.MonetizationServiceClient(this.apiConfiguration);
             } catch(e) {
                 const factoryError = new Error(`ServiceClientFactory Error while initializing MonetizationServiceClient: ${e.message}`);
+                factoryError['name'] = 'ServiceClientFactoryError';
+
+                throw factoryError;
+            }
+        }
+
+        /*
+         * Gets an instance of { reminderManagement.ReminderManagementService }.
+         * @returns { reminderManagement.ReminderManagementService }
+         */
+        getReminderManagementServiceClient() : reminderManagement.ReminderManagementServiceClient {
+            try {
+                return new reminderManagement.ReminderManagementServiceClient(this.apiConfiguration);
+            } catch(e) {
+                const factoryError = new Error(`ServiceClientFactory Error while initializing ReminderManagementServiceClient: ${e.message}`);
                 factoryError['name'] = 'ServiceClientFactoryError';
 
                 throw factoryError;
