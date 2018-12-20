@@ -1961,7 +1961,7 @@ export namespace services.reminderManagement {
      * Status of reminder
      * @enum
      */
-    export type Status = 'true' | 'COMPLETED';
+    export type Status = 'ON' | 'COMPLETED';
 }
 
 export namespace services.reminderManagement {
@@ -2118,6 +2118,14 @@ export namespace ui {
     * @interface
     */
     export type OutputSpeech = ui.SsmlOutputSpeech | ui.PlainTextOutputSpeech;
+}
+
+export namespace ui {
+    /**
+     * Determines whether Alexa will queue or play this output speech immediately interrupting other speech
+     * @enum
+     */
+    export type PlayBehavior = 'ENQUEUE' | 'REPLACE_ALL' | 'REPLACE_ENQUEUED';
 }
 
 export namespace ui {
@@ -3485,6 +3493,7 @@ export namespace ui {
      */
     export interface PlainTextOutputSpeech {
         'type' : 'PlainText';
+        'playBehavior'?: ui.PlayBehavior;
         'text': string;
     }
 }
@@ -3508,6 +3517,7 @@ export namespace ui {
      */
     export interface SsmlOutputSpeech {
         'type' : 'SSML';
+        'playBehavior'?: ui.PlayBehavior;
         'ssml': string;
     }
 }
