@@ -506,7 +506,7 @@ export namespace interfaces.alexa.presentation.apl {
      * The alignment of the item after scrolling. Defaults to visible.
      * @enum
      */
-    export type Align = 'CENTER' | 'FIRST' | 'LAST' | 'VISIBLE';
+    export type Align = 'center' | 'first' | 'last' | 'visible';
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -522,7 +522,7 @@ export namespace interfaces.alexa.presentation.apl {
      * How highlighting is applied: on a line-by-line basis, or to the entire block. Defaults to block.
      * @enum
      */
-    export type HighlightMode = 'BLOCK' | 'LINE';
+    export type HighlightMode = 'block' | 'line';
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -530,7 +530,7 @@ export namespace interfaces.alexa.presentation.apl {
      * Whether the value is a relative or absolute offset. Defaults to absolute.
      * @enum
      */
-    export type Position = 'ABSOLUTE' | 'RELATIVE';
+    export type Position = 'absolute' | 'relative';
 }
 
 export namespace interfaces.alexa.presentation.apl {
