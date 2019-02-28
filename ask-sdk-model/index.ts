@@ -52,10 +52,10 @@ export namespace services {
         invoke(request : ApiClientRequest) : Promise<ApiClientResponse>;
     }
 
-     /**
-      * Represents an interface that provides API configuration options needed by service clients.
-      * @interface ApiConfiguration
-      */
+    /**
+     * Represents an interface that provides API configuration options needed by service clients.
+     * @interface ApiConfiguration
+     */
     export interface ApiConfiguration {
         /**
          * Configured ApiClient implementation
@@ -154,6 +154,7 @@ export namespace services {
          * @param headerParams headers collection
          * @param bodyParam if body parameter is present it is provided here, otherwise null or undefined
          * @param errors maps recognized status codes to messages
+         * @param nonJsonBody if the body is in JSON format
          */
         protected async invoke(
             method : string,
@@ -162,7 +163,9 @@ export namespace services {
             pathParams : Map<string, string>,
             queryParams : Map<string, string>,
             headerParams : Array<{ key : string, value : string }>,
-            bodyParam : any, errors : Map<number, string>,
+            bodyParam : any,
+            errors : Map<number, string>,
+            nonJsonBody? : boolean,
         ) : Promise<any> {
             const request : ApiClientRequest = {
                 url : BaseServiceClient.buildUrl(endpoint, path, queryParams, pathParams),
@@ -170,7 +173,7 @@ export namespace services {
                 headers : headerParams,
             };
             if (bodyParam != null) {
-                request.body = JSON.stringify(bodyParam);
+                request.body = nonJsonBody ? bodyParam : JSON.stringify(bodyParam);
             }
 
             const apiClient = this.apiConfiguration.apiClient;
@@ -206,10 +209,131 @@ export namespace services {
             throw err;
         }
     }
+
+    /**
+     * Represents a Login With Amazon(LWA) access token
+     */
+    export interface AccessToken {
+        token : string;
+        expiry : Number;
+    }
+
+    /**
+     * Represents a request for retrieving a Login With Amazon(LWA) access token
+     */
+    export interface AccessTokenRequest {
+        clientId : string;
+        clientSecret : string;
+        scope : string;
+    }
+
+    /**
+     * Represents a response returned by LWA containing a Login With Amazon(LWA) access token
+     */
+    export interface AccessTokenResponse {
+        access_token : string;
+        expires_in : number;
+        scope : string;
+        token_type : string;
+    }
+
+    /**
+     * Represents the authentication configuration for a client ID and client secret
+     */
+    export interface AuthenticationConfiguration {
+        clientId : string;
+        clientSecret : string;
+    }
+
+    /**
+     * Class to be used to call Amazon LWA to retrieve access tokens.
+     */
+    export class LwaServiceClient extends BaseServiceClient {
+        protected static EXPIRY_OFFSET_MILLIS : number = 60000;
+
+        protected authenticationConfiguration : AuthenticationConfiguration;
+        protected scopeTokenStore : {[scope : string] : AccessToken};
+
+        constructor(options : {
+            apiConfiguration : ApiConfiguration,
+            authenticationConfiguration : AuthenticationConfiguration,
+        }) {
+            super(options.apiConfiguration);
+            if (options.authenticationConfiguration == null) {
+                throw new Error('AuthenticationConfiguration cannot be null or undefined.');
+            }
+            this.authenticationConfiguration = options.authenticationConfiguration;
+            this.scopeTokenStore = {};
+        }
+
+        public async getAccessTokenForScope(scope : string) : Promise<string> {
+            if (scope == null) {
+                throw new Error('Scope cannot be null or undefined.');
+            }
+
+            const accessToken = this.scopeTokenStore[scope];
+
+            if (accessToken && accessToken.expiry > Date.now() + LwaServiceClient.EXPIRY_OFFSET_MILLIS) {
+                return accessToken.token;
+            }
+
+            const accessTokenRequest : AccessTokenRequest = {
+                clientId : this.authenticationConfiguration.clientId,
+                clientSecret : this.authenticationConfiguration.clientSecret,
+                scope,
+            };
+
+            const accessTokenResponse : AccessTokenResponse = await this.generateAccessToken(accessTokenRequest);
+
+            this.scopeTokenStore[scope] = {
+                token : accessTokenResponse.access_token,
+                expiry : Date.now() + accessTokenResponse.expires_in * 1000,
+            };
+
+            return accessTokenResponse.access_token;
+        }
+
+        protected async generateAccessToken(accessTokenRequest : AccessTokenRequest) : Promise<AccessTokenResponse> {
+            if (accessTokenRequest == null) {
+                throw new Error(`Required parameter accessTokenRequest was null or undefined when calling generateAccessToken.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/x-www-form-urlencoded'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const bodyParams : string = `grant_type=client_credentials&client_secret=${accessTokenRequest.clientSecret}&client_id=${accessTokenRequest.clientId}&scope=${accessTokenRequest.scope}`;
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, 'Token request sent.');
+            errorDefinitions.set(400, 'Bad Request');
+            errorDefinitions.set(401, 'Authentication Failed');
+            errorDefinitions.set(500, 'Internal Server Error');
+
+            return this.invoke(
+                'POST',
+                'https://api.amazon.com',
+                '/auth/O2/token',
+                pathParams,
+                queryParams,
+                headerParams,
+                bodyParams,
+                errorDefinitions,
+                true,
+            );
+        }
+    }
+}
+
+export namespace services.proactiveEvents {
+    export type SkillStage = 'DEVELOPMENT' | 'LIVE';
 }
 
 /*
-* Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+* Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file
 * except in compliance with the License. A copy of the License is located at
@@ -220,6 +344,7 @@ export namespace services {
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 * the specific language governing permissions and limitations under the License.
 */
+
 /* tslint:disable */
 
 /**
@@ -298,7 +423,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -382,7 +507,7 @@ export type SessionEndedReason = 'USER_INITIATED' | 'ERROR' | 'EXCEEDED_MAX_REPR
  */
 export interface Slot {
     'name': string;
-    'value': string;
+    'value'?: string;
     'confirmationStatus': SlotConfirmationStatus;
     'resolutions'?: slu.entityresolution.Resolutions;
 }
@@ -488,6 +613,26 @@ export namespace events.skillevents {
      */
     export interface PermissionBody {
         'acceptedPermissions'?: Array<events.skillevents.Permission>;
+    }
+}
+
+export namespace events.skillevents {
+    /**
+     *
+     * @interface
+     */
+    export interface ProactiveSubscriptionChangedBody {
+        'subscriptions'?: Array<events.skillevents.ProactiveSubscriptionEvent>;
+    }
+}
+
+export namespace events.skillevents {
+    /**
+     *
+     * @interface
+     */
+    export interface ProactiveSubscriptionEvent {
+        'eventName'?: string;
     }
 }
 
@@ -1789,6 +1934,62 @@ export namespace services.monetization {
     export type PurchaseMode = 'TEST' | 'LIVE';
 }
 
+export namespace services.proactiveEvents {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateProactiveEventRequest {
+        'timestamp': string;
+        'referenceId': string;
+        'expiryTime': string;
+        'event': services.proactiveEvents.Event;
+        'localizedAttributes': Array<any>;
+        'relevantAudience': services.proactiveEvents.RelevantAudience;
+    }
+}
+
+export namespace services.proactiveEvents {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: number;
+        'message'?: string;
+    }
+}
+
+export namespace services.proactiveEvents {
+    /**
+     * The event data to be sent to customers, conforming to the schema associated with this event.
+     * @interface
+     */
+    export interface Event {
+        'name': string;
+        'payload': any;
+    }
+}
+
+export namespace services.proactiveEvents {
+    /**
+     * The audience for this event.
+     * @interface
+     */
+    export interface RelevantAudience {
+        'type': services.proactiveEvents.RelevantAudienceType;
+        'payload': any;
+    }
+}
+
+export namespace services.proactiveEvents {
+    /**
+     * The audience for this event. Use Multicast to target information to all customers subscribed to that event, or use Unicast to target information containing the actual userId for individual events. 
+     * @enum
+     */
+    export type RelevantAudienceType = 'Unicast' | 'Multicast';
+}
+
 export namespace services.reminderManagement {
     /**
      *
@@ -2281,6 +2482,20 @@ export namespace events.skillevents {
         'body'?: events.skillevents.PermissionBody;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
+    }
+}
+
+export namespace events.skillevents {
+    /**
+     * This event indicates a customer subscription to receive events from your skill and contains information for that user. You need this information to know the userId in order to send events to individual users. Note that these events can arrive out of order, so ensure that your skill service uses the timestamp in the event to correctly record the latest subscription state for a customer. 
+     * @interface
+     */
+    export interface ProactiveSubscriptionChangedRequest {
+        'type' : 'AlexaSkillEvent.ProactiveSubscriptionChanged';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body': events.skillevents.ProactiveSubscriptionChangedBody;
     }
 }
 
@@ -3542,6 +3757,7 @@ export namespace services.deviceAddress {
      *
      */
     export class DeviceAddressServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -3559,7 +3775,7 @@ export namespace services.deviceAddress {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3567,6 +3783,8 @@ export namespace services.deviceAddress {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/devices/{deviceId}/settings/address/countryAndPostalCode";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the country and postal code of the deviceId");
@@ -3576,7 +3794,7 @@ export namespace services.deviceAddress {
             errorDefinitions.set(429, "The request is throttled");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/devices/{deviceId}/settings/address/countryAndPostalCode",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3592,7 +3810,7 @@ export namespace services.deviceAddress {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3600,6 +3818,8 @@ export namespace services.deviceAddress {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/devices/{deviceId}/settings/address";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the address of the device");
@@ -3609,7 +3829,7 @@ export namespace services.deviceAddress {
             errorDefinitions.set(429, "The request is throttled");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/devices/{deviceId}/settings/address",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
     }
@@ -3621,6 +3841,7 @@ export namespace services.directive {
      *
      */
     export class DirectiveServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -3638,13 +3859,15 @@ export namespace services.directive {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/directives";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(204, "Directive sent successfully.");
@@ -3653,7 +3876,7 @@ export namespace services.directive {
             errorDefinitions.set(403, "The skill is not allowed to send directives at the moment.");
             errorDefinitions.set(0, "Unexpected error.");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, "/v1/directives",
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, sendDirectiveRequest, errorDefinitions);
         }
     }
@@ -3665,6 +3888,7 @@ export namespace services.listManagement {
      *
      */
     export class ListManagementServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -3677,7 +3901,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3685,12 +3909,14 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", "/v2/householdlists/",
+            return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3706,7 +3932,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3715,6 +3941,8 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/{listId}/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
@@ -3722,7 +3950,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("DELETE", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/",
+            return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3743,7 +3971,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3753,6 +3981,8 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
@@ -3760,7 +3990,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("DELETE", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/items/{itemId}/",
+            return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3781,7 +4011,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3791,6 +4021,8 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
@@ -3798,7 +4030,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/items/{itemId}/",
+            return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3824,7 +4056,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3834,6 +4066,8 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
@@ -3842,7 +4076,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("PUT", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/items/{itemId}/",
+            return this.invoke("PUT", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, updateListItemRequest, errorDefinitions);
         }
         /**
@@ -3863,7 +4097,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3871,6 +4105,8 @@ export namespace services.listManagement {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/householdlists/{listId}/items/";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -3880,7 +4116,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("POST", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/items/",
+            return this.invoke("POST", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, createListItemRequest, errorDefinitions);
         }
         /**
@@ -3901,7 +4137,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3909,6 +4145,8 @@ export namespace services.listManagement {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/householdlists/{listId}/";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -3919,7 +4157,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("PUT", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/",
+            return this.invoke("PUT", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, updateListRequest, errorDefinitions);
         }
         /**
@@ -3940,7 +4178,7 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -3950,6 +4188,8 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v2/householdlists/{listId}/{status}/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(400, "Bad Request");
@@ -3958,7 +4198,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", "/v2/householdlists/{listId}/{status}/",
+            return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -3974,13 +4214,15 @@ export namespace services.listManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/householdlists/";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -3990,7 +4232,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("POST", "https://api.amazonalexa.com/", "/v2/householdlists/",
+            return this.invoke("POST", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, createListRequest, errorDefinitions);
         }
     }
@@ -4002,6 +4244,7 @@ export namespace services.monetization {
      *
      */
     export class MonetizationServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -4039,7 +4282,7 @@ export namespace services.monetization {
                 queryParams.set('maxResults', maxResults.toString());
             }
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
             headerParams.push({key : 'Accept-Language', value : acceptLanguage});
 
@@ -4048,13 +4291,15 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v1/users/~current/skills/~current/inSkillProducts";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns a list of In-Skill products on success.");
             errorDefinitions.set(400, "Invalid request");
             errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/users/~current/skills/~current/inSkillProducts",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4075,7 +4320,7 @@ export namespace services.monetization {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
             headerParams.push({key : 'Accept-Language', value : acceptLanguage});
 
@@ -4085,6 +4330,8 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v1/users/~current/skills/~current/inSkillProducts/{productId}";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns an In-Skill Product on success.");
             errorDefinitions.set(400, "Invalid request.");
@@ -4092,8 +4339,67 @@ export namespace services.monetization {
             errorDefinitions.set(404, "Requested resource not found.");
             errorDefinitions.set(500, "Internal Server Error.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/users/~current/skills/~current/inSkillProducts/{productId}",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+    }
+}
+
+export namespace services.proactiveEvents {
+
+    /**
+     *
+     */
+    export class ProactiveEventsServiceClient extends BaseServiceClient {
+
+        private lwaServiceClient : LwaServiceClient;
+
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration) {
+            super(apiConfiguration);
+            this.lwaServiceClient = new LwaServiceClient({
+                apiConfiguration,
+                authenticationConfiguration,
+            });
+        }
+
+        /**
+         *
+         * @param {services.proactiveEvents.CreateProactiveEventRequest} createProactiveEventRequest Request to create a new proactive event.
+         */
+        async createProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<void> {
+            const __operationId__ = 'createProactiveEvent';
+            // verify required parameter 'createProactiveEventRequest' is not null or undefined
+            if (createProactiveEventRequest == null) {
+                throw new Error(`Required parameter createProactiveEventRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessTokenForScope("alexa::proactive_events");
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/proactiveEvents";
+            if (stage === 'DEVELOPMENT') {
+                path += '/stages/development';
+            }
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Request accepted");
+            errorDefinitions.set(400, "A required parameter is not present or is incorrectly formatted, or the requested creation of a resource has already been completed by a previous request. ");
+            errorDefinitions.set(403, "The authentication token is invalid or doesn&#39;t have authentication to access the resource");
+            errorDefinitions.set(409, "A skill attempts to create duplicate events using the same referenceId for the same customer.");
+            errorDefinitions.set(429, "The client has made more calls than the allowed limit.");
+            errorDefinitions.set(500, "The ProactiveEvents service encounters an internal error for a valid request.");
+            errorDefinitions.set(0, "Unexpected error");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createProactiveEventRequest, errorDefinitions);
         }
     }
 }
@@ -4104,6 +4410,7 @@ export namespace services.reminderManagement {
      *
      */
     export class ReminderManagementServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -4121,7 +4428,7 @@ export namespace services.reminderManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4130,13 +4437,15 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v1/alerts/reminders/{alertToken}";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4152,7 +4461,7 @@ export namespace services.reminderManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4161,13 +4470,15 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v1/alerts/reminders/{alertToken}";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4188,7 +4499,7 @@ export namespace services.reminderManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4196,6 +4507,8 @@ export namespace services.reminderManagement {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/reminders/{alertToken}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -4205,33 +4518,8 @@ export namespace services.reminderManagement {
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/{alertToken}",
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
-        }
-        /**
-         *
-         */
-        async deleteReminders() : Promise<void> {
-            const __operationId__ = 'deleteReminders';
-
-            const queryParams : Map<string, string> = new Map<string, string>();
-
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
-
-            const pathParams : Map<string, string> = new Map<string, string>();
-
-            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
-            headerParams.push({key : "Authorization", value : authorizationValue});
-
-            const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "Success");
-            errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
-            errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
-            errorDefinitions.set(500, "Internal Server Error");
-
-            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
-                    pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
          *
@@ -4241,7 +4529,7 @@ export namespace services.reminderManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4249,13 +4537,15 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
+            let path : string = "/v1/alerts/reminders/";
+
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(401, "UserAuthenticationException. Request is not authorized/authenticated e.g. If customer does not have permission to create a reminder.");
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4271,13 +4561,15 @@ export namespace services.reminderManagement {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/reminders/";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -4288,7 +4580,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(503, "Service Unavailable");
             errorDefinitions.set(504, "Gateway Timeout");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, "/v1/alerts/reminders/",
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
         }
     }
@@ -4300,6 +4592,7 @@ export namespace services.ups {
      *
      */
     export class UpsServiceClient extends BaseServiceClient {
+
         constructor(apiConfiguration : ApiConfiguration) {
             super(apiConfiguration);
         }
@@ -4312,13 +4605,15 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/accounts/~current/settings/Profile.email";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -4328,7 +4623,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/accounts/~current/settings/Profile.email",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4339,13 +4634,15 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/accounts/~current/settings/Profile.givenName";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -4355,7 +4652,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/accounts/~current/settings/Profile.givenName",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4366,13 +4663,15 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/accounts/~current/settings/Profile.mobileNumber";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -4382,7 +4681,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/accounts/~current/settings/Profile.mobileNumber",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4393,13 +4692,15 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/accounts/~current/settings/Profile.name";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -4409,7 +4710,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/accounts/~current/settings/Profile.name",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4425,7 +4726,7 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4433,6 +4734,8 @@ export namespace services.ups {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/devices/{deviceId}/settings/System.distanceUnits";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -4442,7 +4745,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/devices/{deviceId}/settings/System.distanceUnits",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4458,7 +4761,7 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4466,6 +4769,8 @@ export namespace services.ups {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/devices/{deviceId}/settings/System.temperatureUnit";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -4475,7 +4780,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/devices/{deviceId}/settings/System.temperatureUnit",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         /**
@@ -4491,7 +4796,7 @@ export namespace services.ups {
 
             const queryParams : Map<string, string> = new Map<string, string>();
 
-            const headerParams : [{key : string, value : string}] = <[{key : string, value : string}]>[];
+            const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/json'});
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -4499,6 +4804,8 @@ export namespace services.ups {
 
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/devices/{deviceId}/settings/System.timeZone";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -4508,7 +4815,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, "/v2/devices/{deviceId}/settings/System.timeZone",
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
     }
@@ -4528,7 +4835,6 @@ export namespace services {
         constructor(apiConfiguration : ApiConfiguration) {
             this.apiConfiguration = apiConfiguration;
         }
-
         /*
          * Gets an instance of { deviceAddress.DeviceAddressService }.
          * @returns { deviceAddress.DeviceAddressService }
@@ -4543,7 +4849,6 @@ export namespace services {
                 throw factoryError;
             }
         }
-
         /*
          * Gets an instance of { directive.DirectiveService }.
          * @returns { directive.DirectiveService }
@@ -4558,7 +4863,6 @@ export namespace services {
                 throw factoryError;
             }
         }
-
         /*
          * Gets an instance of { listManagement.ListManagementService }.
          * @returns { listManagement.ListManagementService }
@@ -4573,7 +4877,6 @@ export namespace services {
                 throw factoryError;
             }
         }
-
         /*
          * Gets an instance of { monetization.MonetizationService }.
          * @returns { monetization.MonetizationService }
@@ -4588,7 +4891,6 @@ export namespace services {
                 throw factoryError;
             }
         }
-
         /*
          * Gets an instance of { reminderManagement.ReminderManagementService }.
          * @returns { reminderManagement.ReminderManagementService }
@@ -4603,7 +4905,6 @@ export namespace services {
                 throw factoryError;
             }
         }
-
         /*
          * Gets an instance of { ups.UpsService }.
          * @returns { ups.UpsService }
