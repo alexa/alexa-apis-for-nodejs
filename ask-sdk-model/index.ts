@@ -362,6 +362,7 @@ export interface Application {
 export interface Context {
     'System': interfaces.system.SystemState;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerState;
+    'Automotive'?: interfaces.automotive.AutomotiveState;
     'Display'?: interfaces.display.DisplayState;
     'Geolocation'?: interfaces.geolocation.GeolocationState;
     'Viewport'?: interfaces.viewport.ViewportState;
@@ -1092,6 +1093,15 @@ export namespace interfaces.audioplayer {
         'token': string;
         'url': string;
         'offsetInMilliseconds': number;
+    }
+}
+
+export namespace interfaces.automotive {
+    /**
+     * This object contains the automotive specific information of the device
+     * @interface
+     */
+    export interface AutomotiveState {
     }
 }
 
