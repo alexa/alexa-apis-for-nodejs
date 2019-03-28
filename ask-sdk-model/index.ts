@@ -387,7 +387,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -585,6 +585,47 @@ export namespace canfulfill {
      * @enum
      */
     export type CanUnderstandSlotValues = 'YES' | 'NO' | 'MAYBE';
+}
+
+export namespace er.dynamic {
+    /**
+     * Represents an entity that the skill wants to store. An entity has an optional Id and the value and the synonyms for the entity
+     * @interface
+     */
+    export interface Entity {
+        'id'?: string;
+        'name': er.dynamic.EntityValueAndSynonyms;
+    }
+}
+
+export namespace er.dynamic {
+    /**
+     * Represents an array of entities of a particular type.
+     * @interface
+     */
+    export interface EntityListItem {
+        'name': string;
+        'values': Array<er.dynamic.Entity>;
+    }
+}
+
+export namespace er.dynamic {
+    /**
+     * A container object with value and synomyms for the entity
+     * @interface
+     */
+    export interface EntityValueAndSynonyms {
+        'value': string;
+        'synonyms'?: Array<string>;
+    }
+}
+
+export namespace er.dynamic {
+    /**
+     * Replace the existing dynamic entities or clear them from the catalog
+     * @enum
+     */
+    export type UpdateBehavior = 'REPLACE' | 'CLEAR';
 }
 
 export namespace events.skillevents {
@@ -1882,6 +1923,14 @@ export namespace services.monetization {
 
 export namespace services.monetization {
     /**
+     * Reason for the entitlement status. * 'PURCHASED' - The user is entitled to the product because they purchased it. * 'NOT_PURCHASED' - The user is not entitled to the product because they have not purchased it. * 'AUTO_ENTITLED' - The user is auto entitled to the product because they have subscribed to a broader service.
+     * @enum
+     */
+    export type EntitlementReason = 'PURCHASED' | 'NOT_PURCHASED' | 'AUTO_ENTITLED';
+}
+
+export namespace services.monetization {
+    /**
      * Describes error detail
      * @interface
      */
@@ -1903,6 +1952,7 @@ export namespace services.monetization {
         'summary': string;
         'purchasable': services.monetization.PurchasableState;
         'entitled': services.monetization.EntitledState;
+        'entitlementReason': services.monetization.EntitlementReason;
         'activeEntitlementCount': number;
         'purchaseMode': services.monetization.PurchaseMode;
     }
@@ -2432,6 +2482,18 @@ export namespace dialog {
     export interface DelegateDirective {
         'type' : 'Dialog.Delegate';
         'updatedIntent'?: Intent;
+    }
+}
+
+export namespace dialog {
+    /**
+     *
+     * @interface
+     */
+    export interface DynamicEntitiesDirective {
+        'type' : 'Dialog.UpdateDynamicEntities';
+        'updateBehavior': er.dynamic.UpdateBehavior;
+        'types'?: Array<er.dynamic.EntityListItem>;
     }
 }
 
