@@ -697,11 +697,27 @@ export namespace interfaces.alexa.presentation.apl {
 }
 
 export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The audio track to play on. Defaults to “foreground”
+     * @enum
+     */
+    export type AudioTrack = 'foreground';
+}
+
+export namespace interfaces.alexa.presentation.apl {
    /**
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Component state.
+     * @enum
+     */
+    export type ComponentState = 'checked' | 'disabled' | 'focused';
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -710,6 +726,14 @@ export namespace interfaces.alexa.presentation.apl {
      * @enum
      */
     export type HighlightMode = 'block' | 'line';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The command enumerated value is the operation that should be performed on the media player.
+     * @enum
+     */
+    export type MediaCommandType = 'play' | 'pause' | 'next' | 'previous' | 'rewind' | 'seek' | 'setTrack';
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -727,6 +751,20 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface Runtime {
         'maxVersion'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The source property holds the video clip or sequence of video clips to play.
+     * @interface
+     */
+    export interface VideoSource {
+        'description'?: string;
+        'duration'?: number;
+        'url': string;
+        'repeatCount'?: number;
+        'offset'?: number;
     }
 }
 
@@ -1433,7 +1471,7 @@ export namespace interfaces.system {
     export interface SystemState {
         'application': Application;
         'user': User;
-        'device': Device;
+        'device'?: Device;
         'apiEndpoint': string;
         'apiAccessToken'?: string;
     }
@@ -2247,6 +2285,28 @@ export namespace services.reminderManagement {
     export type TriggerType = 'SCHEDULED_ABSOLUTE' | 'SCHEDULED_RELATIVE';
 }
 
+export namespace services.skillMessaging {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: number;
+        'message'?: string;
+    }
+}
+
+export namespace services.skillMessaging {
+    /**
+     * The message that needs to be sent to the skill 
+     * @interface
+     */
+    export interface SendSkillMessagingRequest {
+        'data': any;
+        'expiresAfterSeconds'?: number;
+    }
+}
+
 export namespace services.ups {
     /**
      *
@@ -2619,6 +2679,22 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Control a media player to play, pause, change tracks, or perform some other common action.
+     * @interface
+     */
+    export interface ControlMediaCommand {
+        'type' : 'ControlMedia';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'command': interfaces.alexa.presentation.apl.MediaCommandType;
+        'componentId'?: string;
+        'value'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Alexa.Presentation.APL.ExecuteCommands directive used to send APL commands to a device.
      * @interface
      */
@@ -2626,6 +2702,49 @@ export namespace interfaces.alexa.presentation.apl {
         'type' : 'Alexa.Presentation.APL.ExecuteCommands';
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
         'token': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The idle command does nothing. It may be a placeholder or used to insert a calculated delay in a longer series of commands.
+     * @interface
+     */
+    export interface IdleCommand {
+        'type' : 'Idle';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Execute a series of commands in parallel. The parallel command starts executing all child command simultaneously. The parallel command is considered finished when all of its child commands have finished. When the parallel command is terminated early, all currently executing commands are terminated.
+     * @interface
+     */
+    export interface ParallelCommand {
+        'type' : 'Parallel';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'commands': Array<interfaces.alexa.presentation.apl.Command>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Plays media on a media player (currently only a Video player; audio may be added in the future). The media may be on the background audio track or may be sequenced with speak directives).
+     * @interface
+     */
+    export interface PlayMediaCommand {
+        'type' : 'PlayMedia';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'audioTrack'?: interfaces.alexa.presentation.apl.AudioTrack;
+        'componentId'?: string;
+        'source': Array<interfaces.alexa.presentation.apl.VideoSource>;
     }
 }
 
@@ -2640,6 +2759,67 @@ export namespace interfaces.alexa.presentation.apl {
         'document'?: { [key: string]: any; };
         'datasources'?: { [key: string]: any; };
         'packages'?: Array<any>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Scroll a ScrollView or Sequence forward or backward by a number of pages. The Scroll command has the following properties in addition to the regular command properties.
+     * @interface
+     */
+    export interface ScrollCommand {
+        'type' : 'Scroll';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'distance'?: number;
+        'componentId': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Scroll forward or backward through a ScrollView or Sequence to ensure that a particular child component is in view.
+     * @interface
+     */
+    export interface ScrollToIndexCommand {
+        'type' : 'ScrollToIndex';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'align'?: interfaces.alexa.presentation.apl.Align;
+        'componentId': string;
+        'index': number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The SendEvent command allows the APL author to generate and send an event to Alexa.
+     * @interface
+     */
+    export interface SendEventCommand {
+        'type' : 'SendEvent';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'arguments'?: Array<string>;
+        'components'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * A sequential command executes a series of commands in order. The sequential command executes the command list in order, waiting for the previous command to finish before executing the next. The sequential command is finished when all of its child commands have finished. When the Sequential command is terminated early, the currently executing command is terminated and no further commands are executed.
+     * @interface
+     */
+    export interface SequentialCommand {
+        'type' : 'Sequential';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        'repeatCount'?: number;
     }
 }
 
@@ -2661,6 +2841,22 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * The SetState command changes one of the component’s state settings. The SetState command can be used to change the checked, disabled, and focused states. The karaoke and pressed states may not be directly set; use the Select command or SpeakItem commands to change those states. Also, note that the focused state may only be set - it can’t be cleared.
+     * @interface
+     */
+    export interface SetStateCommand {
+        'type' : 'SetState';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId'?: string;
+        'state': interfaces.alexa.presentation.apl.ComponentState;
+        'value': boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Reads the contents of a single item on the screen. By default the item will be scrolled into view if it is not currently visible.
      * @interface
      */
@@ -2673,6 +2869,24 @@ export namespace interfaces.alexa.presentation.apl {
         'componentId': string;
         'highlightMode'?: interfaces.alexa.presentation.apl.HighlightMode;
         'minimumDwellTime'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Read the contents of a range of items inside a common container. Each item will scroll into view before speech. Each item should have a speech property, but it is not required.
+     * @interface
+     */
+    export interface SpeakListCommand {
+        'type' : 'SpeakList';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'align'?: interfaces.alexa.presentation.apl.Align;
+        'componentId': string;
+        'count': number;
+        'minimumDwellTime'?: number;
+        'start': number;
     }
 }
 
@@ -4654,6 +4868,68 @@ export namespace services.reminderManagement {
 
             return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
+        }
+    }
+}
+
+export namespace services.skillMessaging {
+
+    /**
+     *
+     */
+    export class SkillMessagingServiceClient extends BaseServiceClient {
+
+        private lwaServiceClient : LwaServiceClient;
+
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration) {
+            super(apiConfiguration);
+            this.lwaServiceClient = new LwaServiceClient({
+                apiConfiguration,
+                authenticationConfiguration,
+            });
+        }
+
+        /**
+         *
+         * @param {string} userId The user Id for the specific user to send the message
+         * @param {services.skillMessaging.SendSkillMessagingRequest} sendSkillMessagingRequest Message Request to be sent to the skill.
+         */
+        async sendSkillMessage(userId : string, sendSkillMessagingRequest : services.skillMessaging.SendSkillMessagingRequest) : Promise<void> {
+            const __operationId__ = 'sendSkillMessage';
+            // verify required parameter 'userId' is not null or undefined
+            if (userId == null) {
+                throw new Error(`Required parameter userId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'sendSkillMessagingRequest' is not null or undefined
+            if (sendSkillMessagingRequest == null) {
+                throw new Error(`Required parameter sendSkillMessagingRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('userId', userId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessTokenForScope("alexa:skill_messaging");
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skillmessages/users/{userId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Message has been successfully accepted, and will be sent to the skill ");
+            errorDefinitions.set(400, "Data is missing or not valid ");
+            errorDefinitions.set(403, "The skill messaging authentication token is expired or not valid ");
+            errorDefinitions.set(404, "The passed userId does not exist ");
+            errorDefinitions.set(429, "The requester has exceeded their maximum allowable rate of messages ");
+            errorDefinitions.set(500, "The SkillMessaging service encountered an internal error for a valid request. ");
+            errorDefinitions.set(0, "Unexpected error");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, sendSkillMessagingRequest, errorDefinitions);
         }
     }
 }
