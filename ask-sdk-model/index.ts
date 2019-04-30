@@ -1560,7 +1560,26 @@ export namespace interfaces.viewport {
         'currentPixelHeight'?: number;
         'touch'?: Array<interfaces.viewport.Touch>;
         'keyboard'?: Array<interfaces.viewport.Keyboard>;
+        'video'?: interfaces.viewport.ViewportStateVideo;
     }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * Details of the technologies which are available for playing video on the device.
+     * @interface
+     */
+    export interface ViewportStateVideo {
+        'codecs'?: Array<interfaces.viewport.video.Codecs>;
+    }
+}
+
+export namespace interfaces.viewport.video {
+    /**
+     * A named bundle of codecs which are available for playing video on the viewport.
+     * @enum
+     */
+    export type Codecs = 'H_264_41' | 'H_264_42';
 }
 
 export namespace services.deviceAddress {
