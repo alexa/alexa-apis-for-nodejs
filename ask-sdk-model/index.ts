@@ -709,7 +709,7 @@ export namespace interfaces.alexa.presentation.apl {
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -2871,6 +2871,22 @@ export namespace interfaces.alexa.presentation.apl {
         'componentId'?: string;
         'state': interfaces.alexa.presentation.apl.ComponentState;
         'value': boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Change a dynamic property of a component without redrawing the screen.
+     * @interface
+     */
+    export interface SetValueCommand {
+        'type' : 'SetValue';
+        'delay'?: number;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId'?: string;
+        'property': string;
+        'value': string;
     }
 }
 
