@@ -494,7 +494,7 @@ export interface SessionEndedError {
  * A string indicating the type of error that occurred.
  * @enum
  */
-export type SessionEndedErrorType = 'INVALID_RESPONSE' | 'DEVICE_COMMUNICATION_ERROR' | 'INTERNAL_SERVICE_ERROR';
+export type SessionEndedErrorType = 'INVALID_RESPONSE' | 'DEVICE_COMMUNICATION_ERROR' | 'INTERNAL_SERVICE_ERROR' | 'ENDPOINT_TIMEOUT';
 
 /**
  * The reason why session ended when not initiated from the Skill itself.
@@ -698,6 +698,22 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * How repeated animations will play.
+     * @enum
+     */
+    export type AnimateItemRepeatMode = 'restart' | 'reverse';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+   /**
+    *
+    * @interface
+    */
+    export type AnimatedProperty = interfaces.alexa.presentation.apl.AnimatedOpacityProperty | interfaces.alexa.presentation.apl.AnimatedTransformProperty;
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * The audio track to play on. Defaults to “foreground”
      * @enum
      */
@@ -709,7 +725,7 @@ export namespace interfaces.alexa.presentation.apl {
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -755,16 +771,24 @@ export namespace interfaces.alexa.presentation.apl {
 }
 
 export namespace interfaces.alexa.presentation.apl {
+   /**
+    * Transform property to apply to a component.
+    * @interface
+    */
+    export type TransformProperty = interfaces.alexa.presentation.apl.MoveTransformProperty | interfaces.alexa.presentation.apl.ScaleTransformProperty | interfaces.alexa.presentation.apl.RotateTransformProperty | interfaces.alexa.presentation.apl.SkewTransformProperty;
+}
+
+export namespace interfaces.alexa.presentation.apl {
     /**
      * The source property holds the video clip or sequence of video clips to play.
      * @interface
      */
     export interface VideoSource {
         'description'?: string;
-        'duration'?: number;
+        'duration'?: number | string;
         'url': string;
-        'repeatCount'?: number;
-        'offset'?: number;
+        'repeatCount'?: number | string;
+        'offset'?: number | string;
     }
 }
 
@@ -786,7 +810,7 @@ export namespace interfaces.amazonpay.model.request {
 
 export namespace interfaces.amazonpay.model.response {
     /**
-     *
+     * Indicates if the contract is for a Live (Production) or Sandbox environment.
      * @enum
      */
     export type ReleaseEnvironment = 'LIVE' | 'SANDBOX';
@@ -886,7 +910,7 @@ export namespace interfaces.amazonpay.model.v1 {
 
 export namespace interfaces.amazonpay.model.v1 {
     /**
-     * The default shipping address of the buyer. Returned if needAmazonShippingAddress is set to true.
+     * Destination object containing the details of an Address.
      * @interface
      */
     export interface Destination {
@@ -2682,17 +2706,73 @@ export namespace events.skillevents {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Runs a fixed-duration animation sequence on one or more properties of a single component.
+     * @interface
+     */
+    export interface AnimateItemCommand {
+        'type' : 'AnimateItem';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId': string;
+        'duration': number | string;
+        'easing'?: string;
+        'repeatCount'?: number | string;
+        'repeatMode'?: interfaces.alexa.presentation.apl.AnimateItemRepeatMode;
+        'value': Array<interfaces.alexa.presentation.apl.AnimatedProperty>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface AnimatedOpacityProperty {
+        'property' : 'opacity';
+        'from'?: number | string;
+        'to': number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface AnimatedTransformProperty {
+        'property' : 'transform';
+        'from': Array<interfaces.alexa.presentation.apl.TransformProperty>;
+        'to': Array<interfaces.alexa.presentation.apl.TransformProperty>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Automatically progress through a series of pages displayed in a Pager component. The AutoPage command finishes after the last page has been displayed for the requested time period.
      * @interface
      */
     export interface AutoPageCommand {
         'type' : 'AutoPage';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'componentId': string;
-        'count'?: number;
-        'duration'?: number;
+        'count'?: number | string;
+        'duration'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Removes focus from the component that is currently in focus.
+     * @interface
+     */
+    export interface ClearFocusCommand {
+        'type' : 'ClearFocus';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
     }
 }
 
@@ -2703,12 +2783,12 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ControlMediaCommand {
         'type' : 'ControlMedia';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'command': interfaces.alexa.presentation.apl.MediaCommandType;
         'componentId'?: string;
-        'value'?: number;
+        'value'?: number | string;
     }
 }
 
@@ -2731,9 +2811,35 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface IdleCommand {
         'type' : 'Idle';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface MoveTransformProperty {
+        'translateX'?: string;
+        'translateY'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Opens a url with web browser or other application on the device. The APL author is responsible for providing a suitable URL that works on the current device.
+     * @interface
+     */
+    export interface OpenUrlCommand {
+        'type' : 'OpenURL';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+        'source': string;
+        'onFail'?: Array<interfaces.alexa.presentation.apl.Command>;
     }
 }
 
@@ -2744,7 +2850,7 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ParallelCommand {
         'type' : 'Parallel';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
@@ -2758,7 +2864,7 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface PlayMediaCommand {
         'type' : 'PlayMedia';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'audioTrack'?: interfaces.alexa.presentation.apl.AudioTrack;
@@ -2783,15 +2889,37 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     *
+     * @interface
+     */
+    export interface RotateTransformProperty {
+        'rotate'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface ScaleTransformProperty {
+        'scale'?: number | string;
+        'scaleX'?: number | string;
+        'scaleY'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Scroll a ScrollView or Sequence forward or backward by a number of pages. The Scroll command has the following properties in addition to the regular command properties.
      * @interface
      */
     export interface ScrollCommand {
         'type' : 'Scroll';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
-        'distance'?: number;
+        'distance'?: number | string;
         'componentId': string;
     }
 }
@@ -2803,12 +2931,12 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ScrollToIndexCommand {
         'type' : 'ScrollToIndex';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
         'componentId': string;
-        'index': number;
+        'index': number | string;
     }
 }
 
@@ -2819,7 +2947,7 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SendEventCommand {
         'type' : 'SendEvent';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'arguments'?: Array<string>;
@@ -2834,11 +2962,27 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SequentialCommand {
         'type' : 'Sequential';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
+        'catch'?: Array<interfaces.alexa.presentation.apl.Command>;
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
-        'repeatCount'?: number;
+        'finally'?: Array<interfaces.alexa.presentation.apl.Command>;
+        'repeatCount'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Changes the actionable component that is in focus. Only one component may have focus at a time.
+     * @interface
+     */
+    export interface SetFocusCommand {
+        'type' : 'SetFocus';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+        'componentId': string;
     }
 }
 
@@ -2849,12 +2993,12 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetPageCommand {
         'type' : 'SetPage';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'componentId': string;
         'position'?: interfaces.alexa.presentation.apl.Position;
-        'value': number;
+        'value': number | string;
     }
 }
 
@@ -2865,12 +3009,12 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetStateCommand {
         'type' : 'SetState';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'componentId'?: string;
         'state': interfaces.alexa.presentation.apl.ComponentState;
-        'value': boolean;
+        'value': boolean | string;
     }
 }
 
@@ -2881,7 +3025,7 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetValueCommand {
         'type' : 'SetValue';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'componentId'?: string;
@@ -2892,18 +3036,29 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     *
+     * @interface
+     */
+    export interface SkewTransformProperty {
+        'skewX'?: number | string;
+        'skewY'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Reads the contents of a single item on the screen. By default the item will be scrolled into view if it is not currently visible.
      * @interface
      */
     export interface SpeakItemCommand {
         'type' : 'SpeakItem';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
         'componentId': string;
         'highlightMode'?: interfaces.alexa.presentation.apl.HighlightMode;
-        'minimumDwellTime'?: number;
+        'minimumDwellTime'?: number | string;
     }
 }
 
@@ -2914,14 +3069,14 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SpeakListCommand {
         'type' : 'SpeakList';
-        'delay'?: number;
+        'delay'?: number | string;
         'description'?: string;
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
         'componentId': string;
-        'count': number;
-        'minimumDwellTime'?: number;
-        'start': number;
+        'count': number | string;
+        'minimumDwellTime'?: number | string;
+        'start': number | string;
     }
 }
 
@@ -3094,7 +3249,7 @@ export namespace interfaces.amazonpay.model.response {
 
 export namespace interfaces.amazonpay.model.response {
     /**
-     * The default shipping address of the buyer. Returned if needAmazonShippingAddress is set to true.
+     *
      * @interface
      */
     export interface Destination {
