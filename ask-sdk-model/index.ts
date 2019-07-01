@@ -356,6 +356,12 @@ export interface Application {
 }
 
 /**
+ * Describes the type of the Cause.
+ * @interface
+ */
+export type Cause = ConnectionCompleted;
+
+/**
  *
  * @interface
  */
@@ -387,7 +393,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -424,7 +430,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionResumedRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -520,6 +526,15 @@ export interface Slot {
 export type SlotConfirmationStatus = 'NONE' | 'DENIED' | 'CONFIRMED';
 
 /**
+ * Status indicates a high level understanding of the result of an execution.
+ * @interface
+ */
+export interface Status {
+    'code': string;
+    'message': string;
+}
+
+/**
  * An object listing each interface that the device supports. For example, if supportedInterfaces includes AudioPlayer {}, then you know that the device supports streaming audio using the AudioPlayer interface.
  * @interface
  */
@@ -529,6 +544,16 @@ export interface SupportedInterfaces {
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
     'Geolocation'?: interfaces.geolocation.GeolocationInterface;
+}
+
+/**
+ * This object encapsulates a specific functionality.
+ * @interface
+ */
+export interface Task {
+    'name': string;
+    'version': string;
+    'input'?: any;
 }
 
 /**
@@ -2503,6 +2528,17 @@ export namespace ui {
 }
 
 /**
+ * Represents the status and result needed to resume a skill's suspended session.
+ * @interface
+ */
+export interface ConnectionCompleted {
+    'type' : 'ConnectionCompleted';
+    'token'?: string;
+    'status'?: Status;
+    'result'?: any;
+}
+
+/**
  * An IntentRequest is an object that represents a request made to a skill based on what the user wants to do.
  * @interface
  */
@@ -2524,6 +2560,7 @@ export interface LaunchRequest {
     'requestId': string;
     'timestamp': string;
     'locale'?: string;
+    'task'?: Task;
 }
 
 /**
@@ -2537,6 +2574,18 @@ export interface SessionEndedRequest {
     'locale'?: string;
     'reason': SessionEndedReason;
     'error'?: SessionEndedError;
+}
+
+/**
+ * The request to resume a skill's session and tells the skill why it is resumed.
+ * @interface
+ */
+export interface SessionResumedRequest {
+    'type' : 'SessionResumedRequest';
+    'requestId': string;
+    'timestamp': string;
+    'locale'?: string;
+    'cause'?: Cause;
 }
 
 export namespace canfulfill {
@@ -3502,6 +3551,19 @@ export namespace interfaces.connections {
     }
 }
 
+export namespace interfaces.connections.V1 {
+    /**
+     * This is the directive that a skill can send as part of their response to a session based request to start a connection. A response will be returned to the skill when the connection is handled.
+     * @interface
+     */
+    export interface StartConnectionDirective {
+        'type' : 'Connections.StartConnection';
+        'uri': string;
+        'input'?: { [key: string]: any; };
+        'token'?: string;
+    }
+}
+
 export namespace interfaces.connections.entities {
     /**
      * Postal Address
@@ -3910,6 +3972,18 @@ export namespace interfaces.system {
         'locale'?: string;
         'error': interfaces.system.Error;
         'cause': interfaces.system.ErrorCause;
+    }
+}
+
+export namespace interfaces.tasks {
+    /**
+     * This is the directive that a skill can send as part of their response to a session based request. The response will contain the result of the task that the skill is launched for.
+     * @interface
+     */
+    export interface CompleteTaskDirective {
+        'type' : 'Tasks.CompleteTask';
+        'status': Status;
+        'result'?: { [key: string]: any; };
     }
 }
 
