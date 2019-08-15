@@ -393,7 +393,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.audioplayer.StopDirective | interfaces.customInterfaceController.StopEventHandlerDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -430,7 +430,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionResumedRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionResumedRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.customInterfaceController.ExpiredRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -827,6 +827,14 @@ export namespace interfaces.amazonpay.model.request {
 
 export namespace interfaces.amazonpay.model.request {
     /**
+     * * This is used to specify applicable billing agreement type. * CustomerInitiatedTransaction – customer is present at the time of processing payment for the order. * MerchantInitiatedTransaction – customer is not present at the time of processing payment for the order. 
+     * @enum
+     */
+    export type BillingAgreementType = 'CustomerInitiatedTransaction' | 'MerchantInitiatedTransaction';
+}
+
+export namespace interfaces.amazonpay.model.request {
+    /**
      * * This is used to specify applicable payment action. * Authorize – you want to confirm the order and authorize a certain amount, but you do not want to capture at this time. * AuthorizeAndCapture – you want to confirm the order, authorize for the given amount, and capture the funds. 
      * @enum
      */
@@ -907,6 +915,8 @@ export namespace interfaces.amazonpay.model.v1 {
         'platformId'?: string;
         'sellerNote'?: string;
         'sellerBillingAgreementAttributes'?: interfaces.amazonpay.model.v1.SellerBillingAgreementAttributes;
+        'billingAgreementType'?: interfaces.amazonpay.model.v1.BillingAgreementType;
+        'subscriptionAmount'?: interfaces.amazonpay.model.v1.Price;
     }
 }
 
@@ -931,6 +941,14 @@ export namespace interfaces.amazonpay.model.v1 {
      * @enum
      */
     export type BillingAgreementStatus = 'CANCELED' | 'CLOSED' | 'DRAFT' | 'OPEN' | 'SUSPENDED';
+}
+
+export namespace interfaces.amazonpay.model.v1 {
+    /**
+     * * This is used to specify applicable billing agreement type. * CustomerInitiatedTransaction – customer is present at the time of processing payment for the order. * MerchantInitiatedTransaction – customer is not present at the time of processing payment for the order. 
+     * @enum
+     */
+    export type BillingAgreementType = 'CustomerInitiatedTransaction' | 'MerchantInitiatedTransaction';
 }
 
 export namespace interfaces.amazonpay.model.v1 {
@@ -1258,6 +1276,69 @@ export namespace interfaces.connections.requests {
     * @interface
     */
     export type BaseRequest = interfaces.connections.requests.ScheduleFoodEstablishmentReservationRequest | interfaces.connections.requests.PrintPDFRequest | interfaces.connections.requests.PrintImageRequest | interfaces.connections.requests.ScheduleTaxiReservationRequest | interfaces.connections.requests.PrintWebPageRequest;
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * The endpoint of a gadget.
+     * @interface
+     */
+    export interface Endpoint {
+        'endpointId': string;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * An Event object defining a single event sent by an endpoint
+     * @interface
+     */
+    export interface Event {
+        'header': interfaces.customInterfaceController.Header;
+        'payload': any;
+        'endpoint': interfaces.customInterfaceController.Endpoint;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * Defines the Jsonlogic event filter expression and its corresponding match action.  This filter is applied to all events during the event handler's duration.  Events that are rejected by the filter expression are not sent to the skill.
+     * @interface
+     */
+    export interface EventFilter {
+        'filterExpression': any;
+        'filterMatchAction': interfaces.customInterfaceController.FilterMatchAction;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * This object defines the duration of the Event Handler and the optional JSON payload that is delivered to the skill when the timer expires.
+     * @interface
+     */
+    export interface Expiration {
+        'durationInMilliseconds': number;
+        'expirationPayload'?: any;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * The behavior to be performed by the platform on a successful filter expression match.
+     * @enum
+     */
+    export type FilterMatchAction = 'SEND_AND_TERMINATE' | 'SEND';
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * Endpoint Event header
+     * @interface
+     */
+    export interface Header {
+        'namespace': string;
+        'name': string;
+    }
 }
 
 export namespace interfaces.display {
@@ -3172,6 +3253,8 @@ export namespace interfaces.amazonpay.model.request {
         'platformId'?: string;
         'sellerNote'?: string;
         'sellerBillingAgreementAttributes'?: interfaces.amazonpay.model.request.SellerBillingAgreementAttributes;
+        'billingAgreementType'?: interfaces.amazonpay.model.request.BillingAgreementType;
+        'subscriptionAmount'?: interfaces.amazonpay.model.request.Price;
         '@version': string;
     }
 }
@@ -3662,6 +3745,73 @@ export namespace interfaces.connections.requests {
         'partySize'?: string;
         'pickupLocation'?: interfaces.connections.entities.PostalAddress;
         'dropOffLocation'?: interfaces.connections.entities.PostalAddress;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * Skill receives this type of event when an event meets the filter  conditions provided in the StartEventHandlerDirective.
+     * @interface
+     */
+    export interface EventsReceivedRequest {
+        'type' : 'CustomInterfaceController.EventsReceived';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token'?: string;
+        'events'?: Array<interfaces.customInterfaceController.Event>;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * This is the event received by the skill at expiry of an Event Handler.
+     * @interface
+     */
+    export interface ExpiredRequest {
+        'type' : 'CustomInterfaceController.Expired';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token'?: string;
+        'expirationPayload'?: any;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * The directive to be delivered to the gadgets. Each directive is targeted to one gadget  (that is, one endpointId). To target the same directive to multiple gadgets, include one  directive for each gadget in the response.
+     * @interface
+     */
+    export interface SendDirectiveDirective {
+        'type' : 'CustomInterfaceController.SendDirective';
+        'header'?: interfaces.customInterfaceController.Header;
+        'payload'?: any;
+        'endpoint'?: interfaces.customInterfaceController.Endpoint;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * This directive configures and starts an event handler. This will enable the skill to receive Custom Events. A skill can only have one active Event Handler at a time.
+     * @interface
+     */
+    export interface StartEventHandlerDirective {
+        'type' : 'CustomInterfaceController.StartEventHandler';
+        'token'?: string;
+        'eventFilter'?: interfaces.customInterfaceController.EventFilter;
+        'expiration'?: interfaces.customInterfaceController.Expiration;
+    }
+}
+
+export namespace interfaces.customInterfaceController {
+    /**
+     * This directive stops a running Event Handler associated with the provided token. The Expiration payload will not be sent if this executed before the Event Handler duration expired.
+     * @interface
+     */
+    export interface StopEventHandlerDirective {
+        'type' : 'CustomInterfaceController.StopEventHandler';
+        'token'?: string;
     }
 }
 
