@@ -557,7 +557,7 @@ export interface Task {
 }
 
 /**
- * Represents the user registered to the device initiating the request.
+ * An object that describes the Amazon account for which the skill is enabled.
  * @interface
  */
 export interface User {
@@ -1661,6 +1661,14 @@ export namespace interfaces.viewport {
 
 export namespace interfaces.viewport {
     /**
+     * The expected use case of the device's viewport, encapsulating the available input mechanisms and user viewing distance.
+     * @enum
+     */
+    export type Mode = 'AUTO' | 'HUB' | 'MOBILE' | 'PC' | 'TV';
+}
+
+export namespace interfaces.viewport {
+    /**
      * The shape of the viewport.
      * @enum
      */
@@ -1682,6 +1690,7 @@ export namespace interfaces.viewport {
      */
     export interface ViewportState {
         'experiences'?: Array<interfaces.viewport.Experience>;
+        'mode'?: interfaces.viewport.Mode;
         'shape'?: interfaces.viewport.Shape;
         'pixelWidth'?: number;
         'pixelHeight'?: number;
@@ -1788,6 +1797,51 @@ export namespace services.directive {
     export interface SendDirectiveRequest {
         'header': services.directive.Header;
         'directive': services.directive.Directive;
+    }
+}
+
+export namespace services.endpointEnumeration {
+    /**
+     *
+     * @interface
+     */
+    export interface EndpointCapability {
+        'interface'?: string;
+        'type'?: string;
+        'version'?: string;
+    }
+}
+
+export namespace services.endpointEnumeration {
+    /**
+     * Contains the list of endpoints.
+     * @interface
+     */
+    export interface EndpointEnumerationResponse {
+        'endpoints'?: Array<services.endpointEnumeration.EndpointInfo>;
+    }
+}
+
+export namespace services.endpointEnumeration {
+    /**
+     * Contains the list of connected endpoints and their declared capabilities.
+     * @interface
+     */
+    export interface EndpointInfo {
+        'endpointId'?: string;
+        'friendlyName'?: string;
+        'capabilities'?: Array<services.endpointEnumeration.EndpointCapability>;
+    }
+}
+
+export namespace services.endpointEnumeration {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message'?: string;
     }
 }
 
@@ -4582,6 +4636,50 @@ export namespace services.directive {
     }
 }
 
+export namespace services.endpointEnumeration {
+
+    /**
+     *
+     */
+    export class EndpointEnumerationServiceClient extends BaseServiceClient {
+
+        constructor(apiConfiguration : ApiConfiguration) {
+            super(apiConfiguration);
+        }
+
+        /**
+         *
+         */
+        async getEndpoints() : Promise<services.endpointEnumeration.EndpointEnumerationResponse> {
+            const __operationId__ = 'getEndpoints';
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/endpoints/";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the list of connected endpoints.");
+            errorDefinitions.set(400, "Bad request. Returned when a required parameter is not present or badly formatted.");
+            errorDefinitions.set(401, "Unauthenticated. Returned when the request is not authenticated.");
+            errorDefinitions.set(403, "Forbidden. Returned when the request is authenticated but does not have sufficient permission.");
+            errorDefinitions.set(500, "Server Error. Returned when the server encountered an error processing the request.");
+            errorDefinitions.set(503, "Service Unavailable. Returned when the server is not ready to handle the request.");
+            errorDefinitions.set(0, "Unexpected error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+    }
+}
+
 export namespace services.listManagement {
 
     /**
@@ -5620,6 +5718,20 @@ export namespace services {
                 return new directive.DirectiveServiceClient(this.apiConfiguration);
             } catch(e) {
                 const factoryError = new Error(`ServiceClientFactory Error while initializing DirectiveServiceClient: ${e.message}`);
+                factoryError['name'] = 'ServiceClientFactoryError';
+
+                throw factoryError;
+            }
+        }
+        /*
+         * Gets an instance of { endpointEnumeration.EndpointEnumerationService }.
+         * @returns { endpointEnumeration.EndpointEnumerationService }
+         */
+        getEndpointEnumerationServiceClient() : endpointEnumeration.EndpointEnumerationServiceClient {
+            try {
+                return new endpointEnumeration.EndpointEnumerationServiceClient(this.apiConfiguration);
+            } catch(e) {
+                const factoryError = new Error(`ServiceClientFactory Error while initializing EndpointEnumerationServiceClient: ${e.message}`);
                 factoryError['name'] = 'ServiceClientFactoryError';
 
                 throw factoryError;
