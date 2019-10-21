@@ -372,6 +372,7 @@ export interface Context {
     'Display'?: interfaces.display.DisplayState;
     'Geolocation'?: interfaces.geolocation.GeolocationState;
     'Viewport'?: interfaces.viewport.ViewportState;
+    'Viewports'?: Array<interfaces.viewport.TypedViewportState>;
 }
 
 /**
@@ -393,7 +394,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.audioplayer.StopDirective | interfaces.customInterfaceController.StopEventHandlerDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.display.RenderTemplateDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | interfaces.display.HintDirective | dialog.ConfirmIntentDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.videoapp.LaunchDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -430,7 +431,7 @@ export interface Permissions {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.listManagement.ListItemsCreatedEventRequest | services.reminderManagement.ReminderUpdatedEventRequest | SessionResumedRequest | SessionEndedRequest | IntentRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.customInterfaceController.ExpiredRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | services.listManagement.ListItemsUpdatedEventRequest | events.skillevents.AccountLinkedRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -540,6 +541,7 @@ export interface Status {
  */
 export interface SupportedInterfaces {
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.AlexaPresentationAplInterface;
+    'Alexa.Presentation.APLT'?: interfaces.alexa.presentation.aplt.AlexaPresentationApltInterface;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerInterface;
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
@@ -750,7 +752,7 @@ export namespace interfaces.alexa.presentation.apl {
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -817,12 +819,56 @@ export namespace interfaces.alexa.presentation.apl {
     }
 }
 
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaPresentationApltInterface {
+        'runtime'?: interfaces.alexa.presentation.aplt.Runtime;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+   /**
+    * A message that can change the visual or audio presentation of the content on the screen.
+    * @interface
+    */
+    export type Command = interfaces.alexa.presentation.aplt.SetValueCommand | interfaces.alexa.presentation.aplt.IdleCommand | interfaces.alexa.presentation.aplt.AutoPageCommand | interfaces.alexa.presentation.aplt.ScrollCommand | interfaces.alexa.presentation.aplt.SendEventCommand | interfaces.alexa.presentation.aplt.ParallelCommand | interfaces.alexa.presentation.aplt.SetPageCommand | interfaces.alexa.presentation.aplt.SequentialCommand;
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Whether the value is a relative or absolute offset. Defaults to absolute.
+     * @enum
+     */
+    export type Position = 'absolute' | 'relative';
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Contains the runtime information for the interface.
+     * @interface
+     */
+    export interface Runtime {
+        'maxVersion'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Name of a supported profile on character display.
+     * @enum
+     */
+    export type TargetProfile = 'FOUR_CHARACTER_CLOCK' | 'NONE';
+}
+
 export namespace interfaces.amazonpay.model.request {
    /**
     *
     * @interface
     */
-    export type BaseAmazonPayEntity = interfaces.amazonpay.model.request.AuthorizeAttributes | interfaces.amazonpay.model.request.SellerBillingAgreementAttributes | interfaces.amazonpay.request.SetupAmazonPayRequest | interfaces.amazonpay.model.request.ProviderCredit | interfaces.amazonpay.model.request.Price | interfaces.amazonpay.request.ChargeAmazonPayRequest | interfaces.amazonpay.model.request.BillingAgreementAttributes | interfaces.amazonpay.model.request.SellerOrderAttributes | interfaces.amazonpay.model.request.ProviderAttributes;
+    export type BaseAmazonPayEntity = interfaces.amazonpay.model.request.SellerBillingAgreementAttributes | interfaces.amazonpay.model.request.Price | interfaces.amazonpay.request.ChargeAmazonPayRequest | interfaces.amazonpay.model.request.BillingAgreementAttributes | interfaces.amazonpay.model.request.SellerOrderAttributes | interfaces.amazonpay.model.request.ProviderAttributes | interfaces.amazonpay.model.request.AuthorizeAttributes | interfaces.amazonpay.request.SetupAmazonPayRequest | interfaces.amazonpay.model.request.ProviderCredit;
 }
 
 export namespace interfaces.amazonpay.model.request {
@@ -1267,7 +1313,7 @@ export namespace interfaces.connections.entities {
     *
     * @interface
     */
-    export type BaseEntity = interfaces.connections.entities.Restaurant | interfaces.connections.entities.PostalAddress;
+    export type BaseEntity = interfaces.connections.entities.PostalAddress | interfaces.connections.entities.Restaurant;
 }
 
 export namespace interfaces.connections.requests {
@@ -1275,7 +1321,7 @@ export namespace interfaces.connections.requests {
     *
     * @interface
     */
-    export type BaseRequest = interfaces.connections.requests.ScheduleFoodEstablishmentReservationRequest | interfaces.connections.requests.PrintPDFRequest | interfaces.connections.requests.PrintImageRequest | interfaces.connections.requests.ScheduleTaxiReservationRequest | interfaces.connections.requests.PrintWebPageRequest;
+    export type BaseRequest = interfaces.connections.requests.ScheduleFoodEstablishmentReservationRequest | interfaces.connections.requests.PrintImageRequest | interfaces.connections.requests.PrintWebPageRequest | interfaces.connections.requests.PrintPDFRequest | interfaces.connections.requests.ScheduleTaxiReservationRequest;
 }
 
 export namespace interfaces.customInterfaceController {
@@ -1669,6 +1715,14 @@ export namespace interfaces.viewport {
 
 export namespace interfaces.viewport {
     /**
+     * Type of the viewport.   * `STANDARD` Indicates that this viewport occupies an exclusive area of the screen.   * `OVERLAY` Indicates that the viewport is an overlay, sharing the screen with other experiences.
+     * @enum
+     */
+    export type PresentationType = 'STANDARD' | 'OVERLAY';
+}
+
+export namespace interfaces.viewport {
+    /**
      * The shape of the viewport.
      * @enum
      */
@@ -1681,6 +1735,14 @@ export namespace interfaces.viewport {
      * @enum
      */
     export type Touch = 'SINGLE';
+}
+
+export namespace interfaces.viewport {
+   /**
+    *
+    * @interface
+    */
+    export type TypedViewportState = interfaces.viewport.APLViewportState | interfaces.viewport.APLTViewportState;
 }
 
 export namespace interfaces.viewport {
@@ -1711,6 +1773,74 @@ export namespace interfaces.viewport {
     export interface ViewportStateVideo {
         'codecs'?: Array<interfaces.viewport.video.Codecs>;
     }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * Details of the technologies which are available for playing video on the device.
+     * @interface
+     */
+    export interface ViewportVideo {
+        'codecs'?: Array<interfaces.viewport.video.Codecs>;
+    }
+}
+
+export namespace interfaces.viewport.apl {
+    /**
+     * The viewport configuration at the time of the request.
+     * @interface
+     */
+    export interface CurrentConfiguration {
+        'mode': interfaces.viewport.Mode;
+        'video'?: interfaces.viewport.ViewportVideo;
+        'size': interfaces.viewport.size.ViewportSize;
+    }
+}
+
+export namespace interfaces.viewport.apl {
+    /**
+     *
+     * @interface
+     */
+    export interface ViewportConfiguration {
+        'current': interfaces.viewport.apl.CurrentConfiguration;
+    }
+}
+
+export namespace interfaces.viewport.aplt {
+    /**
+     * Supported character set on a text display   * `SEVEN_SEGMENT` - 7-segment display 
+     * @enum
+     */
+    export type CharacterFormat = 'SEVEN_SEGMENT';
+}
+
+export namespace interfaces.viewport.aplt {
+    /**
+     *
+     * @interface
+     */
+    export interface InterSegment {
+        'x': number;
+        'y': number;
+        'characters': string;
+    }
+}
+
+export namespace interfaces.viewport.aplt {
+    /**
+     * name of viewport's profile
+     * @enum
+     */
+    export type ViewportProfile = 'FOUR_CHARACTER_CLOCK';
+}
+
+export namespace interfaces.viewport.size {
+   /**
+    * Information regarding the range of sizes for a configuration.
+    * @interface
+    */
+    export type ViewportSize = interfaces.viewport.size.ContinuousViewportSize | interfaces.viewport.size.DiscreteViewportSize;
 }
 
 export namespace interfaces.viewport.video {
@@ -1971,7 +2101,7 @@ export namespace services.gameEngine {
     * Recognizers are conditions that, at any moment, are either true or false, based on all the raw button events that the Input Handler has received in the time elapsed since the Input Handler session started.
     * @interface
     */
-    export type Recognizer = services.gameEngine.ProgressRecognizer | services.gameEngine.PatternRecognizer | services.gameEngine.DeviationRecognizer;
+    export type Recognizer = services.gameEngine.PatternRecognizer | services.gameEngine.DeviationRecognizer | services.gameEngine.ProgressRecognizer;
 }
 
 export namespace services.listManagement {
@@ -2622,7 +2752,7 @@ export namespace ui {
     *
     * @interface
     */
-    export type Card = ui.LinkAccountCard | ui.StandardCard | ui.AskForPermissionsConsentCard | ui.SimpleCard;
+    export type Card = ui.AskForPermissionsConsentCard | ui.LinkAccountCard | ui.StandardCard | ui.SimpleCard;
 }
 
 export namespace ui {
@@ -3278,6 +3408,178 @@ export namespace interfaces.alexa.presentation.apl {
         'arguments'?: Array<any>;
         'source'?: any;
         'components'?: any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Automatically progress through a series of pages displayed in a Pager component. The AutoPage command finishes after the last page has been displayed for the requested time period.
+     * @interface
+     */
+    export interface AutoPageCommand {
+        'type' : 'AutoPage';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'componentId': string;
+        'count'?: number | string;
+        'duration'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Alexa.Presentation.APLT.ExecuteCommands directive used to send APL-T commands to a device.
+     * @interface
+     */
+    export interface ExecuteCommandsDirective {
+        'type' : 'Alexa.Presentation.APLT.ExecuteCommands';
+        'commands': Array<interfaces.alexa.presentation.aplt.Command>;
+        'token': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * The idle command does nothing. It may be a placeholder or used to insert a calculated delay in a longer series of commands.
+     * @interface
+     */
+    export interface IdleCommand {
+        'type' : 'Idle';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Execute a series of commands in parallel. The parallel command starts executing all child command simultaneously. The parallel command is considered finished when all of its child commands have finished. When the parallel command is terminated early, all currently executing commands are terminated.
+     * @interface
+     */
+    export interface ParallelCommand {
+        'type' : 'Parallel';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'commands': Array<interfaces.alexa.presentation.aplt.Command>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     *
+     * @interface
+     */
+    export interface RenderDocumentDirective {
+        'type' : 'Alexa.Presentation.APLT.RenderDocument';
+        'token'?: string;
+        'targetProfile'?: interfaces.alexa.presentation.aplt.TargetProfile;
+        'document'?: { [key: string]: any; };
+        'datasources'?: { [key: string]: any; };
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Scroll a ScrollView or Sequence forward or backward by a number of pages. The Scroll command has the following properties in addition to the regular command properties.
+     * @interface
+     */
+    export interface ScrollCommand {
+        'type' : 'Scroll';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'distance'?: number | string;
+        'componentId': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * The SendEvent command allows the APL author to generate and send an event to Alexa.
+     * @interface
+     */
+    export interface SendEventCommand {
+        'type' : 'SendEvent';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'arguments'?: Array<string>;
+        'components'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * A sequential command executes a series of commands in order. The sequential command executes the command list in order, waiting for the previous command to finish before executing the next. The sequential command is finished when all of its child commands have finished. When the Sequential command is terminated early, the currently executing command is terminated and no further commands are executed.
+     * @interface
+     */
+    export interface SequentialCommand {
+        'type' : 'Sequential';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'catch'?: Array<interfaces.alexa.presentation.aplt.Command>;
+        'commands': Array<interfaces.alexa.presentation.aplt.Command>;
+        'finally'?: Array<interfaces.alexa.presentation.aplt.Command>;
+        'repeatCount'?: number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Change the page displayed in a Pager component. The SetPage command finishes when the item is fully in view.
+     * @interface
+     */
+    export interface SetPageCommand {
+        'type' : 'SetPage';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'componentId': string;
+        'position'?: interfaces.alexa.presentation.aplt.Position;
+        'value': number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     * Change a dynamic property of a component without redrawing the screen.
+     * @interface
+     */
+    export interface SetValueCommand {
+        'type' : 'SetValue';
+        'delay'?: number;
+        'description'?: string;
+        'screenLock'?: boolean;
+        'when'?: boolean | string;
+        'componentId'?: string;
+        'property': string;
+        'value': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.aplt {
+    /**
+     *
+     * @interface
+     */
+    export interface UserEvent {
+        'type' : 'Alexa.Presentation.APLT.UserEvent';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token'?: string;
+        'arguments'?: Array<any>;
+        'source'?: any;
     }
 }
 
@@ -4199,6 +4501,64 @@ export namespace interfaces.videoapp {
     export interface LaunchDirective {
         'type' : 'VideoApp.Launch';
         'videoItem': interfaces.videoapp.VideoItem;
+    }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * This object contains the characteristics related to the text device's viewport.
+     * @interface
+     */
+    export interface APLTViewportState {
+        'type' : 'APLT';
+        'id'?: string;
+        'supportedProfiles': Array<interfaces.viewport.aplt.ViewportProfile>;
+        'lineLength': number;
+        'lineCount': number;
+        'characterFormat': interfaces.viewport.aplt.CharacterFormat;
+        'interSegments'?: Array<interfaces.viewport.aplt.InterSegment>;
+    }
+}
+
+export namespace interfaces.viewport {
+    /**
+     * This object contains the characteristics related to the APL device's viewport.
+     * @interface
+     */
+    export interface APLViewportState {
+        'type' : 'APL';
+        'id'?: string;
+        'shape': interfaces.viewport.Shape;
+        'dpi': number;
+        'presentationType': interfaces.viewport.PresentationType;
+        'canRotate': boolean;
+        'configuration': interfaces.viewport.apl.ViewportConfiguration;
+    }
+}
+
+export namespace interfaces.viewport.size {
+    /**
+     * Defines range of size with minimum and maximum values for with and height.
+     * @interface
+     */
+    export interface ContinuousViewportSize {
+        'type' : 'CONTINUOUS';
+        'minPixelWidth': number;
+        'minPixelHeight': number;
+        'maxPixelWidth': number;
+        'maxPixelHeight': number;
+    }
+}
+
+export namespace interfaces.viewport.size {
+    /**
+     * Defines a fixed size of viewport.
+     * @interface
+     */
+    export interface DiscreteViewportSize {
+        'type' : 'DISCRETE';
+        'pixelWidth': number;
+        'pixelHeight': number;
     }
 }
 
