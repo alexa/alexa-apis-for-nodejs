@@ -2334,10 +2334,31 @@ export namespace services.monetization {
      *
      * @interface
      */
+    export interface InSkillProductTransactionsResponse {
+        'results': Array<services.monetization.Transactions>;
+        'metadata': services.monetization.Metadata;
+    }
+}
+
+export namespace services.monetization {
+    /**
+     *
+     * @interface
+     */
     export interface InSkillProductsResponse {
         'inSkillProducts': Array<services.monetization.InSkillProduct>;
         'isTruncated': boolean;
         'nextToken': string;
+    }
+}
+
+export namespace services.monetization {
+    /**
+     *
+     * @interface
+     */
+    export interface Metadata {
+        'resultSet'?: services.monetization.ResultSet;
     }
 }
 
@@ -2363,6 +2384,37 @@ export namespace services.monetization {
      * @enum
      */
     export type PurchaseMode = 'TEST' | 'LIVE';
+}
+
+export namespace services.monetization {
+    /**
+     *
+     * @interface
+     */
+    export interface ResultSet {
+        'nextToken'?: string;
+    }
+}
+
+export namespace services.monetization {
+    /**
+     * Transaction status for in skill product purchases. * 'PENDING_APPROVAL_BY_PARENT' - The transaction is pending approval from parent. * 'APPROVED_BY_PARENT' - The transaction was approved by parent and fulfilled successfully.. * 'DENIED_BY_PARENT' - The transaction was declined by parent and hence not fulfilled. * 'EXPIRED_NO_ACTION_BY_PARENT' - The transaction was expired due to no response from parent and hence not fulfilled. * 'ERROR' - The transaction was not fullfiled as there was an error while processing the transaction.
+     * @enum
+     */
+    export type Status = 'PENDING_APPROVAL_BY_PARENT' | 'APPROVED_BY_PARENT' | 'DENIED_BY_PARENT' | 'EXPIRED_NO_ACTION_BY_PARENT' | 'ERROR';
+}
+
+export namespace services.monetization {
+    /**
+     *
+     * @interface
+     */
+    export interface Transactions {
+        'status'?: services.monetization.Status;
+        'productId'?: string;
+        'createdTime'?: string;
+        'lastModifiedTime'?: string;
+    }
 }
 
 export namespace services.proactiveEvents {
@@ -5495,6 +5547,94 @@ export namespace services.monetization {
             errorDefinitions.set(400, "Invalid request.");
             errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
             errorDefinitions.set(404, "Requested resource not found.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         * @param {string} acceptLanguage User&#39;s locale/language in context
+         * @param {string} productId Product Id.
+         * @param {string} status Transaction status for in skill product purchases. * &#39;PENDING_APPROVAL_BY_PARENT&#39; - The transaction is pending approval from parent. * &#39;APPROVED_BY_PARENT&#39; - The transaction was approved by parent and fulfilled successfully.. * &#39;DENIED_BY_PARENT&#39; - The transaction was declined by parent and hence not fulfilled. * &#39;EXPIRED_NO_ACTION_BY_PARENT&#39; - The transaction was expired due to no response from parent and hence not fulfilled. * &#39;ERROR&#39; - The transaction was not fullfiled as there was an error while processing the transaction.
+         * @param {string} fromLastModifiedTime Filter transactions based on last modified time stamp, FROM duration in format (UTC ISO 8601) i.e. yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSS&#39;Z&#39;
+         * @param {string} toLastModifiedTime Filter transactions based on last modified time stamp, TO duration in format (UTC ISO 8601) i.e. yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSS&#39;Z&#39;
+         * @param {string} nextToken When response to this API call is truncated, the response also includes the nextToken in metadata, the value of which can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that In-Skill Products API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 100 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned because maxResults was exceeded, the response contains nextToken which can be used to fetch next set of result.
+         */
+        async getInSkillProductsTransactions(acceptLanguage : string, productId? : string, status? : string, fromLastModifiedTime? : string, toLastModifiedTime? : string, nextToken? : string, maxResults? : number) : Promise<services.monetization.InSkillProductTransactionsResponse> {
+            const __operationId__ = 'getInSkillProductsTransactions';
+            // verify required parameter 'acceptLanguage' is not null or undefined
+            if (acceptLanguage == null) {
+                throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+            if(productId != null) {
+                queryParams.set('productId', productId);
+            }
+            if(status != null) {
+                queryParams.set('status', status);
+            }
+            if(fromLastModifiedTime != null) {
+                queryParams.set('fromLastModifiedTime', fromLastModifiedTime.toString());
+            }
+            if(toLastModifiedTime != null) {
+                queryParams.set('toLastModifiedTime', toLastModifiedTime.toString());
+            }
+            if(nextToken != null) {
+                queryParams.set('nextToken', nextToken);
+            }
+            if(maxResults != null) {
+                queryParams.set('maxResults', maxResults.toString());
+            }
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+            headerParams.push({key : 'Accept-Language', value : acceptLanguage});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/users/~current/skills/~current/inSkillProductsTransactions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns a list of transactions of all in skill products purchases in last 30 days on success.");
+            errorDefinitions.set(400, "Invalid request");
+            errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
+            errorDefinitions.set(403, "Forbidden request");
+            errorDefinitions.set(404, "Product id doesn&#39;t exist / invalid / not found.");
+            errorDefinitions.set(412, "Non-Child Directed Skill is not supported.");
+            errorDefinitions.set(429, "The request is throttled.");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        /**
+         *
+         */
+        async getVoicePurchaseSetting() : Promise<boolean> {
+            const __operationId__ = 'getVoicePurchaseSetting';
+
+            const queryParams : Map<string, string> = new Map<string, string>();
+
+            const headerParams : Array<{key : string, value : string}> = [];
+            headerParams.push({key : 'Content-type', value : 'application/json'});
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/users/~current/skills/~current/settings/voicePurchasing.enabled";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns a boolean value for voice purchase setting on success.");
+            errorDefinitions.set(400, "Invalid request.");
+            errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
             errorDefinitions.set(500, "Internal Server Error.");
 
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
