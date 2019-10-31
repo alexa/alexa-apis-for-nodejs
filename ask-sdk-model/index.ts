@@ -82,7 +82,7 @@ export namespace services {
         private static buildUrl(
             endpoint : string,
             path : string,
-            queryParameters : Map<string, string>,
+            queryParameters : Array<{ key : string, value : string }>,
             pathParameters : Map<string, string>,
         ) : string {
             const processedEndpoint : string = endpoint.endsWith('/') ? endpoint.substr(0, endpoint.length - 1) : endpoint;
@@ -107,7 +107,7 @@ export namespace services {
             return result;
         }
 
-        private static buildQueryString(params : Map<string, string>, isQueryStart : boolean) : string {
+        private static buildQueryString(params : Array<{ key : string, value : string }>, isQueryStart : boolean) : string {
             if (!params) {
                 return '';
             }
@@ -120,10 +120,10 @@ export namespace services {
                 sb.push('?');
             }
 
-            params.forEach((paramValue : string, paramName : string) => {
-                sb.push(encodeURIComponent(paramName));
+            params.forEach((obj) => {
+                sb.push(encodeURIComponent(obj.key));
                 sb.push('=');
-                sb.push(encodeURIComponent(paramValue));
+                sb.push(encodeURIComponent(obj.value));
                 sb.push('&');
             });
             sb.pop();
@@ -161,7 +161,7 @@ export namespace services {
             endpoint : string,
             path : string,
             pathParams : Map<string, string>,
-            queryParams : Map<string, string>,
+            queryParams : Array<{ key : string, value : string }>,
             headerParams : Array<{ key : string, value : string }>,
             bodyParam : any,
             errors : Map<number, string>,
@@ -298,7 +298,7 @@ export namespace services {
                 throw new Error(`Required parameter accessTokenRequest was null or undefined when calling generateAccessToken.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{key : string, value : string}> = [];
             headerParams.push({key : 'Content-type', value : 'application/x-www-form-urlencoded'});
@@ -425,6 +425,15 @@ export type PermissionStatus = 'GRANTED' | 'DENIED';
 export interface Permissions {
     'consentToken'?: string;
     'scopes'?: { [key: string]: Scope; };
+}
+
+/**
+ * An object that describes the user (person) who is making the request.
+ * @interface
+ */
+export interface Person {
+    'personId'?: string;
+    'accessToken'?: string;
 }
 
 /**
@@ -1648,6 +1657,7 @@ export namespace interfaces.system {
         'application': Application;
         'user': User;
         'device'?: Device;
+        'person'?: Person;
         'apiEndpoint': string;
         'apiAccessToken'?: string;
     }
@@ -4939,10 +4949,10 @@ export namespace services.deviceAddress {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -4974,10 +4984,10 @@ export namespace services.deviceAddress {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -5023,10 +5033,10 @@ export namespace services.directive {
                 throw new Error(`Required parameter sendDirectiveRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5065,10 +5075,10 @@ export namespace services.endpointEnumeration {
         async getEndpoints() : Promise<services.endpointEnumeration.EndpointEnumerationResponse> {
             const __operationId__ = 'getEndpoints';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5109,10 +5119,10 @@ export namespace services.listManagement {
         async getListsMetadata() : Promise<services.listManagement.AlexaListsMetadata> {
             const __operationId__ = 'getListsMetadata';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5140,10 +5150,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5179,10 +5189,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter itemId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5219,10 +5229,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter itemId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5264,10 +5274,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter updateListItemRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5305,10 +5315,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter createListItemRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5345,10 +5355,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter updateListRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5386,10 +5396,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter status was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5422,10 +5432,10 @@ export namespace services.listManagement {
                 throw new Error(`Required parameter createListRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5475,26 +5485,26 @@ export namespace services.monetization {
                 throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
             if(purchasable != null) {
-                queryParams.set('purchasable', purchasable);
+                queryParams.push({ key: 'purchasable', value: purchasable });
             }
             if(entitled != null) {
-                queryParams.set('entitled', entitled);
+                queryParams.push({ key: 'entitled', value: entitled });
             }
             if(productType != null) {
-                queryParams.set('productType', productType);
+                queryParams.push({ key: 'productType', value: productType });
             }
             if(nextToken != null) {
-                queryParams.set('nextToken', nextToken);
+                queryParams.push({ key: 'nextToken', value: nextToken });
             }
             if(maxResults != null) {
-                queryParams.set('maxResults', maxResults.toString());
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
             }
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
-            headerParams.push({key : 'Accept-Language', value : acceptLanguage});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5528,11 +5538,11 @@ export namespace services.monetization {
                 throw new Error(`Required parameter productId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
-            headerParams.push({key : 'Accept-Language', value : acceptLanguage});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -5569,29 +5579,29 @@ export namespace services.monetization {
                 throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
             if(productId != null) {
-                queryParams.set('productId', productId);
+                queryParams.push({ key: 'productId', value: productId });
             }
             if(status != null) {
-                queryParams.set('status', status);
+                queryParams.push({ key: 'status', value: status });
             }
             if(fromLastModifiedTime != null) {
-                queryParams.set('fromLastModifiedTime', fromLastModifiedTime.toString());
+                queryParams.push({ key: 'fromLastModifiedTime', value: fromLastModifiedTime.toString() });
             }
             if(toLastModifiedTime != null) {
-                queryParams.set('toLastModifiedTime', toLastModifiedTime.toString());
+                queryParams.push({ key: 'toLastModifiedTime', value: toLastModifiedTime.toString() });
             }
             if(nextToken != null) {
-                queryParams.set('nextToken', nextToken);
+                queryParams.push({ key: 'nextToken', value: nextToken });
             }
             if(maxResults != null) {
-                queryParams.set('maxResults', maxResults.toString());
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
             }
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
-            headerParams.push({key : 'Accept-Language', value : acceptLanguage});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5619,10 +5629,10 @@ export namespace services.monetization {
         async getVoicePurchaseSetting() : Promise<boolean> {
             const __operationId__ = 'getVoicePurchaseSetting';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5671,10 +5681,10 @@ export namespace services.proactiveEvents {
                 throw new Error(`Required parameter createProactiveEventRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5724,10 +5734,10 @@ export namespace services.reminderManagement {
                 throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -5757,10 +5767,10 @@ export namespace services.reminderManagement {
                 throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -5795,10 +5805,10 @@ export namespace services.reminderManagement {
                 throw new Error(`Required parameter reminderRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -5825,10 +5835,10 @@ export namespace services.reminderManagement {
         async getReminders() : Promise<services.reminderManagement.GetRemindersResponse> {
             const __operationId__ = 'getReminders';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5857,10 +5867,10 @@ export namespace services.reminderManagement {
                 throw new Error(`Required parameter reminderRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5917,10 +5927,10 @@ export namespace services.skillMessaging {
                 throw new Error(`Required parameter sendSkillMessagingRequest was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('userId', userId);
@@ -5963,10 +5973,10 @@ export namespace services.ups {
         async getProfileEmail() : Promise<string> {
             const __operationId__ = 'getProfileEmail';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5992,10 +6002,10 @@ export namespace services.ups {
         async getProfileGivenName() : Promise<string> {
             const __operationId__ = 'getProfileGivenName';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6021,10 +6031,10 @@ export namespace services.ups {
         async getProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
             const __operationId__ = 'getProfileMobileNumber';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6050,10 +6060,10 @@ export namespace services.ups {
         async getProfileName() : Promise<string> {
             const __operationId__ = 'getProfileName';
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6084,10 +6094,10 @@ export namespace services.ups {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -6119,10 +6129,10 @@ export namespace services.ups {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -6154,10 +6164,10 @@ export namespace services.ups {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
             }
 
-            const queryParams : Map<string, string> = new Map<string, string>();
+            const queryParams : Array<{ key : string, value : string }> = [];
 
-            const headerParams : Array<{key : string, value : string}> = [];
-            headerParams.push({key : 'Content-type', value : 'application/json'});
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
