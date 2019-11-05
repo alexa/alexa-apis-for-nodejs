@@ -367,6 +367,7 @@ export type Cause = ConnectionCompleted;
  */
 export interface Context {
     'System': interfaces.system.SystemState;
+    'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.RenderedDocumentState;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerState;
     'Automotive'?: interfaces.automotive.AutomotiveState;
     'Display'?: interfaces.display.DisplayState;
@@ -394,7 +395,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -555,6 +556,7 @@ export interface SupportedInterfaces {
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
     'Geolocation'?: interfaces.geolocation.GeolocationInterface;
+    'Navigation'?: interfaces.navigation.NavigationInterface;
 }
 
 /**
@@ -766,10 +768,152 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * The entity context data which was attached to an element.
+     * @interface
+     */
+    export interface ComponentEntity {
+        'type'?: string;
+        'value'?: string;
+        'id'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Component state.
      * @enum
      */
     export type ComponentState = 'checked' | 'disabled' | 'focused';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Definition of a visible APL element shown on screen.
+     * @interface
+     */
+    export interface ComponentVisibleOnScreen {
+        'children'?: Array<interfaces.alexa.presentation.apl.ComponentVisibleOnScreen>;
+        'entities'?: Array<interfaces.alexa.presentation.apl.ComponentEntity>;
+        'id': string;
+        'position': string;
+        'tags': interfaces.alexa.presentation.apl.ComponentVisibleOnScreenTags;
+        'transform'?: Array<number>;
+        'type': string;
+        'uid': string;
+        'visibility'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * An element in a scrolling list
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenListItemTag {
+        'index'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * An ordered list of items
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenListTag {
+        'itemCount'?: number;
+        'lowestIndexSeen'?: number;
+        'highestIndexSeen'?: number;
+        'lowestOrdinalSeen'?: number;
+        'highestOrdinalSeen'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Media player
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenMediaTag {
+        'positionInMilliseconds'?: number;
+        'state'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenMediaTagStateEnum;
+        'allowAdjustSeekPositionForward'?: boolean;
+        'allowAdjustSeekPositionBackwards'?: boolean;
+        'allowNext'?: boolean;
+        'allowPrevious'?: boolean;
+        'entities'?: Array<interfaces.alexa.presentation.apl.ComponentEntity>;
+        'url'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Media player stage posible states
+     * @enum
+     */
+    export type ComponentVisibleOnScreenMediaTagStateEnum = 'idle' | 'playing' | 'paused';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * A collection of items that are displayed one at a time.
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenPagerTag {
+        'index'?: number;
+        'pageCount'?: number;
+        'allowForward'?: boolean;
+        'allowBackwards'?: boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * A scrollable region.
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenScrollableTag {
+        'direction'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenScrollableTagDirectionEnum;
+        'allowForward'?: boolean;
+        'allowBackward'?: boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Scrolling direction
+     * @enum
+     */
+    export type ComponentVisibleOnScreenScrollableTagDirectionEnum = 'horizontal' | 'vertical';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The tags which were attached to an element.
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenTags {
+        'checked'?: boolean;
+        'clickable'?: boolean;
+        'disabled'?: boolean;
+        'focused'?: boolean;
+        'list'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenListTag;
+        'listItem'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenListItemTag;
+        'media'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenMediaTag;
+        'ordinal'?: number;
+        'pager'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenPagerTag;
+        'scrollable'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenScrollableTag;
+        'spoken'?: boolean;
+        'viewport'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenViewportTag;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The entire screen in which a document is rendered.
+     * @interface
+     */
+    export interface ComponentVisibleOnScreenViewportTag {
+    }
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -794,6 +938,18 @@ export namespace interfaces.alexa.presentation.apl {
      * @enum
      */
     export type Position = 'absolute' | 'relative';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Provides context for any APL content shown on screen.
+     * @interface
+     */
+    export interface RenderedDocumentState {
+        'token': string;
+        'version'?: string;
+        'componentsVisibleOnScreen'?: Array<interfaces.alexa.presentation.apl.ComponentVisibleOnScreen>;
+    }
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -1617,6 +1773,15 @@ export namespace interfaces.monetization.v1 {
      * @enum
      */
     export type PurchaseResult = 'ACCEPTED' | 'DECLINED' | 'NOT_ENTITLED' | 'ERROR' | 'ALREADY_PURCHASED';
+}
+
+export namespace interfaces.navigation {
+    /**
+     *
+     * @interface
+     */
+    export interface NavigationInterface {
+    }
 }
 
 export namespace interfaces.system {
@@ -4473,6 +4638,16 @@ export namespace interfaces.messaging {
         'timestamp': string;
         'locale'?: string;
         'message': { [key: string]: any; };
+    }
+}
+
+export namespace interfaces.navigation.assistance {
+    /**
+     * New directive that Alexa will send to navigation engine to query road regulations about the road segments that the user is on.
+     * @interface
+     */
+    export interface AnnounceRoadRegulation {
+        'type' : 'Navigation.Assistance.AnnounceRoadRegulation';
     }
 }
 
