@@ -395,7 +395,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | dialog.ElicitSlotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
 
 /**
  * An object that represents what the user wants.
@@ -441,7 +441,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -552,6 +552,7 @@ export interface Status {
 export interface SupportedInterfaces {
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.AlexaPresentationAplInterface;
     'Alexa.Presentation.APLT'?: interfaces.alexa.presentation.aplt.AlexaPresentationApltInterface;
+    'Alexa.Presentation.HTML'?: interfaces.alexa.presentation.html.AlexaPresentationHtmlInterface;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerInterface;
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
@@ -1026,6 +1027,76 @@ export namespace interfaces.alexa.presentation.aplt {
      * @enum
      */
     export type TargetProfile = 'FOUR_CHARACTER_CLOCK' | 'NONE';
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaPresentationHtmlInterface {
+        'runtime'?: interfaces.alexa.presentation.html.Runtime;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @interface
+     */
+    export interface Configuration {
+        'timeoutInSeconds'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * Contains the runtime information for the interface.
+     * @interface
+     */
+    export interface Runtime {
+        'maxVersion': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @interface
+     */
+    export interface StartRequest {
+        'method': interfaces.alexa.presentation.html.StartRequestMethod;
+        'uri'?: string;
+        'headers'?: any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @enum
+     */
+    export type StartRequestMethod = 'GET';
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * Properties for performing text to speech transformations. These are the same properties that [APL transformers](https://developer.amazon.com/docs/alexa-presentation-language/apl-data-source.html#transformer-properties-and-conversion-rules) use. 
+     * @interface
+     */
+    export interface Transformer {
+        'transformer': interfaces.alexa.presentation.html.TransformerType;
+        'inputPath': string;
+        'outputName'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @enum
+     */
+    export type TransformerType = 'ssmlToSpeech' | 'textToSpeech' | 'textToHint' | 'ssmlToText';
 }
 
 export namespace interfaces.amazonpay.model.request {
@@ -3807,6 +3878,46 @@ export namespace interfaces.alexa.presentation.aplt {
         'token'?: string;
         'arguments'?: Array<any>;
         'source'?: any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * The HandleMessage directive sends a message to a skill's web application that runs on the device browser. To use this directive, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * @interface
+     */
+    export interface HandleMessageDirective {
+        'type' : 'Alexa.Presentation.HTML.HandleMessage';
+        'message': any;
+        'transformers'?: Array<interfaces.alexa.presentation.html.Transformer>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * The Message request sends a message to the skill lambda. To use this request, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * @interface
+     */
+    export interface MessageRequest {
+        'type' : 'Alexa.Presentation.html.Message';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'message': any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * The Start directive provides the data necessary to load an HTML page on the target device. To use this directive, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * @interface
+     */
+    export interface StartDirective {
+        'type' : 'Alexa.Presentation.HTML.Start';
+        'data'?: any;
+        'transformers'?: Array<interfaces.alexa.presentation.html.Transformer>;
+        'request': interfaces.alexa.presentation.html.StartRequest;
+        'configuration': interfaces.alexa.presentation.html.Configuration;
     }
 }
 
