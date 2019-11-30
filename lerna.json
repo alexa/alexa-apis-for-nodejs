@@ -1,0 +1,12 @@
+{
+  "version": "2.7.0",
+  "packages": [
+    "ask-sdk-model",
+    "ask-sdk-model-runtime"
+  ],
+  "command": {
+    "bootstrap": {
+      "ci": false
+    }
+  }
+}

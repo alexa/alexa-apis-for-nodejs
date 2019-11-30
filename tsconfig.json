@@ -1,0 +1,33 @@
+{
+  "compilerOptions" : {
+    "target" : "es5",
+    "module" : "commonjs",
+    "moduleResolution": "node",
+    "outDir" : "dist",
+    "sourceMap" : true,
+    "alwaysStrict" : true,
+    "declaration" : true,
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "include" : [
+    "ask-sdk-model",
+    "ask-sdk-model-runtime"
+  ],
+  "exclude" : [
+    "node_modules"
+  ],
+  "typedocOptions": {
+    "name" : "Alexa Apis for Node.js",
+    "readme" : "./README.md",
+    "mode": "file",
+    "out": "typedoc",
+    "theme": "default",
+    "excludeExternals" : true,
+    "hideGenerator" : true,
+    "target": "ES6",
+    "module": "commonjs"
+  }
+}

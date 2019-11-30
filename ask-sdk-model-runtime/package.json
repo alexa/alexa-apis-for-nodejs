@@ -1,0 +1,32 @@
+{
+    "name": "ask-sdk-model-runtime",
+    "version": "1.0",
+    "description": "The base components for ASK SDK Models",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+      "gulp": "./node_modules/.bin/gulp"
+    },
+    "author": "Amazon.com",
+    "contributors": [
+      {
+        "name": "ASK SDK",
+        "email": "ask-sdk@amazon.com"
+      }
+    ],
+    "license": "Apache-2.0",
+    "keywords": [
+      "Alexa",
+      "Skill",
+      "SDK"
+    ],
+    "devDependencies": {
+      "del": "^3.0.0",
+      "gulp": "^4.0.0",
+      "typescript": "^2.8.1"
+    },
+    "repository": "github:alexa/alexa-apis-for-nodejs",
+    "bugs": "https://github.com/alexa/alexa-skill-sdk-for-nodejs/issues",
+    "homepage": "https://github.com/alexa/alexa-skill-sdk-for-nodejs#readme"
+  }
+  
