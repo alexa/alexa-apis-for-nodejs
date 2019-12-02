@@ -18,7 +18,9 @@
     "keywords": [
       "Alexa",
       "Skill",
-      "SDK"
+      "SDK",
+      "Models",
+      "Model Runtime"
     ],
     "devDependencies": {
       "del": "^3.0.0",

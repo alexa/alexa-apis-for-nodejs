@@ -11,7 +11,7 @@ that is used by the SDK models.
 ## Installing
 
 ```
-npm install --save smapi-sdk-model-runtime
+npm install --save ask-sdk-model-runtime
 ```
 
 ## Opening Issues
