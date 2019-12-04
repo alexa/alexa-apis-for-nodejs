@@ -1496,6 +1496,25 @@ export namespace interfaces.audioplayer {
 export namespace interfaces.audioplayer {
     /**
      *
+     * @interface
+     */
+    export interface CaptionData {
+        'content'?: string;
+        'type'?: interfaces.audioplayer.CaptionType;
+    }
+}
+
+export namespace interfaces.audioplayer {
+    /**
+     *
+     * @enum
+     */
+    export type CaptionType = 'WEBVTT';
+}
+
+export namespace interfaces.audioplayer {
+    /**
+     *
      * @enum
      */
     export type ClearBehavior = 'CLEAR_ALL' | 'CLEAR_ENQUEUED';
@@ -1558,6 +1577,7 @@ export namespace interfaces.audioplayer {
         'token': string;
         'url': string;
         'offsetInMilliseconds': number;
+        'captionData'?: interfaces.audioplayer.CaptionData;
     }
 }
 
