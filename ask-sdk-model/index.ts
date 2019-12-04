@@ -35,6 +35,17 @@ export namespace services {
     }
 
     /**
+     * Represents a response with parsed body.
+     * @export
+     * @interface ApiResponse
+     */
+    export interface ApiResponse {
+        headers : Array<{key : string, value : string}>;
+        body? : any;
+        statusCode : number;
+    }
+
+    /**
      * Represents a basic contract for API request execution
      * @export
      * @interface ApiClient
@@ -195,7 +206,13 @@ export namespace services {
             }
 
             if (BaseServiceClient.isCodeSuccessful(response.statusCode)) {
-                return body;
+                const apiResponse : ApiResponse = {
+                    headers : response.headers,
+                    body,
+                    statusCode : response.statusCode,
+                };
+
+                return apiResponse;
             }
 
             const err = new Error('Unknown error');
@@ -224,7 +241,8 @@ export namespace services {
     export interface AccessTokenRequest {
         clientId : string;
         clientSecret : string;
-        scope : string;
+        scope? : string;
+        refreshToken? : string;
     }
 
     /**
@@ -243,6 +261,7 @@ export namespace services {
     export interface AuthenticationConfiguration {
         clientId : string;
         clientSecret : string;
+        refreshToken? : string;
     }
 
     /**
@@ -250,20 +269,26 @@ export namespace services {
      */
     export class LwaServiceClient extends BaseServiceClient {
         protected static EXPIRY_OFFSET_MILLIS : number = 60000;
+        protected static REFRESH_ACCESS_TOKEN : string = 'refresh_access_token';
+        protected static CLIENT_CREDENTIALS_GRANT_TYPE : string = 'client_credentials';
+        protected static LWA_CREDENTIALS_GRANT_TYPE : string = 'refresh_token';
 
         protected authenticationConfiguration : AuthenticationConfiguration;
-        protected scopeTokenStore : {[scope : string] : AccessToken};
+        protected tokenStore : {[cacheKey : string] : AccessToken};
+        protected grantType : string;
 
         constructor(options : {
             apiConfiguration : ApiConfiguration,
             authenticationConfiguration : AuthenticationConfiguration,
+            grantType? : string,
         }) {
             super(options.apiConfiguration);
             if (options.authenticationConfiguration == null) {
                 throw new Error('AuthenticationConfiguration cannot be null or undefined.');
             }
+            this.grantType = options.grantType ? options.grantType : LwaServiceClient.CLIENT_CREDENTIALS_GRANT_TYPE;
             this.authenticationConfiguration = options.authenticationConfiguration;
-            this.scopeTokenStore = {};
+            this.tokenStore = {};
         }
 
         public async getAccessTokenForScope(scope : string) : Promise<string> {
@@ -271,7 +296,12 @@ export namespace services {
                 throw new Error('Scope cannot be null or undefined.');
             }
 
-            const accessToken = this.scopeTokenStore[scope];
+            return this.getAccessToken(scope);
+        }
+
+        public async getAccessToken(scope? : string) : Promise<string> {
+            const cacheKey : string = scope ? scope : LwaServiceClient.REFRESH_ACCESS_TOKEN;
+            const accessToken = this.tokenStore[cacheKey];
 
             if (accessToken && accessToken.expiry > Date.now() + LwaServiceClient.EXPIRY_OFFSET_MILLIS) {
                 return accessToken.token;
@@ -280,12 +310,20 @@ export namespace services {
             const accessTokenRequest : AccessTokenRequest = {
                 clientId : this.authenticationConfiguration.clientId,
                 clientSecret : this.authenticationConfiguration.clientSecret,
-                scope,
             };
+            if (scope && this.authenticationConfiguration.refreshToken) {
+                throw new Error('Cannot support both refreshToken and scope.');
+            } else if (scope == null && this.authenticationConfiguration.refreshToken == null) {
+                throw new Error('Either refreshToken or scope must be specified.');
+            } else if (scope == null) {
+                accessTokenRequest.refreshToken = this.authenticationConfiguration.refreshToken;
+            } else {
+                accessTokenRequest.scope = scope;
+            }
 
             const accessTokenResponse : AccessTokenResponse = await this.generateAccessToken(accessTokenRequest);
 
-            this.scopeTokenStore[scope] = {
+            this.tokenStore[cacheKey] = {
                 token : accessTokenResponse.access_token,
                 expiry : Date.now() + accessTokenResponse.expires_in * 1000,
             };
@@ -305,7 +343,8 @@ export namespace services {
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
-            const bodyParams : string = `grant_type=client_credentials&client_secret=${accessTokenRequest.clientSecret}&client_id=${accessTokenRequest.clientId}&scope=${accessTokenRequest.scope}`;
+            const paramInfo = this.grantType === LwaServiceClient.LWA_CREDENTIALS_GRANT_TYPE ? `&refresh_token=${accessTokenRequest.refreshToken}` : `&scope=${accessTokenRequest.scope}`;
+            const bodyParams : string = `grant_type=${this.grantType}&client_secret=${accessTokenRequest.clientSecret}&client_id=${accessTokenRequest.clientId}` + paramInfo;
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, 'Token request sent.');
@@ -313,7 +352,7 @@ export namespace services {
             errorDefinitions.set(401, 'Authentication Failed');
             errorDefinitions.set(500, 'Internal Server Error');
 
-            return this.invoke(
+            const apiResponse : ApiResponse = await this.invoke(
                 'POST',
                 'https://api.amazon.com',
                 '/auth/O2/token',
@@ -324,12 +363,10 @@ export namespace services {
                 errorDefinitions,
                 true,
             );
+
+            return apiResponse.body as AccessTokenResponse;
         }
     }
-}
-
-export namespace services.proactiveEvents {
-    export type SkillStage = 'DEVELOPMENT' | 'LIVE';
 }
 
 /*
@@ -2717,6 +2754,14 @@ export namespace services.proactiveEvents {
      * @enum
      */
     export type RelevantAudienceType = 'Unicast' | 'Multicast';
+}
+
+export namespace services.proactiveEvents {
+    /**
+     * Stage for creating Proactive events. Since proactive events can be created on the DEVELOPMENT and LIVE stages of the skill, this enum provides the stage values that can be used to pass to the service call. 
+     * @enum
+     */
+    export type SkillStage = 'DEVELOPMENT' | 'LIVE';
 }
 
 export namespace services.reminderManagement {
@@ -5228,8 +5273,8 @@ export namespace services.deviceAddress {
          *
          * @param {string} deviceId The device Id for which to get the country and postal code
          */
-        async getCountryAndPostalCode(deviceId : string) : Promise<services.deviceAddress.ShortAddress> {
-            const __operationId__ = 'getCountryAndPostalCode';
+        async callGetCountryAndPostalCode(deviceId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetCountryAndPostalCode';
             // verify required parameter 'deviceId' is not null or undefined
             if (deviceId == null) {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
@@ -5259,12 +5304,21 @@ export namespace services.deviceAddress {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} deviceId The device Id for which to get the country and postal code
+         */
+        async getCountryAndPostalCode(deviceId : string) : Promise<services.deviceAddress.ShortAddress> {
+                const apiResponse: ApiResponse = await this.callGetCountryAndPostalCode(deviceId);
+                return apiResponse.body as services.deviceAddress.ShortAddress;
+        }
         /**
          *
          * @param {string} deviceId The device Id for which to get the address
          */
-        async getFullAddress(deviceId : string) : Promise<services.deviceAddress.Address> {
-            const __operationId__ = 'getFullAddress';
+        async callGetFullAddress(deviceId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetFullAddress';
             // verify required parameter 'deviceId' is not null or undefined
             if (deviceId == null) {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
@@ -5294,6 +5348,15 @@ export namespace services.deviceAddress {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} deviceId The device Id for which to get the address
+         */
+        async getFullAddress(deviceId : string) : Promise<services.deviceAddress.Address> {
+                const apiResponse: ApiResponse = await this.callGetFullAddress(deviceId);
+                return apiResponse.body as services.deviceAddress.Address;
+        }
     }
 }
 
@@ -5312,8 +5375,8 @@ export namespace services.directive {
          *
          * @param {services.directive.SendDirectiveRequest} sendDirectiveRequest Represents the request object to send in the payload.
          */
-        async enqueue(sendDirectiveRequest : services.directive.SendDirectiveRequest) : Promise<void> {
-            const __operationId__ = 'enqueue';
+        async callEnqueue(sendDirectiveRequest : services.directive.SendDirectiveRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callEnqueue';
             // verify required parameter 'sendDirectiveRequest' is not null or undefined
             if (sendDirectiveRequest == null) {
                 throw new Error(`Required parameter sendDirectiveRequest was null or undefined when calling ${__operationId__}.`);
@@ -5341,6 +5404,14 @@ export namespace services.directive {
             return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, sendDirectiveRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {services.directive.SendDirectiveRequest} sendDirectiveRequest Represents the request object to send in the payload.
+         */
+        async enqueue(sendDirectiveRequest : services.directive.SendDirectiveRequest) : Promise<void> {
+                await this.callEnqueue(sendDirectiveRequest);
+        }
     }
 }
 
@@ -5358,8 +5429,8 @@ export namespace services.endpointEnumeration {
         /**
          *
          */
-        async getEndpoints() : Promise<services.endpointEnumeration.EndpointEnumerationResponse> {
-            const __operationId__ = 'getEndpoints';
+        async callGetEndpoints() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetEndpoints';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -5385,6 +5456,14 @@ export namespace services.endpointEnumeration {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         */
+        async getEndpoints() : Promise<services.endpointEnumeration.EndpointEnumerationResponse> {
+                const apiResponse: ApiResponse = await this.callGetEndpoints();
+                return apiResponse.body as services.endpointEnumeration.EndpointEnumerationResponse;
+        }
     }
 }
 
@@ -5402,8 +5481,8 @@ export namespace services.listManagement {
         /**
          *
          */
-        async getListsMetadata() : Promise<services.listManagement.AlexaListsMetadata> {
-            const __operationId__ = 'getListsMetadata';
+        async callGetListsMetadata() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetListsMetadata';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -5425,12 +5504,20 @@ export namespace services.listManagement {
             return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         */
+        async getListsMetadata() : Promise<services.listManagement.AlexaListsMetadata> {
+                const apiResponse: ApiResponse = await this.callGetListsMetadata();
+                return apiResponse.body as services.listManagement.AlexaListsMetadata;
+        }
         /**
          *
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call
          */
-        async deleteList(listId : string) : Promise<void> {
-            const __operationId__ = 'deleteList';
+        async callDeleteList(listId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteList';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5459,13 +5546,21 @@ export namespace services.listManagement {
             return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call
+         */
+        async deleteList(listId : string) : Promise<void> {
+                await this.callDeleteList(listId);
+        }
         /**
          *
          * @param {string} listId The customer’s listId is retrieved from a getListsMetadata call.
          * @param {string} itemId The customer’s itemId is retrieved from a GetList call.
          */
-        async deleteListItem(listId : string, itemId : string) : Promise<void> {
-            const __operationId__ = 'deleteListItem';
+        async callDeleteListItem(listId : string, itemId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteListItem';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5499,13 +5594,22 @@ export namespace services.listManagement {
             return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId The customer’s listId is retrieved from a getListsMetadata call.
+         * @param {string} itemId The customer’s itemId is retrieved from a GetList call.
+         */
+        async deleteListItem(listId : string, itemId : string) : Promise<void> {
+                await this.callDeleteListItem(listId, itemId);
+        }
         /**
          *
          * @param {string} listId Retrieved from a call to getListsMetadata
          * @param {string} itemId itemId within a list is retrieved from a getList call
          */
-        async getListItem(listId : string, itemId : string) : Promise<services.listManagement.AlexaListItem> {
-            const __operationId__ = 'getListItem';
+        async callGetListItem(listId : string, itemId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetListItem';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5539,14 +5643,24 @@ export namespace services.listManagement {
             return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId Retrieved from a call to getListsMetadata
+         * @param {string} itemId itemId within a list is retrieved from a getList call
+         */
+        async getListItem(listId : string, itemId : string) : Promise<services.listManagement.AlexaListItem> {
+                const apiResponse: ApiResponse = await this.callGetListItem(listId, itemId);
+                return apiResponse.body as services.listManagement.AlexaListItem;
+        }
         /**
          *
          * @param {string} listId Customer’s listId
          * @param {string} itemId itemId to be updated in the list
          * @param {services.listManagement.UpdateListItemRequest} updateListItemRequest 
          */
-        async updateListItem(listId : string, itemId : string, updateListItemRequest : services.listManagement.UpdateListItemRequest) : Promise<services.listManagement.AlexaListItem> {
-            const __operationId__ = 'updateListItem';
+        async callUpdateListItem(listId : string, itemId : string, updateListItemRequest : services.listManagement.UpdateListItemRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateListItem';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5585,13 +5699,24 @@ export namespace services.listManagement {
             return this.invoke("PUT", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, updateListItemRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId Customer’s listId
+         * @param {string} itemId itemId to be updated in the list
+         * @param {services.listManagement.UpdateListItemRequest} updateListItemRequest 
+         */
+        async updateListItem(listId : string, itemId : string, updateListItemRequest : services.listManagement.UpdateListItemRequest) : Promise<services.listManagement.AlexaListItem> {
+                const apiResponse: ApiResponse = await this.callUpdateListItem(listId, itemId, updateListItemRequest);
+                return apiResponse.body as services.listManagement.AlexaListItem;
+        }
         /**
          *
          * @param {string} listId The customer’s listId retrieved from a getListsMetadata call.
          * @param {services.listManagement.CreateListItemRequest} createListItemRequest 
          */
-        async createListItem(listId : string, createListItemRequest : services.listManagement.CreateListItemRequest) : Promise<services.listManagement.AlexaListItem> {
-            const __operationId__ = 'createListItem';
+        async callCreateListItem(listId : string, createListItemRequest : services.listManagement.CreateListItemRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateListItem';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5625,13 +5750,23 @@ export namespace services.listManagement {
             return this.invoke("POST", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, createListItemRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId The customer’s listId retrieved from a getListsMetadata call.
+         * @param {services.listManagement.CreateListItemRequest} createListItemRequest 
+         */
+        async createListItem(listId : string, createListItemRequest : services.listManagement.CreateListItemRequest) : Promise<services.listManagement.AlexaListItem> {
+                const apiResponse: ApiResponse = await this.callCreateListItem(listId, createListItemRequest);
+                return apiResponse.body as services.listManagement.AlexaListItem;
+        }
         /**
          *
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call. 
          * @param {services.listManagement.UpdateListRequest} updateListRequest 
          */
-        async updateList(listId : string, updateListRequest : services.listManagement.UpdateListRequest) : Promise<services.listManagement.AlexaListMetadata> {
-            const __operationId__ = 'updateList';
+        async callUpdateList(listId : string, updateListRequest : services.listManagement.UpdateListRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateList';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5666,13 +5801,23 @@ export namespace services.listManagement {
             return this.invoke("PUT", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, updateListRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call. 
+         * @param {services.listManagement.UpdateListRequest} updateListRequest 
+         */
+        async updateList(listId : string, updateListRequest : services.listManagement.UpdateListRequest) : Promise<services.listManagement.AlexaListMetadata> {
+                const apiResponse: ApiResponse = await this.callUpdateList(listId, updateListRequest);
+                return apiResponse.body as services.listManagement.AlexaListMetadata;
+        }
         /**
          *
          * @param {string} listId Retrieved from a call to GetListsMetadata to specify the listId in the request path. 
          * @param {string} status Specify the status of the list. 
          */
-        async getList(listId : string, status : string) : Promise<services.listManagement.AlexaList> {
-            const __operationId__ = 'getList';
+        async callGetList(listId : string, status : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetList';
             // verify required parameter 'listId' is not null or undefined
             if (listId == null) {
                 throw new Error(`Required parameter listId was null or undefined when calling ${__operationId__}.`);
@@ -5707,12 +5852,22 @@ export namespace services.listManagement {
             return this.invoke("GET", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} listId Retrieved from a call to GetListsMetadata to specify the listId in the request path. 
+         * @param {string} status Specify the status of the list. 
+         */
+        async getList(listId : string, status : string) : Promise<services.listManagement.AlexaList> {
+                const apiResponse: ApiResponse = await this.callGetList(listId, status);
+                return apiResponse.body as services.listManagement.AlexaList;
+        }
         /**
          *
          * @param {services.listManagement.CreateListRequest} createListRequest 
          */
-        async createList(createListRequest : services.listManagement.CreateListRequest) : Promise<services.listManagement.AlexaListMetadata> {
-            const __operationId__ = 'createList';
+        async callCreateList(createListRequest : services.listManagement.CreateListRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateList';
             // verify required parameter 'createListRequest' is not null or undefined
             if (createListRequest == null) {
                 throw new Error(`Required parameter createListRequest was null or undefined when calling ${__operationId__}.`);
@@ -5741,6 +5896,15 @@ export namespace services.listManagement {
             return this.invoke("POST", "https://api.amazonalexa.com/", path,
                     pathParams, queryParams, headerParams, createListRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {services.listManagement.CreateListRequest} createListRequest 
+         */
+        async createList(createListRequest : services.listManagement.CreateListRequest) : Promise<services.listManagement.AlexaListMetadata> {
+                const apiResponse: ApiResponse = await this.callCreateList(createListRequest);
+                return apiResponse.body as services.listManagement.AlexaListMetadata;
+        }
     }
 }
 
@@ -5764,8 +5928,8 @@ export namespace services.monetization {
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element, the value of which can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that In-Skill Products API understands. Token has expiry of 24 hours.
          * @param {number} maxResults sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 100 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned because maxResults was exceeded, the response contains isTruncated &#x3D; true.
          */
-        async getInSkillProducts(acceptLanguage : string, purchasable? : string, entitled? : string, productType? : string, nextToken? : string, maxResults? : number) : Promise<services.monetization.InSkillProductsResponse> {
-            const __operationId__ = 'getInSkillProducts';
+        async callGetInSkillProducts(acceptLanguage : string, purchasable? : string, entitled? : string, productType? : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInSkillProducts';
             // verify required parameter 'acceptLanguage' is not null or undefined
             if (acceptLanguage == null) {
                 throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
@@ -5808,13 +5972,27 @@ export namespace services.monetization {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} acceptLanguage User&#39;s locale/language in context
+         * @param {string} purchasable Filter products based on whether they are purchasable by the user or not. * &#39;PURCHASABLE&#39; - Products that are purchasable by the user. * &#39;NOT_PURCHASABLE&#39; - Products that are not purchasable by the user.
+         * @param {string} entitled Filter products based on whether they are entitled to the user or not. * &#39;ENTITLED&#39; - Products that the user is entitled to. * &#39;NOT_ENTITLED&#39; - Products that the user is not entitled to.
+         * @param {string} productType Product type. * &#39;SUBSCRIPTION&#39; - Once purchased, customers will own the content for the subscription period. * &#39;ENTITLEMENT&#39; - Once purchased, customers will own the content forever. * &#39;CONSUMABLE&#39; - Once purchased, customers will be entitled to the content until it is consumed. It can also be re-purchased.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element, the value of which can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that In-Skill Products API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 100 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned because maxResults was exceeded, the response contains isTruncated &#x3D; true.
+         */
+        async getInSkillProducts(acceptLanguage : string, purchasable? : string, entitled? : string, productType? : string, nextToken? : string, maxResults? : number) : Promise<services.monetization.InSkillProductsResponse> {
+                const apiResponse: ApiResponse = await this.callGetInSkillProducts(acceptLanguage, purchasable, entitled, productType, nextToken, maxResults);
+                return apiResponse.body as services.monetization.InSkillProductsResponse;
+        }
         /**
          *
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} productId Product Id.
          */
-        async getInSkillProduct(acceptLanguage : string, productId : string) : Promise<services.monetization.InSkillProduct> {
-            const __operationId__ = 'getInSkillProduct';
+        async callGetInSkillProduct(acceptLanguage : string, productId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInSkillProduct';
             // verify required parameter 'acceptLanguage' is not null or undefined
             if (acceptLanguage == null) {
                 throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
@@ -5848,6 +6026,16 @@ export namespace services.monetization {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} acceptLanguage User&#39;s locale/language in context
+         * @param {string} productId Product Id.
+         */
+        async getInSkillProduct(acceptLanguage : string, productId : string) : Promise<services.monetization.InSkillProduct> {
+                const apiResponse: ApiResponse = await this.callGetInSkillProduct(acceptLanguage, productId);
+                return apiResponse.body as services.monetization.InSkillProduct;
+        }
         /**
          *
          * @param {string} acceptLanguage User&#39;s locale/language in context
@@ -5858,8 +6046,8 @@ export namespace services.monetization {
          * @param {string} nextToken When response to this API call is truncated, the response also includes the nextToken in metadata, the value of which can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that In-Skill Products API understands. Token has expiry of 24 hours.
          * @param {number} maxResults sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 100 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned because maxResults was exceeded, the response contains nextToken which can be used to fetch next set of result.
          */
-        async getInSkillProductsTransactions(acceptLanguage : string, productId? : string, status? : string, fromLastModifiedTime? : string, toLastModifiedTime? : string, nextToken? : string, maxResults? : number) : Promise<services.monetization.InSkillProductTransactionsResponse> {
-            const __operationId__ = 'getInSkillProductsTransactions';
+        async callGetInSkillProductsTransactions(acceptLanguage : string, productId? : string, status? : string, fromLastModifiedTime? : string, toLastModifiedTime? : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInSkillProductsTransactions';
             // verify required parameter 'acceptLanguage' is not null or undefined
             if (acceptLanguage == null) {
                 throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
@@ -5909,11 +6097,26 @@ export namespace services.monetization {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} acceptLanguage User&#39;s locale/language in context
+         * @param {string} productId Product Id.
+         * @param {string} status Transaction status for in skill product purchases. * &#39;PENDING_APPROVAL_BY_PARENT&#39; - The transaction is pending approval from parent. * &#39;APPROVED_BY_PARENT&#39; - The transaction was approved by parent and fulfilled successfully.. * &#39;DENIED_BY_PARENT&#39; - The transaction was declined by parent and hence not fulfilled. * &#39;EXPIRED_NO_ACTION_BY_PARENT&#39; - The transaction was expired due to no response from parent and hence not fulfilled. * &#39;ERROR&#39; - The transaction was not fullfiled as there was an error while processing the transaction.
+         * @param {string} fromLastModifiedTime Filter transactions based on last modified time stamp, FROM duration in format (UTC ISO 8601) i.e. yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSS&#39;Z&#39;
+         * @param {string} toLastModifiedTime Filter transactions based on last modified time stamp, TO duration in format (UTC ISO 8601) i.e. yyyy-MM-dd&#39;T&#39;HH:mm:ss.SSS&#39;Z&#39;
+         * @param {string} nextToken When response to this API call is truncated, the response also includes the nextToken in metadata, the value of which can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that In-Skill Products API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 100 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned because maxResults was exceeded, the response contains nextToken which can be used to fetch next set of result.
+         */
+        async getInSkillProductsTransactions(acceptLanguage : string, productId? : string, status? : string, fromLastModifiedTime? : string, toLastModifiedTime? : string, nextToken? : string, maxResults? : number) : Promise<services.monetization.InSkillProductTransactionsResponse> {
+                const apiResponse: ApiResponse = await this.callGetInSkillProductsTransactions(acceptLanguage, productId, status, fromLastModifiedTime, toLastModifiedTime, nextToken, maxResults);
+                return apiResponse.body as services.monetization.InSkillProductTransactionsResponse;
+        }
         /**
          *
          */
-        async getVoicePurchaseSetting() : Promise<boolean> {
-            const __operationId__ = 'getVoicePurchaseSetting';
+        async callGetVoicePurchaseSetting() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetVoicePurchaseSetting';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -5935,6 +6138,14 @@ export namespace services.monetization {
 
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async getVoicePurchaseSetting() : Promise<boolean> {
+                const apiResponse: ApiResponse = await this.callGetVoicePurchaseSetting();
+                return apiResponse.body as boolean;
         }
     }
 }
@@ -5960,8 +6171,8 @@ export namespace services.proactiveEvents {
          *
          * @param {services.proactiveEvents.CreateProactiveEventRequest} createProactiveEventRequest Request to create a new proactive event.
          */
-        async createProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<void> {
-            const __operationId__ = 'createProactiveEvent';
+        async callCreateProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateProactiveEvent';
             // verify required parameter 'createProactiveEventRequest' is not null or undefined
             if (createProactiveEventRequest == null) {
                 throw new Error(`Required parameter createProactiveEventRequest was null or undefined when calling ${__operationId__}.`);
@@ -5995,6 +6206,14 @@ export namespace services.proactiveEvents {
             return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, createProactiveEventRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {services.proactiveEvents.CreateProactiveEventRequest} createProactiveEventRequest Request to create a new proactive event.
+         */
+        async createProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<void> {
+                await this.callCreateProactiveEvent(createProactiveEventRequest, stage);
+        }
     }
 }
 
@@ -6013,8 +6232,8 @@ export namespace services.reminderManagement {
          *
          * @param {string} alertToken 
          */
-        async deleteReminder(alertToken : string) : Promise<void> {
-            const __operationId__ = 'deleteReminder';
+        async callDeleteReminder(alertToken : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteReminder';
             // verify required parameter 'alertToken' is not null or undefined
             if (alertToken == null) {
                 throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
@@ -6042,12 +6261,20 @@ export namespace services.reminderManagement {
             return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          * @param {string} alertToken 
          */
-        async getReminder(alertToken : string) : Promise<services.reminderManagement.GetReminderResponse> {
-            const __operationId__ = 'getReminder';
+        async deleteReminder(alertToken : string) : Promise<void> {
+                await this.callDeleteReminder(alertToken);
+        }
+        /**
+         *
+         * @param {string} alertToken 
+         */
+        async callGetReminder(alertToken : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetReminder';
             // verify required parameter 'alertToken' is not null or undefined
             if (alertToken == null) {
                 throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
@@ -6075,13 +6302,22 @@ export namespace services.reminderManagement {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} alertToken 
+         */
+        async getReminder(alertToken : string) : Promise<services.reminderManagement.GetReminderResponse> {
+                const apiResponse: ApiResponse = await this.callGetReminder(alertToken);
+                return apiResponse.body as services.reminderManagement.GetReminderResponse;
+        }
         /**
          *
          * @param {string} alertToken 
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
-        async updateReminder(alertToken : string, reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
-            const __operationId__ = 'updateReminder';
+        async callUpdateReminder(alertToken : string, reminderRequest : services.reminderManagement.ReminderRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateReminder';
             // verify required parameter 'alertToken' is not null or undefined
             if (alertToken == null) {
                 throw new Error(`Required parameter alertToken was null or undefined when calling ${__operationId__}.`);
@@ -6115,11 +6351,21 @@ export namespace services.reminderManagement {
             return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} alertToken 
+         * @param {services.reminderManagement.ReminderRequest} reminderRequest 
+         */
+        async updateReminder(alertToken : string, reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
+                const apiResponse: ApiResponse = await this.callUpdateReminder(alertToken, reminderRequest);
+                return apiResponse.body as services.reminderManagement.ReminderResponse;
+        }
         /**
          *
          */
-        async getReminders() : Promise<services.reminderManagement.GetRemindersResponse> {
-            const __operationId__ = 'getReminders';
+        async callGetReminders() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetReminders';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -6142,12 +6388,20 @@ export namespace services.reminderManagement {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         */
+        async getReminders() : Promise<services.reminderManagement.GetRemindersResponse> {
+                const apiResponse: ApiResponse = await this.callGetReminders();
+                return apiResponse.body as services.reminderManagement.GetRemindersResponse;
+        }
         /**
          *
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
-        async createReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
-            const __operationId__ = 'createReminder';
+        async callCreateReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateReminder';
             // verify required parameter 'reminderRequest' is not null or undefined
             if (reminderRequest == null) {
                 throw new Error(`Required parameter reminderRequest was null or undefined when calling ${__operationId__}.`);
@@ -6177,6 +6431,15 @@ export namespace services.reminderManagement {
             return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {services.reminderManagement.ReminderRequest} reminderRequest 
+         */
+        async createReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
+                const apiResponse: ApiResponse = await this.callCreateReminder(reminderRequest);
+                return apiResponse.body as services.reminderManagement.ReminderResponse;
+        }
     }
 }
 
@@ -6202,8 +6465,8 @@ export namespace services.skillMessaging {
          * @param {string} userId The user Id for the specific user to send the message
          * @param {services.skillMessaging.SendSkillMessagingRequest} sendSkillMessagingRequest Message Request to be sent to the skill.
          */
-        async sendSkillMessage(userId : string, sendSkillMessagingRequest : services.skillMessaging.SendSkillMessagingRequest) : Promise<void> {
-            const __operationId__ = 'sendSkillMessage';
+        async callSendSkillMessage(userId : string, sendSkillMessagingRequest : services.skillMessaging.SendSkillMessagingRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSendSkillMessage';
             // verify required parameter 'userId' is not null or undefined
             if (userId == null) {
                 throw new Error(`Required parameter userId was null or undefined when calling ${__operationId__}.`);
@@ -6239,6 +6502,15 @@ export namespace services.skillMessaging {
             return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, sendSkillMessagingRequest, errorDefinitions);
         }
+        
+        /**
+         *
+         * @param {string} userId The user Id for the specific user to send the message
+         * @param {services.skillMessaging.SendSkillMessagingRequest} sendSkillMessagingRequest Message Request to be sent to the skill.
+         */
+        async sendSkillMessage(userId : string, sendSkillMessagingRequest : services.skillMessaging.SendSkillMessagingRequest) : Promise<void> {
+                await this.callSendSkillMessage(userId, sendSkillMessagingRequest);
+        }
     }
 }
 
@@ -6256,8 +6528,8 @@ export namespace services.ups {
         /**
          *
          */
-        async getProfileEmail() : Promise<string> {
-            const __operationId__ = 'getProfileEmail';
+        async callGetProfileEmail() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetProfileEmail';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -6282,11 +6554,19 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          */
-        async getProfileGivenName() : Promise<string> {
-            const __operationId__ = 'getProfileGivenName';
+        async getProfileEmail() : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetProfileEmail();
+                return apiResponse.body as string;
+        }
+        /**
+         *
+         */
+        async callGetProfileGivenName() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetProfileGivenName';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -6311,11 +6591,19 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          */
-        async getProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
-            const __operationId__ = 'getProfileMobileNumber';
+        async getProfileGivenName() : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetProfileGivenName();
+                return apiResponse.body as string;
+        }
+        /**
+         *
+         */
+        async callGetProfileMobileNumber() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetProfileMobileNumber';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -6340,11 +6628,19 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          */
-        async getProfileName() : Promise<string> {
-            const __operationId__ = 'getProfileName';
+        async getProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
+                const apiResponse: ApiResponse = await this.callGetProfileMobileNumber();
+                return apiResponse.body as services.ups.PhoneNumber;
+        }
+        /**
+         *
+         */
+        async callGetProfileName() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetProfileName';
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -6369,12 +6665,20 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
+        /**
+         *
+         */
+        async getProfileName() : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetProfileName();
+                return apiResponse.body as string;
+        }
         /**
          *
          * @param {string} deviceId The device Id
          */
-        async getSystemDistanceUnits(deviceId : string) : Promise<services.ups.DistanceUnits> {
-            const __operationId__ = 'getSystemDistanceUnits';
+        async callGetSystemDistanceUnits(deviceId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSystemDistanceUnits';
             // verify required parameter 'deviceId' is not null or undefined
             if (deviceId == null) {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
@@ -6404,12 +6708,21 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          * @param {string} deviceId The device Id
          */
-        async getSystemTemperatureUnit(deviceId : string) : Promise<services.ups.TemperatureUnit> {
-            const __operationId__ = 'getSystemTemperatureUnit';
+        async getSystemDistanceUnits(deviceId : string) : Promise<services.ups.DistanceUnits> {
+                const apiResponse: ApiResponse = await this.callGetSystemDistanceUnits(deviceId);
+                return apiResponse.body as services.ups.DistanceUnits;
+        }
+        /**
+         *
+         * @param {string} deviceId The device Id
+         */
+        async callGetSystemTemperatureUnit(deviceId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSystemTemperatureUnit';
             // verify required parameter 'deviceId' is not null or undefined
             if (deviceId == null) {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
@@ -6439,12 +6752,21 @@ export namespace services.ups {
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
+        
         /**
          *
          * @param {string} deviceId The device Id
          */
-        async getSystemTimeZone(deviceId : string) : Promise<string> {
-            const __operationId__ = 'getSystemTimeZone';
+        async getSystemTemperatureUnit(deviceId : string) : Promise<services.ups.TemperatureUnit> {
+                const apiResponse: ApiResponse = await this.callGetSystemTemperatureUnit(deviceId);
+                return apiResponse.body as services.ups.TemperatureUnit;
+        }
+        /**
+         *
+         * @param {string} deviceId The device Id
+         */
+        async callGetSystemTimeZone(deviceId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSystemTimeZone';
             // verify required parameter 'deviceId' is not null or undefined
             if (deviceId == null) {
                 throw new Error(`Required parameter deviceId was null or undefined when calling ${__operationId__}.`);
@@ -6473,6 +6795,15 @@ export namespace services.ups {
 
             return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} deviceId The device Id
+         */
+        async getSystemTimeZone(deviceId : string) : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetSystemTimeZone(deviceId);
+                return apiResponse.body as string;
         }
     }
 }
