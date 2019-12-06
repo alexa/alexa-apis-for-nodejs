@@ -10,7 +10,6 @@ export interface ApiClientMessage {
     headers : Array<{key : string, value : string}>;
     body? : string;
 }
-
 /**
  * Represents a request sent from Service Clients to an ApiClient implementation.
  * @export

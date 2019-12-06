@@ -2,7 +2,8 @@
   "version": "2.7.0",
   "packages": [
     "ask-sdk-model",
-    "ask-sdk-model-runtime"
+    "ask-sdk-model-runtime",
+    "ask-smapi-model"
   ],
   "command": {
     "bootstrap": {

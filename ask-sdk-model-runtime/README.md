@@ -15,7 +15,7 @@ npm install --save ask-sdk-model-runtime
 ```
 
 ## Opening Issues
-For bug reports, feature requests and questions, we would like to hear about it. Search the [existing issues](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs/issues) and try to make sure your problem doesnâ€™t already exist before opening a new issue. Itâ€™s helpful if you include the version of the SDK, Node.js or browser environment and OS youâ€™re using. Please include a stack trace and reduced repro case when appropriate, too. 
+For bug reports, feature requests and questions, we would like to hear about it. Search the [existing issues](https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs/issues) and try to make sure your problem doesn't already exist before opening a new issue. It's helpful if you include the version of the SDK, Node.js or browser environment and OS you're using. Please include a stack trace and reduced repro case when appropriate, too. 
 
 ## License
 This SDK is distributed under the Apache License, Version 2.0, see LICENSE for more information.
