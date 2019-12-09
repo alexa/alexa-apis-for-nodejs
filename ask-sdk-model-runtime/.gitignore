@@ -4,6 +4,4 @@ node_modules
 package-lock.json
 .nyc_output
 .DS_Store
-build
-index.*
-!index.ts
+build/

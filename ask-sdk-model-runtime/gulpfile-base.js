@@ -9,7 +9,25 @@ module.exports = {
     const command = `${tscPath} -p tsconfig.json`;
 
     exec(command, done);
-  }
+  },
+  tslint : (done) => {
+    const tslintPath = path.normalize('./node_modules/.bin/tslint');
+    const command = `${tslintPath} -p tsconfig.json -c tslint.json`;
+    const commandForTests = `${tslintPath} ./tst/**/*.ts -c tslint.json`;
+
+    exec(command, done);
+    exec(commandForTests, done);
+  },
+  test : (done) => {
+    const nycPath = path.normalize('./node_modules/.bin/nyc');
+    const mochaPath = path.normalize('./node_modules/.bin/_mocha');
+    const tsNodePath = path.normalize('./node_modules/ts-node/register/index.js');
+    const nycTmpPath = path.join('coverage', './nyc-output');
+    const command = `${nycPath} -x tst -e .ts --temp-dir ${nycTmpPath} -r html -r text-summary -r cobertura ` +
+        `${mochaPath} --require ${tsNodePath} 'tst/**/*.spec.ts' --reporter min`;
+
+    exec(command, done);
+  },
 };
 
 function exec(command, callback) {

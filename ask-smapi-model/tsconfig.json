@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "alwaysStrict" : true,
+      "declaration": true,
+      "lib" : [
+        "es2017",
+        "dom"
+      ]
+    },
+    "include": ["index.ts"]
+  }
+  
