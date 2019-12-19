@@ -1,3 +1,16 @@
+/*
+ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
 import { RequestOptions as HttpRequestOptions } from 'http';
 import { RequestOptions as HttpsRequestOptions } from 'https';
 import * as url from 'url';
@@ -452,8 +465,8 @@ export class LwaServiceClient extends BaseServiceClient {
     }
 
     protected async generateAccessToken(accessTokenRequest : AccessTokenRequest) : Promise<AccessTokenResponse> {
-        if (accessTokenRequest == null) {
-            throw new Error(`Required parameter accessTokenRequest was null or undefined when calling generateAccessToken.`);
+        if (!accessTokenRequest.clientId || ! accessTokenRequest.clientSecret) {
+            throw new Error(`Required parameter accessTokenRequest didn't specify clientId or clientSecret`);
         }
 
         const queryParams : Array<{ key : string, value : string }> = [];
@@ -493,4 +506,15 @@ export class LwaServiceClient extends BaseServiceClient {
 
         return response;
     }
+}
+
+/**
+ * function creating an AskSdk user agent.
+ * @param packageVersion
+ * @param customUserAgent
+ */
+export function createUserAgent(packageVersion : string, customUserAgent : string) : string {
+    const customUserAgentString = customUserAgent ? (' ' + customUserAgent) : '';
+
+    return `ask-node-model/${packageVersion} Node/${process.version}` + customUserAgentString;
 }

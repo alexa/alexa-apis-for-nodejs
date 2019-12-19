@@ -20,6 +20,7 @@ import ApiResponse = runtime.ApiResponse;
 import AuthenticationConfiguration = runtime.AuthenticationConfiguration;
 import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
+import createUserAgent = runtime.createUserAgent;
 
 export namespace v1 {
     /**
@@ -272,6 +273,16 @@ export namespace v1.isp {
 
 export namespace v1.isp {
     /**
+     * Defines In-skill product response.
+     * @interface
+     */
+    export interface InSkillProductDefinitionResponse {
+        'inSkillProductDefinition'?: v1.isp.InSkillProductDefinition;
+    }
+}
+
+export namespace v1.isp {
+    /**
      * Information about the in-skill product that is not editable.
      * @interface
      */
@@ -292,6 +303,16 @@ export namespace v1.isp {
 
 export namespace v1.isp {
     /**
+     * In-skill product summary response.
+     * @interface
+     */
+    export interface InSkillProductSummaryResponse {
+        'inSkillProductSummary'?: v1.isp.InSkillProductSummary;
+    }
+}
+
+export namespace v1.isp {
+    /**
      *
      * @interface
      */
@@ -305,11 +326,21 @@ export namespace v1.isp {
      * List of in-skill products.
      * @interface
      */
-    export interface ListInSkillProductResponse {
+    export interface ListInSkillProduct {
         '_links'?: v1.Links;
         'inSkillProducts'?: Array<v1.isp.InSkillProductSummary>;
         'isTruncated'?: boolean;
         'nextToken'?: string;
+    }
+}
+
+export namespace v1.isp {
+    /**
+     * List of in-skill product response.
+     * @interface
+     */
+    export interface ListInSkillProductResponse {
+        'inSkillProductSummaryList'?: v1.isp.ListInSkillProduct;
     }
 }
 
@@ -879,7 +910,6 @@ export namespace v1.skill.Manifest {
         'interfaces'?: Array<v1.skill.Manifest.Interface>;
         'tasks'?: Array<v1.skill.Manifest.SkillManifestCustomTask>;
         'connections'?: v1.skill.Manifest.CustomConnections;
-        'dialogManagement'?: v1.skill.Manifest.DialogManagement;
     }
 }
 
@@ -900,37 +930,6 @@ export namespace v1.skill.Manifest {
      * @enum
      */
     export type DataProtectionProvider = 'KEY_MASTER' | 'AWS_KMS';
-}
-
-export namespace v1.skill.Manifest {
-    /**
-     * Specifies the initial dialog manager to field requests when a new skill session starts. If absent this is assumed to be the default \\\"skill\\\" target.
-     * @interface
-     */
-    export interface DialogDelegationStrategy {
-        'target': string;
-    }
-}
-
-export namespace v1.skill.Manifest {
-    /**
-     * Defines the dialog management configuration for the skill.
-     * @interface
-     */
-    export interface DialogManagement {
-        'dialogManagers': Array<v1.skill.Manifest.DialogManager>;
-        'sessionStartDelegationStrategy'?: v1.skill.Manifest.DialogDelegationStrategy;
-    }
-}
-
-export namespace v1.skill.Manifest {
-    /**
-     * Individual dialog manager defined for the skill.
-     * @interface
-     */
-    export interface DialogManager {
-        'type': string;
-    }
 }
 
 export namespace v1.skill.Manifest {
@@ -1103,7 +1102,7 @@ export namespace v1.skill.Manifest {
     *
     * @interface
     */
-    export type Interface = v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.VideoAppInterface | v1.skill.Manifest.CustomInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.SessionSuspendAndResumeInterface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface;
+    export type Interface = v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.VideoAppInterface | v1.skill.Manifest.CustomInterface | v1.skill.Manifest.AlexaPresentationHtmlInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface;
 }
 
 export namespace v1.skill.Manifest {
@@ -2958,6 +2957,18 @@ export namespace v1.skill.simulations {
      *
      * @interface
      */
+    export interface Invocation {
+        'invocationRequest'?: v1.skill.simulations.InvocationRequest;
+        'invocationResponse'?: v1.skill.simulations.InvocationResponse;
+        'metrics'?: v1.skill.simulations.Metrics;
+    }
+}
+
+export namespace v1.skill.simulations {
+    /**
+     *
+     * @interface
+     */
     export interface InvocationRequest {
         'endpoint'?: string;
         'body'?: { [key: string]: any; };
@@ -2971,18 +2982,6 @@ export namespace v1.skill.simulations {
      */
     export interface InvocationResponse {
         'body'?: { [key: string]: any; };
-    }
-}
-
-export namespace v1.skill.simulations {
-    /**
-     *
-     * @interface
-     */
-    export interface Invocations {
-        'invocationRequest'?: v1.skill.simulations.InvocationRequest;
-        'invocationResponse'?: v1.skill.simulations.InvocationResponse;
-        'metrics'?: v1.skill.simulations.Metrics;
     }
 }
 
@@ -3021,7 +3020,7 @@ export namespace v1.skill.simulations {
      */
     export interface SimulationResult {
         'alexaExecutionInfo'?: v1.skill.simulations.AlexaExecutionInfo;
-        'skillExecutionInfo'?: Array<v1.skill.simulations.Invocations>;
+        'skillExecutionInfo'?: v1.skill.simulations.Invocation;
         'error'?: v1.Error;
     }
 }
@@ -3235,11 +3234,21 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
+     * Used to declare that the skill uses the Alexa.Presentation.HTML interface.
+     * @interface
+     */
+    export interface AlexaPresentationHtmlInterface {
+        'type' : 'ALEXA_PRESENTATION_HTML';
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
      *
      * @interface
      */
     export interface AudioInterface {
-        'type' : 'AUDIO';
+        'type' : 'AUDIO_PLAYER';
     }
 }
 
@@ -3287,21 +3296,11 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
-     * Skill use this interface to receive session state change event when a session is suspended or resumed.
-     * @interface
-     */
-    export interface SessionSuspendAndResumeInterface {
-        'type' : 'SESSION_SUSPEND_AND_RESUME_INTERFACE';
-    }
-}
-
-export namespace v1.skill.Manifest {
-    /**
      *
      * @interface
      */
     export interface VideoAppInterface {
-        'type' : 'VIDEO';
+        'type' : 'VIDEO_APP';
     }
 }
 
@@ -3446,14 +3445,16 @@ export namespace services.skillManagement {
     export class SkillManagementServiceClient extends BaseServiceClient {
 
         private lwaServiceClient : LwaServiceClient;
+        private userAgent : string;
 
-        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration) {
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
             this.lwaServiceClient = new LwaServiceClient({
                 apiConfiguration,
                 authenticationConfiguration,
                 grantType: 'refresh_token',
             });
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -3476,6 +3477,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -3528,6 +3530,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -3581,6 +3584,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -3662,6 +3666,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -3713,6 +3718,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -3761,6 +3767,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -3813,6 +3820,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -3866,6 +3874,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -3923,6 +3932,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -3976,6 +3986,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -4004,9 +4015,9 @@ export namespace services.skillManagement {
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
          */
-        async getIspDefinitionV1(productId : string, stage : string) : Promise<v1.isp.InSkillProductDefinition> {
+        async getIspDefinitionV1(productId : string, stage : string) : Promise<v1.isp.InSkillProductDefinitionResponse> {
                 const apiResponse: ApiResponse = await this.callGetIspDefinitionV1(productId, stage);
-                return apiResponse.body as v1.isp.InSkillProductDefinition;
+                return apiResponse.body as v1.isp.InSkillProductDefinitionResponse;
         }
         /**
          *
@@ -4034,6 +4045,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -4100,6 +4112,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -4153,6 +4166,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -4180,9 +4194,9 @@ export namespace services.skillManagement {
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
          */
-        async getIspSummaryV1(productId : string, stage : string) : Promise<v1.isp.InSkillProductSummary> {
+        async getIspSummaryV1(productId : string, stage : string) : Promise<v1.isp.InSkillProductSummaryResponse> {
                 const apiResponse: ApiResponse = await this.callGetIspSummaryV1(productId, stage);
-                return apiResponse.body as v1.isp.InSkillProductSummary;
+                return apiResponse.body as v1.isp.InSkillProductSummaryResponse;
         }
         /**
          *
@@ -4199,6 +4213,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4245,6 +4260,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4297,6 +4313,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4349,6 +4366,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4403,6 +4421,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4455,6 +4474,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4508,6 +4528,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4563,6 +4584,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4625,6 +4647,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -4689,6 +4712,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -4738,6 +4762,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -4784,6 +4809,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('exportId', exportId);
@@ -4842,6 +4868,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -4889,6 +4916,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('importId', importId);
@@ -4934,6 +4962,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -4978,6 +5007,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5023,6 +5053,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5074,6 +5105,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5121,6 +5153,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5166,6 +5199,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5212,6 +5246,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5259,6 +5294,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5304,6 +5340,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5354,6 +5391,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5407,6 +5445,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5459,6 +5498,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5509,6 +5549,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5560,6 +5601,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5612,6 +5654,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(acceptLanguage != null) {
                 headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
             }
@@ -5670,6 +5713,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5717,6 +5761,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5814,6 +5859,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -5879,6 +5925,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -5983,6 +6030,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6045,6 +6093,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6099,6 +6148,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6147,6 +6197,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6197,6 +6248,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6248,6 +6300,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6301,6 +6354,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6354,6 +6408,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6408,6 +6463,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6468,6 +6524,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6532,6 +6589,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6596,6 +6654,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6657,6 +6716,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6717,6 +6777,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6772,6 +6833,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6824,6 +6886,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6883,6 +6946,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -6947,6 +7011,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7008,6 +7073,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7074,6 +7140,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -7156,6 +7223,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7226,6 +7294,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7284,6 +7353,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7345,6 +7415,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
@@ -7410,6 +7481,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7471,6 +7543,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(acceptLanguage != null) {
                 headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
             }
@@ -7528,6 +7601,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7577,6 +7651,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7629,6 +7704,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -7671,6 +7747,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7708,6 +7785,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7755,6 +7833,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('vendorId', vendorId);
