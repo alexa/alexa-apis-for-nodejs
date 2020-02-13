@@ -369,6 +369,17 @@ export namespace services {
     }
 }
 
+/**
+ * function creating an AskSdk user agent.
+ * @param packageVersion
+ * @param customUserAgent
+ */
+export function createUserAgent(packageVersion : string, customUserAgent : string) : string {
+    const customUserAgentString = customUserAgent ? (' ' + customUserAgent) : '';
+
+    return `ask-node-model/${packageVersion} Node/${process.version}` + customUserAgentString;
+}
+
 /*
 * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *
@@ -478,7 +489,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.html.RuntimeErrorRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -1094,6 +1105,26 @@ export namespace interfaces.alexa.presentation.html {
     export interface Runtime {
         'maxVersion': string;
     }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @interface
+     */
+    export interface RuntimeError {
+        'reason': interfaces.alexa.presentation.html.RuntimeErrorReason;
+        'message'?: string;
+        'code'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     *
+     * @enum
+     */
+    export type RuntimeErrorReason = 'HTTP_REQUEST_ERROR' | 'TIMED_OUT' | 'FILE_TYPE_NOT_SUPPORTED' | 'APPLICATION_ERROR';
 }
 
 export namespace interfaces.alexa.presentation.html {
@@ -1989,6 +2020,14 @@ export namespace interfaces.videoapp {
 
 export namespace interfaces.viewport {
     /**
+     * Indicates that dialog playback is supported or desired in the given interaction mode. Player interface abilities controlled by this field are any directives that would render audio on the dialog channel.
+     * @enum
+     */
+    export type Dialog = 'SUPPORTED' | 'UNSUPPORTED';
+}
+
+export namespace interfaces.viewport {
+    /**
      * An experience represents a viewing mode used to interact with the device.
      * @interface
      */
@@ -2097,6 +2136,7 @@ export namespace interfaces.viewport.apl {
         'mode': interfaces.viewport.Mode;
         'video'?: interfaces.viewport.ViewportVideo;
         'size': interfaces.viewport.size.ViewportSize;
+        'dialog'?: interfaces.viewport.Dialog;
     }
 }
 
@@ -3964,11 +4004,25 @@ export namespace interfaces.alexa.presentation.html {
      * @interface
      */
     export interface MessageRequest {
-        'type' : 'Alexa.Presentation.html.Message';
+        'type' : 'Alexa.Presentation.HTML.Message';
         'requestId': string;
         'timestamp': string;
         'locale'?: string;
         'message': any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.html {
+    /**
+     * The RuntimeError request occurs when the device software encounters an error with loading a skill's web application. To use this request, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * @interface
+     */
+    export interface RuntimeErrorRequest {
+        'type' : 'Alexa.Presentation.HTML.RuntimeError';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'error': interfaces.alexa.presentation.html.RuntimeError;
     }
 }
 
@@ -5285,8 +5339,11 @@ export namespace services.deviceAddress {
      */
     export class DeviceAddressServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -5304,6 +5361,7 @@ export namespace services.deviceAddress {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -5348,6 +5406,7 @@ export namespace services.deviceAddress {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -5387,8 +5446,11 @@ export namespace services.directive {
      */
     export class DirectiveServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -5406,6 +5468,7 @@ export namespace services.directive {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5442,8 +5505,11 @@ export namespace services.endpointEnumeration {
      */
     export class EndpointEnumerationServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -5456,6 +5522,7 @@ export namespace services.endpointEnumeration {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5494,8 +5561,11 @@ export namespace services.listManagement {
      */
     export class ListManagementServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -5508,6 +5578,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5547,6 +5618,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5594,6 +5666,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5643,6 +5716,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5698,6 +5772,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5750,6 +5825,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5800,6 +5876,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5851,6 +5928,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -5897,6 +5975,7 @@ export namespace services.listManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5935,8 +6014,11 @@ export namespace services.monetization {
      */
     export class MonetizationServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -5974,6 +6056,7 @@ export namespace services.monetization {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -6026,6 +6109,7 @@ export namespace services.monetization {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -6095,6 +6179,7 @@ export namespace services.monetization {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -6142,6 +6227,7 @@ export namespace services.monetization {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6178,13 +6264,15 @@ export namespace services.proactiveEvents {
     export class ProactiveEventsServiceClient extends BaseServiceClient {
 
         private lwaServiceClient : LwaServiceClient;
+        private userAgent : string;
 
-        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration) {
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
             this.lwaServiceClient = new LwaServiceClient({
                 apiConfiguration,
                 authenticationConfiguration,
             });
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -6202,6 +6290,7 @@ export namespace services.proactiveEvents {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6244,8 +6333,11 @@ export namespace services.reminderManagement {
      */
     export class ReminderManagementServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -6263,6 +6355,7 @@ export namespace services.reminderManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6304,6 +6397,7 @@ export namespace services.reminderManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6351,6 +6445,7 @@ export namespace services.reminderManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6391,6 +6486,7 @@ export namespace services.reminderManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6431,6 +6527,7 @@ export namespace services.reminderManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6471,13 +6568,15 @@ export namespace services.skillMessaging {
     export class SkillMessagingServiceClient extends BaseServiceClient {
 
         private lwaServiceClient : LwaServiceClient;
+        private userAgent : string;
 
-        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration) {
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
             this.lwaServiceClient = new LwaServiceClient({
                 apiConfiguration,
                 authenticationConfiguration,
             });
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -6500,6 +6599,7 @@ export namespace services.skillMessaging {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('userId', userId);
@@ -6541,8 +6641,11 @@ export namespace services.ups {
      */
     export class UpsServiceClient extends BaseServiceClient {
 
-        constructor(apiConfiguration : ApiConfiguration) {
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
             super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
         }
 
         /**
@@ -6555,6 +6658,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6592,6 +6696,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6629,6 +6734,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6666,6 +6772,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6708,6 +6815,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -6752,6 +6860,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -6796,6 +6905,7 @@ export namespace services.ups {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
