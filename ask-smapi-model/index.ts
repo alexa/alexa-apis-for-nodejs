@@ -2588,6 +2588,28 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
+     * the value schema in type object of interaction model
+     * @interface
+     */
+    export interface TypeValue {
+        'id'?: string;
+        'name'?: v1.skill.interactionModel.TypeValueObject;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
+     * The object that contains individual type values
+     * @interface
+     */
+    export interface TypeValueObject {
+        'value'?: string;
+        'synonyms'?: Array<string>;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
      * Catalog reference to provide values.
      * @interface
      */
@@ -2598,11 +2620,30 @@ export namespace v1.skill.interactionModel {
 }
 
 export namespace v1.skill.interactionModel {
+    /**
+     * Catalog reference to provide values.
+     * @interface
+     */
+    export interface ValueCatalogSlot {
+        'catalogId'?: string;
+        'version'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel {
    /**
     * Supplier object to provide slot values.
     * @interface
     */
     export type ValueSupplier = v1.skill.interactionModel.CatalogValueSupplier;
+}
+
+export namespace v1.skill.interactionModel {
+   /**
+    * Supplier object to provide slot values.
+    * @interface
+    */
+    export type ValueSupplierSlot = v1.skill.interactionModel.CatalogValueSupplierSlot | v1.skill.interactionModel.InlineValueSupplier;
 }
 
 export namespace v1.skill.interactionModel.catalog {
@@ -2740,6 +2781,263 @@ export namespace v1.skill.interactionModel {
     }
 }
 
+export namespace v1.skill.interactionModel.type {
+    /**
+     * The body of the bad request exception
+     * @interface
+     */
+    export interface BadRequest {
+        'errors'?: Array<v1.skill.interactionModel.type.Error>;
+        'warnings'?: Array<v1.skill.interactionModel.type.Warning>;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Slot type request definitions.
+     * @interface
+     */
+    export interface DefinitionData {
+        'slotType'?: v1.skill.interactionModel.type.SlotTypeInput;
+        'vendorId'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * The Error which would fail requests
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Contains attributes related to last modification request of a resource.
+     * @interface
+     */
+    export interface LastUpdateRequest {
+        'status'?: v1.skill.interactionModel.type.SlotTypeStatusType;
+        'version'?: string;
+        'errors'?: Array<v1.skill.interactionModel.type.Error>;
+        'warnings'?: Array<v1.skill.interactionModel.type.Warning>;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * List of slot types of a skill for the vendor.
+     * @interface
+     */
+    export interface ListSlotTypeResponse {
+        '_links'?: v1.Links;
+        'slotTypes'?: Array<v1.skill.interactionModel.type.SlotTypeItem>;
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Slot Type request definitions.
+     * @interface
+     */
+    export interface SlotTypeDefinitionOutput {
+        'slotType'?: v1.skill.interactionModel.type.SlotTypeEntity;
+        'totalVersions'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Definition for slot type entity.
+     * @interface
+     */
+    export interface SlotTypeEntity {
+        'name'?: string;
+        'description'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Definition for slot type input.
+     * @interface
+     */
+    export interface SlotTypeInput {
+        'name'?: string;
+        'description'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Definition for slot type entity.
+     * @interface
+     */
+    export interface SlotTypeItem {
+        'name'?: string;
+        'description'?: string;
+        'id'?: string;
+        '_links'?: v1.Links;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * SlotTypeId information.
+     * @interface
+     */
+    export interface SlotTypeResponse {
+        'slotType'?: v1.skill.interactionModel.type.SlotTypeResponseEntity;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * SlotTypeId information.
+     * @interface
+     */
+    export interface SlotTypeResponseEntity {
+        'id'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Defines the structure for slot type status response.
+     * @interface
+     */
+    export interface SlotTypeStatus {
+        'updateRequest'?: v1.skill.interactionModel.type.LastUpdateRequest;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Status of last modification request for a resource.
+     * @enum
+     */
+    export type SlotTypeStatusType = 'FAILED' | 'IN_PROGRESS' | 'SUCCEEDED';
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Slot type update request object.
+     * @interface
+     */
+    export interface SlotTypeUpdateDefinition {
+        'description'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * Slot type update request object.
+     * @interface
+     */
+    export interface UpdateRequest {
+        'slotType'?: v1.skill.interactionModel.type.SlotTypeUpdateDefinition;
+    }
+}
+
+export namespace v1.skill.interactionModel.type {
+    /**
+     * The warning which would not fail requests
+     * @interface
+     */
+    export interface Warning {
+        'code'?: string;
+        'message'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * List of slot type versions of a skill for the vendor.
+     * @interface
+     */
+    export interface ListSlotTypeVersionResponse {
+        '_links'?: v1.Links;
+        'slotTypeVersions'?: Array<v1.skill.interactionModel.typeVersion.SlotTypeVersionItem>;
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type version data with metadata.
+     * @interface
+     */
+    export interface SlotTypeVersionData {
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Definition for slot type entity.
+     * @interface
+     */
+    export interface SlotTypeVersionItem {
+        'version'?: string;
+        'description'?: string;
+        '_links'?: v1.Links;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Value supplier object for slot definition.
+     * @interface
+     */
+    export interface ValueSupplierObject {
+        'valueSupplier'?: v1.skill.interactionModel.ValueSupplierSlot;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type version specific data.
+     * @interface
+     */
+    export interface VersionData {
+        'slotType'?: v1.skill.interactionModel.typeVersion.VersionDataObject;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type version fields with specific data.
+     * @interface
+     */
+    export interface VersionDataObject {
+        'definition'?: v1.skill.interactionModel.typeVersion.ValueSupplierObject;
+        'description'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type update description wrapper.
+     * @interface
+     */
+    export interface SlotTypeUpdate {
+        'slotType'?: v1.skill.interactionModel.typeVersion.SlotTypeUpdateObject;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type update description object.
+     * @interface
+     */
+    export interface SlotTypeUpdateObject {
+        'description'?: string;
+    }
+}
+
 export namespace v1.skill.interactionModel.version {
     /**
      * List of catalog values.
@@ -2797,6 +3095,19 @@ export namespace v1.skill.interactionModel.version {
         'skillModelVersions'?: Array<v1.skill.interactionModel.version.VersionItems>;
         'isTruncated'?: boolean;
         'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.version {
+    /**
+     * Slot Type version fields with metadata.
+     * @interface
+     */
+    export interface SlotTypeVersionDataObject {
+        'id'?: string;
+        'definition'?: v1.skill.interactionModel.typeVersion.ValueSupplierObject;
+        'description'?: string;
+        'version'?: string;
     }
 }
 
@@ -3329,12 +3640,34 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
+     * Supply slot values from catalog(s).
+     * @interface
+     */
+    export interface CatalogValueSupplierSlot {
+        'type' : 'CatalogValueSupplier';
+        'valueCatalog'?: v1.skill.interactionModel.ValueCatalogSlot;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
      * The hasEntityResolutionMatch would allow Alexa to trigger a re-prompt when the status produced by ER is \"ER_SUCCESS_NO_MATCH\".
      * @interface
      */
     export interface HasEntityResolutionMatch {
         'type' : 'HasEntityResolutionMatch';
         'prompt': string;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
+     * Supplies inline slot type values.
+     * @interface
+     */
+    export interface InlineValueSupplier {
+        'type' : 'InlineValueSupplier';
+        'values'?: Array<v1.skill.interactionModel.TypeValue>;
     }
 }
 
@@ -4296,9 +4629,9 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Unique identifier of the catalog
-         * @param {v1.skill.interactionModel.catalog.UpdateRequest} updateRequest 
+         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
          */
-        async callUpdateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.catalog.UpdateRequest) : Promise<ApiResponse> {
+        async callUpdateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callUpdateInteractionModelCatalogV1';
             // verify required parameter 'catalogId' is not null or undefined
             if (catalogId == null) {
@@ -4341,15 +4674,15 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Unique identifier of the catalog
-         * @param {v1.skill.interactionModel.catalog.UpdateRequest} updateRequest 
+         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
          */
-        async updateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.catalog.UpdateRequest) : Promise<void> {
+        async updateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<void> {
                 await this.callUpdateInteractionModelCatalogV1(catalogId, updateRequest);
         }
         /**
          *
          * @param {string} catalogId Unique identifier of the catalog
-         * @param {string} updateRequestId The identifier for catalog version creation process
+         * @param {string} updateRequestId The identifier for slotType version creation process
          */
         async callGetInteractionModelCatalogUpdateStatusV1(catalogId : string, updateRequestId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetInteractionModelCatalogUpdateStatusV1';
@@ -4395,7 +4728,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Unique identifier of the catalog
-         * @param {string} updateRequestId The identifier for catalog version creation process
+         * @param {string} updateRequestId The identifier for slotType version creation process
          */
         async getInteractionModelCatalogUpdateStatusV1(catalogId : string, updateRequestId : string) : Promise<v1.skill.interactionModel.catalog.CatalogStatus> {
                 const apiResponse: ApiResponse = await this.callGetInteractionModelCatalogUpdateStatusV1(catalogId, updateRequestId);
@@ -4793,6 +5126,600 @@ export namespace services.skillManagement {
         async createInteractionModelCatalogV1(catalog : v1.skill.interactionModel.catalog.DefinitionData) : Promise<v1.skill.interactionModel.catalog.CatalogResponse> {
                 const apiResponse: ApiResponse = await this.callCreateInteractionModelCatalogV1(catalog);
                 return apiResponse.body as v1.skill.interactionModel.catalog.CatalogResponse;
+        }
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async callListInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListInteractionModelSlotTypesV1';
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            queryParams.push({ key: 'vendorId', value: vendorId});
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(sortDirection != null) {
+                queryParams.push({ key: 'sortDirection', value: sortDirection });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns list of slot types for the vendor.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async listInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.type.ListSlotTypeResponse> {
+                const apiResponse: ApiResponse = await this.callListInteractionModelSlotTypesV1(vendorId, maxResults, nextToken, sortDirection);
+                return apiResponse.body as v1.skill.interactionModel.type.ListSlotTypeResponse;
+        }
+        /**
+         *
+         * @param {v1.skill.interactionModel.type.DefinitionData} slotType 
+         */
+        async callCreateInteractionModelSlotTypeV1(slotType : v1.skill.interactionModel.type.DefinitionData) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateInteractionModelSlotTypeV1';
+            // verify required parameter 'slotType' is not null or undefined
+            if (slotType == null) {
+                throw new Error(`Required parameter slotType was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns the generated slotTypeId.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the slot type definition is invalid.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(429, "The operation being requested is not allowed.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, slotType, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v1.skill.interactionModel.type.DefinitionData} slotType 
+         */
+        async createInteractionModelSlotTypeV1(slotType : v1.skill.interactionModel.type.DefinitionData) : Promise<v1.skill.interactionModel.type.SlotTypeResponse> {
+                const apiResponse: ApiResponse = await this.callCreateInteractionModelSlotTypeV1(slotType);
+                return apiResponse.body as v1.skill.interactionModel.type.SlotTypeResponse;
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         */
+        async callDeleteInteractionModelSlotTypeV1(slotTypeId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteInteractionModelSlotTypeV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No content; just confirm the slot type is deleted.");
+            errorDefinitions.set(400, "The slot type cannot be deleted from reasons due to in-use by other entities.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         */
+        async deleteInteractionModelSlotTypeV1(slotTypeId : string) : Promise<void> {
+                await this.callDeleteInteractionModelSlotTypeV1(slotTypeId);
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         */
+        async callGetInteractionModelSlotTypeDefinitionV1(slotTypeId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInteractionModelSlotTypeDefinitionV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "the slot type definition");
+            errorDefinitions.set(400, "The slot type cannot be retrieved due to errors listed.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         */
+        async getInteractionModelSlotTypeDefinitionV1(slotTypeId : string) : Promise<v1.skill.interactionModel.type.SlotTypeDefinitionOutput> {
+                const apiResponse: ApiResponse = await this.callGetInteractionModelSlotTypeDefinitionV1(slotTypeId);
+                return apiResponse.body as v1.skill.interactionModel.type.SlotTypeDefinitionOutput;
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
+         */
+        async callUpdateInteractionModelSlotTypeV1(slotTypeId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateInteractionModelSlotTypeV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateRequest' is not null or undefined
+            if (updateRequest == null) {
+                throw new Error(`Required parameter updateRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/update";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No content, indicates the fields were successfully updated.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
+         */
+        async updateInteractionModelSlotTypeV1(slotTypeId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<void> {
+                await this.callUpdateInteractionModelSlotTypeV1(slotTypeId, updateRequest);
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} updateRequestId The identifier for slotType version creation process
+         */
+        async callGetInteractionModelSlotTypeBuildStatusV1(slotTypeId : string, updateRequestId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInteractionModelSlotTypeBuildStatusV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateRequestId' is not null or undefined
+            if (updateRequestId == null) {
+                throw new Error(`Required parameter updateRequestId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+            pathParams.set('updateRequestId', updateRequestId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/updateRequest/{updateRequestId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns the build status and error codes for the given slotTypeId");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} updateRequestId The identifier for slotType version creation process
+         */
+        async getInteractionModelSlotTypeBuildStatusV1(slotTypeId : string, updateRequestId : string) : Promise<v1.skill.interactionModel.type.SlotTypeStatus> {
+                const apiResponse: ApiResponse = await this.callGetInteractionModelSlotTypeBuildStatusV1(slotTypeId, updateRequestId);
+                return apiResponse.body as v1.skill.interactionModel.type.SlotTypeStatus;
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async callListInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListInteractionModelSlotTypeVersionsV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(sortDirection != null) {
+                queryParams.push({ key: 'sortDirection', value: sortDirection });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns list of slot type version for the slot type id.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async listInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.typeVersion.ListSlotTypeVersionResponse> {
+                const apiResponse: ApiResponse = await this.callListInteractionModelSlotTypeVersionsV1(slotTypeId, maxResults, nextToken, sortDirection);
+                return apiResponse.body as v1.skill.interactionModel.typeVersion.ListSlotTypeVersionResponse;
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {v1.skill.interactionModel.typeVersion.VersionData} slotType 
+         */
+        async callCreateInteractionModelSlotTypeVersionV1(slotTypeId : string, slotType : v1.skill.interactionModel.typeVersion.VersionData) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateInteractionModelSlotTypeVersionV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'slotType' is not null or undefined
+            if (slotType == null) {
+                throw new Error(`Required parameter slotType was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Returns update status location link on success.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the slot type definition is invalid.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The specified slot type does not exist.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, slotType, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {v1.skill.interactionModel.typeVersion.VersionData} slotType 
+         */
+        async createInteractionModelSlotTypeVersionV1(slotTypeId : string, slotType : v1.skill.interactionModel.typeVersion.VersionData) : Promise<void> {
+                await this.callCreateInteractionModelSlotTypeVersionV1(slotTypeId, slotType);
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         */
+        async callDeleteInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteInteractionModelSlotTypeVersionV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions/{version}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No Content; Confirms that version is successfully deleted.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type version for this slotTypeId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         */
+        async deleteInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<void> {
+                await this.callDeleteInteractionModelSlotTypeVersionV1(slotTypeId, version);
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         */
+        async callGetInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetInteractionModelSlotTypeVersionV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions/{version}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns the slot type version metadata for the given slotTypeId and version.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         */
+        async getInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<v1.skill.interactionModel.typeVersion.SlotTypeVersionData> {
+                const apiResponse: ApiResponse = await this.callGetInteractionModelSlotTypeVersionV1(slotTypeId, version);
+                return apiResponse.body as v1.skill.interactionModel.typeVersion.SlotTypeVersionData;
+        }
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         * @param {v1.skill.interactionModel.typeVersion.SlotTypeUpdate} slotTypeUpdate 
+         */
+        async callUpdateInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string, slotTypeUpdate : v1.skill.interactionModel.typeVersion.SlotTypeUpdate) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateInteractionModelSlotTypeVersionV1';
+            // verify required parameter 'slotTypeId' is not null or undefined
+            if (slotTypeId == null) {
+                throw new Error(`Required parameter slotTypeId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'slotTypeUpdate' is not null or undefined
+            if (slotTypeUpdate == null) {
+                throw new Error(`Required parameter slotTypeUpdate was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('slotTypeId', slotTypeId);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions/{version}/update";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No Content; Confirms that version is successfully updated.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, slotTypeUpdate, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} version Version for interaction model.
+         * @param {v1.skill.interactionModel.typeVersion.SlotTypeUpdate} slotTypeUpdate 
+         */
+        async updateInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string, slotTypeUpdate : v1.skill.interactionModel.typeVersion.SlotTypeUpdate) : Promise<void> {
+                await this.callUpdateInteractionModelSlotTypeVersionV1(slotTypeId, version, slotTypeUpdate);
         }
         /**
          *
