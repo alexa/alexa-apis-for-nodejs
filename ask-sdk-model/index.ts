@@ -2960,12 +2960,15 @@ export namespace services.reminderManagement {
         'freq'?: services.reminderManagement.RecurrenceFreq;
         'byDay'?: Array<services.reminderManagement.RecurrenceDay>;
         'interval'?: number;
+        'startDateTime'?: string;
+        'endDateTime'?: string;
+        'recurrenceRules'?: Array<string>;
     }
 }
 
 export namespace services.reminderManagement {
     /**
-     * Day of recurrence
+     * Day of recurrence. Deprecated.
      * @enum
      */
     export type RecurrenceDay = 'SU' | 'MO' | 'TU' | 'WE' | 'TH' | 'FR' | 'SA';
@@ -2973,7 +2976,7 @@ export namespace services.reminderManagement {
 
 export namespace services.reminderManagement {
     /**
-     * Frequency of recurrence
+     * Frequency of recurrence. Deprecated.
      * @enum
      */
     export type RecurrenceFreq = 'WEEKLY' | 'DAILY';
