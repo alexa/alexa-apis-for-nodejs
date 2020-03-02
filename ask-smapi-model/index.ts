@@ -1651,6 +1651,14 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Publication status of the skill. It is associated with the skill's stage. Skill in 'development' stage can have publication status as 'DEVELOPMENT' or 'CERTIFICATION'. Skill in 'certified' stage can have publication status as 'CERTIFIED'. 'Skill in 'live' stage can have publication status as 'PUBLISHED', 'HIDDEN' or 'REMOVED'. * `DEVELOPMENT` - The skill is available only to you. If you have enabled it for testing, you can test it on devices registered to your developer account. * `CERTIFICATION` - Amazon is currently reviewing the skill for publication. During this time, you cannot edit the configuration. * `CERTIFIED` - The skill has been certified and ready to be published. Skill can be either published immediately or an future release date can be set for the skill. You cannot edit the configuration for the certified skills. To start development, make your changes on the development version. * `PUBLISHED` - The skill has been published and is available to users. You cannot edit the configuration for live skills. To start development on an updated version, make your changes on the development version instead. * `HIDDEN` - The skill has been published but is no longer available to new users for activation. Existing users can still invoke this skill. * `REMOVED` - The skill has been published but removed for use, due to Amazon's policy violation. You can update your skill and publish a new version to live to address the policy violation. 
+     * @enum
+     */
+    export type PublicationStatus = 'DEVELOPMENT' | 'CERTIFICATION' | 'CERTIFIED' | 'PUBLISHED' | 'HIDDEN' | 'REMOVED';
+}
+
+export namespace v1.skill {
+    /**
      * The reason to withdraw.
      * @enum
      */
@@ -1757,6 +1765,11 @@ export namespace v1.skill {
     export interface SkillSummary {
         'skillId'?: string;
         'apis'?: Array<v1.skill.SkillSummaryApis>;
+        'publicationStatus'?: v1.skill.PublicationStatus;
+        'lastUpdated'?: string;
+        'nameByLocale'?: { [key: string]: string; };
+        'asin'?: string;
+        '_links'?: v1.Links;
     }
 }
 
@@ -2573,7 +2586,7 @@ export namespace v1.skill.interactionModel {
      */
     export interface SlotType {
         'name'?: string;
-        'values'?: Array<string>;
+        'values'?: Array<v1.skill.interactionModel.TypeValue>;
         'valueSupplier'?: v1.skill.interactionModel.ValueSupplier;
     }
 }
@@ -2588,7 +2601,7 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
-     * the value schema in type object of interaction model
+     * The value schema in type object of interaction model.
      * @interface
      */
     export interface TypeValue {
@@ -2599,7 +2612,7 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
-     * The object that contains individual type values
+     * The object that contains individual type values.
      * @interface
      */
     export interface TypeValueObject {
@@ -2614,17 +2627,6 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface ValueCatalog {
-        'id'?: string;
-        'version'?: string;
-    }
-}
-
-export namespace v1.skill.interactionModel {
-    /**
-     * Catalog reference to provide values.
-     * @interface
-     */
-    export interface ValueCatalogSlot {
         'catalogId'?: string;
         'version'?: string;
     }
@@ -2635,15 +2637,7 @@ export namespace v1.skill.interactionModel {
     * Supplier object to provide slot values.
     * @interface
     */
-    export type ValueSupplier = v1.skill.interactionModel.CatalogValueSupplier;
-}
-
-export namespace v1.skill.interactionModel {
-   /**
-    * Supplier object to provide slot values.
-    * @interface
-    */
-    export type ValueSupplierSlot = v1.skill.interactionModel.CatalogValueSupplierSlot | v1.skill.interactionModel.InlineValueSupplier;
+    export type ValueSupplier = v1.skill.interactionModel.CatalogValueSupplier | v1.skill.interactionModel.InlineValueSupplier;
 }
 
 export namespace v1.skill.interactionModel.catalog {
@@ -2783,7 +2777,7 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel.type {
     /**
-     * The body of the bad request exception
+     * The body of the bad request exception.
      * @interface
      */
     export interface BadRequest {
@@ -2805,7 +2799,7 @@ export namespace v1.skill.interactionModel.type {
 
 export namespace v1.skill.interactionModel.type {
     /**
-     * The Error which would fail requests
+     * The error which would fail requests.
      * @interface
      */
     export interface Error {
@@ -2845,19 +2839,8 @@ export namespace v1.skill.interactionModel.type {
      * @interface
      */
     export interface SlotTypeDefinitionOutput {
-        'slotType'?: v1.skill.interactionModel.type.SlotTypeEntity;
+        'slotType'?: v1.skill.interactionModel.type.SlotTypeInput;
         'totalVersions'?: string;
-    }
-}
-
-export namespace v1.skill.interactionModel.type {
-    /**
-     * Definition for slot type entity.
-     * @interface
-     */
-    export interface SlotTypeEntity {
-        'name'?: string;
-        'description'?: string;
     }
 }
 
@@ -2887,7 +2870,7 @@ export namespace v1.skill.interactionModel.type {
 
 export namespace v1.skill.interactionModel.type {
     /**
-     * SlotTypeId information.
+     * Slot Type information.
      * @interface
      */
     export interface SlotTypeResponse {
@@ -2925,7 +2908,7 @@ export namespace v1.skill.interactionModel.type {
 
 export namespace v1.skill.interactionModel.type {
     /**
-     * Slot type update request object.
+     * Slot type update definition object.
      * @interface
      */
     export interface SlotTypeUpdateDefinition {
@@ -2945,7 +2928,7 @@ export namespace v1.skill.interactionModel.type {
 
 export namespace v1.skill.interactionModel.type {
     /**
-     * The warning which would not fail requests
+     * The warning which would not fail requests.
      * @interface
      */
     export interface Warning {
@@ -2972,6 +2955,20 @@ export namespace v1.skill.interactionModel.typeVersion {
      * @interface
      */
     export interface SlotTypeVersionData {
+        'slotType'?: v1.skill.interactionModel.typeVersion.SlotTypeVersionDataObject;
+    }
+}
+
+export namespace v1.skill.interactionModel.typeVersion {
+    /**
+     * Slot Type version fields with metadata.
+     * @interface
+     */
+    export interface SlotTypeVersionDataObject {
+        'id'?: string;
+        'definition'?: v1.skill.interactionModel.typeVersion.ValueSupplierObject;
+        'description'?: string;
+        'version'?: string;
     }
 }
 
@@ -2993,7 +2990,7 @@ export namespace v1.skill.interactionModel.typeVersion {
      * @interface
      */
     export interface ValueSupplierObject {
-        'valueSupplier'?: v1.skill.interactionModel.ValueSupplierSlot;
+        'valueSupplier'?: v1.skill.interactionModel.ValueSupplier;
     }
 }
 
@@ -3095,19 +3092,6 @@ export namespace v1.skill.interactionModel.version {
         'skillModelVersions'?: Array<v1.skill.interactionModel.version.VersionItems>;
         'isTruncated'?: boolean;
         'nextToken'?: string;
-    }
-}
-
-export namespace v1.skill.interactionModel.version {
-    /**
-     * Slot Type version fields with metadata.
-     * @interface
-     */
-    export interface SlotTypeVersionDataObject {
-        'id'?: string;
-        'definition'?: v1.skill.interactionModel.typeVersion.ValueSupplierObject;
-        'description'?: string;
-        'version'?: string;
     }
 }
 
@@ -3640,22 +3624,11 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
-     * Supply slot values from catalog(s).
-     * @interface
-     */
-    export interface CatalogValueSupplierSlot {
-        'type' : 'CatalogValueSupplier';
-        'valueCatalog'?: v1.skill.interactionModel.ValueCatalogSlot;
-    }
-}
-
-export namespace v1.skill.interactionModel {
-    /**
      * The hasEntityResolutionMatch would allow Alexa to trigger a re-prompt when the status produced by ER is \"ER_SUCCESS_NO_MATCH\".
      * @interface
      */
     export interface HasEntityResolutionMatch {
-        'type' : 'HasEntityResolutionMatch';
+        'type' : 'hasEntityResolutionMatch';
         'prompt': string;
     }
 }
@@ -3677,7 +3650,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsGreaterThan {
-        'type' : 'IsGreaterThan';
+        'type' : 'isGreaterThan';
         'prompt': string;
         'value': string;
     }
@@ -3689,7 +3662,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsGreaterThanOrEqualTo {
-        'type' : 'IsGreaterThanOrEqualTo';
+        'type' : 'isGreaterThanOrEqualTo';
         'prompt': string;
         'value': string;
     }
@@ -3701,7 +3674,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsInDuration {
-        'type' : 'IsInDuration';
+        'type' : 'isInDuration';
         'prompt': string;
         'start'?: string;
         'end'?: string;
@@ -3714,7 +3687,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsInSet {
-        'type' : 'IsInSet';
+        'type' : 'isInSet';
         'prompt': string;
         'values': Array<string>;
     }
@@ -3726,7 +3699,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsLessThan {
-        'type' : 'IsLessThan';
+        'type' : 'isLessThan';
         'prompt': string;
         'value': string;
     }
@@ -3738,7 +3711,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsLessThanOrEqualTo {
-        'type' : 'IsLessThanOrEqualTo';
+        'type' : 'isLessThanOrEqualTo';
         'prompt': string;
         'value': string;
     }
@@ -3750,7 +3723,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsNotInDuration {
-        'type' : 'IsNotInDuration';
+        'type' : 'isNotInDuration';
         'prompt': string;
         'start'?: string;
         'end'?: string;
@@ -3763,7 +3736,7 @@ export namespace v1.skill.interactionModel {
      * @interface
      */
     export interface IsNotInSet {
-        'type' : 'IsNotInSet';
+        'type' : 'isNotInSet';
         'prompt': string;
         'values': Array<string>;
     }
@@ -5218,7 +5191,7 @@ export namespace services.skillManagement {
             errorDefinitions.set(200, "Returns the generated slotTypeId.");
             errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the slot type definition is invalid.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
-            errorDefinitions.set(429, "The operation being requested is not allowed.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
             errorDefinitions.set(500, "Internal Server Error.");
             errorDefinitions.set(503, "Service Unavailable.");
 
@@ -5236,7 +5209,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          */
         async callDeleteInteractionModelSlotTypeV1(slotTypeId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callDeleteInteractionModelSlotTypeV1';
@@ -5276,14 +5249,14 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          */
         async deleteInteractionModelSlotTypeV1(slotTypeId : string) : Promise<void> {
                 await this.callDeleteInteractionModelSlotTypeV1(slotTypeId);
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          */
         async callGetInteractionModelSlotTypeDefinitionV1(slotTypeId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetInteractionModelSlotTypeDefinitionV1';
@@ -5308,7 +5281,7 @@ export namespace services.skillManagement {
             let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "the slot type definition");
+            errorDefinitions.set(200, "The slot type definition.");
             errorDefinitions.set(400, "The slot type cannot be retrieved due to errors listed.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
@@ -5323,7 +5296,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          */
         async getInteractionModelSlotTypeDefinitionV1(slotTypeId : string) : Promise<v1.skill.interactionModel.type.SlotTypeDefinitionOutput> {
                 const apiResponse: ApiResponse = await this.callGetInteractionModelSlotTypeDefinitionV1(slotTypeId);
@@ -5331,7 +5304,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
          */
         async callUpdateInteractionModelSlotTypeV1(slotTypeId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<ApiResponse> {
@@ -5376,7 +5349,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
          */
         async updateInteractionModelSlotTypeV1(slotTypeId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<void> {
@@ -5384,7 +5357,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} updateRequestId The identifier for slotType version creation process
          */
         async callGetInteractionModelSlotTypeBuildStatusV1(slotTypeId : string, updateRequestId : string) : Promise<ApiResponse> {
@@ -5415,12 +5388,12 @@ export namespace services.skillManagement {
             let path : string = "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/updateRequest/{updateRequestId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "Returns the build status and error codes for the given slotTypeId");
+            errorDefinitions.set(200, "Returns the build status and error codes for the given slotTypeId.");
             errorDefinitions.set(400, "Server cannot process the request due to a client error.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
             errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
-            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
             errorDefinitions.set(500, "Internal Server Error.");
             errorDefinitions.set(503, "Service Unavailable.");
 
@@ -5430,7 +5403,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} updateRequestId The identifier for slotType version creation process
          */
         async getInteractionModelSlotTypeBuildStatusV1(slotTypeId : string, updateRequestId : string) : Promise<v1.skill.interactionModel.type.SlotTypeStatus> {
@@ -5439,7 +5412,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
@@ -5490,7 +5463,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
@@ -5501,7 +5474,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {v1.skill.interactionModel.typeVersion.VersionData} slotType 
          */
         async callCreateInteractionModelSlotTypeVersionV1(slotTypeId : string, slotType : v1.skill.interactionModel.typeVersion.VersionData) : Promise<ApiResponse> {
@@ -5546,7 +5519,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {v1.skill.interactionModel.typeVersion.VersionData} slotType 
          */
         async createInteractionModelSlotTypeVersionV1(slotTypeId : string, slotType : v1.skill.interactionModel.typeVersion.VersionData) : Promise<void> {
@@ -5554,7 +5527,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          */
         async callDeleteInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<ApiResponse> {
@@ -5600,7 +5573,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          */
         async deleteInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<void> {
@@ -5608,7 +5581,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          */
         async callGetInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<ApiResponse> {
@@ -5654,7 +5627,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          */
         async getInteractionModelSlotTypeVersionV1(slotTypeId : string, version : string) : Promise<v1.skill.interactionModel.typeVersion.SlotTypeVersionData> {
@@ -5663,7 +5636,7 @@ export namespace services.skillManagement {
         }
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          * @param {v1.skill.interactionModel.typeVersion.SlotTypeUpdate} slotTypeUpdate 
          */
@@ -5703,7 +5676,7 @@ export namespace services.skillManagement {
             errorDefinitions.set(400, "Server cannot process the request due to a client error.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
-            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId");
+            errorDefinitions.set(404, "There is no slot type defined for the slotTypeId.");
             errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
             errorDefinitions.set(500, "Internal Server Error.");
             errorDefinitions.set(503, "Service Unavailable.");
@@ -5714,7 +5687,7 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {string} slotTypeId The identitfier for a slot type
+         * @param {string} slotTypeId The identifier for a slot type.
          * @param {string} version Version for interaction model.
          * @param {v1.skill.interactionModel.typeVersion.SlotTypeUpdate} slotTypeUpdate 
          */
@@ -7952,7 +7925,7 @@ export namespace services.skillManagement {
             let path : string = "/v1/skills/{skillId}/stages/{stageV2}/interactionModel/locales/{locale}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "Returns interaction model object on success");
+            errorDefinitions.set(200, "Returns interaction model object on success.");
             errorDefinitions.set(400, "Server cannot process the request due to a client error.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
@@ -8014,7 +7987,7 @@ export namespace services.skillManagement {
             let path : string = "/v1/skills/{skillId}/stages/{stageV2}/interactionModel/locales/{locale}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(204, "success. There is no content but returns etag");
+            errorDefinitions.set(204, "Success. There is no content but returns etag.");
             errorDefinitions.set(400, "Server cannot process the request due to a client error.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
@@ -8085,10 +8058,10 @@ export namespace services.skillManagement {
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(202, "Returns build status location link on success.");
-            errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the input interaction model is invalid");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the input interaction model is invalid.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
-            errorDefinitions.set(404, "The specified skill or stage or locale does not exist");
+            errorDefinitions.set(404, "The specified skill or stage or locale does not exist.");
             errorDefinitions.set(412, "Precondition failed.");
             errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
             errorDefinitions.set(500, "Internal Server Error.");
