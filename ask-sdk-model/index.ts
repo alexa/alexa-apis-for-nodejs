@@ -765,6 +765,17 @@ export namespace events.skillevents {
     }
 }
 
+export namespace interfaces.alexa.comms.messagingcontroller {
+    /**
+     * A map whose key is the new status and value is the message ID list. The status of the messages whose IDs are in the list will be updated to the new status from the key. 
+     * @interface
+     */
+    export interface StatusMap {
+        'read'?: Array<string>;
+        'deleted'?: Array<string>;
+    }
+}
+
 export namespace interfaces.alexa.presentation.apl {
     /**
      *
@@ -3046,6 +3057,158 @@ export namespace services.skillMessaging {
     }
 }
 
+export namespace services.timerManagement {
+    /**
+     * Whether the native Timer GUI is shown for 8-seconds upon Timer Creation.
+     * @interface
+     */
+    export interface CreationBehavior {
+        'displayExperience'?: services.timerManagement.DisplayExperience;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * Multi model presentation of the timer creation.
+     * @interface
+     */
+    export interface DisplayExperience {
+        'visibility'?: services.timerManagement.Visibility;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * Error object for Response.
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message'?: string;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * notification of the timer expiration.
+     * @interface
+     */
+    export interface NotificationConfig {
+        'playAudible'?: boolean;
+    }
+}
+
+export namespace services.timerManagement {
+   /**
+    * Triggering information for Timer.
+    * @interface
+    */
+    export type Operation = services.timerManagement.LaunchTaskOperation | services.timerManagement.AnnounceOperation | services.timerManagement.NotifyOnlyOperation;
+}
+
+export namespace services.timerManagement {
+    /**
+     * Status of timer
+     * @enum
+     */
+    export type Status = 'ON' | 'PAUSED' | 'OFF';
+}
+
+export namespace services.timerManagement {
+    /**
+     * Custom task passed by skill developers when the operation type is \"LAUNCH_TASK\"
+     * @interface
+     */
+    export interface Task {
+        'name'?: string;
+        'version'?: string;
+        'input'?: any;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * When the operation type is \"ANNOUNCE\", announces a certain text that the developer wants to be read out at the expiration of the timer.
+     * @interface
+     */
+    export interface TextToAnnounce {
+        'locale'?: string;
+        'text'?: string;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * When the operation type is \"LAUNCH_TASK\", confirm with the customer at the expiration of the timer.
+     * @interface
+     */
+    export interface TextToConfirm {
+        'locale'?: string;
+        'text'?: string;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * Input request for creating a timer.
+     * @interface
+     */
+    export interface TimerRequest {
+        'duration': string;
+        'timerLabel'?: string;
+        'creationBehavior': services.timerManagement.CreationBehavior;
+        'triggeringBehavior': services.timerManagement.TriggeringBehavior;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * Timer object
+     * @interface
+     */
+    export interface TimerResponse {
+        'id'?: string;
+        'status'?: services.timerManagement.Status;
+        'duration'?: string;
+        'triggerTime'?: string;
+        'timerLabel'?: string;
+        'createdTime'?: string;
+        'updatedTime'?: string;
+        'remainingTimeWhenPaused'?: string;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * Timers object with paginated list of multiple timers
+     * @interface
+     */
+    export interface TimersResponse {
+        'totalCount'?: number;
+        'timers'?: Array<services.timerManagement.TimerResponse>;
+        'nextToken'?: string;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * The triggering behavior upon Timer Expired.
+     * @interface
+     */
+    export interface TriggeringBehavior {
+        'operation'?: services.timerManagement.Operation;
+        'notificationConfig'?: services.timerManagement.NotificationConfig;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * The default native Timer GUI \"visible\" is shown for 8-seconds upon Timer Creation. Otherwise, \"hidden\" will not show default native Timer GUI.
+     * @enum
+     */
+    export type Visibility = 'VISIBLE' | 'HIDDEN';
+}
+
 export namespace services.ups {
     /**
      *
@@ -5264,6 +5427,39 @@ export namespace services.reminderManagement {
     }
 }
 
+export namespace services.timerManagement {
+    /**
+     * ANNOUNCE trigger behavior represents announcing a certain text that the developer wants to be read out at the expiration of the timer.
+     * @interface
+     */
+    export interface AnnounceOperation {
+        'type' : 'ANNOUNCE';
+        'textToAnnounce': Array<services.timerManagement.TextToAnnounce>;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * LAUNCH_TASK trigger behavior representing launch a Skill Connection task exposed by the same skill.
+     * @interface
+     */
+    export interface LaunchTaskOperation {
+        'type' : 'LAUNCH_TASK';
+        'textToConfirm': Array<services.timerManagement.TextToConfirm>;
+        'task': services.timerManagement.Task;
+    }
+}
+
+export namespace services.timerManagement {
+    /**
+     * NOTIFY_ONLY trigger behavior represents chime only when timer expired.
+     * @interface
+     */
+    export interface NotifyOnlyOperation {
+        'type' : 'NOTIFY_ONLY';
+    }
+}
+
 export namespace ui {
     /**
      *
@@ -6637,6 +6833,313 @@ export namespace services.skillMessaging {
     }
 }
 
+export namespace services.timerManagement {
+
+    /**
+     *
+     */
+    export class TimerManagementServiceClient extends BaseServiceClient {
+
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, customUserAgent : string = null) {
+            super(apiConfiguration);
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
+        }
+
+        /**
+         *
+         */
+        async callDeleteTimers() : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteTimers';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async deleteTimers() : Promise<void> {
+                await this.callDeleteTimers();
+        }
+        /**
+         *
+         */
+        async callGetTimers() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetTimers';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async getTimers() : Promise<services.timerManagement.TimersResponse> {
+                const apiResponse: ApiResponse = await this.callGetTimers();
+                return apiResponse.body as services.timerManagement.TimersResponse;
+        }
+        /**
+         *
+         * @param {string} id 
+         */
+        async callDeleteTimer(id : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteTimer';
+            // verify required parameter 'id' is not null or undefined
+            if (id == null) {
+                throw new Error(`Required parameter id was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('id', id);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/{id}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(404, "Timer not found");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} id 
+         */
+        async deleteTimer(id : string) : Promise<void> {
+                await this.callDeleteTimer(id);
+        }
+        /**
+         *
+         * @param {string} id 
+         */
+        async callGetTimer(id : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetTimer';
+            // verify required parameter 'id' is not null or undefined
+            if (id == null) {
+                throw new Error(`Required parameter id was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('id', id);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/{id}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(404, "Timer not found");
+            errorDefinitions.set(500, "Internal Server Error");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} id 
+         */
+        async getTimer(id : string) : Promise<services.timerManagement.TimerResponse> {
+                const apiResponse: ApiResponse = await this.callGetTimer(id);
+                return apiResponse.body as services.timerManagement.TimerResponse;
+        }
+        /**
+         *
+         * @param {string} id 
+         */
+        async callPauseTimer(id : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callPauseTimer';
+            // verify required parameter 'id' is not null or undefined
+            if (id == null) {
+                throw new Error(`Required parameter id was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('id', id);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/{id}/pause";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(404, "Timer not found");
+            errorDefinitions.set(500, "Internal Server Error");
+            errorDefinitions.set(504, "Device offline");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} id 
+         */
+        async pauseTimer(id : string) : Promise<void> {
+                await this.callPauseTimer(id);
+        }
+        /**
+         *
+         * @param {string} id 
+         */
+        async callResumeTimer(id : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callResumeTimer';
+            // verify required parameter 'id' is not null or undefined
+            if (id == null) {
+                throw new Error(`Required parameter id was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('id', id);
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/{id}/resume";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(404, "Timer not found");
+            errorDefinitions.set(500, "Internal Server Error");
+            errorDefinitions.set(504, "Device offline");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} id 
+         */
+        async resumeTimer(id : string) : Promise<void> {
+                await this.callResumeTimer(id);
+        }
+        /**
+         *
+         * @param {services.timerManagement.TimerRequest} timerRequest 
+         */
+        async callCreateTimer(timerRequest : services.timerManagement.TimerRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateTimer';
+            // verify required parameter 'timerRequest' is not null or undefined
+            if (timerRequest == null) {
+                throw new Error(`Required parameter timerRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/alerts/timers/";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Success");
+            errorDefinitions.set(400, "Bad Request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(403, "Forbidden");
+            errorDefinitions.set(500, "Internal Server Error");
+            errorDefinitions.set(504, "Device offline");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, timerRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {services.timerManagement.TimerRequest} timerRequest 
+         */
+        async createTimer(timerRequest : services.timerManagement.TimerRequest) : Promise<services.timerManagement.TimerResponse> {
+                const apiResponse: ApiResponse = await this.callCreateTimer(timerRequest);
+                return apiResponse.body as services.timerManagement.TimerResponse;
+        }
+    }
+}
+
 export namespace services.ups {
 
     /**
@@ -7034,6 +7537,20 @@ export namespace services {
                 return new reminderManagement.ReminderManagementServiceClient(this.apiConfiguration);
             } catch(e) {
                 const factoryError = new Error(`ServiceClientFactory Error while initializing ReminderManagementServiceClient: ${e.message}`);
+                factoryError['name'] = 'ServiceClientFactoryError';
+
+                throw factoryError;
+            }
+        }
+        /*
+         * Gets an instance of { timerManagement.TimerManagementService }.
+         * @returns { timerManagement.TimerManagementService }
+         */
+        getTimerManagementServiceClient() : timerManagement.TimerManagementServiceClient {
+            try {
+                return new timerManagement.TimerManagementServiceClient(this.apiConfiguration);
+            } catch(e) {
+                const factoryError = new Error(`ServiceClientFactory Error while initializing TimerManagementServiceClient: ${e.message}`);
                 factoryError['name'] = 'ServiceClientFactoryError';
 
                 throw factoryError;
