@@ -443,7 +443,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
 
 /**
  * An object that represents what the user wants.
@@ -489,7 +489,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.html.RuntimeErrorRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -986,6 +986,14 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * The reason for the failure.
+     * @enum
+     */
+    export type ListRuntimeErrorReason = 'INVALID_PRESENTATION_TOKEN' | 'INVALID_LIST_ID' | 'INVALID_DATASOURCE' | 'INVALID_OPERATION' | 'MISSING_LIST_VERSION' | 'DUPLICATE_LIST_VERSION' | 'LIST_INDEX_OUT_OF_RANGE' | 'MISSING_LIST_VERSION_IN_SEND_DATA' | 'LOAD_TIMEOUT' | 'INCONSISTENT_LIST_ID' | 'INCONSISTENT_PAGE_TOKEN' | 'INCONSISTENT_PAGE_ITEMS' | 'DUPLICATE_PAGE_TOKEN' | 'OCCUPIED_LIST_INDEX' | 'LOAD_INDEX_OUT_OF_RANGE' | 'INCONSISTENT_RANGE' | 'MISSING_LIST_ITEMS' | 'INTERNAL_ERROR';
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * The command enumerated value is the operation that should be performed on the media player.
      * @enum
      */
@@ -1024,6 +1032,14 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
    /**
+    * A description of an error in APL functionality.
+    * @interface
+    */
+    export type RuntimeError = interfaces.alexa.presentation.apl.ListRuntimeError;
+}
+
+export namespace interfaces.alexa.presentation.apl {
+   /**
     * Transform property to apply to a component.
     * @interface
     */
@@ -1042,6 +1058,14 @@ export namespace interfaces.alexa.presentation.apl {
         'repeatCount'?: number | string;
         'offset'?: number | string;
     }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+   /**
+    * An operation which adds, removes or replaces item(s) defined in a dynamicIndexList.
+    * @interface
+    */
+    export type Operation = interfaces.alexa.presentation.apl.listoperations.SetItemOperation | interfaces.alexa.presentation.apl.listoperations.InsertMultipleItemsOperation | interfaces.alexa.presentation.apl.listoperations.DeleteMultipleItemsOperation | interfaces.alexa.presentation.apl.listoperations.InsertItemOperation | interfaces.alexa.presentation.apl.listoperations.DeleteItemOperation;
 }
 
 export namespace interfaces.alexa.presentation.aplt {
@@ -3702,6 +3726,39 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Reports an error with list functionality.
+     * @interface
+     */
+    export interface ListRuntimeError {
+        'type' : 'LIST_ERROR';
+        'message': string;
+        'reason': interfaces.alexa.presentation.apl.ListRuntimeErrorReason;
+        'listId': string;
+        'listVersion'?: number;
+        'operationIndex'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The LoadIndexListData event is sent to the skill to retrieve additional list items.
+     * @interface
+     */
+    export interface LoadIndexListDataEvent {
+        'type' : 'Alexa.Presentation.APL.LoadIndexListData';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token': string;
+        'correlationToken': string;
+        'listId': string;
+        'startIndex': number;
+        'count': number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      *
      * @interface
      */
@@ -3782,6 +3839,21 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Notifies the skill of any errors in APL functionality.
+     * @interface
+     */
+    export interface RuntimeErrorEvent {
+        'type' : 'Alexa.Presentation.APL.RuntimeError';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token': string;
+        'errors': Array<interfaces.alexa.presentation.apl.RuntimeError>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      *
      * @interface
      */
@@ -3835,6 +3907,23 @@ export namespace interfaces.alexa.presentation.apl {
         'when'?: boolean;
         'arguments'?: Array<string>;
         'components'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Returned in response to a LoadIndexListData event, containing the requested items and metadata for further interaction.
+     * @interface
+     */
+    export interface SendIndexListDataDirective {
+        'type' : 'Alexa.Presentation.APL.SendIndexListData';
+        'correlationToken'?: string;
+        'listId': string;
+        'listVersion'?: number;
+        'startIndex': number;
+        'minimumInclusiveIndex'?: number;
+        'maximumExclusiveIndex'?: number;
+        'items'?: Array<any>;
     }
 }
 
@@ -3965,6 +4054,20 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Updates the content of an dynamicIndexList datasource which has been previously communicated to an Alexa device.
+     * @interface
+     */
+    export interface UpdateIndexListDataDirective {
+        'type' : 'Alexa.Presentation.APL.UpdateIndexListData';
+        'token': string;
+        'listId': string;
+        'listVersion': number;
+        'operations': Array<interfaces.alexa.presentation.apl.listoperations.Operation>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      *
      * @interface
      */
@@ -3977,6 +4080,65 @@ export namespace interfaces.alexa.presentation.apl {
         'arguments'?: Array<any>;
         'source'?: any;
         'components'?: any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+    /**
+     * Deletes an item at a specified index in a dynamicIndexList.
+     * @interface
+     */
+    export interface DeleteItemOperation {
+        'type' : 'DeleteItem';
+        'index': number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+    /**
+     * Deletes items at consecutive indexes in a dynamicIndexList.
+     * @interface
+     */
+    export interface DeleteMultipleItemsOperation {
+        'type' : 'DeleteMultipleItems';
+        'index': number;
+        'count': number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+    /**
+     * Inserts a new item at a specified index in a dynamicIndexList.
+     * @interface
+     */
+    export interface InsertItemOperation {
+        'type' : 'InsertItem';
+        'index': number;
+        'item': any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+    /**
+     * Inserts an array of items into consecutive indexes in a dynamicIndexList.
+     * @interface
+     */
+    export interface InsertMultipleItemsOperation {
+        'type' : 'InsertMultipleItems';
+        'index': number;
+        'items': Array<any>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl.listoperations {
+    /**
+     * Sets an item at a specified index in a dynamicIndexList.
+     * @interface
+     */
+    export interface SetItemOperation {
+        'type' : 'SetItem';
+        'index': number;
+        'item': any;
     }
 }
 
