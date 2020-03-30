@@ -81,6 +81,193 @@ export namespace v1 {
     export type StageV2Type = 'live' | 'certified' | 'development';
 }
 
+export namespace v1.auditLogs {
+    /**
+     *
+     * @interface
+     */
+    export interface AuditLog {
+        'xAmznRequestId'?: string;
+        'timestamp'?: string;
+        'client'?: v1.auditLogs.Client;
+        'operation'?: v1.auditLogs.Operation;
+        'resources'?: Array<v1.auditLogs.Resource>;
+        'requester'?: v1.auditLogs.Requester;
+        'httpResponseCode'?: number;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     *
+     * @interface
+     */
+    export interface AuditLogsRequest {
+        'vendorId'?: string;
+        'requestFilters'?: v1.auditLogs.RequestFilters;
+        'sortDirection'?: v1.auditLogs.SortDirection;
+        'sortField'?: v1.auditLogs.SortField;
+        'paginationContext'?: v1.auditLogs.RequestPaginationContext;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Response to the Query Audit Logs API. It contains the collection of audit logs for the vendor, nextToken and other metadata related to the search query.
+     * @interface
+     */
+    export interface AuditLogsResponse {
+        'paginationContext'?: v1.auditLogs.ResponsePaginationContext;
+        'auditLogs'?: Array<v1.auditLogs.AuditLog>;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Contains information about the Client that this request was performed by.
+     * @interface
+     */
+    export interface Client {
+        'id'?: string;
+        'name'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Identifier for the application the developer used to manage their skills and skill-related resources. For OAuth applications, this is the OAuth Client Id.
+     * @interface
+     */
+    export interface ClientFilter {
+        'id'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Object containing name and version.
+     * @interface
+     */
+    export interface Operation {
+        'name'?: string;
+        'version'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Name and version of the operation that the developer performed. For example, 'deleteSkill' and 'v1'. This is the same name used in the SMAPI SDK.
+     * @interface
+     */
+    export interface OperationFilter {
+        'name'?: string;
+        'version'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Request Filters for filtering audit logs.
+     * @interface
+     */
+    export interface RequestFilters {
+        'clients'?: Array<v1.auditLogs.ClientFilter>;
+        'operations'?: Array<v1.auditLogs.OperationFilter>;
+        'resources'?: Array<v1.auditLogs.ResourceFilter>;
+        'requesters'?: Array<v1.auditLogs.RequesterFilter>;
+        'startTime'?: string;
+        'endTime'?: string;
+        'httpResponseCodes'?: Array<string>;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * This object includes nextToken and maxResults.
+     * @interface
+     */
+    export interface RequestPaginationContext {
+        'nextToken'?: string;
+        'maxResults'?: number;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * The user that performed the operation.
+     * @interface
+     */
+    export interface Requester {
+        'userId'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Filter for the requester of the operation.
+     * @interface
+     */
+    export interface RequesterFilter {
+        'userId'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Resource that the developer operated on. This includes both the type and ID of the resource.
+     * @interface
+     */
+    export interface Resource {
+        'id'?: string;
+        'type'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Resource that the developer operated on. Both do not need to be provided.
+     * @interface
+     */
+    export interface ResourceFilter {
+        'id'?: string;
+        'type'?: v1.auditLogs.ResourceTypeEnum;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     *
+     * @enum
+     */
+    export type ResourceTypeEnum = 'Skill' | 'SkillCatalog' | 'InSkillProduct' | 'Import' | 'Export';
+}
+
+export namespace v1.auditLogs {
+    /**
+     * This object contains the next token used to load the next page of the result.
+     * @interface
+     */
+    export interface ResponsePaginationContext {
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Sets the sorting direction of the result items. When set to 'ASC' these items are returned in ascending order of sortField value and when set to 'DESC' these items are returned in descending order of sortField value.
+     * @enum
+     */
+    export type SortDirection = 'ASC' | 'DESC';
+}
+
+export namespace v1.auditLogs {
+    /**
+     * Sets the field on which the sorting would be applied.
+     * @enum
+     */
+    export type SortField = 'timestamp' | 'operation' | 'resource.id' | 'resource.type' | 'requester.userId' | 'client.id' | 'httpResponseCode';
+}
+
 export namespace v1.catalog {
     /**
      *
@@ -1102,7 +1289,7 @@ export namespace v1.skill.Manifest {
     *
     * @interface
     */
-    export type Interface = v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.VideoAppInterface | v1.skill.Manifest.CustomInterface | v1.skill.Manifest.AlexaPresentationHtmlInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface;
+    export type Interface = v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.CustomInterface | v1.skill.Manifest.AlexaPresentationHtmlInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface | v1.skill.Manifest.VideoAppInterface;
 }
 
 export namespace v1.skill.Manifest {
@@ -2596,7 +2783,7 @@ export namespace v1.skill.interactionModel {
     * Validation on a slot with support for prompt and confirmation.
     * @interface
     */
-    export type SlotValidation = v1.skill.interactionModel.HasEntityResolutionMatch | v1.skill.interactionModel.IsLessThanOrEqualTo | v1.skill.interactionModel.IsInDuration | v1.skill.interactionModel.IsLessThan | v1.skill.interactionModel.IsGreaterThan | v1.skill.interactionModel.IsNotInSet | v1.skill.interactionModel.IsNotInDuration | v1.skill.interactionModel.IsGreaterThanOrEqualTo | v1.skill.interactionModel.IsInSet;
+    export type SlotValidation = v1.skill.interactionModel.HasEntityResolutionMatch | v1.skill.interactionModel.IsLessThanOrEqualTo | v1.skill.interactionModel.IsGreaterThan | v1.skill.interactionModel.IsNotInSet | v1.skill.interactionModel.IsInDuration | v1.skill.interactionModel.IsLessThan | v1.skill.interactionModel.IsNotInDuration | v1.skill.interactionModel.IsGreaterThanOrEqualTo | v1.skill.interactionModel.IsInSet;
 }
 
 export namespace v1.skill.interactionModel {
@@ -3495,6 +3682,328 @@ export namespace v1.vendorManagement {
     }
 }
 
+export namespace v2 {
+    /**
+     *
+     * @interface
+     */
+    export interface BadRequestError {
+        'message'?: string;
+        'violations'?: Array<v2.Error>;
+    }
+}
+
+export namespace v2 {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message': string;
+    }
+}
+
+export namespace v2.skill {
+    /**
+     *
+     * @interface
+     */
+    export interface Invocation {
+        'invocationRequest'?: v2.skill.InvocationRequest;
+        'invocationResponse'?: v2.skill.InvocationResponse;
+        'metrics'?: v2.skill.Metrics;
+    }
+}
+
+export namespace v2.skill {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationRequest {
+        'endpoint'?: string;
+        'body'?: { [key: string]: any; };
+    }
+}
+
+export namespace v2.skill {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationResponse {
+        'body'?: { [key: string]: any; };
+    }
+}
+
+export namespace v2.skill {
+    /**
+     *
+     * @interface
+     */
+    export interface Metrics {
+        'skillExecutionTimeInMilliseconds'?: number;
+    }
+}
+
+export namespace v2.skill.invocations {
+    /**
+     * Region of endpoint to be called.
+     * @enum
+     */
+    export type EndPointRegions = 'NA' | 'EU' | 'FE';
+}
+
+export namespace v2.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationResponseResult {
+        'skillExecutionInfo'?: v2.skill.Invocation;
+        'error'?: v2.Error;
+    }
+}
+
+export namespace v2.skill.invocations {
+    /**
+     * String that specifies the status of skill invocation. Possible values are \"SUCCEEDED\", and \"FAILED\". 
+     * @enum
+     */
+    export type InvocationResponseStatus = 'SUCCEEDED' | 'FAILED';
+}
+
+export namespace v2.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationsApiResponse {
+        'status'?: v2.skill.invocations.InvocationResponseStatus;
+        'result'?: v2.skill.invocations.InvocationResponseResult;
+    }
+}
+
+export namespace v2.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface SkillRequest {
+        'body': any;
+    }
+}
+
+export namespace v2.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationsApiRequest {
+        'endpointRegion': v2.skill.invocations.EndPointRegions;
+        'skillRequest': v2.skill.invocations.SkillRequest;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaExecutionInfo {
+        'alexaResponses'?: Array<v2.skill.simulations.AlexaResponse>;
+        'consideredIntents'?: Array<v2.skill.simulations.Intent>;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaResponse {
+        'type'?: string;
+        'content'?: v2.skill.simulations.AlexaResponseContent;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaResponseContent {
+        'caption'?: string;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * An enumeration indicating whether the user has explicitly confirmed or denied the entire intent. Possible values: \"NONE\", \"CONFIRMED\", \"DENIED\". 
+     * @enum
+     */
+    export type ConfirmationStatusType = 'NONE' | 'CONFIRMED' | 'DENIED';
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * Model of a virtual device used for simulation. This device object emulates attributes associated with a real Alexa enabled device. 
+     * @interface
+     */
+    export interface Device {
+        'locale': string;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface Input {
+        'content': string;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface Intent {
+        'name'?: string;
+        'confirmationStatus'?: v2.skill.simulations.ConfirmationStatusType;
+        'slots'?: { [key: string]: v2.skill.simulations.Slot; };
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResolutionsPerAuthorityItems {
+        'authority'?: string;
+        'status'?: v2.skill.simulations.ResolutionsPerAuthorityStatus;
+        'values'?: Array<v2.skill.simulations.ResolutionsPerAuthorityValueItems>;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * An object representing the status of entity resolution for the slot.
+     * @interface
+     */
+    export interface ResolutionsPerAuthorityStatus {
+        'code'?: v2.skill.simulations.ResolutionsPerAuthorityStatusCode;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * A code indicating the results of attempting to resolve the user utterance against the defined slot types. This can be one of the following: ER_SUCCESS_MATCH: The spoken value matched a value or synonym explicitly defined in your custom slot type. ER_SUCCESS_NO_MATCH: The spoken value did not match any values or synonyms explicitly defined in your custom slot type. ER_ERROR_TIMEOUT: An error occurred due to a timeout. ER_ERROR_EXCEPTION: An error occurred due to an exception during processing. 
+     * @enum
+     */
+    export type ResolutionsPerAuthorityStatusCode = 'ER_SUCCESS_MATCH' | 'ER_SUCCESS_NO_MATCH' | 'ER_ERROR_TIMEOUT' | 'ER_ERROR_EXCEPTION';
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * An object representing the resolved value for the slot, based on the user's utterance and the slot type definition. 
+     * @interface
+     */
+    export interface ResolutionsPerAuthorityValueItems {
+        'name'?: string;
+        'id'?: string;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * Session settings for running current simulation. 
+     * @interface
+     */
+    export interface Session {
+        'mode'?: v2.skill.simulations.SessionMode;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * Indicate the session mode of the current simulation is using. 
+     * @enum
+     */
+    export type SessionMode = 'DEFAULT' | 'FORCE_NEW_SESSION';
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface SimulationResult {
+        'alexaExecutionInfo'?: v2.skill.simulations.AlexaExecutionInfo;
+        'skillExecutionInfo'?: v2.skill.Invocation;
+        'error'?: v2.Error;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface SimulationsApiRequest {
+        'input': v2.skill.simulations.Input;
+        'device': v2.skill.simulations.Device;
+        'session'?: v2.skill.simulations.Session;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface SimulationsApiResponse {
+        'id'?: string;
+        'status'?: v2.skill.simulations.SimulationsApiResponseStatus;
+        'result'?: v2.skill.simulations.SimulationResult;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * String that specifies the current status of the simulation. Possible values are \"IN_PROGRESS\", \"SUCCESSFUL\", and \"FAILED\". 
+     * @enum
+     */
+    export type SimulationsApiResponseStatus = 'IN_PROGRESS' | 'SUCCESSFUL' | 'FAILED';
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface Slot {
+        'name'?: string;
+        'value'?: string;
+        'confirmationStatus'?: v2.skill.simulations.ConfirmationStatusType;
+        'resolutions'?: v2.skill.simulations.SlotResolutions;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
+     * A resolutions object representing the results of resolving the words captured from the user's utterance. 
+     * @interface
+     */
+    export interface SlotResolutions {
+        'resolutionsPerAuthority'?: Array<v2.skill.simulations.ResolutionsPerAuthorityItems>;
+    }
+}
+
 export namespace v1.catalog.upload {
     /**
      * Request body for self-hosted catalog uploads
@@ -3923,6 +4432,53 @@ export namespace services.skillManagement {
         async generateCatalogUploadUrlV1(catalogId : string, generateCatalogUploadUrlRequestBody : v1.catalog.CreateContentUploadUrlRequest) : Promise<v1.catalog.CreateContentUploadUrlResponse> {
                 const apiResponse: ApiResponse = await this.callGenerateCatalogUploadUrlV1(catalogId, generateCatalogUploadUrlRequestBody);
                 return apiResponse.body as v1.catalog.CreateContentUploadUrlResponse;
+        }
+        /**
+         *
+         * @param {v1.auditLogs.AuditLogsRequest} getAuditLogsRequest Request object encompassing vendorId, optional request filters and optional pagination context.
+         */
+        async callQueryDevelopmentAuditLogsV1(getAuditLogsRequest : v1.auditLogs.AuditLogsRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callQueryDevelopmentAuditLogsV1';
+            // verify required parameter 'getAuditLogsRequest' is not null or undefined
+            if (getAuditLogsRequest == null) {
+                throw new Error(`Required parameter getAuditLogsRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/developmentAuditLogs/query";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns a list of audit logs for the given vendor.");
+            errorDefinitions.set(400, "Invalid request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(403, "Forbidden");
+            errorDefinitions.set(404, "Not Found");
+            errorDefinitions.set(429, "Too Many Requests");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, getAuditLogsRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v1.auditLogs.AuditLogsRequest} getAuditLogsRequest Request object encompassing vendorId, optional request filters and optional pagination context.
+         */
+        async queryDevelopmentAuditLogsV1(getAuditLogsRequest : v1.auditLogs.AuditLogsRequest) : Promise<v1.auditLogs.AuditLogsResponse> {
+                const apiResponse: ApiResponse = await this.callQueryDevelopmentAuditLogsV1(getAuditLogsRequest);
+                return apiResponse.body as v1.auditLogs.AuditLogsResponse;
         }
         /**
          *
@@ -7031,7 +7587,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} simulationId Id of the simulation. 
+         * @param {string} simulationId Id of the simulation.
          */
         async callGetSkillSimulationV1(skillId : string, simulationId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetSkillSimulationV1';
@@ -7076,7 +7632,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} simulationId Id of the simulation. 
+         * @param {string} simulationId Id of the simulation.
          */
         async getSkillSimulationV1(skillId : string, simulationId : string) : Promise<v1.skill.simulations.SimulationsApiResponse> {
                 const apiResponse: ApiResponse = await this.callGetSkillSimulationV1(skillId, simulationId);
@@ -8765,6 +9321,190 @@ export namespace services.skillManagement {
         async getAlexaHostedSkillUserPermissionsV1(vendorId : string, permission : string) : Promise<v1.skill.AlexaHosted.HostedSkillPermission> {
                 const apiResponse: ApiResponse = await this.callGetAlexaHostedSkillUserPermissionsV1(vendorId, permission);
                 return apiResponse.body as v1.skill.AlexaHosted.HostedSkillPermission;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {v2.skill.invocations.InvocationsApiRequest} invocationsApiRequest Payload sent to the skill invocation API.
+         */
+        async callInvokeSkillEndPointV2(skillId : string, stage : string, invocationsApiRequest : v2.skill.invocations.InvocationsApiRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callInvokeSkillEndPointV2';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'invocationsApiRequest' is not null or undefined
+            if (invocationsApiRequest == null) {
+                throw new Error(`Required parameter invocationsApiRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('stage', stage);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/skills/{skillId}/stages/{stage}/invocations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Skill was invoked.");
+            errorDefinitions.set(400, "Bad request due to invalid or missing data.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "API user does not have permission to call this API or is currently in a state that does not allow invocation of this skill. ");
+            errorDefinitions.set(404, "The specified skill does not exist.");
+            errorDefinitions.set(429, "API user has exceeded the permitted request rate.");
+            errorDefinitions.set(500, "Internal service error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, invocationsApiRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {v2.skill.invocations.InvocationsApiRequest} invocationsApiRequest Payload sent to the skill invocation API.
+         */
+        async invokeSkillEndPointV2(skillId : string, stage : string, invocationsApiRequest : v2.skill.invocations.InvocationsApiRequest) : Promise<v2.skill.invocations.InvocationsApiResponse> {
+                const apiResponse: ApiResponse = await this.callInvokeSkillEndPointV2(skillId, stage, invocationsApiRequest);
+                return apiResponse.body as v2.skill.invocations.InvocationsApiResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {v2.skill.simulations.SimulationsApiRequest} simulationsApiRequest Payload sent to the skill simulation API.
+         */
+        async callSimulateSkillV2(skillId : string, stage : string, simulationsApiRequest : v2.skill.simulations.SimulationsApiRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSimulateSkillV2';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'simulationsApiRequest' is not null or undefined
+            if (simulationsApiRequest == null) {
+                throw new Error(`Required parameter simulationsApiRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('stage', stage);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/skills/{skillId}/stages/{stage}/simulations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Skill simulation has successfully began.");
+            errorDefinitions.set(400, "Bad request due to invalid or missing data.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "API user does not have permission to call this API or is currently in a state that does not allow simulation of this skill. ");
+            errorDefinitions.set(404, "The specified skill does not exist.");
+            errorDefinitions.set(409, "This requests conflicts with another one currently being processed. ");
+            errorDefinitions.set(429, "API user has exceeded the permitted request rate.");
+            errorDefinitions.set(500, "Internal service error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, simulationsApiRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {v2.skill.simulations.SimulationsApiRequest} simulationsApiRequest Payload sent to the skill simulation API.
+         */
+        async simulateSkillV2(skillId : string, stage : string, simulationsApiRequest : v2.skill.simulations.SimulationsApiRequest) : Promise<v2.skill.simulations.SimulationsApiResponse> {
+                const apiResponse: ApiResponse = await this.callSimulateSkillV2(skillId, stage, simulationsApiRequest);
+                return apiResponse.body as v2.skill.simulations.SimulationsApiResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {string} simulationId Id of the simulation.
+         */
+        async callGetSkillSimulationV2(skillId : string, stage : string, simulationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSkillSimulationV2';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'simulationId' is not null or undefined
+            if (simulationId == null) {
+                throw new Error(`Required parameter simulationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('stage', stage);
+            pathParams.set('simulationId', simulationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/skills/{skillId}/stages/{stage}/simulations/{simulationId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved skill simulation information.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill or simulation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(429, "API user has exceeded the permitted request rate.");
+            errorDefinitions.set(500, "Internal service error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage Stage for skill.
+         * @param {string} simulationId Id of the simulation.
+         */
+        async getSkillSimulationV2(skillId : string, stage : string, simulationId : string) : Promise<v2.skill.simulations.SimulationsApiResponse> {
+                const apiResponse: ApiResponse = await this.callGetSkillSimulationV2(skillId, stage, simulationId);
+                return apiResponse.body as v2.skill.simulations.SimulationsApiResponse;
         }
     }
 }
