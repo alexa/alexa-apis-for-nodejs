@@ -13,6 +13,1533 @@
     }
   ],
   "paths": {
+    "/v0/catalogs": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Lists catalogs associated with a vendor.",
+        "parameters": [
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "vendorId",
+            "in": "query",
+            "description": "The vendor ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.ListCatalogsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "listCatalogsForVendorV0"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new catalog based on information provided in the request.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateCatalogRequest",
+            "description": "Defines the request body for createCatalog API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.CreateCatalogRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Catalog created.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.CatalogDetails"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "createCatalogV0"
+      }
+    },
+    "/v0/catalogs/{catalogId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Returns information about a particular catalog.",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.CatalogDetails"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "getCatalogV0"
+      }
+    },
+    "/v0/skills/{skillId}/catalogs": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Lists all the catalogs associated with a skill.",
+        "parameters": [
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.ListCatalogsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "listCatalogsForSkillV0"
+      }
+    },
+    "/v0/skills/{skillId}/catalogs/{catalogId}": {
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Associate skill with catalog.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "associateCatalogWithSkillV0"
+      }
+    },
+    "/v0/catalogs/{catalogId}/uploads": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Lists all the uploads for a particular catalog.",
+        "parameters": [
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.upload.ListUploadsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "listUploadsForCatalogV0"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new upload for a catalog and returns presigned upload parts for uploading the file.",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "CreateContentUploadRequest",
+            "description": "Defines the request body for updateCatalog API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.upload.CreateContentUploadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Content upload created.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.upload.CreateContentUploadResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "createContentUploadV0"
+      }
+    },
+    "/v0/catalogs/{catalogId}/uploads/{uploadId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Gets detailed information about an upload which was created for a specific catalog. Includes the upload's ingestion steps and a presigned url for downloading the file.",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uploadId",
+            "in": "path",
+            "description": "Unique identifier of the upload",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.upload.GetContentUploadResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "getContentUploadByIdV0"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Completes an upload. To be called after the file is uploaded to the backend data store using presigned url(s).",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "path",
+            "description": "Unique identifier of the catalog",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uploadId",
+            "in": "path",
+            "description": "Unique identifier of the upload",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "CompleteUploadRequestPayload",
+            "description": "Request payload to complete an upload.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v0.catalog.upload.CompleteUploadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "completeCatalogUploadV0"
+      }
+    },
+    "/v0/developmentEvents/subscribers": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Lists the subscribers for a particular vendor.",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "query",
+            "description": "The vendor ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscriber.ListSubscribersResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "listSubscribersForDevelopmentEventsV0"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new subscriber resource for a vendor.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateSubscriberRequest",
+            "description": "Defines the request body for createSubscriber API.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscriber.CreateSubscriberRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created. Returns a URL to retrieve the subscriber in 'Location' header.",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Relative URL to retrieve the subscriber."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "createSubscriberForDevelopmentEventsV0"
+      }
+    },
+    "/v0/developmentEvents/subscribers/{subscriberId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Returns information about specified subscriber.",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "description": "Unique identifier of the subscriber.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscriber.SubscriberInfo"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "getSubscriberForDevelopmentEventsV0"
+      },
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Updates the properties of a subscriber.",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "description": "Unique identifier of the subscriber.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          },
+          {
+            "in": "body",
+            "name": "UpdateSubscriberRequest",
+            "description": "Defines the request body for updateSubscriber API.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscriber.UpdateSubscriberRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "setSubscriberForDevelopmentEventsV0"
+      },
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Deletes a specified subscriber.",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "description": "Unique identifier of the subscriber.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "deleteSubscriberForDevelopmentEventsV0"
+      }
+    },
+    "/v0/developmentEvents/subscribers/{subscriberId}/test": {},
+    "/v0/developmentEvents/subscriptions": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Lists all the subscriptions for a vendor/subscriber depending on the query parameter.",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "query",
+            "description": "The vendor ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "subscriberId",
+            "in": "query",
+            "description": "Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.",
+            "required": false,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscription.ListSubscriptionsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "listSubscriptionsForDevelopmentEventsV0"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new subscription for a subscriber. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateSubscriptionRequest",
+            "description": "Request body for createSubscription API.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscription.CreateSubscriptionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created; Returns a URL to retrieve the subscription in 'Location' header.",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Relative URL to retrieve the subscription."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "createSubscriptionForDevelopmentEventsV0"
+      }
+    },
+    "/v0/developmentEvents/subscriptions/{subscriptionId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization.",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Unique identifier of the subscription.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscription.SubscriptionInfo"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "getSubscriptionForDevelopmentEventsV0"
+      },
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Updates the mutable properties of a subscription. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated.",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Unique identifier of the subscription.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          },
+          {
+            "in": "body",
+            "name": "UpdateSubscriptionRequest",
+            "description": "Request body for updateSubscription API.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v0.developmentEvents.subscription.UpdateSubscriptionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "setSubscriptionForDevelopmentEventsV0"
+      },
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization.",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Unique identifier of the subscription.",
+            "required": true,
+            "type": "string",
+            "format": "Amazon Common Identifier"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v0.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v0.Error"
+            }
+          }
+        },
+        "x-operation-name": "deleteSubscriptionForDevelopmentEventsV0"
+      }
+    },
     "/v1/catalogs/{catalogId}/urls": {
       "post": {
         "tags": [
@@ -208,7 +1735,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful operation.",
             "schema": {
               "$ref": "#/definitions/v1.catalog.upload.GetContentUploadResponse"
             }
@@ -8643,6 +10170,880 @@
         "live"
       ]
     },
+    "v0.BadRequestError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Human readable description of error."
+        },
+        "violations": {
+          "type": "array",
+          "description": "An array of violation messages.",
+          "items": {
+            "$ref": "#/definitions/v0.Error"
+          }
+        }
+      }
+    },
+    "v0.Error": {
+      "type": "object",
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error code that maps to an error message. Developers with different locales should be able to lookup the error description based on this code.\n"
+        },
+        "message": {
+          "type": "string",
+          "description": "Readable description of error."
+        }
+      }
+    },
+    "v0.Links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/v0.Link"
+        },
+        "next": {
+          "$ref": "#/definitions/v0.Link"
+        }
+      },
+      "description": "Links for the API navigation."
+    },
+    "v0.Link": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        }
+      }
+    },
+    "v0.catalog.CreateCatalogRequest": {
+      "type": "object",
+      "required": [
+        "title",
+        "type",
+        "usage",
+        "vendorId"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the catalog."
+        },
+        "type": {
+          "$ref": "#/definitions/v0.catalog.CatalogType"
+        },
+        "usage": {
+          "$ref": "#/definitions/v0.catalog.CatalogUsage"
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "ID of the vendor owning the catalog."
+        }
+      }
+    },
+    "v0.catalog.ListCatalogsResponse": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/v0.Links"
+        },
+        "catalogs": {
+          "type": "array",
+          "description": "List of catalog summaries.\n",
+          "items": {
+            "$ref": "#/definitions/v0.catalog.CatalogSummary"
+          }
+        },
+        "isTruncated": {
+          "type": "boolean"
+        },
+        "nextToken": {
+          "type": "string"
+        }
+      },
+      "description": "Information about catalogs."
+    },
+    "v0.catalog.CatalogDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the added catalog object."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the catalog."
+        },
+        "type": {
+          "$ref": "#/definitions/v0.catalog.CatalogType"
+        },
+        "usage": {
+          "$ref": "#/definitions/v0.catalog.CatalogUsage"
+        },
+        "lastUpdatedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time when the catalog was last updated."
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time when the catalog was created."
+        },
+        "associatedSkillIds": {
+          "type": "array",
+          "description": "The list of skill Ids associated with the catalog.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v0.catalog.CatalogSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the added catalog object."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the catalog."
+        },
+        "type": {
+          "$ref": "#/definitions/v0.catalog.CatalogType"
+        },
+        "usage": {
+          "$ref": "#/definitions/v0.catalog.CatalogUsage"
+        },
+        "lastUpdatedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time when the catalog was last updated."
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date time when the catalog was created."
+        },
+        "associatedSkillIds": {
+          "type": "array",
+          "description": "The list of skill Ids associated with the catalog.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v0.catalog.CatalogType": {
+      "type": "string",
+      "description": "Type of catalog.",
+      "enum": [
+        "AMAZON.BroadcastChannel",
+        "AMAZON.Genre",
+        "AMAZON.MusicAlbum",
+        "AMAZON.MusicGroup",
+        "AMAZON.MusicPlaylist",
+        "AMAZON.MusicRecording",
+        "AMAZON.TerrestrialRadioChannel",
+        "AMAZON.AudioRecording"
+      ]
+    },
+    "v0.catalog.CatalogUsage": {
+      "type": "string",
+      "description": "Usage of the catalog.",
+      "enum": [
+        "AlexaMusic.Catalog.BroadcastChannel",
+        "AlexaMusic.Catalog.Genre",
+        "AlexaMusic.Catalog.MusicAlbum",
+        "AlexaMusic.Catalog.MusicGroup",
+        "AlexaMusic.Catalog.MusicPlaylist",
+        "AlexaMusic.Catalog.MusicRecording",
+        "AlexaMusic.Catalog.TerrestrialRadioChannel",
+        "AlexaTest.Catalog.AudioRecording"
+      ]
+    },
+    "v0.catalog.upload.CompleteUploadRequest": {
+      "type": "object",
+      "properties": {
+        "partETags": {
+          "type": "array",
+          "description": "List of (eTag, part number) pairs for each part of the file uploaded.",
+          "items": {
+            "$ref": "#/definitions/v0.catalog.upload.PreSignedUrlItem"
+          }
+        }
+      }
+    },
+    "v0.catalog.upload.CreateContentUploadRequest": {
+      "type": "object",
+      "properties": {
+        "numberOfUploadParts": {
+          "type": "integer",
+          "description": "The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload."
+        }
+      }
+    },
+    "v0.catalog.upload.UploadStatus": {
+      "type": "string",
+      "description": "Status of the entire upload.",
+      "enum": [
+        "PENDING",
+        "PROCESSING",
+        "FAILED",
+        "SUCCEEDED"
+      ]
+    },
+    "v0.catalog.upload.IngestionStepName": {
+      "type": "string",
+      "enum": [
+        "UPLOAD",
+        "SCHEMA_VALIDATION"
+      ]
+    },
+    "v0.catalog.upload.IngestionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "IN_PROGRESS",
+        "FAILED",
+        "SUCCEEDED",
+        "CANCELLED"
+      ]
+    },
+    "v0.catalog.upload.UploadIngestionStep": {
+      "type": "object",
+      "required": [
+        "errors",
+        "name",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/v0.catalog.upload.IngestionStepName"
+        },
+        "status": {
+          "$ref": "#/definitions/v0.catalog.upload.IngestionStatus"
+        },
+        "logUrl": {
+          "type": "string",
+          "description": "Represents the url for the file containing logs of ingestion step."
+        },
+        "errors": {
+          "type": "array",
+          "description": "This array will contain the errors occurred during the execution of step. Will be empty, if execution succeeded.",
+          "items": {
+            "$ref": "#/definitions/v0.Error"
+          }
+        }
+      },
+      "description": "Represents a single step in the ingestion process of a new upload."
+    },
+    "v0.catalog.upload.ListUploadsResponse": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/v0.Links"
+        },
+        "isTruncated": {
+          "type": "boolean"
+        },
+        "nextToken": {
+          "type": "string"
+        },
+        "uploads": {
+          "type": "array",
+          "description": "List of upload summaries.",
+          "items": {
+            "$ref": "#/definitions/v0.catalog.upload.ContentUploadSummary"
+          }
+        }
+      }
+    },
+    "v0.catalog.upload.ContentUploadSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the upload."
+        },
+        "catalogId": {
+          "type": "string",
+          "description": "Unique identifier of the catalog."
+        },
+        "status": {
+          "$ref": "#/definitions/v0.catalog.upload.UploadStatus"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v0.catalog.upload.ContentUploadFileSummary": {
+      "type": "object",
+      "properties": {
+        "presignedDownloadUrl": {
+          "type": "string",
+          "description": "If the file is available for download, presigned download URL can be used to download the file."
+        },
+        "status": {
+          "$ref": "#/definitions/v0.catalog.upload.FileUploadStatus"
+        }
+      }
+    },
+    "v0.catalog.upload.CreateContentUploadResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.catalog.upload.ContentUploadSummary"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ingestionSteps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v0.catalog.upload.UploadIngestionStep"
+              }
+            },
+            "presignedUploadParts": {
+              "type": "array",
+              "description": "Ordered list of presigned upload parts to perform a partitioned (multipart) file upload.",
+              "items": {
+                "$ref": "#/definitions/v0.catalog.upload.PresignedUploadPart"
+              }
+            }
+          }
+        }
+      ],
+      "description": "Request body for self-hosted catalog uploads."
+    },
+    "v0.catalog.upload.GetContentUploadResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.catalog.upload.ContentUploadSummary"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "file": {
+              "$ref": "#/definitions/v0.catalog.upload.ContentUploadFileSummary"
+            },
+            "ingestionSteps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v0.catalog.upload.UploadIngestionStep"
+              }
+            }
+          }
+        }
+      ],
+      "description": "Response object for get content upload request."
+    },
+    "v0.catalog.upload.FileUploadStatus": {
+      "type": "string",
+      "description": "Value of status depends on if file is available for download or not.",
+      "enum": [
+        "PENDING",
+        "AVAILABLE",
+        "PURGED",
+        "UNAVAILABLE"
+      ]
+    },
+    "v0.catalog.upload.PresignedUploadPart": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "partNumber": {
+          "type": "integer"
+        }
+      },
+      "description": "Single upload part to perform a partitioned (multipart) file upload."
+    },
+    "v0.catalog.upload.PreSignedUrlItem": {
+      "type": "object",
+      "properties": {
+        "eTag": {
+          "type": "string"
+        },
+        "partNumber": {
+          "type": "integer"
+        }
+      }
+    },
+    "v0.developmentEvents.subscriber.Endpoint": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "description": "Uri of the endpoint that receives the notification."
+        },
+        "authorization": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.EndpointAuthorization"
+        }
+      }
+    },
+    "v0.developmentEvents.subscriber.EndpointAuthorization": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "x-isDiscriminator": true
+        }
+      },
+      "description": "Authorization information to be able to publish notification to specified endpoint."
+    },
+    "v0.developmentEvents.subscriber.EndpointAwsAuthorization": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.EndpointAuthorization"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "arn": {
+              "type": "string",
+              "description": "IAM Role arn to use/assumeRole for authorization."
+            }
+          }
+        }
+      ],
+      "description": "Authorization for accessing AWS SNS endpoint.",
+      "x-discriminator-value": "AWS_IAM"
+    },
+    "v0.developmentEvents.subscriber.EndpointAuthorizationType": {
+      "type": "string",
+      "description": "Type of authorization (e.g. AWS IAM, OAuth).",
+      "enum": [
+        "AWS_IAM"
+      ]
+    },
+    "v0.developmentEvents.subscriber.SubscriberInfo": {
+      "type": "object",
+      "properties": {
+        "subscriberId": {
+          "type": "string",
+          "description": "Unique identifier of the subscriber resource."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the subscriber."
+        },
+        "endpoint": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.Endpoint"
+        }
+      },
+      "description": "Information about the subscriber."
+    },
+    "v0.developmentEvents.subscriber.SubscriberSummary": {
+      "type": "object",
+      "properties": {
+        "subscriberId": {
+          "type": "string",
+          "description": "Unique identifier of the subscriber resource."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the subscriber."
+        },
+        "status": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.SubscriberStatus"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "Client Id of the subscriber resource."
+        },
+        "endpoint": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.Endpoint"
+        }
+      }
+    },
+    "v0.developmentEvents.subscriber.SubscriberStatus": {
+      "type": "string",
+      "description": "Status of the subscriber. This enum may get extended with new values in future. Clients are expected to gracefully handle any unknown values.",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE"
+      ]
+    },
+    "v0.developmentEvents.subscriber.ListSubscribersResponse": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/v0.Links"
+        },
+        "nextToken": {
+          "type": "string"
+        },
+        "subscribers": {
+          "type": "array",
+          "description": "List containing subscriber summary.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscriber.SubscriberSummary"
+          }
+        }
+      }
+    },
+    "v0.developmentEvents.subscriber.CreateSubscriberRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscriber."
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "The Vendor ID."
+        },
+        "endpoint": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.Endpoint"
+        }
+      }
+    },
+    "v0.developmentEvents.subscriber.UpdateSubscriberRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscriber."
+        },
+        "endpoint": {
+          "$ref": "#/definitions/v0.developmentEvents.subscriber.Endpoint"
+        }
+      }
+    },
+    "v0.developmentEvents.subscription.Event": {
+      "type": "string",
+      "description": "Represents an event that the subscriber is interested in. The event is of the format AlexaDevelopmentEvent.OPERATION. You can use wildcard event 'AlexaDevelopmentEvent.All' for recieving all developer notifications listed below.\n  * 'AlexaDevelopmentEvent.ManifestUpdate' - The event representing the status of the update request on the Manifest.\n  * 'AlexaDevelopmentEvent.SkillPublish' -   The event representing the status of the skill publish process.\n  * 'AlexaDevelopmentEvent.SkillCertification' -   The event represents if a skill has been certified or not.\n  * 'AlexaDevelopmentEvent.InteractionModelUpdate' -   The event represents the status of an Interaction Model build for a particular locale.\n  * 'AlexaDevelopmentEvent.All' - A wildcard event name that allows subscription to all the existing events. While using this, you must not specify any other event name. AlexaDevelopmentEvent.All avoids the need of specifying every development event name in order to receive all events pertaining to a vendor account. Similarly, it avoids the need of updating an existing subscription to be able to receive new events, whenever supproted by notification service. Test Subscriber API cannot use this wildcard. Please make sure that your code can gracefully handle new/previously unknown events, if you are using this wildcard.\n",
+      "enum": [
+        "AlexaDevelopmentEvent.ManifestUpdate",
+        "AlexaDevelopmentEvent.SkillPublish",
+        "AlexaDevelopmentEvent.SkillCertification",
+        "AlexaDevelopmentEvent.InteractionModelUpdate",
+        "AlexaDevelopmentEvent.All"
+      ]
+    },
+    "v0.developmentEvents.subscription.SubscriptionInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscription."
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Unique identifier of the subscription resource."
+        },
+        "subscriberId": {
+          "type": "string",
+          "description": "Subscriber Id of the event-receiver."
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "Vendor Id of the event-publisher."
+        },
+        "events": {
+          "type": "array",
+          "description": "The list of events that the subscriber should be notified for.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscription.Event"
+          }
+        }
+      }
+    },
+    "v0.developmentEvents.subscription.SubscriptionSummary": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscription."
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Unique identifier of the subscription resource."
+        },
+        "subscriberId": {
+          "type": "string",
+          "description": "Subscriber Id of the event-reciever."
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "VendorId of the event-publisher."
+        },
+        "events": {
+          "type": "array",
+          "description": "The list of events that the subscriber should be notified for.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscription.Event"
+          }
+        }
+      }
+    },
+    "v0.developmentEvents.subscription.ListSubscriptionsResponse": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/v0.Links"
+        },
+        "nextToken": {
+          "type": "string"
+        },
+        "subscriptions": {
+          "type": "array",
+          "description": "List of subscription summaries.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscription.SubscriptionSummary"
+          }
+        }
+      }
+    },
+    "v0.developmentEvents.subscription.CreateSubscriptionRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscription."
+        },
+        "events": {
+          "type": "array",
+          "description": "The list of events that the subscriber should be notified for.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscription.Event"
+          }
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "The vendorId of the event publisher."
+        },
+        "subscriberId": {
+          "type": "string",
+          "description": "The id of the subscriber that would receive the events."
+        }
+      }
+    },
+    "v0.developmentEvents.subscription.UpdateSubscriptionRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the subscription."
+        },
+        "events": {
+          "type": "array",
+          "description": "The list of events that the subscriber should be notified for.",
+          "items": {
+            "$ref": "#/definitions/v0.developmentEvents.subscription.Event"
+          }
+        }
+      }
+    },
+    "v0.eventSchema.AlexaDevelopmentEvent.ManifestUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.eventSchema.BaseSchema"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "description": "A development notification includes a unique identifier that identifies the original request that resulted in the development notification. The requestId for original request is returned by Amazon APIs in response's 'X-Amzn-RequestId' header.\n"
+            },
+            "payload": {
+              "$ref": "#/definitions/v0.eventSchema.SkillEventAttributes"
+            }
+          }
+        }
+      ],
+      "description": "'AlexaDevelopmentEvent.ManifestUpdate' event represents the status of the update request on the Manifest. This event is generated when request to create a skill or update an existing skill is completed. The request may complete either with `SUCCEEDED` or `FAILED` status.",
+      "x-discriminator-value": "AlexaDevelopmentEvent.ManifestUpdate"
+    },
+    "v0.eventSchema.AlexaDevelopmentEvent.SkillPublish": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.eventSchema.BaseSchema"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "description": "A development notification includes a unique identifier that identifies the original request that resulted in the development notification. The requestId for original request is returned by Amazon APIs in response's 'X-Amzn-RequestId' header.\n"
+            },
+            "payload": {
+              "$ref": "#/definitions/v0.eventSchema.SkillEventAttributes"
+            }
+          }
+        }
+      ],
+      "description": "'AlexaDevelopmentEvent.SkillPublish' event represents the status of publish to live operation. When a developer submits a skill for certification, it goes through `certification workflow` followed by publish to live workflow. This event is generated in publish workflow and may complete either with `SUCCEEDED` or `FAILED` status. If 'SUCCEEDED', users can see and enable latest version of the skill via Alexa Skill Store.",
+      "x-discriminator-value": "AlexaDevelopmentEvent.SkillPublish"
+    },
+    "v0.eventSchema.AlexaDevelopmentEvent.SkillCertification": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.eventSchema.BaseSchema"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "description": "A development notification includes a unique identifier that identifies the original request that resulted in the development notification. The requestId for original request is returned by Amazon APIs in response's 'X-Amzn-RequestId' header.\n"
+            },
+            "payload": {
+              "$ref": "#/definitions/v0.eventSchema.SkillEventAttributes"
+            }
+          }
+        }
+      ],
+      "description": "'AlexaDevelopmentEvent.SkillCertification' event represents the status of various validations of\n`certification workflow`. This step may complete either with `SUCCEEDED` or `FAILED` status.\n",
+      "x-discriminator-value": "AlexaDevelopmentEvent.SkillCertification"
+    },
+    "v0.eventSchema.AlexaDevelopmentEvent.InteractionModelUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.eventSchema.BaseSchema"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "description": "A development notification includes a unique identifier that identifies the original request that resulted in the development notification. The requestId for original request is returned by Amazon APIs in response's 'X-Amzn-RequestId' header.\n"
+            },
+            "payload": {
+              "$ref": "#/definitions/v0.eventSchema.InteractionModelEventAttributes"
+            }
+          }
+        }
+      ],
+      "description": "'AlexaDevelopmentEvent.InteractionModelUpdate' event represents the status of set/update interaction model\nrequest. The update request may complete either with `SUCCEEDED` or `FAILED` status.\n",
+      "x-discriminator-value": "AlexaDevelopmentEvent.InteractionModelUpdate"
+    },
+    "v0.eventSchema.SkillEventAttributes": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v0.eventSchema.RequestStatus"
+        },
+        "actor": {
+          "$ref": "#/definitions/v0.eventSchema.ActorAttributes"
+        },
+        "skill": {
+          "$ref": "#/definitions/v0.eventSchema.SkillAttributes"
+        },
+        "subscription": {
+          "$ref": "#/definitions/v0.eventSchema.SubscriptionAttributes"
+        }
+      },
+      "description": "Skill event specific attributes.\n"
+    },
+    "v0.eventSchema.InteractionModelEventAttributes": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v0.eventSchema.RequestStatus"
+        },
+        "actor": {
+          "$ref": "#/definitions/v0.eventSchema.ActorAttributes"
+        },
+        "interactionModel": {
+          "$ref": "#/definitions/v0.eventSchema.InteractionModelAttributes"
+        },
+        "subscription": {
+          "$ref": "#/definitions/v0.eventSchema.SubscriptionAttributes"
+        }
+      },
+      "description": "Interaction model event specific attributes.\n"
+    },
+    "v0.eventSchema.BaseSchema": {
+      "type": "object",
+      "required": [
+        "eventName"
+      ],
+      "discriminator": "eventName",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp for the instant when event was created.\n"
+        },
+        "eventName": {
+          "type": "string",
+          "x-isDiscriminator": true
+        }
+      },
+      "description": "Represents attributes common to all development notifications.\n"
+    },
+    "v0.eventSchema.SkillAttributes": {
+      "type": "object",
+      "properties": {
+        "skillId": {
+          "type": "string",
+          "format": "Amazon Common Identifier",
+          "description": "Unique identifier of an Alexa skill.\n"
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "Unique identifier of vendor account to which this skill belongs.\n"
+        }
+      },
+      "description": "Represents a set of attributes specific to an Alexa Skill.\n"
+    },
+    "v0.eventSchema.InteractionModelAttributes": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v0.eventSchema.SkillAttributes"
+        }
+      ],
+      "description": "Represents a set of attributes specific to interaction model of an Alexa Skill.\n"
+    },
+    "v0.eventSchema.SubscriptionAttributes": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "format": "Amazon Common Identifier",
+          "description": "Unique subscription id that triggered the development notification event.\n"
+        }
+      },
+      "description": "Represents attributes of a subscription for development notification.\n"
+    },
+    "v0.eventSchema.ActorAttributes": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Identifies an Amazon Customer who submitted a request corresponding to the generated event.\n"
+        }
+      },
+      "description": "Represents an actor that submitted a request causing development notification event.\n"
+    },
+    "v0.eventSchema.RequestStatus": {
+      "type": "string",
+      "description": "Represents the completion status of the request.\n",
+      "enum": [
+        "SUCCEEDED",
+        "FAILED"
+      ]
+    },
     "v1.catalog.CreateContentUploadUrlRequest": {
       "type": "object",
       "properties": {
@@ -10576,9 +12977,39 @@
           "items": {
             "$ref": "#/definitions/v1.skill.interactionModel.Intent"
           }
+        },
+        "modelConfiguration": {
+          "$ref": "#/definitions/v1.skill.interactionModel.ModelConfiguration"
         }
       },
       "description": "Define the language model."
+    },
+    "v1.skill.interactionModel.ModelConfiguration": {
+      "type": "object",
+      "properties": {
+        "fallbackIntentSensitivity": {
+          "$ref": "#/definitions/v1.skill.interactionModel.FallbackIntentSensitivity"
+        }
+      },
+      "description": "Global configurations applicable to a skill's model."
+    },
+    "v1.skill.interactionModel.FallbackIntentSensitivity": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "$ref": "#/definitions/v1.skill.interactionModel.FallbackIntentSensitivityLevel"
+        }
+      },
+      "description": "Denotes skill's sensitivity for out-of-domain utterances."
+    },
+    "v1.skill.interactionModel.FallbackIntentSensitivityLevel": {
+      "type": "string",
+      "description": "Skill's sensitivity level for out-of-domain utterances. By default, the sensitivity level of the skill is set to ‘LOW’.\nAs the sensitivity level for a skill is increased, more customer utterances that are not supported by the skill will be captured by AMAZON.FallbackIntent.\n",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
     },
     "v1.skill.interactionModel.SlotType": {
       "type": "object",

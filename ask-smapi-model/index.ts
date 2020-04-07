@@ -22,6 +22,489 @@ import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
 import createUserAgent = runtime.createUserAgent;
 
+export namespace v0 {
+    /**
+     *
+     * @interface
+     */
+    export interface BadRequestError {
+        'message'?: string;
+        'violations'?: Array<v0.Error>;
+    }
+}
+
+export namespace v0 {
+    /**
+     *
+     * @interface
+     */
+    export interface Error {
+        'code'?: string;
+        'message': string;
+    }
+}
+
+export namespace v0 {
+    /**
+     *
+     * @interface
+     */
+    export interface Link {
+        'href'?: string;
+    }
+}
+
+export namespace v0 {
+    /**
+     * Links for the API navigation.
+     * @interface
+     */
+    export interface Links {
+        'self'?: v0.Link;
+        'next'?: v0.Link;
+    }
+}
+
+export namespace v0.catalog {
+    /**
+     *
+     * @interface
+     */
+    export interface CatalogDetails {
+        'id'?: string;
+        'title'?: string;
+        'type'?: v0.catalog.CatalogType;
+        'usage'?: v0.catalog.CatalogUsage;
+        'lastUpdatedDate'?: string;
+        'createdDate'?: string;
+        'associatedSkillIds'?: Array<string>;
+    }
+}
+
+export namespace v0.catalog {
+    /**
+     *
+     * @interface
+     */
+    export interface CatalogSummary {
+        'id'?: string;
+        'title'?: string;
+        'type'?: v0.catalog.CatalogType;
+        'usage'?: v0.catalog.CatalogUsage;
+        'lastUpdatedDate'?: string;
+        'createdDate'?: string;
+        'associatedSkillIds'?: Array<string>;
+    }
+}
+
+export namespace v0.catalog {
+    /**
+     * Type of catalog.
+     * @enum
+     */
+    export type CatalogType = 'AMAZON.BroadcastChannel' | 'AMAZON.Genre' | 'AMAZON.MusicAlbum' | 'AMAZON.MusicGroup' | 'AMAZON.MusicPlaylist' | 'AMAZON.MusicRecording' | 'AMAZON.TerrestrialRadioChannel' | 'AMAZON.AudioRecording';
+}
+
+export namespace v0.catalog {
+    /**
+     * Usage of the catalog.
+     * @enum
+     */
+    export type CatalogUsage = 'AlexaMusic.Catalog.BroadcastChannel' | 'AlexaMusic.Catalog.Genre' | 'AlexaMusic.Catalog.MusicAlbum' | 'AlexaMusic.Catalog.MusicGroup' | 'AlexaMusic.Catalog.MusicPlaylist' | 'AlexaMusic.Catalog.MusicRecording' | 'AlexaMusic.Catalog.TerrestrialRadioChannel' | 'AlexaTest.Catalog.AudioRecording';
+}
+
+export namespace v0.catalog {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateCatalogRequest {
+        'title': string;
+        'type': v0.catalog.CatalogType;
+        'usage': v0.catalog.CatalogUsage;
+        'vendorId': string;
+    }
+}
+
+export namespace v0.catalog {
+    /**
+     * Information about catalogs.
+     * @interface
+     */
+    export interface ListCatalogsResponse {
+        '_links'?: v0.Links;
+        'catalogs'?: Array<v0.catalog.CatalogSummary>;
+        'isTruncated'?: boolean;
+        'nextToken'?: string;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface CompleteUploadRequest {
+        'partETags'?: Array<v0.catalog.upload.PreSignedUrlItem>;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface ContentUploadFileSummary {
+        'presignedDownloadUrl'?: string;
+        'status'?: v0.catalog.upload.FileUploadStatus;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface ContentUploadSummary {
+        'id'?: string;
+        'catalogId'?: string;
+        'status'?: v0.catalog.upload.UploadStatus;
+        'createdDate'?: string;
+        'lastUpdatedDate'?: string;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateContentUploadRequest {
+        'numberOfUploadParts'?: number;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     * Value of status depends on if file is available for download or not.
+     * @enum
+     */
+    export type FileUploadStatus = 'PENDING' | 'AVAILABLE' | 'PURGED' | 'UNAVAILABLE';
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @enum
+     */
+    export type IngestionStatus = 'PENDING' | 'IN_PROGRESS' | 'FAILED' | 'SUCCEEDED' | 'CANCELLED';
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @enum
+     */
+    export type IngestionStepName = 'UPLOAD' | 'SCHEMA_VALIDATION';
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface ListUploadsResponse {
+        '_links'?: v0.Links;
+        'isTruncated'?: boolean;
+        'nextToken'?: string;
+        'uploads'?: Array<v0.catalog.upload.ContentUploadSummary>;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     *
+     * @interface
+     */
+    export interface PreSignedUrlItem {
+        'eTag'?: string;
+        'partNumber'?: number;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     * Single upload part to perform a partitioned (multipart) file upload.
+     * @interface
+     */
+    export interface PresignedUploadPart {
+        'url'?: string;
+        'partNumber'?: number;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     * Represents a single step in the ingestion process of a new upload.
+     * @interface
+     */
+    export interface UploadIngestionStep {
+        'name': v0.catalog.upload.IngestionStepName;
+        'status': v0.catalog.upload.IngestionStatus;
+        'logUrl'?: string;
+        'errors': Array<v0.Error>;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     * Status of the entire upload.
+     * @enum
+     */
+    export type UploadStatus = 'PENDING' | 'PROCESSING' | 'FAILED' | 'SUCCEEDED';
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateSubscriberRequest {
+        'name'?: string;
+        'vendorId'?: string;
+        'endpoint'?: v0.developmentEvents.subscriber.Endpoint;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     *
+     * @interface
+     */
+    export interface Endpoint {
+        'uri'?: string;
+        'authorization'?: v0.developmentEvents.subscriber.EndpointAuthorization;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+   /**
+    * Authorization information to be able to publish notification to specified endpoint.
+    * @interface
+    */
+    export type EndpointAuthorization = v0.developmentEvents.subscriber.EndpointAwsAuthorization;
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     * Type of authorization (e.g. AWS IAM, OAuth).
+     * @enum
+     */
+    export type EndpointAuthorizationType = 'AWS_IAM';
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     *
+     * @interface
+     */
+    export interface ListSubscribersResponse {
+        '_links'?: v0.Links;
+        'nextToken'?: string;
+        'subscribers'?: Array<v0.developmentEvents.subscriber.SubscriberSummary>;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     * Information about the subscriber.
+     * @interface
+     */
+    export interface SubscriberInfo {
+        'subscriberId'?: string;
+        'name'?: string;
+        'endpoint'?: v0.developmentEvents.subscriber.Endpoint;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     * Status of the subscriber. This enum may get extended with new values in future. Clients are expected to gracefully handle any unknown values.
+     * @enum
+     */
+    export type SubscriberStatus = 'ACTIVE' | 'INACTIVE';
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     *
+     * @interface
+     */
+    export interface SubscriberSummary {
+        'subscriberId'?: string;
+        'name'?: string;
+        'status'?: v0.developmentEvents.subscriber.SubscriberStatus;
+        'clientId'?: string;
+        'endpoint'?: v0.developmentEvents.subscriber.Endpoint;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateSubscriberRequest {
+        'name'?: string;
+        'endpoint'?: v0.developmentEvents.subscriber.Endpoint;
+    }
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateSubscriptionRequest {
+        'name'?: string;
+        'events'?: Array<v0.developmentEvents.subscription.Event>;
+        'vendorId'?: string;
+        'subscriberId'?: string;
+    }
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     * Represents an event that the subscriber is interested in. The event is of the format AlexaDevelopmentEvent.OPERATION. You can use wildcard event 'AlexaDevelopmentEvent.All' for recieving all developer notifications listed below.   * 'AlexaDevelopmentEvent.ManifestUpdate' - The event representing the status of the update request on the Manifest.   * 'AlexaDevelopmentEvent.SkillPublish' -   The event representing the status of the skill publish process.   * 'AlexaDevelopmentEvent.SkillCertification' -   The event represents if a skill has been certified or not.   * 'AlexaDevelopmentEvent.InteractionModelUpdate' -   The event represents the status of an Interaction Model build for a particular locale.   * 'AlexaDevelopmentEvent.All' - A wildcard event name that allows subscription to all the existing events. While using this, you must not specify any other event name. AlexaDevelopmentEvent.All avoids the need of specifying every development event name in order to receive all events pertaining to a vendor account. Similarly, it avoids the need of updating an existing subscription to be able to receive new events, whenever supproted by notification service. Test Subscriber API cannot use this wildcard. Please make sure that your code can gracefully handle new/previously unknown events, if you are using this wildcard. 
+     * @enum
+     */
+    export type Event = 'AlexaDevelopmentEvent.ManifestUpdate' | 'AlexaDevelopmentEvent.SkillPublish' | 'AlexaDevelopmentEvent.SkillCertification' | 'AlexaDevelopmentEvent.InteractionModelUpdate' | 'AlexaDevelopmentEvent.All';
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     *
+     * @interface
+     */
+    export interface ListSubscriptionsResponse {
+        '_links'?: v0.Links;
+        'nextToken'?: string;
+        'subscriptions'?: Array<v0.developmentEvents.subscription.SubscriptionSummary>;
+    }
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     *
+     * @interface
+     */
+    export interface SubscriptionInfo {
+        'name'?: string;
+        'subscriptionId'?: string;
+        'subscriberId'?: string;
+        'vendorId'?: string;
+        'events'?: Array<v0.developmentEvents.subscription.Event>;
+    }
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     *
+     * @interface
+     */
+    export interface SubscriptionSummary {
+        'name'?: string;
+        'subscriptionId'?: string;
+        'subscriberId'?: string;
+        'vendorId'?: string;
+        'events'?: Array<v0.developmentEvents.subscription.Event>;
+    }
+}
+
+export namespace v0.developmentEvents.subscription {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateSubscriptionRequest {
+        'name'?: string;
+        'events'?: Array<v0.developmentEvents.subscription.Event>;
+    }
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Represents an actor that submitted a request causing development notification event. 
+     * @interface
+     */
+    export interface ActorAttributes {
+        'customerId'?: string;
+    }
+}
+
+export namespace v0.eventSchema {
+   /**
+    * Represents attributes common to all development notifications. 
+    * @interface
+    */
+    export type BaseSchema = v0.eventSchema.AlexaDevelopmentEvent.InteractionModelUpdate | v0.eventSchema.AlexaDevelopmentEvent.SkillPublish | v0.eventSchema.AlexaDevelopmentEvent.ManifestUpdate | v0.eventSchema.AlexaDevelopmentEvent.SkillCertification;
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Interaction model event specific attributes. 
+     * @interface
+     */
+    export interface InteractionModelEventAttributes {
+        'status'?: v0.eventSchema.RequestStatus;
+        'actor'?: v0.eventSchema.ActorAttributes;
+        'interactionModel'?: v0.eventSchema.InteractionModelAttributes;
+        'subscription'?: v0.eventSchema.SubscriptionAttributes;
+    }
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Represents the completion status of the request. 
+     * @enum
+     */
+    export type RequestStatus = 'SUCCEEDED' | 'FAILED';
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Represents a set of attributes specific to an Alexa Skill. 
+     * @interface
+     */
+    export interface SkillAttributes {
+        'skillId'?: string;
+        'vendorId'?: string;
+    }
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Skill event specific attributes. 
+     * @interface
+     */
+    export interface SkillEventAttributes {
+        'status'?: v0.eventSchema.RequestStatus;
+        'actor'?: v0.eventSchema.ActorAttributes;
+        'skill'?: v0.eventSchema.SkillAttributes;
+        'subscription'?: v0.eventSchema.SubscriptionAttributes;
+    }
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Represents attributes of a subscription for development notification. 
+     * @interface
+     */
+    export interface SubscriptionAttributes {
+        'subscriptionId'?: string;
+    }
+}
+
 export namespace v1 {
     /**
      *
@@ -2690,6 +3173,24 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
+     * Denotes skill's sensitivity for out-of-domain utterances.
+     * @interface
+     */
+    export interface FallbackIntentSensitivity {
+        'level'?: v1.skill.interactionModel.FallbackIntentSensitivityLevel;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
+     * Skill's sensitivity level for out-of-domain utterances. By default, the sensitivity level of the skill is set to ‘LOW’. As the sensitivity level for a skill is increased, more customer utterances that are not supported by the skill will be captured by AMAZON.FallbackIntent. 
+     * @enum
+     */
+    export type FallbackIntentSensitivityLevel = 'HIGH' | 'MEDIUM' | 'LOW';
+}
+
+export namespace v1.skill.interactionModel {
+    /**
      * The set of intents your service can accept and process.
      * @interface
      */
@@ -2721,6 +3222,16 @@ export namespace v1.skill.interactionModel {
         'languageModel'?: v1.skill.interactionModel.LanguageModel;
         'dialog'?: v1.skill.interactionModel.Dialog;
         'prompts'?: Array<v1.skill.interactionModel.Prompt>;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
+     * Global configurations applicable to a skill's model.
+     * @interface
+     */
+    export interface ModelConfiguration {
+        'fallbackIntentSensitivity'?: v1.skill.interactionModel.FallbackIntentSensitivity;
     }
 }
 
@@ -2959,6 +3470,7 @@ export namespace v1.skill.interactionModel {
         'invocationName'?: string;
         'types'?: Array<v1.skill.interactionModel.SlotType>;
         'intents'?: Array<v1.skill.interactionModel.Intent>;
+        'modelConfiguration'?: v1.skill.interactionModel.ModelConfiguration;
     }
 }
 
@@ -4004,6 +4516,112 @@ export namespace v2.skill.simulations {
     }
 }
 
+export namespace v0.catalog.upload {
+    /**
+     * Request body for self-hosted catalog uploads.
+     * @interface
+     */
+    export interface CreateContentUploadResponse {
+        'id'?: string;
+        'catalogId'?: string;
+        'status'?: v0.catalog.upload.UploadStatus;
+        'createdDate'?: string;
+        'lastUpdatedDate'?: string;
+        'ingestionSteps'?: Array<v0.catalog.upload.UploadIngestionStep>;
+        'presignedUploadParts'?: Array<v0.catalog.upload.PresignedUploadPart>;
+    }
+}
+
+export namespace v0.catalog.upload {
+    /**
+     * Response object for get content upload request.
+     * @interface
+     */
+    export interface GetContentUploadResponse {
+        'id'?: string;
+        'catalogId'?: string;
+        'status'?: v0.catalog.upload.UploadStatus;
+        'createdDate'?: string;
+        'lastUpdatedDate'?: string;
+        'file'?: v0.catalog.upload.ContentUploadFileSummary;
+        'ingestionSteps'?: Array<v0.catalog.upload.UploadIngestionStep>;
+    }
+}
+
+export namespace v0.developmentEvents.subscriber {
+    /**
+     * Authorization for accessing AWS SNS endpoint.
+     * @interface
+     */
+    export interface EndpointAwsAuthorization {
+        'type' : 'AWS_IAM';
+        'arn'?: string;
+    }
+}
+
+export namespace v0.eventSchema.AlexaDevelopmentEvent {
+    /**
+     * 'AlexaDevelopmentEvent.InteractionModelUpdate' event represents the status of set/update interaction model request. The update request may complete either with `SUCCEEDED` or `FAILED` status. 
+     * @interface
+     */
+    export interface InteractionModelUpdate {
+        'eventName' : 'AlexaDevelopmentEvent.InteractionModelUpdate';
+        'timestamp'?: string;
+        'requestId'?: string;
+        'payload'?: v0.eventSchema.InteractionModelEventAttributes;
+    }
+}
+
+export namespace v0.eventSchema.AlexaDevelopmentEvent {
+    /**
+     * 'AlexaDevelopmentEvent.ManifestUpdate' event represents the status of the update request on the Manifest. This event is generated when request to create a skill or update an existing skill is completed. The request may complete either with `SUCCEEDED` or `FAILED` status.
+     * @interface
+     */
+    export interface ManifestUpdate {
+        'eventName' : 'AlexaDevelopmentEvent.ManifestUpdate';
+        'timestamp'?: string;
+        'requestId'?: string;
+        'payload'?: v0.eventSchema.SkillEventAttributes;
+    }
+}
+
+export namespace v0.eventSchema.AlexaDevelopmentEvent {
+    /**
+     * 'AlexaDevelopmentEvent.SkillCertification' event represents the status of various validations of `certification workflow`. This step may complete either with `SUCCEEDED` or `FAILED` status. 
+     * @interface
+     */
+    export interface SkillCertification {
+        'eventName' : 'AlexaDevelopmentEvent.SkillCertification';
+        'timestamp'?: string;
+        'requestId'?: string;
+        'payload'?: v0.eventSchema.SkillEventAttributes;
+    }
+}
+
+export namespace v0.eventSchema.AlexaDevelopmentEvent {
+    /**
+     * 'AlexaDevelopmentEvent.SkillPublish' event represents the status of publish to live operation. When a developer submits a skill for certification, it goes through `certification workflow` followed by publish to live workflow. This event is generated in publish workflow and may complete either with `SUCCEEDED` or `FAILED` status. If 'SUCCEEDED', users can see and enable latest version of the skill via Alexa Skill Store.
+     * @interface
+     */
+    export interface SkillPublish {
+        'eventName' : 'AlexaDevelopmentEvent.SkillPublish';
+        'timestamp'?: string;
+        'requestId'?: string;
+        'payload'?: v0.eventSchema.SkillEventAttributes;
+    }
+}
+
+export namespace v0.eventSchema {
+    /**
+     * Represents a set of attributes specific to interaction model of an Alexa Skill. 
+     * @interface
+     */
+    export interface InteractionModelAttributes {
+        'skillId'?: string;
+        'vendorId'?: string;
+    }
+}
+
 export namespace v1.catalog.upload {
     /**
      * Request body for self-hosted catalog uploads
@@ -4275,6 +4893,989 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Unique identifier of the catalog
+         */
+        async callGetCatalogV0(catalogId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetCatalogV0';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs/{catalogId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         */
+        async getCatalogV0(catalogId : string) : Promise<v0.catalog.CatalogDetails> {
+                const apiResponse: ApiResponse = await this.callGetCatalogV0(catalogId);
+                return apiResponse.body as v0.catalog.CatalogDetails;
+        }
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListUploadsForCatalogV0';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs/{catalogId}/uploads";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.upload.ListUploadsResponse> {
+                const apiResponse: ApiResponse = await this.callListUploadsForCatalogV0(catalogId, nextToken, maxResults);
+                return apiResponse.body as v0.catalog.upload.ListUploadsResponse;
+        }
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {v0.catalog.upload.CreateContentUploadRequest} createContentUploadRequest Defines the request body for updateCatalog API.
+         */
+        async callCreateContentUploadV0(catalogId : string, createContentUploadRequest : v0.catalog.upload.CreateContentUploadRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateContentUploadV0';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'createContentUploadRequest' is not null or undefined
+            if (createContentUploadRequest == null) {
+                throw new Error(`Required parameter createContentUploadRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs/{catalogId}/uploads";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Content upload created.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createContentUploadRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {v0.catalog.upload.CreateContentUploadRequest} createContentUploadRequest Defines the request body for updateCatalog API.
+         */
+        async createContentUploadV0(catalogId : string, createContentUploadRequest : v0.catalog.upload.CreateContentUploadRequest) : Promise<v0.catalog.upload.CreateContentUploadResponse> {
+                const apiResponse: ApiResponse = await this.callCreateContentUploadV0(catalogId, createContentUploadRequest);
+                return apiResponse.body as v0.catalog.upload.CreateContentUploadResponse;
+        }
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} uploadId Unique identifier of the upload
+         */
+        async callGetContentUploadByIdV0(catalogId : string, uploadId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetContentUploadByIdV0';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'uploadId' is not null or undefined
+            if (uploadId == null) {
+                throw new Error(`Required parameter uploadId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+            pathParams.set('uploadId', uploadId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs/{catalogId}/uploads/{uploadId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} uploadId Unique identifier of the upload
+         */
+        async getContentUploadByIdV0(catalogId : string, uploadId : string) : Promise<v0.catalog.upload.GetContentUploadResponse> {
+                const apiResponse: ApiResponse = await this.callGetContentUploadByIdV0(catalogId, uploadId);
+                return apiResponse.body as v0.catalog.upload.GetContentUploadResponse;
+        }
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} uploadId Unique identifier of the upload
+         * @param {v0.catalog.upload.CompleteUploadRequest} completeUploadRequestPayload Request payload to complete an upload.
+         */
+        async callCompleteCatalogUploadV0(catalogId : string, uploadId : string, completeUploadRequestPayload : v0.catalog.upload.CompleteUploadRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCompleteCatalogUploadV0';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'uploadId' is not null or undefined
+            if (uploadId == null) {
+                throw new Error(`Required parameter uploadId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'completeUploadRequestPayload' is not null or undefined
+            if (completeUploadRequestPayload == null) {
+                throw new Error(`Required parameter completeUploadRequestPayload was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+            pathParams.set('uploadId', uploadId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs/{catalogId}/uploads/{uploadId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Accepted.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, completeUploadRequestPayload, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
+         * @param {string} uploadId Unique identifier of the upload
+         * @param {v0.catalog.upload.CompleteUploadRequest} completeUploadRequestPayload Request payload to complete an upload.
+         */
+        async completeCatalogUploadV0(catalogId : string, uploadId : string, completeUploadRequestPayload : v0.catalog.upload.CompleteUploadRequest) : Promise<void> {
+                await this.callCompleteCatalogUploadV0(catalogId, uploadId, completeUploadRequestPayload);
+        }
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListCatalogsForVendorV0';
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+            queryParams.push({ key: 'vendorId', value: vendorId});
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
+                const apiResponse: ApiResponse = await this.callListCatalogsForVendorV0(vendorId, nextToken, maxResults);
+                return apiResponse.body as v0.catalog.ListCatalogsResponse;
+        }
+        /**
+         *
+         * @param {v0.catalog.CreateCatalogRequest} createCatalogRequest Defines the request body for createCatalog API.
+         */
+        async callCreateCatalogV0(createCatalogRequest : v0.catalog.CreateCatalogRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateCatalogV0';
+            // verify required parameter 'createCatalogRequest' is not null or undefined
+            if (createCatalogRequest == null) {
+                throw new Error(`Required parameter createCatalogRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/catalogs";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Catalog created.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createCatalogRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v0.catalog.CreateCatalogRequest} createCatalogRequest Defines the request body for createCatalog API.
+         */
+        async createCatalogV0(createCatalogRequest : v0.catalog.CreateCatalogRequest) : Promise<v0.catalog.CatalogDetails> {
+                const apiResponse: ApiResponse = await this.callCreateCatalogV0(createCatalogRequest);
+                return apiResponse.body as v0.catalog.CatalogDetails;
+        }
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListSubscribersForDevelopmentEventsV0';
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            queryParams.push({ key: 'vendorId', value: vendorId});
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscribers";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.developmentEvents.subscriber.ListSubscribersResponse> {
+                const apiResponse: ApiResponse = await this.callListSubscribersForDevelopmentEventsV0(vendorId, nextToken, maxResults);
+                return apiResponse.body as v0.developmentEvents.subscriber.ListSubscribersResponse;
+        }
+        /**
+         *
+         * @param {v0.developmentEvents.subscriber.CreateSubscriberRequest} createSubscriberRequest Defines the request body for createSubscriber API.
+         */
+        async callCreateSubscriberForDevelopmentEventsV0(createSubscriberRequest? : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateSubscriberForDevelopmentEventsV0';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscribers";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Created. Returns a URL to retrieve the subscriber in &#39;Location&#39; header.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createSubscriberRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v0.developmentEvents.subscriber.CreateSubscriberRequest} createSubscriberRequest Defines the request body for createSubscriber API.
+         */
+        async createSubscriberForDevelopmentEventsV0(createSubscriberRequest? : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<void> {
+                await this.callCreateSubscriberForDevelopmentEventsV0(createSubscriberRequest);
+        }
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         */
+        async callDeleteSubscriberForDevelopmentEventsV0(subscriberId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteSubscriberForDevelopmentEventsV0';
+            // verify required parameter 'subscriberId' is not null or undefined
+            if (subscriberId == null) {
+                throw new Error(`Required parameter subscriberId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriberId', subscriberId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscribers/{subscriberId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         */
+        async deleteSubscriberForDevelopmentEventsV0(subscriberId : string) : Promise<void> {
+                await this.callDeleteSubscriberForDevelopmentEventsV0(subscriberId);
+        }
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         */
+        async callGetSubscriberForDevelopmentEventsV0(subscriberId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSubscriberForDevelopmentEventsV0';
+            // verify required parameter 'subscriberId' is not null or undefined
+            if (subscriberId == null) {
+                throw new Error(`Required parameter subscriberId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriberId', subscriberId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscribers/{subscriberId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         */
+        async getSubscriberForDevelopmentEventsV0(subscriberId : string) : Promise<v0.developmentEvents.subscriber.SubscriberInfo> {
+                const apiResponse: ApiResponse = await this.callGetSubscriberForDevelopmentEventsV0(subscriberId);
+                return apiResponse.body as v0.developmentEvents.subscriber.SubscriberInfo;
+        }
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         * @param {v0.developmentEvents.subscriber.UpdateSubscriberRequest} updateSubscriberRequest Defines the request body for updateSubscriber API.
+         */
+        async callSetSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest? : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetSubscriberForDevelopmentEventsV0';
+            // verify required parameter 'subscriberId' is not null or undefined
+            if (subscriberId == null) {
+                throw new Error(`Required parameter subscriberId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriberId', subscriberId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscribers/{subscriberId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateSubscriberRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriberId Unique identifier of the subscriber.
+         * @param {v0.developmentEvents.subscriber.UpdateSubscriberRequest} updateSubscriberRequest Defines the request body for updateSubscriber API.
+         */
+        async setSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest? : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<void> {
+                await this.callSetSubscriberForDevelopmentEventsV0(subscriberId, updateSubscriberRequest);
+        }
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
+         */
+        async callListSubscriptionsForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number, subscriberId? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListSubscriptionsForDevelopmentEventsV0';
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            queryParams.push({ key: 'vendorId', value: vendorId});
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+            if(subscriberId != null) {
+                queryParams.push({ key: 'subscriberId', value: subscriberId });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscriptions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
+         */
+        async listSubscriptionsForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number, subscriberId? : string) : Promise<v0.developmentEvents.subscription.ListSubscriptionsResponse> {
+                const apiResponse: ApiResponse = await this.callListSubscriptionsForDevelopmentEventsV0(vendorId, nextToken, maxResults, subscriberId);
+                return apiResponse.body as v0.developmentEvents.subscription.ListSubscriptionsResponse;
+        }
+        /**
+         *
+         * @param {v0.developmentEvents.subscription.CreateSubscriptionRequest} createSubscriptionRequest Request body for createSubscription API.
+         */
+        async callCreateSubscriptionForDevelopmentEventsV0(createSubscriptionRequest? : v0.developmentEvents.subscription.CreateSubscriptionRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateSubscriptionForDevelopmentEventsV0';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscriptions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Created; Returns a URL to retrieve the subscription in &#39;Location&#39; header.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createSubscriptionRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v0.developmentEvents.subscription.CreateSubscriptionRequest} createSubscriptionRequest Request body for createSubscription API.
+         */
+        async createSubscriptionForDevelopmentEventsV0(createSubscriptionRequest? : v0.developmentEvents.subscription.CreateSubscriptionRequest) : Promise<void> {
+                await this.callCreateSubscriptionForDevelopmentEventsV0(createSubscriptionRequest);
+        }
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         */
+        async callDeleteSubscriptionForDevelopmentEventsV0(subscriptionId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteSubscriptionForDevelopmentEventsV0';
+            // verify required parameter 'subscriptionId' is not null or undefined
+            if (subscriptionId == null) {
+                throw new Error(`Required parameter subscriptionId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriptionId', subscriptionId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscriptions/{subscriptionId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         */
+        async deleteSubscriptionForDevelopmentEventsV0(subscriptionId : string) : Promise<void> {
+                await this.callDeleteSubscriptionForDevelopmentEventsV0(subscriptionId);
+        }
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         */
+        async callGetSubscriptionForDevelopmentEventsV0(subscriptionId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSubscriptionForDevelopmentEventsV0';
+            // verify required parameter 'subscriptionId' is not null or undefined
+            if (subscriptionId == null) {
+                throw new Error(`Required parameter subscriptionId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriptionId', subscriptionId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscriptions/{subscriptionId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         */
+        async getSubscriptionForDevelopmentEventsV0(subscriptionId : string) : Promise<v0.developmentEvents.subscription.SubscriptionInfo> {
+                const apiResponse: ApiResponse = await this.callGetSubscriptionForDevelopmentEventsV0(subscriptionId);
+                return apiResponse.body as v0.developmentEvents.subscription.SubscriptionInfo;
+        }
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         * @param {v0.developmentEvents.subscription.UpdateSubscriptionRequest} updateSubscriptionRequest Request body for updateSubscription API.
+         */
+        async callSetSubscriptionForDevelopmentEventsV0(subscriptionId : string, updateSubscriptionRequest? : v0.developmentEvents.subscription.UpdateSubscriptionRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetSubscriptionForDevelopmentEventsV0';
+            // verify required parameter 'subscriptionId' is not null or undefined
+            if (subscriptionId == null) {
+                throw new Error(`Required parameter subscriptionId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('subscriptionId', subscriptionId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/developmentEvents/subscriptions/{subscriptionId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No content.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateSubscriptionRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} subscriptionId Unique identifier of the subscription.
+         * @param {v0.developmentEvents.subscription.UpdateSubscriptionRequest} updateSubscriptionRequest Request body for updateSubscription API.
+         */
+        async setSubscriptionForDevelopmentEventsV0(subscriptionId : string, updateSubscriptionRequest? : v0.developmentEvents.subscription.UpdateSubscriptionRequest) : Promise<void> {
+                await this.callSetSubscriptionForDevelopmentEventsV0(subscriptionId, updateSubscriptionRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} catalogId Unique identifier of the catalog
+         */
+        async callAssociateCatalogWithSkillV0(skillId : string, catalogId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callAssociateCatalogWithSkillV0';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('catalogId', catalogId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/skills/{skillId}/catalogs/{catalogId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} catalogId Unique identifier of the catalog
+         */
+        async associateCatalogWithSkillV0(skillId : string, catalogId : string) : Promise<void> {
+                await this.callAssociateCatalogWithSkillV0(skillId, catalogId);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListCatalogsForSkillV0';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v0/skills/{skillId}/catalogs";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successful operation.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
+                const apiResponse: ApiResponse = await this.callListCatalogsForSkillV0(skillId, nextToken, maxResults);
+                return apiResponse.body as v0.catalog.ListCatalogsResponse;
+        }
+        /**
+         *
+         * @param {string} catalogId Unique identifier of the catalog
          * @param {v1.catalog.upload.CatalogUploadBase} catalogUploadRequestBody Request body for create content upload
          */
         async callCreateCatalogUploadV1(catalogId : string, catalogUploadRequestBody : v1.catalog.upload.CatalogUploadBase) : Promise<ApiResponse> {
@@ -4358,7 +5959,7 @@ export namespace services.skillManagement {
             let path : string = "/v1/catalogs/{catalogId}/uploads/{uploadId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "successful operation");
+            errorDefinitions.set(200, "Successful operation.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
             errorDefinitions.set(404, "The resource being requested is not found.");
