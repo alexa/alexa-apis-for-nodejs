@@ -188,7 +188,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           }
@@ -360,7 +360,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           }
@@ -448,7 +448,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           }
@@ -520,7 +520,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -603,7 +603,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -682,7 +682,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -1545,12 +1545,12 @@
         "tags": [
           "skillManagement"
         ],
-        "description": "Generate preSigned urls to upload data",
+        "description": "Generates preSigned urls to upload data",
         "parameters": [
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -1629,19 +1629,19 @@
           "skillManagement"
         ],
         "summary": "Create new upload",
-        "description": "Create a new upload for a catalog and returns location to track the upload process.",
+        "description": "Creates a new upload for a catalog and returns location to track the upload process.",
         "parameters": [
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
           {
             "in": "body",
             "name": "CatalogUploadRequestBody",
-            "description": "Request body for create content upload",
+            "description": "Provides the request body for create content upload",
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1.catalog.upload.CatalogUploadBase"
@@ -1721,7 +1721,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5345,7 +5345,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           }
@@ -5423,7 +5423,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           }
@@ -5500,7 +5500,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5587,7 +5587,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5666,7 +5666,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5751,7 +5751,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5837,7 +5837,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -5916,7 +5916,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -6003,7 +6003,7 @@
           {
             "name": "catalogId",
             "in": "path",
-            "description": "Unique identifier of the catalog",
+            "description": "Provides a unique identifier of the catalog",
             "required": true,
             "type": "string"
           },
@@ -10386,7 +10386,7 @@
       "properties": {
         "numberOfUploadParts": {
           "type": "integer",
-          "description": "The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload."
+          "description": "Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload."
         }
       }
     },
@@ -10475,7 +10475,7 @@
         },
         "catalogId": {
           "type": "string",
-          "description": "Unique identifier of the catalog."
+          "description": "Provides a unique identifier of the catalog."
         },
         "status": {
           "$ref": "#/definitions/v0.catalog.upload.UploadStatus"
@@ -11050,7 +11050,7 @@
         "numberOfUploadParts": {
           "type": "integer",
           "example": 1,
-          "description": "The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.",
+          "description": "Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.",
           "minimum": 1,
           "maximum": 10000
         }
