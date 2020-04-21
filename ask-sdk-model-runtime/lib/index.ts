@@ -351,6 +351,7 @@ export abstract class BaseServiceClient {
         err.name = 'ServiceError';
         err['statusCode'] = response.statusCode; // tslint:disable-line:no-string-literal
         err['response'] = body; // tslint:disable-line:no-string-literal
+        err['headers'] = response.headers;  // tslint:disable-line:no-string-literal
         if (errors && errors.has(response.statusCode)) {
             err.message = errors.get(response.statusCode);
         }
