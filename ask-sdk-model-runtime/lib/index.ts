@@ -350,7 +350,6 @@ export abstract class BaseServiceClient {
         const err = new Error('Unknown error');
         err.name = 'ServiceError';
         err['statusCode'] = response.statusCode; // tslint:disable-line:no-string-literal
-        err['headers'] = response.headers;  // tslint:disable-line:no-string-literal
         err['response'] = body; // tslint:disable-line:no-string-literal
         if (errors && errors.has(response.statusCode)) {
             err.message = errors.get(response.statusCode);
@@ -395,6 +394,7 @@ export interface AuthenticationConfiguration {
     clientId : string;
     clientSecret : string;
     refreshToken? : string;
+    authEndpoint? : string;
 }
 
 /**
@@ -405,6 +405,7 @@ export class LwaServiceClient extends BaseServiceClient {
     protected static REFRESH_ACCESS_TOKEN : string = 'refresh_access_token';
     protected static CLIENT_CREDENTIALS_GRANT_TYPE : string = 'client_credentials';
     protected static LWA_CREDENTIALS_GRANT_TYPE : string = 'refresh_token';
+    protected static AUTH_ENDPOINT : string = 'https://api.amazon.com';
 
     protected authenticationConfiguration : AuthenticationConfiguration;
     protected tokenStore : {[cacheKey : string] : AccessToken};
@@ -465,6 +466,7 @@ export class LwaServiceClient extends BaseServiceClient {
     }
 
     protected async generateAccessToken(accessTokenRequest : AccessTokenRequest) : Promise<AccessTokenResponse> {
+        const authEndpoint = this.authenticationConfiguration.authEndpoint || LwaServiceClient.AUTH_ENDPOINT;
         if (!accessTokenRequest.clientId || ! accessTokenRequest.clientSecret) {
             throw new Error(`Required parameter accessTokenRequest didn't specify clientId or clientSecret`);
         }
@@ -487,7 +489,7 @@ export class LwaServiceClient extends BaseServiceClient {
 
         const apiResponse : ApiResponse = await this.invoke(
             'POST',
-            'https://api.amazon.com',
+            authEndpoint,
             '/auth/O2/token',
             pathParams,
             queryParams,
