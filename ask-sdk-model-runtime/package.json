@@ -1,6 +1,6 @@
 {
   "name": "ask-sdk-model-runtime",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The base components for ASK SDK Models",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
