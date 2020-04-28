@@ -366,10 +366,10 @@ export namespace v0.developmentEvents.subscription {
      * @interface
      */
     export interface CreateSubscriptionRequest {
-        'name'?: string;
-        'events'?: Array<v0.developmentEvents.subscription.Event>;
-        'vendorId'?: string;
-        'subscriberId'?: string;
+        'name': string;
+        'events': Array<v0.developmentEvents.subscription.Event>;
+        'vendorId': string;
+        'subscriberId': string;
     }
 }
 
@@ -427,8 +427,8 @@ export namespace v0.developmentEvents.subscription {
      * @interface
      */
     export interface UpdateSubscriptionRequest {
-        'name'?: string;
-        'events'?: Array<v0.developmentEvents.subscription.Event>;
+        'name': string;
+        'events': Array<v0.developmentEvents.subscription.Event>;
     }
 }
 
@@ -1330,7 +1330,17 @@ export namespace v1.skill.AlexaHosted {
      * Hosted skill lambda runtime
      * @enum
      */
-    export type HostedSkillRuntime = 'nodejs8.10' | 'python3.7';
+    export type HostedSkillRuntime = 'nodejs10.x' | 'python3.7';
+}
+
+export namespace v1.skill.AlexaHosted {
+    /**
+     * Configurations for creating new hosted skill
+     * @interface
+     */
+    export interface HostingConfiguration {
+        'alexaHosted'?: v1.skill.AlexaHosted.HostedSkillRuntime;
+    }
 }
 
 export namespace v1.skill {
@@ -1393,6 +1403,62 @@ export namespace v1.skill {
         'eTag'?: string;
         'location'?: string;
         'expiresAt'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Details about hosted skill deployment.
+     * @interface
+     */
+    export interface HostedSkillDeploymentDetails {
+        'commitId'?: string;
+        'logUrl'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Defines the most recent deployment status for the Alexa hosted skill.
+     * @interface
+     */
+    export interface HostedSkillDeploymentStatus {
+        'lastUpdateRequest'?: v1.skill.HostedSkillDeploymentStatusLastUpdateRequest;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Contains attributes related to last modification request of a hosted skill deployment resource.
+     * @interface
+     */
+    export interface HostedSkillDeploymentStatusLastUpdateRequest {
+        'status'?: v1.skill.Status;
+        'errors'?: Array<v1.skill.StandardizedError>;
+        'warnings'?: Array<v1.skill.StandardizedError>;
+        'deploymentDetails'?: v1.skill.HostedSkillDeploymentDetails;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Contains attributes related to last modification request of a hosted skill provisioning resource.
+     * @interface
+     */
+    export interface HostedSkillProvisioningLastUpdateRequest {
+        'status'?: v1.skill.Status;
+        'errors'?: Array<v1.skill.StandardizedError>;
+        'warnings'?: Array<v1.skill.StandardizedError>;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Defines the provisioning status for hosted skill.
+     * @interface
+     */
+    export interface HostedSkillProvisioningStatus {
+        'lastUpdateRequest'?: v1.skill.HostedSkillProvisioningLastUpdateRequest;
     }
 }
 
@@ -1465,6 +1531,19 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Contains attributes related to last modification (create/update) request of a resource.
+     * @interface
+     */
+    export interface InteractionModelLastUpdateRequest {
+        'status'?: v1.skill.Status;
+        'errors'?: Array<v1.skill.StandardizedError>;
+        'warnings'?: Array<v1.skill.StandardizedError>;
+        'buildDetails'?: v1.skill.BuildDetails;
+    }
+}
+
+export namespace v1.skill {
+    /**
      * Interface related objects.
      * @interface
      */
@@ -1484,19 +1563,6 @@ export namespace v1.skill {
         'isExtensible'?: boolean;
         'name'?: string;
         'isRequired'?: boolean;
-    }
-}
-
-export namespace v1.skill {
-    /**
-     * Contains attributes related to last modification (create/update) request of a resource.
-     * @interface
-     */
-    export interface LastUpdateRequest {
-        'status'?: v1.skill.Status;
-        'errors'?: Array<v1.skill.StandardizedError>;
-        'warnings'?: Array<v1.skill.StandardizedError>;
-        'buildDetails'?: v1.skill.BuildDetails;
     }
 }
 
@@ -1561,16 +1627,6 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
-     * Contains the critical data related info.
-     * @interface
-     */
-    export interface CriticalDataHandling {
-        'dataProtectionProvider'?: v1.skill.Manifest.DataProtectionProvider;
-    }
-}
-
-export namespace v1.skill.Manifest {
-    /**
      * Defines the structure for custom api of the skill.
      * @interface
      */
@@ -1592,14 +1648,6 @@ export namespace v1.skill.Manifest {
         'requires'?: Array<v1.skill.Manifest.Connections>;
         'provides'?: Array<v1.skill.Manifest.Connections>;
     }
-}
-
-export namespace v1.skill.Manifest {
-    /**
-     * The data protection provider.
-     * @enum
-     */
-    export type DataProtectionProvider = 'KEY_MASTER' | 'AWS_KMS';
 }
 
 export namespace v1.skill.Manifest {
@@ -2063,7 +2111,6 @@ export namespace v1.skill.Manifest {
      */
     export interface SkillManifestEndpoint {
         'uri'?: string;
-        'requestEnvelopeVersionSupported'?: string;
         'sslCertificateType'?: v1.skill.Manifest.SSLCertificateType;
     }
 }
@@ -2132,7 +2179,6 @@ export namespace v1.skill.Manifest {
         'isExportCompliant'?: boolean;
         'containsAds'?: boolean;
         'usesHealthInfo'?: boolean;
-        'criticalDataHandling'?: v1.skill.Manifest.CriticalDataHandling;
     }
 }
 
@@ -2280,6 +2326,30 @@ export namespace v1.skill.Manifest {
     }
 }
 
+export namespace v1.skill {
+    /**
+     * Contains attributes related to last modification (create/update) request of a resource.
+     * @interface
+     */
+    export interface ManifestLastUpdateRequest {
+        'status'?: v1.skill.Status;
+        'errors'?: Array<v1.skill.StandardizedError>;
+        'warnings'?: Array<v1.skill.StandardizedError>;
+        'version'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Defines the structure for a resource status.
+     * @interface
+     */
+    export interface ManifestStatus {
+        'lastUpdateRequest'?: v1.skill.ManifestLastUpdateRequest;
+        'eTag'?: string;
+    }
+}
+
 export namespace v1.skill.Private {
     /**
      * Enterprise IT administrators' action on the private distribution.
@@ -2361,20 +2431,6 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * Defines the structure for a resource status.
-     * @interface
-     */
-    export interface ResourceStatus {
-        'lastUpdateRequest'?: v1.skill.LastUpdateRequest;
-        'eTag'?: string;
-        'version'?: string;
-        'errors'?: Array<v1.skill.StandardizedError>;
-        'warnings'?: Array<v1.skill.StandardizedError>;
-    }
-}
-
-export namespace v1.skill {
-    /**
      * Status for a Response resource.
      * @enum
      */
@@ -2394,7 +2450,7 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * Status for available interaction models, keyed by locale. 
+     * Status for available interaction models, keyed by locale.
      * @interface
      */
     export interface SkillInteractionModel {
@@ -2408,11 +2464,9 @@ export namespace v1.skill {
      * @interface
      */
     export interface SkillInteractionModelStatus {
-        'lastUpdateRequest'?: v1.skill.LastUpdateRequest;
+        'lastUpdateRequest'?: v1.skill.InteractionModelLastUpdateRequest;
         'eTag'?: string;
         'version'?: string;
-        'errors'?: Array<v1.skill.StandardizedError>;
-        'warnings'?: Array<v1.skill.StandardizedError>;
     }
 }
 
@@ -2422,8 +2476,10 @@ export namespace v1.skill {
      * @interface
      */
     export interface SkillStatus {
-        'manifest'?: v1.skill.ResourceStatus;
+        'manifest'?: v1.skill.ManifestStatus;
         'interactionModel'?: v1.skill.SkillInteractionModel;
+        'hostedSkillDeployment'?: v1.skill.HostedSkillDeploymentStatus;
+        'hostedSkillProvisioning'?: v1.skill.HostedSkillProvisioningStatus;
     }
 }
 
@@ -2477,7 +2533,7 @@ export namespace v1.skill {
      * @interface
      */
     export interface SubmitSkillForCertificationRequest {
-        'publicationMethod'?: v1.skill.PublicationMethod;
+        'publicationMethod': v1.skill.PublicationMethod;
     }
 }
 
@@ -2799,6 +2855,7 @@ export namespace v1.skill {
     export interface CreateSkillRequest {
         'vendorId'?: string;
         'manifest'?: v1.skill.Manifest.SkillManifest;
+        'hosting'?: v1.skill.AlexaHosted.HostingConfiguration;
     }
 }
 
@@ -3456,8 +3513,8 @@ export namespace v1.skill.interactionModel.catalog {
      * @interface
      */
     export interface UpdateRequest {
-        'name'?: string;
-        'description'?: string;
+        'name': string;
+        'description': string;
     }
 }
 
@@ -3611,7 +3668,7 @@ export namespace v1.skill.interactionModel.type {
      * @interface
      */
     export interface SlotTypeUpdateDefinition {
-        'description'?: string;
+        'description': string;
     }
 }
 
@@ -4049,6 +4106,14 @@ export namespace v1.skill.simulations {
      * @enum
      */
     export type SimulationsApiResponseStatus = 'IN_PROGRESS' | 'SUCCESSFUL' | 'FAILED';
+}
+
+export namespace v1.skill {
+    /**
+     *
+     * @enum
+     */
+    export type SkillResourcesEnum = 'manifest' | 'interactionModel' | 'hostedSkillDeployment' | 'hostedSkillProvisioning';
 }
 
 export namespace v1.skill {
@@ -5327,8 +5392,12 @@ export namespace services.skillManagement {
          *
          * @param {v0.developmentEvents.subscriber.CreateSubscriberRequest} createSubscriberRequest Defines the request body for createSubscriber API.
          */
-        async callCreateSubscriberForDevelopmentEventsV0(createSubscriberRequest? : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<ApiResponse> {
+        async callCreateSubscriberForDevelopmentEventsV0(createSubscriberRequest : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callCreateSubscriberForDevelopmentEventsV0';
+            // verify required parameter 'createSubscriberRequest' is not null or undefined
+            if (createSubscriberRequest == null) {
+                throw new Error(`Required parameter createSubscriberRequest was null or undefined when calling ${__operationId__}.`);
+            }
 
             const queryParams : Array<{ key : string, value : string }> = [];
 
@@ -5360,7 +5429,7 @@ export namespace services.skillManagement {
          *
          * @param {v0.developmentEvents.subscriber.CreateSubscriberRequest} createSubscriberRequest Defines the request body for createSubscriber API.
          */
-        async createSubscriberForDevelopmentEventsV0(createSubscriberRequest? : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<void> {
+        async createSubscriberForDevelopmentEventsV0(createSubscriberRequest : v0.developmentEvents.subscriber.CreateSubscriberRequest) : Promise<void> {
                 await this.callCreateSubscriberForDevelopmentEventsV0(createSubscriberRequest);
         }
         /**
@@ -5461,11 +5530,15 @@ export namespace services.skillManagement {
          * @param {string} subscriberId Unique identifier of the subscriber.
          * @param {v0.developmentEvents.subscriber.UpdateSubscriberRequest} updateSubscriberRequest Defines the request body for updateSubscriber API.
          */
-        async callSetSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest? : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<ApiResponse> {
+        async callSetSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callSetSubscriberForDevelopmentEventsV0';
             // verify required parameter 'subscriberId' is not null or undefined
             if (subscriberId == null) {
                 throw new Error(`Required parameter subscriberId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateSubscriberRequest' is not null or undefined
+            if (updateSubscriberRequest == null) {
+                throw new Error(`Required parameter updateSubscriberRequest was null or undefined when calling ${__operationId__}.`);
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
@@ -5502,7 +5575,7 @@ export namespace services.skillManagement {
          * @param {string} subscriberId Unique identifier of the subscriber.
          * @param {v0.developmentEvents.subscriber.UpdateSubscriberRequest} updateSubscriberRequest Defines the request body for updateSubscriber API.
          */
-        async setSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest? : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<void> {
+        async setSubscriberForDevelopmentEventsV0(subscriberId : string, updateSubscriberRequest : v0.developmentEvents.subscriber.UpdateSubscriberRequest) : Promise<void> {
                 await this.callSetSubscriberForDevelopmentEventsV0(subscriberId, updateSubscriberRequest);
         }
         /**

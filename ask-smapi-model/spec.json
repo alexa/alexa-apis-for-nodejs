@@ -859,7 +859,7 @@
             "in": "body",
             "name": "CreateSubscriberRequest",
             "description": "Defines the request body for createSubscriber API.",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/v0.developmentEvents.subscriber.CreateSubscriberRequest"
             }
@@ -1007,7 +1007,7 @@
             "in": "body",
             "name": "UpdateSubscriberRequest",
             "description": "Defines the request body for updateSubscriber API.",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/v0.developmentEvents.subscriber.UpdateSubscriberRequest"
             }
@@ -10815,6 +10815,12 @@
     },
     "v0.developmentEvents.subscription.CreateSubscriptionRequest": {
       "type": "object",
+      "required": [
+        "events",
+        "name",
+        "subscriberId",
+        "vendorId"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -10839,6 +10845,10 @@
     },
     "v0.developmentEvents.subscription.UpdateSubscriptionRequest": {
       "type": "object",
+      "required": [
+        "events",
+        "name"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -12116,6 +12126,15 @@
       },
       "description": "The payload for creating the account linking partner."
     },
+    "v1.skill.AlexaHosted.HostingConfiguration": {
+      "type": "object",
+      "properties": {
+        "alexaHosted": {
+          "$ref": "#/definitions/v1.skill.AlexaHosted.HostedSkillRuntime"
+        }
+      },
+      "description": "Configurations for creating new hosted skill"
+    },
     "v1.skill.AlexaHosted.HostedSkillRepositoryCredentialsRequest": {
       "type": "object",
       "properties": {
@@ -12192,7 +12211,7 @@
       "type": "string",
       "description": "Hosted skill lambda runtime",
       "enum": [
-        "nodejs8.10",
+        "nodejs10.x",
         "python3.7"
       ]
     },
@@ -13517,6 +13536,10 @@
     },
     "v1.skill.interactionModel.catalog.UpdateRequest": {
       "type": "object",
+      "required": [
+        "description",
+        "name"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -13844,6 +13867,9 @@
     },
     "v1.skill.interactionModel.type.SlotTypeUpdateDefinition": {
       "type": "object",
+      "required": [
+        "description"
+      ],
       "properties": {
         "description": {
           "type": "string",
@@ -14612,21 +14638,9 @@
         "usesHealthInfo": {
           "type": "boolean",
           "description": "True if the skill developer is a Covered Entity (CE) or Business Associate (BA) as defined by the Health Insurance Portability And Accountability Act (HIPAA) and the skill requires Amazon to process PHI on their behalf, false otherwise. This is an optional property and treated as false if not set."
-        },
-        "criticalDataHandling": {
-          "$ref": "#/definitions/v1.skill.Manifest.CriticalDataHandling"
         }
       },
       "description": "Defines the structure for privacy & compliance information in the skill manifest."
-    },
-    "v1.skill.Manifest.CriticalDataHandling": {
-      "type": "object",
-      "properties": {
-        "dataProtectionProvider": {
-          "$ref": "#/definitions/v1.skill.Manifest.DataProtectionProvider"
-        }
-      },
-      "description": "Contains the critical data related info."
     },
     "v1.skill.Manifest.SkillManifestLocalizedPrivacyAndCompliance": {
       "type": "object",
@@ -14642,24 +14656,12 @@
       },
       "description": "Defines the structure for locale specific privacy & compliance information in the skill manifest."
     },
-    "v1.skill.Manifest.DataProtectionProvider": {
-      "type": "string",
-      "description": "The data protection provider.",
-      "enum": [
-        "KEY_MASTER",
-        "AWS_KMS"
-      ]
-    },
     "v1.skill.Manifest.SkillManifestEndpoint": {
       "type": "object",
       "properties": {
         "uri": {
           "type": "string",
           "description": "Amazon Resource Name (ARN) of the skill's Lambda function or HTTPS URL."
-        },
-        "requestEnvelopeVersionSupported": {
-          "type": "string",
-          "description": "Supported version of the requestEnvelope."
         },
         "sslCertificateType": {
           "$ref": "#/definitions/v1.skill.Manifest.SSLCertificateType"
@@ -16325,6 +16327,9 @@
         },
         "manifest": {
           "$ref": "#/definitions/v1.skill.Manifest.SkillManifest"
+        },
+        "hosting": {
+          "$ref": "#/definitions/v1.skill.AlexaHosted.HostingConfiguration"
         }
       }
     },
@@ -16450,13 +16455,66 @@
       "type": "object",
       "properties": {
         "manifest": {
-          "$ref": "#/definitions/v1.skill.ResourceStatus"
+          "$ref": "#/definitions/v1.skill.ManifestStatus"
         },
         "interactionModel": {
           "$ref": "#/definitions/v1.skill.SkillInteractionModel"
+        },
+        "hostedSkillDeployment": {
+          "$ref": "#/definitions/v1.skill.HostedSkillDeploymentStatus"
+        },
+        "hostedSkillProvisioning": {
+          "$ref": "#/definitions/v1.skill.HostedSkillProvisioningStatus"
         }
       },
       "description": "Defines the structure for skill status response."
+    },
+    "v1.skill.skillResourcesEnum": {
+      "type": "object",
+      "enum": [
+        "manifest",
+        "interactionModel",
+        "hostedSkillDeployment",
+        "hostedSkillProvisioning"
+      ]
+    },
+    "v1.skill.ManifestStatus": {
+      "type": "object",
+      "properties": {
+        "lastUpdateRequest": {
+          "$ref": "#/definitions/v1.skill.ManifestLastUpdateRequest"
+        },
+        "eTag": {
+          "type": "string",
+          "description": "An opaque identifier for last successfully updated resource."
+        }
+      },
+      "description": "Defines the structure for a resource status."
+    },
+    "v1.skill.ManifestLastUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.Status"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "version": {
+          "type": "string",
+          "description": "on success, this field indicates the created version."
+        }
+      },
+      "description": "Contains attributes related to last modification (create/update) request of a resource."
     },
     "v1.skill.SkillInteractionModel": {
       "type": "object",
@@ -16468,13 +16526,13 @@
           }
         }
       },
-      "description": "Status for available interaction models, keyed by locale.\n"
+      "description": "Status for available interaction models, keyed by locale."
     },
     "v1.skill.SkillInteractionModelStatus": {
       "type": "object",
       "properties": {
         "lastUpdateRequest": {
-          "$ref": "#/definitions/v1.skill.LastUpdateRequest"
+          "$ref": "#/definitions/v1.skill.InteractionModelLastUpdateRequest"
         },
         "eTag": {
           "type": "string",
@@ -16483,52 +16541,11 @@
         "version": {
           "type": "string",
           "description": "Version for last successfully built model."
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.StandardizedError"
-          }
-        },
-        "warnings": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.StandardizedError"
-          }
         }
       },
       "description": "Defines the structure for interaction model build status."
     },
-    "v1.skill.ResourceStatus": {
-      "type": "object",
-      "properties": {
-        "lastUpdateRequest": {
-          "$ref": "#/definitions/v1.skill.LastUpdateRequest"
-        },
-        "eTag": {
-          "type": "string",
-          "description": "An opaque identifier for last successfully updated resource."
-        },
-        "version": {
-          "type": "string",
-          "description": "Version for last successfully built model."
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.StandardizedError"
-          }
-        },
-        "warnings": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.StandardizedError"
-          }
-        }
-      },
-      "description": "Defines the structure for a resource status."
-    },
-    "v1.skill.LastUpdateRequest": {
+    "v1.skill.InteractionModelLastUpdateRequest": {
       "type": "object",
       "properties": {
         "status": {
@@ -16551,6 +16568,81 @@
         }
       },
       "description": "Contains attributes related to last modification (create/update) request of a resource."
+    },
+    "v1.skill.HostedSkillDeploymentStatus": {
+      "type": "object",
+      "properties": {
+        "lastUpdateRequest": {
+          "$ref": "#/definitions/v1.skill.HostedSkillDeploymentStatusLastUpdateRequest"
+        }
+      },
+      "description": "Defines the most recent deployment status for the Alexa hosted skill."
+    },
+    "v1.skill.HostedSkillDeploymentStatusLastUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.Status"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "deploymentDetails": {
+          "$ref": "#/definitions/v1.skill.HostedSkillDeploymentDetails"
+        }
+      },
+      "description": "Contains attributes related to last modification request of a hosted skill deployment resource."
+    },
+    "v1.skill.HostedSkillDeploymentDetails": {
+      "type": "object",
+      "properties": {
+        "commitId": {
+          "type": "string"
+        },
+        "logUrl": {
+          "type": "string"
+        }
+      },
+      "description": "Details about hosted skill deployment."
+    },
+    "v1.skill.HostedSkillProvisioningStatus": {
+      "type": "object",
+      "properties": {
+        "lastUpdateRequest": {
+          "$ref": "#/definitions/v1.skill.HostedSkillProvisioningLastUpdateRequest"
+        }
+      },
+      "description": "Defines the provisioning status for hosted skill."
+    },
+    "v1.skill.HostedSkillProvisioningLastUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.Status"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        }
+      },
+      "description": "Contains attributes related to last modification request of a hosted skill provisioning resource."
     },
     "v1.skill.BuildDetails": {
       "type": "object",
@@ -16603,6 +16695,9 @@
     },
     "v1.skill.SubmitSkillForCertificationRequest": {
       "type": "object",
+      "required": [
+        "publicationMethod"
+      ],
       "properties": {
         "publicationMethod": {
           "$ref": "#/definitions/v1.skill.PublicationMethod"
@@ -16652,7 +16747,7 @@
         "location": {
           "type": "string",
           "format": "uri",
-          "description": "Location of the package."
+          "description": "The URL for the skill package."
         }
       }
     },
@@ -16662,7 +16757,7 @@
         "location": {
           "type": "string",
           "format": "uri",
-          "description": "Location of the package."
+          "description": "The URL for the skill package."
         }
       }
     },
