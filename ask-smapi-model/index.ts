@@ -2450,16 +2450,6 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * Status for available interaction models, keyed by locale.
-     * @interface
-     */
-    export interface SkillInteractionModel {
-        'locale'?: { [key: string]: v1.skill.SkillInteractionModelStatus; };
-    }
-}
-
-export namespace v1.skill {
-    /**
      * Defines the structure for interaction model build status.
      * @interface
      */
@@ -2477,7 +2467,7 @@ export namespace v1.skill {
      */
     export interface SkillStatus {
         'manifest'?: v1.skill.ManifestStatus;
-        'interactionModel'?: v1.skill.SkillInteractionModel;
+        'interactionModel'?: { [key: string]: v1.skill.SkillInteractionModelStatus; };
         'hostedSkillDeployment'?: v1.skill.HostedSkillDeploymentStatus;
         'hostedSkillProvisioning'?: v1.skill.HostedSkillProvisioningStatus;
     }

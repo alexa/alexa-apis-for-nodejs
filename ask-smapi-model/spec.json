@@ -16458,7 +16458,11 @@
           "$ref": "#/definitions/v1.skill.ManifestStatus"
         },
         "interactionModel": {
-          "$ref": "#/definitions/v1.skill.SkillInteractionModel"
+          "type": "object",
+          "description": "Status for available interaction models, keyed by locale.",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1.skill.SkillInteractionModelStatus"
+          }
         },
         "hostedSkillDeployment": {
           "$ref": "#/definitions/v1.skill.HostedSkillDeploymentStatus"
@@ -16515,18 +16519,6 @@
         }
       },
       "description": "Contains attributes related to last modification (create/update) request of a resource."
-    },
-    "v1.skill.SkillInteractionModel": {
-      "type": "object",
-      "properties": {
-        "locale": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/v1.skill.SkillInteractionModelStatus"
-          }
-        }
-      },
-      "description": "Status for available interaction models, keyed by locale."
     },
     "v1.skill.SkillInteractionModelStatus": {
       "type": "object",
