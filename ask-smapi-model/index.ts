@@ -22,6 +22,24 @@ import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
 import createUserAgent = runtime.createUserAgent;
 
+/**
+ *
+ * @interface
+ */
+export interface InlineResponse400 {
+    'message'?: string;
+    'violations'?: Array<v1.Error>;
+}
+
+/**
+ *
+ * @interface
+ */
+export interface InlineResponse401 {
+    'code'?: string;
+    'message': string;
+}
+
 export namespace v0 {
     /**
      *
@@ -1209,6 +1227,359 @@ export namespace v1.isp {
     }
 }
 
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSetEntity {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateNLUAnnotationSetRequest {
+        'locale'?: string;
+        'name'?: string;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateNLUAnnotationSetResponse {
+        'id'?: string;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     * Links for the API navigation.
+     * @interface
+     */
+    export interface Links {
+        'self'?: v1.Link;
+        'next'?: v1.Link;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface ListNLUAnnotationSetsResponse {
+        'annotationSets'?: Array<v1.nlu.annotationSets.AnnotationSet>;
+        'paginationContext'?: v1.nlu.annotationSets.PaginationContext;
+        '_links'?: v1.nlu.annotationSets.Links;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateNLUAnnotationSetAnnotationsRequest {
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateNLUAnnotationSetPropertiesRequest {
+        'name'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Actual {
+        'domain'?: string;
+        'intent'?: v1.nlu.evaluations.Intent;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     * An enumeration indicating whether the user has explicitly confirmed or denied the entire intent/slot. Possible values: 'NONE', 'CONFIRMED', 'DENIED'. 
+     * @enum
+     */
+    export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateNLURequest {
+        'stage': string;
+        'locale': string;
+        'source': v1.nlu.evaluations.Source;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateResponse {
+        'id'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationEntity {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationInputs {
+        'locale'?: string;
+        'stage'?: string;
+        'source'?: v1.nlu.evaluations.Source;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Expected {
+        'domain'?: string;
+        'intent'?: v1.nlu.evaluations.ExpectedIntent;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ExpectedIntent {
+        'name'?: string;
+        'slots'?: { [key: string]: v1.nlu.evaluations.ExpectedIntentSlotsProps; };
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ExpectedIntentSlotsProps {
+        'value'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResponseLinks {
+        'results'?: v1.nlu.evaluations.Results;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Inputs {
+        'utterance'?: string;
+        'referenceTimestamp'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Intent {
+        'name'?: string;
+        'confirmationStatus'?: v1.nlu.evaluations.ConfirmationStatus;
+        'slots'?: { [key: string]: v1.nlu.evaluations.SlotsProps; };
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     * Links for the API navigation.
+     * @interface
+     */
+    export interface Links {
+        'self'?: v1.Link;
+        'next'?: v1.Link;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResponse {
+        'paginationContext'?: v1.nlu.evaluations.PaginationContext;
+        '_links'?: v1.nlu.evaluations.Links;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResultsResponse {
+        'paginationContext'?: v1.nlu.evaluations.PagedResultsResponsePaginationContext;
+        '_links'?: v1.nlu.evaluations.Links;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResultsResponsePaginationContext {
+        'nextToken'?: string;
+        'totalCount'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     * A resolutions object representing the results of resolving the words captured from the user's utterance. 
+     * @interface
+     */
+    export interface Resolutions {
+        'resolutionsPerAuthority'?: Array<v1.nlu.evaluations.ResolutionsPerAuthority>;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResolutionsPerAuthority {
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Results {
+        'href'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @enum
+     */
+    export type ResultsStatus = 'PASSED' | 'FAILED';
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface SlotsProps {
+        'name'?: string;
+        'value'?: string;
+        'confirmationStatus'?: v1.nlu.evaluations.ConfirmationStatus;
+        'resolutions'?: v1.nlu.evaluations.Resolutions;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     * Use Annotation Set as evaluation source 
+     * @interface
+     */
+    export interface Source {
+        'annotationId'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @enum
+     */
+    export type Status = 'PASSED' | 'FAILED' | 'IN_PROGRESS' | 'ERROR';
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface TestCase {
+        'status'?: v1.nlu.evaluations.ResultsStatus;
+        'inputs'?: v1.nlu.evaluations.Inputs;
+        'actual'?: v1.nlu.evaluations.Actual;
+        'expected'?: Array<v1.nlu.evaluations.Expected>;
+    }
+}
+
 export namespace v1.skill {
     /**
      * Action of a resource.
@@ -1223,6 +1594,16 @@ export namespace v1.skill {
      * @enum
      */
     export type AgreementType = 'EXPORT_COMPLIANCE';
+}
+
+export namespace v1.skill.AlexaHosted {
+    /**
+     * Alexa hosted skill create configuration
+     * @interface
+     */
+    export interface AlexaHostedConfig {
+        'runtime'?: v1.skill.AlexaHosted.HostedSkillRuntime;
+    }
 }
 
 export namespace v1.skill.AlexaHosted {
@@ -1339,7 +1720,7 @@ export namespace v1.skill.AlexaHosted {
      * @interface
      */
     export interface HostingConfiguration {
-        'alexaHosted'?: v1.skill.AlexaHosted.HostedSkillRuntime;
+        'alexaHosted'?: v1.skill.AlexaHosted.AlexaHostedConfig;
     }
 }
 
@@ -4695,6 +5076,88 @@ export namespace v1.catalog.upload {
     export interface PreSignedUrl {
         'urlId': string;
         'partETags'?: Array<v1.catalog.upload.PreSignedUrlItem>;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSet {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+        'annotationId'?: string;
+    }
+}
+
+export namespace v1.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUAnnotationSetPropertiesResponse {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Evaluation {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
+        'id'?: string;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResponse {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
+        '_links'?: v1.nlu.evaluations.GetNLUEvaluationResponseLinks;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResultsResponse {
+        'paginationContext'?: v1.nlu.evaluations.PagedResultsResponsePaginationContext;
+        '_links'?: v1.nlu.evaluations.Links;
+        'totalFailed'?: number;
+        'testCases'?: Array<v1.nlu.evaluations.TestCase>;
+    }
+}
+
+export namespace v1.nlu.evaluations {
+    /**
+     * response body for a list evaluation API
+     * @interface
+     */
+    export interface ListNLUEvaluationsResponse {
+        'paginationContext'?: v1.nlu.evaluations.PaginationContext;
+        '_links'?: v1.nlu.evaluations.Links;
+        'evaluations'?: Array<v1.nlu.evaluations.Evaluation>;
     }
 }
 
@@ -9144,6 +9607,670 @@ export namespace services.skillManagement {
         async getSkillMetricsV1(skillId : string, startTime : string, endTime : string, period : string, metric : string, stage : string, skillType : string, intent? : string, locale? : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.metrics.GetMetricDataResponse> {
                 const apiResponse: ApiResponse = await this.callGetSkillMetricsV1(skillId, startTime, endTime, period, metric, stage, skillType, intent, locale, maxResults, nextToken);
                 return apiResponse.body as v1.skill.metrics.GetMetricDataResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {string} accept Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for GET calls. 
+         */
+        async callGetAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, accept : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetAnnotationsForNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationId' is not null or undefined
+            if (annotationId == null) {
+                throw new Error(`Required parameter annotationId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'accept' is not null or undefined
+            if (accept == null) {
+                throw new Error(`Required parameter accept was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Accept', value : accept });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationId', annotationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/annotations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "The specific version of a NLU annotation set has the content.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {string} accept Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for GET calls. 
+         */
+        async getAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, accept : string) : Promise<void> {
+                await this.callGetAnnotationsForNLUAnnotationSetsV1(skillId, annotationId, accept);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {string} contentType Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for POST calls with a json/csv body. 
+         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
+         */
+        async callUpdateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateAnnotationsForNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationId' is not null or undefined
+            if (annotationId == null) {
+                throw new Error(`Required parameter annotationId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'contentType' is not null or undefined
+            if (contentType == null) {
+                throw new Error(`Required parameter contentType was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateNLUAnnotationSetAnnotationsRequest' is not null or undefined
+            if (updateNLUAnnotationSetAnnotationsRequest == null) {
+                throw new Error(`Required parameter updateNLUAnnotationSetAnnotationsRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Content-Type', value : contentType });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationId', annotationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/annotations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "NLU annotation set exists and starts the update.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateNLUAnnotationSetAnnotationsRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {string} contentType Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for POST calls with a json/csv body. 
+         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
+         */
+        async updateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<void> {
+                await this.callUpdateAnnotationsForNLUAnnotationSetsV1(skillId, annotationId, contentType, updateNLUAnnotationSetAnnotationsRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         */
+        async callDeletePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeletePropertiesForNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationId' is not null or undefined
+            if (annotationId == null) {
+                throw new Error(`Required parameter annotationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationId', annotationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "NLU annotation set exists and is deleted successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         */
+        async deletePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<void> {
+                await this.callDeletePropertiesForNLUAnnotationSetsV1(skillId, annotationId);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         */
+        async callGetPropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetPropertiesForNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationId' is not null or undefined
+            if (annotationId == null) {
+                throw new Error(`Required parameter annotationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationId', annotationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/properties";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "The NLU annotation set exists.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         */
+        async getPropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse> {
+                const apiResponse: ApiResponse = await this.callGetPropertiesForNLUAnnotationSetsV1(skillId, annotationId);
+                return apiResponse.body as v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
+         */
+        async callUpdatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdatePropertiesForNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationId' is not null or undefined
+            if (annotationId == null) {
+                throw new Error(`Required parameter annotationId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateNLUAnnotationSetPropertiesRequest' is not null or undefined
+            if (updateNLUAnnotationSetPropertiesRequest == null) {
+                throw new Error(`Required parameter updateNLUAnnotationSetPropertiesRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationId', annotationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/properties";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "NLU annotation set exists and properties are updated successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateNLUAnnotationSetPropertiesRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationId Identifier of the NLU annotation set.
+         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
+         */
+        async updatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<void> {
+                await this.callUpdatePropertiesForNLUAnnotationSetsV1(skillId, annotationId, updateNLUAnnotationSetPropertiesRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale filter to NLU annotation set created using this locale
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async callListNLUAnnotationSetsV1(skillId : string, locale? : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListNLUAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(locale != null) {
+                queryParams.push({ key: 'locale', value: locale });
+            }
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "NLU annotation sets are returned.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale filter to NLU annotation set created using this locale
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async listNLUAnnotationSetsV1(skillId : string, locale? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.annotationSets.ListNLUAnnotationSetsResponse> {
+                const apiResponse: ApiResponse = await this.callListNLUAnnotationSetsV1(skillId, locale, nextToken, maxResults);
+                return apiResponse.body as v1.nlu.annotationSets.ListNLUAnnotationSetsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
+         */
+        async callCreateNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateNLUAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'createNLUAnnotationSetRequest' is not null or undefined
+            if (createNLUAnnotationSetRequest == null) {
+                throw new Error(`Required parameter createNLUAnnotationSetRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluAnnotationSets";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "NLU annotation set created successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createNLUAnnotationSetRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
+         */
+        async createNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<v1.nlu.annotationSets.CreateNLUAnnotationSetResponse> {
+                const apiResponse: ApiResponse = await this.callCreateNLUAnnotationSetV1(skillId, createNLUAnnotationSetRequest);
+                return apiResponse.body as v1.nlu.annotationSets.CreateNLUAnnotationSetResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async callGetNLUEvaluationV1(skillId : string, evaluationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetNLUEvaluationV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluEvaluations/{evaluationId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation exists and its status is queryable.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async getNLUEvaluationV1(skillId : string, evaluationId : string) : Promise<v1.nlu.evaluations.GetNLUEvaluationResponse> {
+                const apiResponse: ApiResponse = await this.callGetNLUEvaluationV1(skillId, evaluationId);
+                return apiResponse.body as v1.nlu.evaluations.GetNLUEvaluationResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         * @param {string} sortField 
+         * @param {string} testCaseStatus only returns test cases with this status
+         * @param {string} actualIntentName only returns test cases with intents which resolve to this intent
+         * @param {string} expectedIntentName only returns test cases with intents which are expected to be this intent
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async callGetResultForNLUEvaluationsV1(skillId : string, evaluationId : string, sortField? : string, testCaseStatus? : string, actualIntentName? : string, expectedIntentName? : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetResultForNLUEvaluationsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(sortField != null) {
+                queryParams.push({ key: 'sort.field', value: sortField });
+            }
+            if(testCaseStatus != null) {
+                queryParams.push({ key: 'testCaseStatus', value: testCaseStatus });
+            }
+            if(actualIntentName != null) {
+                queryParams.push({ key: 'actualIntentName', value: actualIntentName });
+            }
+            if(expectedIntentName != null) {
+                queryParams.push({ key: 'expectedIntentName', value: expectedIntentName });
+            }
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluEvaluations/{evaluationId}/results";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation exists and its status is queryable.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         * @param {string} sortField 
+         * @param {string} testCaseStatus only returns test cases with this status
+         * @param {string} actualIntentName only returns test cases with intents which resolve to this intent
+         * @param {string} expectedIntentName only returns test cases with intents which are expected to be this intent
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async getResultForNLUEvaluationsV1(skillId : string, evaluationId : string, sortField? : string, testCaseStatus? : string, actualIntentName? : string, expectedIntentName? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.evaluations.GetNLUEvaluationResultsResponse> {
+                const apiResponse: ApiResponse = await this.callGetResultForNLUEvaluationsV1(skillId, evaluationId, sortField, testCaseStatus, actualIntentName, expectedIntentName, nextToken, maxResults);
+                return apiResponse.body as v1.nlu.evaluations.GetNLUEvaluationResultsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale filter to evaluations started using this locale
+         * @param {string} stage filter to evaluations started using this stage
+         * @param {string} annotationId filter to evaluations started using this annotationId
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async callListNLUEvaluationsV1(skillId : string, locale? : string, stage? : string, annotationId? : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListNLUEvaluationsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(locale != null) {
+                queryParams.push({ key: 'locale', value: locale });
+            }
+            if(stage != null) {
+                queryParams.push({ key: 'stage', value: stage });
+            }
+            if(annotationId != null) {
+                queryParams.push({ key: 'annotationId', value: annotationId });
+            }
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluations are returned.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale filter to evaluations started using this locale
+         * @param {string} stage filter to evaluations started using this stage
+         * @param {string} annotationId filter to evaluations started using this annotationId
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
+         */
+        async listNLUEvaluationsV1(skillId : string, locale? : string, stage? : string, annotationId? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.evaluations.ListNLUEvaluationsResponse> {
+                const apiResponse: ApiResponse = await this.callListNLUEvaluationsV1(skillId, locale, stage, annotationId, nextToken, maxResults);
+                return apiResponse.body as v1.nlu.evaluations.ListNLUEvaluationsResponse;
+        }
+        /**
+         *
+         * @param {v1.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
+         * @param {string} skillId The skill ID.
+         */
+        async callCreateNLUEvaluationsV1(evaluateNLURequest : v1.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateNLUEvaluationsV1';
+            // verify required parameter 'evaluateNLURequest' is not null or undefined
+            if (evaluateNLURequest == null) {
+                throw new Error(`Required parameter evaluateNLURequest was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'Content-type', value : 'application/json' });
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/nluEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation has successfully begun.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, evaluateNLURequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v1.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
+         * @param {string} skillId The skill ID.
+         */
+        async createNLUEvaluationsV1(evaluateNLURequest : v1.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<v1.nlu.evaluations.EvaluateResponse> {
+                const apiResponse: ApiResponse = await this.callCreateNLUEvaluationsV1(evaluateNLURequest, skillId);
+                return apiResponse.body as v1.nlu.evaluations.EvaluateResponse;
         }
         /**
          *

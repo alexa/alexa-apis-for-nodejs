@@ -9706,6 +9706,1074 @@
         "x-operation-name": "queryDevelopmentAuditLogsV1"
       }
     },
+    "/v1/skills/{skillId}/nluEvaluations": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "List nlu evaluations run for a skill.",
+        "description": "API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "filter to evaluations started using this locale",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "description": "filter to evaluations started using this stage",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "query",
+            "description": "filter to evaluations started using this annotationId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.\n",
+            "required": false,
+            "type": "number",
+            "default": 10,
+            "maximum": 100,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluations are returned.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.evaluations.ListNLUEvaluationsResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "listNLUEvaluationsV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Start an evaluation against the NLU model built by the skill's interaction model.",
+        "description": "This is an asynchronous API that starts an evaluation against the NLU model built by the skill's interaction model.\nThe operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it evaluate NLU models.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "evaluateNLURequest",
+            "description": "Payload sent to the evaluate NLU API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.evaluations.EvaluateNLURequest"
+            }
+          },
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluation has successfully begun.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.evaluations.EvaluateResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, - application/json or application/hal+json supported"
+              },
+              "Location": {
+                "type": "string",
+                "description": "GET Location of the started evaluation.\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "createNLUEvaluationsV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluEvaluations/{evaluationId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get top level information and status of a nlu evaluation.",
+        "description": "API which requests top level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns data used to start the job, like the number of test cases, stage, locale, and start time. This should be considered the 'cheap' operation while getResultForNLUEvaluations is 'expensive'.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "evaluationId",
+            "in": "path",
+            "description": "Identifier of the evaluation.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluation exists and its status is queryable.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, - application/json or application/hal+json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "getNLUEvaluationV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluEvaluations/{evaluationId}/results": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get test case results for a completed Evaluation.",
+        "description": "Paginated API which returns the test case results of an evaluation. This should be considered the 'expensive' operation while getNluEvaluation is 'cheap'.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "evaluationId",
+            "in": "path",
+            "description": "Identifier of the evaluation.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sort.field",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "STATUS",
+              "ACTUAL_INTENT",
+              "EXPECTED_INTENT"
+            ]
+          },
+          {
+            "name": "testCaseStatus",
+            "in": "query",
+            "description": "only returns test cases with this status",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "PASSED",
+              "FAILED"
+            ]
+          },
+          {
+            "name": "actualIntentName",
+            "in": "query",
+            "description": "only returns test cases with intents which resolve to this intent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "expectedIntentName",
+            "in": "query",
+            "description": "only returns test cases with intents which are expected to be this intent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href.\n",
+            "required": false,
+            "type": "number",
+            "default": 1000,
+            "maximum": 1000,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluation exists and its status is queryable.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResultsResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, - application/json or application/hal+json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "getResultForNLUEvaluationsV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluAnnotationSets": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "List NLU annotation sets for a given skill.",
+        "description": "API which requests all the NLU annotation sets for a skill. Returns the annotationId and properties for each NLU annotation set. Developers can filter the results using locale. Supports paging of results.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "filter to NLU annotation set created using this locale",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.\n",
+            "required": false,
+            "type": "number",
+            "default": 10,
+            "maximum": 100,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NLU annotation sets are returned.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.ListNLUAnnotationSetsResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "listNLUAnnotationSetsV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Create a new NLU annotation set for a skill which will generate a new annotationId.",
+        "description": "This is an API that creates a new NLU annotation set with properties and returns the annotationId.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "CreateNLUAnnotationSetRequest",
+            "description": "Payload sent to the create NLU annotation set API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.CreateNLUAnnotationSetRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "NLU annotation set created successfully.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.CreateNLUAnnotationSetResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, only application/json supported",
+                "enum": [
+                  "application/json"
+                ]
+              },
+              "Location": {
+                "type": "string",
+                "description": "GET Location of the created NLU annotation set.\n"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "createNLUAnnotationSetV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/properties": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get the properties of an NLU annotation set",
+        "description": "Return the properties for an NLU annotation set.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "path",
+            "description": "Identifier of the NLU annotation set.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The NLU annotation set exists.",
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "getPropertiesForNLUAnnotationSetsV1"
+      },
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "update the NLU annotation set properties.",
+        "description": "API which updates the NLU annotation set properties. Currently, the only data can be updated is annotation set name.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "path",
+            "description": "Identifier of the NLU annotation set.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "UpdateNLUAnnotationSetPropertiesRequest",
+            "description": "Payload sent to the update NLU annotation set properties API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "NLU annotation set exists and properties are updated successfully.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "updatePropertiesForNLUAnnotationSetsV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}": {
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Delete the NLU annotation set",
+        "description": "API which deletes the NLU annotation set. Developers cannot get/list the deleted annotation set.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "path",
+            "description": "Identifier of the NLU annotation set.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "NLU annotation set exists and is deleted successfully.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "deletePropertiesForNLUAnnotationSetsV1"
+      }
+    },
+    "/v1/skills/{skillId}/nluAnnotationSets/{annotationId}/annotations": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get the annotations of an NLU annotation set",
+        "produces": [
+          "application/json",
+          "text/csv"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "path",
+            "description": "Identifier of the NLU annotation set.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Standard HTTP. Pass `application/json` or `test/csv` for GET calls.\n",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The specific version of a NLU annotation set has the content.",
+            "examples": {
+              "application/json": {
+                "data": [
+                  {
+                    "inputs": {
+                      "utterance": "i want to travel from seattle",
+                      "referenceTimestamp": "2018-10-25T23:50:02.135Z"
+                    },
+                    "expected": [
+                      {
+                        "intent": {
+                          "name": "TravelIntent",
+                          "slots": {
+                            "fromCity": {
+                              "value": "seattle"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "text/csv": "utterance,referenceTimestamp,intent,slot[fromCity] i want to travel from seattle,2018-10-25T23:50:02.135Z,TravelIntent,seattle\n"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "getAnnotationsForNLUAnnotationSetsV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Replace the annotations in NLU annotation set.",
+        "description": "API which replaces the annotations in NLU annotation set.\n",
+        "consumes": [
+          "application/json",
+          "text/csv"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "annotationId",
+            "in": "path",
+            "description": "Identifier of the NLU annotation set.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Standard HTTP. Pass `application/json` or `test/csv` for POST calls with a json/csv body.\n",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "UpdateNLUAnnotationSetAnnotationsRequest",
+            "description": "Payload sent to the update NLU annotation set API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NLU annotation set exists and starts the update.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, application/hal+json or application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Define the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_400"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/inline_response_401"
+            }
+          }
+        },
+        "x-operation-name": "updateAnnotationsForNLUAnnotationSetsV1"
+      }
+    },
     "/v2/skills/{skillId}/stages/{stage}/simulations": {
       "post": {
         "tags": [
@@ -12130,7 +13198,7 @@
       "type": "object",
       "properties": {
         "alexaHosted": {
-          "$ref": "#/definitions/v1.skill.AlexaHosted.HostedSkillRuntime"
+          "$ref": "#/definitions/v1.skill.AlexaHosted.AlexaHostedConfig"
         }
       },
       "description": "Configurations for creating new hosted skill"
@@ -12206,6 +13274,15 @@
           "$ref": "#/definitions/v1.skill.AlexaHosted.HostedSkillRuntime"
         }
       }
+    },
+    "v1.skill.AlexaHosted.AlexaHostedConfig": {
+      "type": "object",
+      "properties": {
+        "runtime": {
+          "$ref": "#/definitions/v1.skill.AlexaHosted.HostedSkillRuntime"
+        }
+      },
+      "description": "Alexa hosted skill create configuration"
     },
     "v1.skill.AlexaHosted.HostedSkillRuntime": {
       "type": "string",
@@ -17459,6 +18536,563 @@
         }
       }
     },
+    "v1.nlu.evaluations.EvaluateNLURequest": {
+      "type": "object",
+      "required": [
+        "locale",
+        "source",
+        "stage"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string",
+          "default": "development"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Source"
+        }
+      }
+    },
+    "v1.nlu.evaluations.EvaluateResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id used to retrieve the evaluation later."
+        }
+      }
+    },
+    "v1.nlu.evaluations.ListNLUEvaluationsResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.evaluations.PagedResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "evaluations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.nlu.evaluations.Evaluation"
+              }
+            }
+          }
+        }
+      ],
+      "description": "response body for a list evaluation API"
+    },
+    "v1.nlu.evaluations.GetNLUEvaluationResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationEntity"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_links": {
+              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResponseLinks"
+            }
+          }
+        }
+      ]
+    },
+    "v1.nlu.evaluations.GetNLUEvaluationResultsResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.evaluations.PagedResultsResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "totalFailed": {
+              "type": "number",
+              "description": "count of tests failed. A test fails when the expected intent and expected slots are not identical.\n"
+            },
+            "testCases": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.nlu.evaluations.TestCase"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "v1.nlu.evaluations.EvaluationInputs": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Source"
+        }
+      }
+    },
+    "v1.nlu.evaluations.Source": {
+      "properties": {
+        "annotationId": {
+          "type": "string",
+          "description": "ID of the annotation set"
+        }
+      },
+      "description": "Use Annotation Set as evaluation source\n"
+    },
+    "v1.nlu.evaluations.PagedResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.nlu.evaluations.PaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Links"
+        }
+      }
+    },
+    "v1.nlu.evaluations.PagedResultsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.nlu.evaluations.PagedResultsResponsePaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Links"
+        }
+      }
+    },
+    "v1.nlu.evaluations.EvaluationEntity": {
+      "type": "object",
+      "properties": {
+        "startTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Status"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "Error message when evaluation job fails"
+        },
+        "inputs": {
+          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationInputs"
+        }
+      }
+    },
+    "v1.nlu.evaluations.ConfirmationStatus": {
+      "type": "string",
+      "description": "An enumeration indicating whether the user has explicitly confirmed or denied the entire intent/slot. Possible values: 'NONE', 'CONFIRMED', 'DENIED'.\n",
+      "enum": [
+        "NONE",
+        "CONFIRMED",
+        "DENIED"
+      ]
+    },
+    "v1.nlu.evaluations.Status": {
+      "type": "string",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "IN_PROGRESS",
+        "ERROR"
+      ]
+    },
+    "v1.nlu.evaluations.ResultsStatus": {
+      "type": "string",
+      "enum": [
+        "PASSED",
+        "FAILED"
+      ],
+      "default": "null"
+    },
+    "v1.nlu.evaluations.Evaluation": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationEntity"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "id of the job"
+            }
+          }
+        }
+      ]
+    },
+    "v1.nlu.evaluations.GetNLUEvaluationResponseLinks": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Results"
+        }
+      }
+    },
+    "v1.nlu.evaluations.TestCase": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.nlu.evaluations.ResultsStatus"
+        },
+        "inputs": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Inputs"
+        },
+        "actual": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Actual"
+        },
+        "expected": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.nlu.evaluations.Expected"
+          }
+        }
+      }
+    },
+    "v1.nlu.evaluations.PaginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string",
+          "description": "opaque token returned if there are more results for the given inputs than `maxResults` from the request."
+        }
+      }
+    },
+    "v1.nlu.evaluations.PagedResultsResponsePaginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string",
+          "description": "opaque token returned if there are more results for the given inputs than `maxResults` from the request."
+        },
+        "totalCount": {
+          "type": "string",
+          "description": "Total available results for the given query."
+        }
+      }
+    },
+    "v1.nlu.evaluations.Results": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string",
+          "description": "url to get the test case result details Example: /v1/skills/{skillId}/nluEvaluations/{evaluationId}/results\n"
+        }
+      }
+    },
+    "v1.nlu.evaluations.Inputs": {
+      "type": "object",
+      "properties": {
+        "utterance": {
+          "type": "string"
+        },
+        "referenceTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2018-10-25T23:50:02.135Z",
+          "description": "Datetime to use to base date operations on."
+        }
+      }
+    },
+    "v1.nlu.evaluations.Actual": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "intent": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Intent"
+        }
+      }
+    },
+    "v1.nlu.evaluations.Expected": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "intent": {
+          "$ref": "#/definitions/v1.nlu.evaluations.ExpectedIntent"
+        }
+      }
+    },
+    "v1.nlu.evaluations.Intent": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "confirmationStatus": {
+          "$ref": "#/definitions/v1.nlu.evaluations.ConfirmationStatus"
+        },
+        "slots": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1.nlu.evaluations.SlotsProps"
+          }
+        }
+      }
+    },
+    "v1.nlu.evaluations.ExpectedIntent": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "slots": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1.nlu.evaluations.ExpectedIntentSlotsProps"
+          }
+        }
+      }
+    },
+    "v1.nlu.evaluations.SlotsProps": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "confirmationStatus": {
+          "$ref": "#/definitions/v1.nlu.evaluations.ConfirmationStatus"
+        },
+        "resolutions": {
+          "$ref": "#/definitions/v1.nlu.evaluations.Resolutions"
+        }
+      }
+    },
+    "v1.nlu.evaluations.ExpectedIntentSlotsProps": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.nlu.evaluations.Resolutions": {
+      "type": "object",
+      "properties": {
+        "resolutionsPerAuthority": {
+          "type": "array",
+          "description": "An array of objects representing each possible authority for entity resolution. An authority represents the source for the data provided for the slot. For a custom slot type, the authority is the slot type you defined.\n",
+          "items": {
+            "$ref": "#/definitions/v1.nlu.evaluations.ResolutionsPerAuthority"
+          }
+        }
+      },
+      "description": "A resolutions object representing the results of resolving the words captured from the user's utterance.\n"
+    },
+    "v1.nlu.evaluations.ResolutionsPerAuthority": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string",
+            "description": "The name of the authority for the slot values. For custom slot types, this authority label incorporates your skill ID and the slot type name.\n"
+          },
+          "status": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "A code indicating the results of attempting to resolve the user utterance against the defined slot types. This can be one of the following:\nER_SUCCESS_MATCH: The spoken value matched a value or synonym explicitly defined in your custom slot type. ER_SUCCESS_NO_MATCH: The spoken value did not match any values or synonyms explicitly defined in your custom slot type. ER_ERROR_TIMEOUT: An error occurred due to a timeout. ER_ERROR_EXCEPTION: An error occurred due to an exception during processing.\n",
+                "enum": [
+                  "ER_SUCCESS_MATCH",
+                  "ER_SUCCESS_NO_MATCH",
+                  "ER_ERROR_TIMEOUT",
+                  "ER_ERROR_EXCEPTION"
+                ]
+              }
+            }
+          },
+          "values": {
+            "type": "array",
+            "description": "An array of resolved values for the slot.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The string for the resolved slot value."
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The unique ID defined for the resolved slot value. This is based on the IDs defined in the slot type definition.\n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "v1.nlu.evaluations.Links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/v1.Link"
+        },
+        "next": {
+          "$ref": "#/definitions/v1.Link"
+        }
+      },
+      "description": "Links for the API navigation."
+    },
+    "v1.nlu.annotationSets.CreateNLUAnnotationSetRequest": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string",
+          "description": "The locale of the NLU annotation set"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of NLU annotation set provided by customer"
+        }
+      }
+    },
+    "v1.nlu.annotationSets.CreateNLUAnnotationSetResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id used to retrieve the NLU annotation set."
+        }
+      }
+    },
+    "v1.nlu.annotationSets.ListNLUAnnotationSetsResponse": {
+      "type": "object",
+      "properties": {
+        "annotationSets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSet"
+          }
+        },
+        "paginationContext": {
+          "$ref": "#/definitions/v1.nlu.annotationSets.PaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.nlu.annotationSets.Links"
+        }
+      }
+    },
+    "v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of NLU annotation set provided by customer"
+        }
+      }
+    },
+    "v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest": {
+      "type": "object",
+      "example": {
+        "application/json": {
+          "data": [
+            {
+              "inputs": {
+                "utterance": "i want to travel from seattle",
+                "referenceTimestamp": "2018-10-25T23:50:02.135Z"
+              },
+              "expected": [
+                {
+                  "intent": {
+                    "name": "TravelIntent",
+                    "slots": {
+                      "fromCity": {
+                        "value": "seattle"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "text/csv": "utterance,referenceTimestamp,intent,slot[fromCity] i want to travel from seattle,2018-10-25T23:50:02.135Z,TravelIntent,seattle\n"
+      }
+    },
+    "v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSetEntity"
+        }
+      ]
+    },
+    "v1.nlu.annotationSets.AnnotationSetEntity": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the NLU annotation set"
+        },
+        "numberOfEntries": {
+          "type": "integer",
+          "description": "Number of entries which represents number of utterances in each NLU annotation set content"
+        },
+        "updatedTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2018-10-25T23:50:02.135Z",
+          "description": "The lastest updated timestamp for the NLU annotation set"
+        }
+      }
+    },
+    "v1.nlu.annotationSets.AnnotationSet": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSetEntity"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "annotationId": {
+              "type": "string",
+              "description": "Identifier of the NLU annotation set."
+            }
+          }
+        }
+      ]
+    },
+    "v1.nlu.annotationSets.PaginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string",
+          "description": "Opaque token returned if there are more results for the given inputs than `maxResults` from the request."
+        }
+      }
+    },
+    "v1.nlu.annotationSets.Links": {
+      "type": "object",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/v1.Link"
+        },
+        "next": {
+          "$ref": "#/definitions/v1.Link"
+        }
+      },
+      "description": "Links for the API navigation."
+    },
     "v2.skill.Invocation": {
       "type": "object",
       "properties": {
@@ -17822,6 +19456,36 @@
         },
         "error": {
           "$ref": "#/definitions/v2.Error"
+        }
+      }
+    },
+    "inline_response_400": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Human readable description of error."
+        },
+        "violations": {
+          "type": "array",
+          "description": "An array of violation messages.",
+          "items": {
+            "$ref": "#/definitions/v1.Error"
+          }
+        }
+      }
+    },
+    "inline_response_401": {
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error code that maps to an error message. Developers with different locales should be able to lookup the error description based on this code.\n"
+        },
+        "message": {
+          "type": "string",
+          "description": "Readable description of error."
         }
       }
     },
