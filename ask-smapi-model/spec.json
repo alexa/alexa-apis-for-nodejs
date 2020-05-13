@@ -4011,6 +4011,9 @@
         "x-operation-name": "requestFeedbackFromTestersV1"
       }
     },
+    "/v1/skills/{skillId}/stages/{stageV2}/blueprint/details": {},
+    "/v1/skills/{skillId}/stages/{stageV2}/blueprint/data/locales/{locale}": {},
+    "/v1/blueprints/{blueprintId}/versions/{blueprintVersion}/skills": {},
     "/v1/skills/{skillId}/certifications": {
       "get": {
         "tags": [
@@ -5654,6 +5657,237 @@
           }
         },
         "x-operation-name": "updateInteractionModelCatalogV1"
+      }
+    },
+    "/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}/versions/{version}/conflictDetectionJobStatus": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Retrieve conflict detection job status for skill.",
+        "description": "This API returns the job status of conflict detection job for a specified interaction model.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "description": "The locale for the model requested e.g. en-GB, en-US, de-DE.",
+            "required": true,
+            "type": "string",
+            "format": "languager-region; same as BCP-47 language tag format"
+          },
+          {
+            "name": "stage",
+            "in": "path",
+            "description": "Stage of the interaction model.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "development"
+            ]
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Version of interaction model. Use \"~current\" to get the model of the current version.",
+            "required": true,
+            "type": "string",
+            "pattern": "^~current|[0-9]+$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get conflict detection results sucessfully.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.GetConflictDetectionJobStatusResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "returned content type, only application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "There is no catalog defined for the catalogId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getConflictDetectionJobStatusForInteractionModelV1"
+      }
+    },
+    "/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}/versions/{version}/conflicts": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Retrieve conflict detection results for a specified interaction model.",
+        "description": "This is a paginated API that retrieves results of conflict detection job for a specified interaction model.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "in": "path",
+            "description": "The locale for the model requested e.g. en-GB, en-US, de-DE.",
+            "required": true,
+            "type": "string",
+            "format": "languager-region; same as BCP-47 language tag format"
+          },
+          {
+            "name": "stage",
+            "in": "path",
+            "description": "Stage of the interaction model.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "development"
+            ]
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Version of interaction model. Use \"~current\" to get the model of the current version.",
+            "required": true,
+            "type": "string",
+            "pattern": "^~current|[0-9]+$"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.",
+            "required": false,
+            "type": "number",
+            "default": 100,
+            "maximum": 1000,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get conflict detection results sucessfully.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.GetConflictsResponse"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "returned content type, only application/json supported"
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "There is no catalog defined for the catalogId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getConflictsForInteractionModelV1"
       }
     },
     "/v1/skills/api/custom/interactionModel/catalogs/{catalogId}/versions": {
@@ -8720,7 +8954,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "Returned SHREYAS content type only 'application/json' supported."
+                "description": "Returned content type, only application/json supported."
               }
             }
           },
@@ -8774,6 +9008,74 @@
           }
         },
         "x-operation-name": "getSkillStatusV1"
+      }
+    },
+    "/v1/skills/{skillId}/credentials": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Get the client credentials for the skill.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response contains the skill credentials.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.SkillCredentials"
+            },
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, only application/json supported."
+              }
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            },
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getSkillCredentialsV1"
       }
     },
     "/v1/skills/{skillId}/sslCertificateSets/~latest": {
@@ -9038,7 +9340,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "Returned content type, only 'application/json' supported."
+                "description": "Returned content type, only application/json supported."
               }
             }
           },
@@ -9196,7 +9498,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "Returned content type, only 'application/json' supported"
+                "description": "Returned content type, only application/json supported"
               }
             }
           },
@@ -9436,7 +9738,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "Returned content type, only 'application/json' supported."
+                "description": "Returned content type, only application/json supported."
               }
             }
           },
@@ -9496,7 +9798,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "Returned content type, only 'application/json' supported."
+                "description": "Returned content type, only application/json supported."
               }
             }
           },
@@ -9764,7 +10066,7 @@
           "200": {
             "description": "Evaluations are returned.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.evaluations.ListNLUEvaluationsResponse"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.ListNLUEvaluationsResponse"
             },
             "headers": {
               "Content-Type": {
@@ -9831,7 +10133,7 @@
             "description": "Payload sent to the evaluate NLU API.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1.nlu.evaluations.EvaluateNLURequest"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.EvaluateNLURequest"
             }
           },
           {
@@ -9846,7 +10148,7 @@
           "200": {
             "description": "Evaluation has successfully begun.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.evaluations.EvaluateResponse"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.EvaluateResponse"
             },
             "headers": {
               "Content-Type": {
@@ -9932,7 +10234,7 @@
           "200": {
             "description": "Evaluation exists and its status is queryable.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResponse"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.GetNLUEvaluationResponse"
             },
             "headers": {
               "Content-Type": {
@@ -10067,7 +10369,7 @@
           "200": {
             "description": "Evaluation exists and its status is queryable.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResultsResponse"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.GetNLUEvaluationResultsResponse"
             },
             "headers": {
               "Content-Type": {
@@ -10166,7 +10468,7 @@
           "200": {
             "description": "NLU annotation sets are returned.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.ListNLUAnnotationSetsResponse"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.ListNLUAnnotationSetsResponse"
             },
             "headers": {
               "Content-Type": {
@@ -10240,7 +10542,7 @@
             "description": "Payload sent to the create NLU annotation set API.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.CreateNLUAnnotationSetRequest"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest"
             }
           }
         ],
@@ -10248,7 +10550,7 @@
           "201": {
             "description": "NLU annotation set created successfully.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.CreateNLUAnnotationSetResponse"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.CreateNLUAnnotationSetResponse"
             },
             "headers": {
               "Content-Type": {
@@ -10343,7 +10645,7 @@
           "200": {
             "description": "The NLU annotation set exists.",
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse"
             },
             "headers": {
               "Content-Type": {
@@ -10424,7 +10726,7 @@
             "description": "Payload sent to the update NLU annotation set properties API.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest"
             }
           }
         ],
@@ -10714,7 +11016,7 @@
             "description": "Payload sent to the update NLU annotation set API.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest"
+              "$ref": "#/definitions/v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest"
             }
           }
         ],
@@ -13288,8 +13590,8 @@
       "type": "string",
       "description": "Hosted skill lambda runtime",
       "enum": [
-        "nodejs10.x",
-        "python3.7"
+        "NODE_10_X",
+        "PYTHON_3_7"
       ]
     },
     "v1.skill.AlexaHosted.HostedSkillPermissionType": {
@@ -14779,6 +15081,134 @@
         }
       },
       "description": "Catalog request definitions."
+    },
+    "v1.skill.interactionModel.conflictDetection.GetConflictDetectionJobStatusResponse": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictDetectionJobStatus"
+        },
+        "totalConflicts": {
+          "type": "number",
+          "format": "long",
+          "description": "The total number of conflicts within skill model."
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.ConflictDetectionJobStatus": {
+      "type": "string",
+      "description": "The status of conflict detection job.",
+      "enum": [
+        "IN_PROGRESS",
+        "COMPLETED",
+        "FAILED"
+      ]
+    },
+    "v1.skill.interactionModel.conflictDetection.GetConflictsResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.PagedResponse"
+        }
+      ]
+    },
+    "v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult": {
+      "type": "object",
+      "required": [
+        "conflictingUtterance",
+        "conflicts"
+      ],
+      "properties": {
+        "conflictingUtterance": {
+          "type": "string",
+          "description": "Utterance resolved from sample utterance that causes conflicts among different intents."
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictResult"
+          }
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.ConflictResult": {
+      "type": "object",
+      "required": [
+        "intent",
+        "sampleUtterance"
+      ],
+      "properties": {
+        "sampleUtterance": {
+          "type": "string",
+          "description": "Sample utterance provided by 3P developers for intents."
+        },
+        "intent": {
+          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntent"
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.ConflictIntent": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Conflict intent name"
+        },
+        "slots": {
+          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntentSlots"
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.ConflictIntentSlots": {
+      "type": "object",
+      "description": "List of conflict intent slots",
+      "additionalProperties": {
+        "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntentSlot"
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.ConflictIntentSlot": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.PagedResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.PaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.Links"
+        }
+      }
+    },
+    "v1.skill.interactionModel.conflictDetection.PaginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string",
+          "description": "A token returned if there are more results for the given inputs than `maxResults` from the request. It should also be used in the next request to retrieve more results."
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total avaliable results for the given query."
+        }
+      }
     },
     "v1.skill.interactionModel.version.catalogUpdate": {
       "type": "object",
@@ -17762,6 +18192,25 @@
         "SUCCEEDED"
       ]
     },
+    "v1.skill.SkillCredentials": {
+      "type": "object",
+      "properties": {},
+      "description": "Structure for skill credentials response."
+    },
+    "v1.skill.SkillMessagingCredentials": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "The client id for the security profile."
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "The client secret for the security profile."
+        }
+      },
+      "description": "Defines the structure for skill messaging credentials."
+    },
     "v1.skill.SubmitSkillForCertificationRequest": {
       "type": "object",
       "required": [
@@ -18536,7 +18985,7 @@
         }
       }
     },
-    "v1.nlu.evaluations.EvaluateNLURequest": {
+    "v1.skill.nlu.evaluations.EvaluateNLURequest": {
       "type": "object",
       "required": [
         "locale",
@@ -18552,11 +19001,11 @@
           "type": "string"
         },
         "source": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Source"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Source"
         }
       }
     },
-    "v1.nlu.evaluations.EvaluateResponse": {
+    "v1.skill.nlu.evaluations.EvaluateResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -18565,10 +19014,10 @@
         }
       }
     },
-    "v1.nlu.evaluations.ListNLUEvaluationsResponse": {
+    "v1.skill.nlu.evaluations.ListNLUEvaluationsResponse": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.evaluations.PagedResponse"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.PagedResponse"
         },
         {
           "type": "object",
@@ -18576,7 +19025,7 @@
             "evaluations": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/v1.nlu.evaluations.Evaluation"
+                "$ref": "#/definitions/v1.skill.nlu.evaluations.Evaluation"
               }
             }
           }
@@ -18584,25 +19033,25 @@
       ],
       "description": "response body for a list evaluation API"
     },
-    "v1.nlu.evaluations.GetNLUEvaluationResponse": {
+    "v1.skill.nlu.evaluations.GetNLUEvaluationResponse": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationEntity"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.EvaluationEntity"
         },
         {
           "type": "object",
           "properties": {
             "_links": {
-              "$ref": "#/definitions/v1.nlu.evaluations.GetNLUEvaluationResponseLinks"
+              "$ref": "#/definitions/v1.skill.nlu.evaluations.GetNLUEvaluationResponseLinks"
             }
           }
         }
       ]
     },
-    "v1.nlu.evaluations.GetNLUEvaluationResultsResponse": {
+    "v1.skill.nlu.evaluations.GetNLUEvaluationResultsResponse": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.evaluations.PagedResultsResponse"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.PagedResultsResponse"
         },
         {
           "type": "object",
@@ -18614,14 +19063,14 @@
             "testCases": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/v1.nlu.evaluations.TestCase"
+                "$ref": "#/definitions/v1.skill.nlu.evaluations.TestCase"
               }
             }
           }
         }
       ]
     },
-    "v1.nlu.evaluations.EvaluationInputs": {
+    "v1.skill.nlu.evaluations.EvaluationInputs": {
       "type": "object",
       "properties": {
         "locale": {
@@ -18631,11 +19080,11 @@
           "type": "string"
         },
         "source": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Source"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Source"
         }
       }
     },
-    "v1.nlu.evaluations.Source": {
+    "v1.skill.nlu.evaluations.Source": {
       "properties": {
         "annotationId": {
           "type": "string",
@@ -18644,29 +19093,29 @@
       },
       "description": "Use Annotation Set as evaluation source\n"
     },
-    "v1.nlu.evaluations.PagedResponse": {
+    "v1.skill.nlu.evaluations.PagedResponse": {
       "type": "object",
       "properties": {
         "paginationContext": {
-          "$ref": "#/definitions/v1.nlu.evaluations.PaginationContext"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.PaginationContext"
         },
         "_links": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Links"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Links"
         }
       }
     },
-    "v1.nlu.evaluations.PagedResultsResponse": {
+    "v1.skill.nlu.evaluations.PagedResultsResponse": {
       "type": "object",
       "properties": {
         "paginationContext": {
-          "$ref": "#/definitions/v1.nlu.evaluations.PagedResultsResponsePaginationContext"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.PagedResultsResponsePaginationContext"
         },
         "_links": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Links"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Links"
         }
       }
     },
-    "v1.nlu.evaluations.EvaluationEntity": {
+    "v1.skill.nlu.evaluations.EvaluationEntity": {
       "type": "object",
       "properties": {
         "startTimestamp": {
@@ -18678,18 +19127,18 @@
           "format": "date-time"
         },
         "status": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Status"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Status"
         },
         "errorMessage": {
           "type": "string",
           "description": "Error message when evaluation job fails"
         },
         "inputs": {
-          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationInputs"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.EvaluationInputs"
         }
       }
     },
-    "v1.nlu.evaluations.ConfirmationStatus": {
+    "v1.skill.nlu.evaluations.ConfirmationStatus": {
       "type": "string",
       "description": "An enumeration indicating whether the user has explicitly confirmed or denied the entire intent/slot. Possible values: 'NONE', 'CONFIRMED', 'DENIED'.\n",
       "enum": [
@@ -18698,7 +19147,7 @@
         "DENIED"
       ]
     },
-    "v1.nlu.evaluations.Status": {
+    "v1.skill.nlu.evaluations.Status": {
       "type": "string",
       "enum": [
         "PASSED",
@@ -18707,7 +19156,7 @@
         "ERROR"
       ]
     },
-    "v1.nlu.evaluations.ResultsStatus": {
+    "v1.skill.nlu.evaluations.ResultsStatus": {
       "type": "string",
       "enum": [
         "PASSED",
@@ -18715,10 +19164,10 @@
       ],
       "default": "null"
     },
-    "v1.nlu.evaluations.Evaluation": {
+    "v1.skill.nlu.evaluations.Evaluation": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.evaluations.EvaluationEntity"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.EvaluationEntity"
         },
         {
           "type": "object",
@@ -18731,35 +19180,35 @@
         }
       ]
     },
-    "v1.nlu.evaluations.GetNLUEvaluationResponseLinks": {
+    "v1.skill.nlu.evaluations.GetNLUEvaluationResponseLinks": {
       "type": "object",
       "properties": {
         "results": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Results"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Results"
         }
       }
     },
-    "v1.nlu.evaluations.TestCase": {
+    "v1.skill.nlu.evaluations.TestCase": {
       "type": "object",
       "properties": {
         "status": {
-          "$ref": "#/definitions/v1.nlu.evaluations.ResultsStatus"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.ResultsStatus"
         },
         "inputs": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Inputs"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Inputs"
         },
         "actual": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Actual"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Actual"
         },
         "expected": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1.nlu.evaluations.Expected"
+            "$ref": "#/definitions/v1.skill.nlu.evaluations.Expected"
           }
         }
       }
     },
-    "v1.nlu.evaluations.PaginationContext": {
+    "v1.skill.nlu.evaluations.PaginationContext": {
       "type": "object",
       "properties": {
         "nextToken": {
@@ -18768,7 +19217,7 @@
         }
       }
     },
-    "v1.nlu.evaluations.PagedResultsResponsePaginationContext": {
+    "v1.skill.nlu.evaluations.PagedResultsResponsePaginationContext": {
       "type": "object",
       "properties": {
         "nextToken": {
@@ -18781,7 +19230,7 @@
         }
       }
     },
-    "v1.nlu.evaluations.Results": {
+    "v1.skill.nlu.evaluations.Results": {
       "type": "object",
       "properties": {
         "href": {
@@ -18790,7 +19239,7 @@
         }
       }
     },
-    "v1.nlu.evaluations.Inputs": {
+    "v1.skill.nlu.evaluations.Inputs": {
       "type": "object",
       "properties": {
         "utterance": {
@@ -18804,46 +19253,46 @@
         }
       }
     },
-    "v1.nlu.evaluations.Actual": {
+    "v1.skill.nlu.evaluations.Actual": {
       "type": "object",
       "properties": {
         "domain": {
           "type": "string"
         },
         "intent": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Intent"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Intent"
         }
       }
     },
-    "v1.nlu.evaluations.Expected": {
+    "v1.skill.nlu.evaluations.Expected": {
       "type": "object",
       "properties": {
         "domain": {
           "type": "string"
         },
         "intent": {
-          "$ref": "#/definitions/v1.nlu.evaluations.ExpectedIntent"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.ExpectedIntent"
         }
       }
     },
-    "v1.nlu.evaluations.Intent": {
+    "v1.skill.nlu.evaluations.Intent": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         },
         "confirmationStatus": {
-          "$ref": "#/definitions/v1.nlu.evaluations.ConfirmationStatus"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.ConfirmationStatus"
         },
         "slots": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/v1.nlu.evaluations.SlotsProps"
+            "$ref": "#/definitions/v1.skill.nlu.evaluations.SlotsProps"
           }
         }
       }
     },
-    "v1.nlu.evaluations.ExpectedIntent": {
+    "v1.skill.nlu.evaluations.ExpectedIntent": {
       "type": "object",
       "properties": {
         "name": {
@@ -18852,12 +19301,12 @@
         "slots": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/v1.nlu.evaluations.ExpectedIntentSlotsProps"
+            "$ref": "#/definitions/v1.skill.nlu.evaluations.ExpectedIntentSlotsProps"
           }
         }
       }
     },
-    "v1.nlu.evaluations.SlotsProps": {
+    "v1.skill.nlu.evaluations.SlotsProps": {
       "type": "object",
       "properties": {
         "name": {
@@ -18867,14 +19316,14 @@
           "type": "string"
         },
         "confirmationStatus": {
-          "$ref": "#/definitions/v1.nlu.evaluations.ConfirmationStatus"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.ConfirmationStatus"
         },
         "resolutions": {
-          "$ref": "#/definitions/v1.nlu.evaluations.Resolutions"
+          "$ref": "#/definitions/v1.skill.nlu.evaluations.Resolutions"
         }
       }
     },
-    "v1.nlu.evaluations.ExpectedIntentSlotsProps": {
+    "v1.skill.nlu.evaluations.ExpectedIntentSlotsProps": {
       "type": "object",
       "properties": {
         "value": {
@@ -18882,20 +19331,20 @@
         }
       }
     },
-    "v1.nlu.evaluations.Resolutions": {
+    "v1.skill.nlu.evaluations.Resolutions": {
       "type": "object",
       "properties": {
         "resolutionsPerAuthority": {
           "type": "array",
           "description": "An array of objects representing each possible authority for entity resolution. An authority represents the source for the data provided for the slot. For a custom slot type, the authority is the slot type you defined.\n",
           "items": {
-            "$ref": "#/definitions/v1.nlu.evaluations.ResolutionsPerAuthority"
+            "$ref": "#/definitions/v1.skill.nlu.evaluations.ResolutionsPerAuthority"
           }
         }
       },
       "description": "A resolutions object representing the results of resolving the words captured from the user's utterance.\n"
     },
-    "v1.nlu.evaluations.ResolutionsPerAuthority": {
+    "v1.skill.nlu.evaluations.ResolutionsPerAuthority": {
       "type": "object",
       "additionalProperties": {
         "type": "object",
@@ -18939,7 +19388,7 @@
         }
       }
     },
-    "v1.nlu.evaluations.Links": {
+    "v1.skill.nlu.evaluations.Links": {
       "type": "object",
       "properties": {
         "self": {
@@ -18951,7 +19400,7 @@
       },
       "description": "Links for the API navigation."
     },
-    "v1.nlu.annotationSets.CreateNLUAnnotationSetRequest": {
+    "v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest": {
       "type": "object",
       "properties": {
         "locale": {
@@ -18964,7 +19413,7 @@
         }
       }
     },
-    "v1.nlu.annotationSets.CreateNLUAnnotationSetResponse": {
+    "v1.skill.nlu.annotationSets.CreateNLUAnnotationSetResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -18973,24 +19422,24 @@
         }
       }
     },
-    "v1.nlu.annotationSets.ListNLUAnnotationSetsResponse": {
+    "v1.skill.nlu.annotationSets.ListNLUAnnotationSetsResponse": {
       "type": "object",
       "properties": {
         "annotationSets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSet"
+            "$ref": "#/definitions/v1.skill.nlu.annotationSets.AnnotationSet"
           }
         },
         "paginationContext": {
-          "$ref": "#/definitions/v1.nlu.annotationSets.PaginationContext"
+          "$ref": "#/definitions/v1.skill.nlu.annotationSets.PaginationContext"
         },
         "_links": {
-          "$ref": "#/definitions/v1.nlu.annotationSets.Links"
+          "$ref": "#/definitions/v1.skill.nlu.annotationSets.Links"
         }
       }
     },
-    "v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest": {
+    "v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest": {
       "type": "object",
       "properties": {
         "name": {
@@ -18999,7 +19448,7 @@
         }
       }
     },
-    "v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest": {
+    "v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest": {
       "type": "object",
       "example": {
         "application/json": {
@@ -19027,14 +19476,14 @@
         "text/csv": "utterance,referenceTimestamp,intent,slot[fromCity] i want to travel from seattle,2018-10-25T23:50:02.135Z,TravelIntent,seattle\n"
       }
     },
-    "v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse": {
+    "v1.skill.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSetEntity"
+          "$ref": "#/definitions/v1.skill.nlu.annotationSets.AnnotationSetEntity"
         }
       ]
     },
-    "v1.nlu.annotationSets.AnnotationSetEntity": {
+    "v1.skill.nlu.annotationSets.AnnotationSetEntity": {
       "type": "object",
       "properties": {
         "locale": {
@@ -19056,10 +19505,10 @@
         }
       }
     },
-    "v1.nlu.annotationSets.AnnotationSet": {
+    "v1.skill.nlu.annotationSets.AnnotationSet": {
       "allOf": [
         {
-          "$ref": "#/definitions/v1.nlu.annotationSets.AnnotationSetEntity"
+          "$ref": "#/definitions/v1.skill.nlu.annotationSets.AnnotationSetEntity"
         },
         {
           "type": "object",
@@ -19072,7 +19521,7 @@
         }
       ]
     },
-    "v1.nlu.annotationSets.PaginationContext": {
+    "v1.skill.nlu.annotationSets.PaginationContext": {
       "type": "object",
       "properties": {
         "nextToken": {
@@ -19081,7 +19530,7 @@
         }
       }
     },
-    "v1.nlu.annotationSets.Links": {
+    "v1.skill.nlu.annotationSets.Links": {
       "type": "object",
       "properties": {
         "self": {

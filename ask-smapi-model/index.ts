@@ -1227,359 +1227,6 @@ export namespace v1.isp {
     }
 }
 
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface AnnotationSetEntity {
-        'locale'?: string;
-        'name'?: string;
-        'numberOfEntries'?: number;
-        'updatedTimestamp'?: string;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface CreateNLUAnnotationSetRequest {
-        'locale'?: string;
-        'name'?: string;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface CreateNLUAnnotationSetResponse {
-        'id'?: string;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     * Links for the API navigation.
-     * @interface
-     */
-    export interface Links {
-        'self'?: v1.Link;
-        'next'?: v1.Link;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface ListNLUAnnotationSetsResponse {
-        'annotationSets'?: Array<v1.nlu.annotationSets.AnnotationSet>;
-        'paginationContext'?: v1.nlu.annotationSets.PaginationContext;
-        '_links'?: v1.nlu.annotationSets.Links;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface PaginationContext {
-        'nextToken'?: string;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface UpdateNLUAnnotationSetAnnotationsRequest {
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface UpdateNLUAnnotationSetPropertiesRequest {
-        'name'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Actual {
-        'domain'?: string;
-        'intent'?: v1.nlu.evaluations.Intent;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     * An enumeration indicating whether the user has explicitly confirmed or denied the entire intent/slot. Possible values: 'NONE', 'CONFIRMED', 'DENIED'. 
-     * @enum
-     */
-    export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface EvaluateNLURequest {
-        'stage': string;
-        'locale': string;
-        'source': v1.nlu.evaluations.Source;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface EvaluateResponse {
-        'id'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface EvaluationEntity {
-        'startTimestamp'?: string;
-        'endTimestamp'?: string;
-        'status'?: v1.nlu.evaluations.Status;
-        'errorMessage'?: string;
-        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface EvaluationInputs {
-        'locale'?: string;
-        'stage'?: string;
-        'source'?: v1.nlu.evaluations.Source;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Expected {
-        'domain'?: string;
-        'intent'?: v1.nlu.evaluations.ExpectedIntent;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface ExpectedIntent {
-        'name'?: string;
-        'slots'?: { [key: string]: v1.nlu.evaluations.ExpectedIntentSlotsProps; };
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface ExpectedIntentSlotsProps {
-        'value'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface GetNLUEvaluationResponseLinks {
-        'results'?: v1.nlu.evaluations.Results;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Inputs {
-        'utterance'?: string;
-        'referenceTimestamp'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Intent {
-        'name'?: string;
-        'confirmationStatus'?: v1.nlu.evaluations.ConfirmationStatus;
-        'slots'?: { [key: string]: v1.nlu.evaluations.SlotsProps; };
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     * Links for the API navigation.
-     * @interface
-     */
-    export interface Links {
-        'self'?: v1.Link;
-        'next'?: v1.Link;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface PagedResponse {
-        'paginationContext'?: v1.nlu.evaluations.PaginationContext;
-        '_links'?: v1.nlu.evaluations.Links;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface PagedResultsResponse {
-        'paginationContext'?: v1.nlu.evaluations.PagedResultsResponsePaginationContext;
-        '_links'?: v1.nlu.evaluations.Links;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface PagedResultsResponsePaginationContext {
-        'nextToken'?: string;
-        'totalCount'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface PaginationContext {
-        'nextToken'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     * A resolutions object representing the results of resolving the words captured from the user's utterance. 
-     * @interface
-     */
-    export interface Resolutions {
-        'resolutionsPerAuthority'?: Array<v1.nlu.evaluations.ResolutionsPerAuthority>;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface ResolutionsPerAuthority {
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Results {
-        'href'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @enum
-     */
-    export type ResultsStatus = 'PASSED' | 'FAILED';
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface SlotsProps {
-        'name'?: string;
-        'value'?: string;
-        'confirmationStatus'?: v1.nlu.evaluations.ConfirmationStatus;
-        'resolutions'?: v1.nlu.evaluations.Resolutions;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     * Use Annotation Set as evaluation source 
-     * @interface
-     */
-    export interface Source {
-        'annotationId'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @enum
-     */
-    export type Status = 'PASSED' | 'FAILED' | 'IN_PROGRESS' | 'ERROR';
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface TestCase {
-        'status'?: v1.nlu.evaluations.ResultsStatus;
-        'inputs'?: v1.nlu.evaluations.Inputs;
-        'actual'?: v1.nlu.evaluations.Actual;
-        'expected'?: Array<v1.nlu.evaluations.Expected>;
-    }
-}
-
 export namespace v1.skill {
     /**
      * Action of a resource.
@@ -1711,7 +1358,7 @@ export namespace v1.skill.AlexaHosted {
      * Hosted skill lambda runtime
      * @enum
      */
-    export type HostedSkillRuntime = 'nodejs10.x' | 'python3.7';
+    export type HostedSkillRuntime = 'NODE_10_X' | 'PYTHON_3_7';
 }
 
 export namespace v1.skill.AlexaHosted {
@@ -2831,6 +2478,15 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Structure for skill credentials response.
+     * @interface
+     */
+    export interface SkillCredentials {
+    }
+}
+
+export namespace v1.skill {
+    /**
      * Defines the structure for interaction model build status.
      * @interface
      */
@@ -2838,6 +2494,17 @@ export namespace v1.skill {
         'lastUpdateRequest'?: v1.skill.InteractionModelLastUpdateRequest;
         'eTag'?: string;
         'version'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Defines the structure for skill messaging credentials.
+     * @interface
+     */
+    export interface SkillMessagingCredentials {
+        'clientId'?: string;
+        'clientSecret'?: string;
     }
 }
 
@@ -3889,6 +3556,100 @@ export namespace v1.skill.interactionModel.catalog {
     }
 }
 
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     * The status of conflict detection job.
+     * @enum
+     */
+    export type ConflictDetectionJobStatus = 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface ConflictIntent {
+        'name': string;
+        'slots'?: v1.skill.interactionModel.conflictDetection.ConflictIntentSlots;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface ConflictIntentSlot {
+        'value'?: string;
+        'type': string;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     * List of conflict intent slots
+     * @interface
+     */
+    export interface ConflictIntentSlots {
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface ConflictResult {
+        'sampleUtterance': string;
+        'intent': v1.skill.interactionModel.conflictDetection.ConflictIntent;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface GetConflictDetectionJobStatusResponse {
+        'status': v1.skill.interactionModel.conflictDetection.ConflictDetectionJobStatus;
+        'totalConflicts'?: number;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface GetConflictsResponseResult {
+        'conflictingUtterance': string;
+        'conflicts': Array<v1.skill.interactionModel.conflictDetection.ConflictResult>;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResponse {
+        'paginationContext'?: v1.skill.interactionModel.conflictDetection.PaginationContext;
+        '_links'?: v1.Links;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+        'totalCount'?: number;
+    }
+}
+
 export namespace v1.skill.interactionModel {
     /**
      * Define the language model.
@@ -4321,6 +4082,359 @@ export namespace v1.skill.metrics {
      * @enum
      */
     export type StageForMetric = 'live' | 'development';
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSetEntity {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateNLUAnnotationSetRequest {
+        'locale'?: string;
+        'name'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateNLUAnnotationSetResponse {
+        'id'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     * Links for the API navigation.
+     * @interface
+     */
+    export interface Links {
+        'self'?: v1.Link;
+        'next'?: v1.Link;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface ListNLUAnnotationSetsResponse {
+        'annotationSets'?: Array<v1.skill.nlu.annotationSets.AnnotationSet>;
+        'paginationContext'?: v1.skill.nlu.annotationSets.PaginationContext;
+        '_links'?: v1.skill.nlu.annotationSets.Links;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateNLUAnnotationSetAnnotationsRequest {
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateNLUAnnotationSetPropertiesRequest {
+        'name'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Actual {
+        'domain'?: string;
+        'intent'?: v1.skill.nlu.evaluations.Intent;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * An enumeration indicating whether the user has explicitly confirmed or denied the entire intent/slot. Possible values: 'NONE', 'CONFIRMED', 'DENIED'. 
+     * @enum
+     */
+    export type ConfirmationStatus = 'NONE' | 'CONFIRMED' | 'DENIED';
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateNLURequest {
+        'stage': string;
+        'locale': string;
+        'source': v1.skill.nlu.evaluations.Source;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateResponse {
+        'id'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationEntity {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.skill.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.skill.nlu.evaluations.EvaluationInputs;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationInputs {
+        'locale'?: string;
+        'stage'?: string;
+        'source'?: v1.skill.nlu.evaluations.Source;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Expected {
+        'domain'?: string;
+        'intent'?: v1.skill.nlu.evaluations.ExpectedIntent;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ExpectedIntent {
+        'name'?: string;
+        'slots'?: { [key: string]: v1.skill.nlu.evaluations.ExpectedIntentSlotsProps; };
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ExpectedIntentSlotsProps {
+        'value'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResponseLinks {
+        'results'?: v1.skill.nlu.evaluations.Results;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Inputs {
+        'utterance'?: string;
+        'referenceTimestamp'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Intent {
+        'name'?: string;
+        'confirmationStatus'?: v1.skill.nlu.evaluations.ConfirmationStatus;
+        'slots'?: { [key: string]: v1.skill.nlu.evaluations.SlotsProps; };
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * Links for the API navigation.
+     * @interface
+     */
+    export interface Links {
+        'self'?: v1.Link;
+        'next'?: v1.Link;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResponse {
+        'paginationContext'?: v1.skill.nlu.evaluations.PaginationContext;
+        '_links'?: v1.skill.nlu.evaluations.Links;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResultsResponse {
+        'paginationContext'?: v1.skill.nlu.evaluations.PagedResultsResponsePaginationContext;
+        '_links'?: v1.skill.nlu.evaluations.Links;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResultsResponsePaginationContext {
+        'nextToken'?: string;
+        'totalCount'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * A resolutions object representing the results of resolving the words captured from the user's utterance. 
+     * @interface
+     */
+    export interface Resolutions {
+        'resolutionsPerAuthority'?: Array<v1.skill.nlu.evaluations.ResolutionsPerAuthority>;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResolutionsPerAuthority {
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Results {
+        'href'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @enum
+     */
+    export type ResultsStatus = 'PASSED' | 'FAILED';
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface SlotsProps {
+        'name'?: string;
+        'value'?: string;
+        'confirmationStatus'?: v1.skill.nlu.evaluations.ConfirmationStatus;
+        'resolutions'?: v1.skill.nlu.evaluations.Resolutions;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * Use Annotation Set as evaluation source 
+     * @interface
+     */
+    export interface Source {
+        'annotationId'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @enum
+     */
+    export type Status = 'PASSED' | 'FAILED' | 'IN_PROGRESS' | 'ERROR';
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface TestCase {
+        'status'?: v1.skill.nlu.evaluations.ResultsStatus;
+        'inputs'?: v1.skill.nlu.evaluations.Inputs;
+        'actual'?: v1.skill.nlu.evaluations.Actual;
+        'expected'?: Array<v1.skill.nlu.evaluations.Expected>;
+    }
 }
 
 export namespace v1.skill.simulations {
@@ -5079,88 +5193,6 @@ export namespace v1.catalog.upload {
     }
 }
 
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface AnnotationSet {
-        'locale'?: string;
-        'name'?: string;
-        'numberOfEntries'?: number;
-        'updatedTimestamp'?: string;
-        'annotationId'?: string;
-    }
-}
-
-export namespace v1.nlu.annotationSets {
-    /**
-     *
-     * @interface
-     */
-    export interface GetNLUAnnotationSetPropertiesResponse {
-        'locale'?: string;
-        'name'?: string;
-        'numberOfEntries'?: number;
-        'updatedTimestamp'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface Evaluation {
-        'startTimestamp'?: string;
-        'endTimestamp'?: string;
-        'status'?: v1.nlu.evaluations.Status;
-        'errorMessage'?: string;
-        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
-        'id'?: string;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface GetNLUEvaluationResponse {
-        'startTimestamp'?: string;
-        'endTimestamp'?: string;
-        'status'?: v1.nlu.evaluations.Status;
-        'errorMessage'?: string;
-        'inputs'?: v1.nlu.evaluations.EvaluationInputs;
-        '_links'?: v1.nlu.evaluations.GetNLUEvaluationResponseLinks;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     *
-     * @interface
-     */
-    export interface GetNLUEvaluationResultsResponse {
-        'paginationContext'?: v1.nlu.evaluations.PagedResultsResponsePaginationContext;
-        '_links'?: v1.nlu.evaluations.Links;
-        'totalFailed'?: number;
-        'testCases'?: Array<v1.nlu.evaluations.TestCase>;
-    }
-}
-
-export namespace v1.nlu.evaluations {
-    /**
-     * response body for a list evaluation API
-     * @interface
-     */
-    export interface ListNLUEvaluationsResponse {
-        'paginationContext'?: v1.nlu.evaluations.PaginationContext;
-        '_links'?: v1.nlu.evaluations.Links;
-        'evaluations'?: Array<v1.nlu.evaluations.Evaluation>;
-    }
-}
-
 export namespace v1.skill.Manifest {
     /**
      * Used to declare that the skill uses the Alexa.Presentation.APL interface.
@@ -5384,6 +5416,99 @@ export namespace v1.skill.interactionModel {
         'type' : 'isNotInSet';
         'prompt': string;
         'values': Array<string>;
+    }
+}
+
+export namespace v1.skill.interactionModel.conflictDetection {
+    /**
+     *
+     * @interface
+     */
+    export interface GetConflictsResponse {
+        'paginationContext'?: v1.skill.interactionModel.conflictDetection.PaginationContext;
+        '_links'?: v1.Links;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSet {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+        'annotationId'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUAnnotationSetPropertiesResponse {
+        'locale'?: string;
+        'name'?: string;
+        'numberOfEntries'?: number;
+        'updatedTimestamp'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Evaluation {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.skill.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.skill.nlu.evaluations.EvaluationInputs;
+        'id'?: string;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResponse {
+        'startTimestamp'?: string;
+        'endTimestamp'?: string;
+        'status'?: v1.skill.nlu.evaluations.Status;
+        'errorMessage'?: string;
+        'inputs'?: v1.skill.nlu.evaluations.EvaluationInputs;
+        '_links'?: v1.skill.nlu.evaluations.GetNLUEvaluationResponseLinks;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetNLUEvaluationResultsResponse {
+        'paginationContext'?: v1.skill.nlu.evaluations.PagedResultsResponsePaginationContext;
+        '_links'?: v1.skill.nlu.evaluations.Links;
+        'totalFailed'?: number;
+        'testCases'?: Array<v1.skill.nlu.evaluations.TestCase>;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * response body for a list evaluation API
+     * @interface
+     */
+    export interface ListNLUEvaluationsResponse {
+        'paginationContext'?: v1.skill.nlu.evaluations.PaginationContext;
+        '_links'?: v1.skill.nlu.evaluations.Links;
+        'evaluations'?: Array<v1.skill.nlu.evaluations.Evaluation>;
     }
 }
 
@@ -9288,6 +9413,51 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          */
+        async callGetSkillCredentialsV1(skillId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSkillCredentialsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/credentials";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Response contains the skill credentials.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         */
+        async getSkillCredentialsV1(skillId : string) : Promise<v1.skill.SkillCredentials> {
+                const apiResponse: ApiResponse = await this.callGetSkillCredentialsV1(skillId);
+                return apiResponse.body as v1.skill.SkillCredentials;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         */
         async callDeleteSkillV1(skillId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callDeleteSkillV1';
             // verify required parameter 'skillId' is not null or undefined
@@ -9672,9 +9842,9 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} annotationId Identifier of the NLU annotation set.
          * @param {string} contentType Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for POST calls with a json/csv body. 
-         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
+         * @param {v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
          */
-        async callUpdateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<ApiResponse> {
+        async callUpdateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callUpdateAnnotationsForNLUAnnotationSetsV1';
             // verify required parameter 'skillId' is not null or undefined
             if (skillId == null) {
@@ -9728,9 +9898,9 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} annotationId Identifier of the NLU annotation set.
          * @param {string} contentType Standard HTTP. Pass &#x60;application/json&#x60; or &#x60;test/csv&#x60; for POST calls with a json/csv body. 
-         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
+         * @param {v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest} updateNLUAnnotationSetAnnotationsRequest Payload sent to the update NLU annotation set API.
          */
-        async updateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<void> {
+        async updateAnnotationsForNLUAnnotationSetsV1(skillId : string, annotationId : string, contentType : string, updateNLUAnnotationSetAnnotationsRequest : v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetAnnotationsRequest) : Promise<void> {
                 await this.callUpdateAnnotationsForNLUAnnotationSetsV1(skillId, annotationId, contentType, updateNLUAnnotationSetAnnotationsRequest);
         }
         /**
@@ -9834,17 +10004,17 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} annotationId Identifier of the NLU annotation set.
          */
-        async getPropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse> {
+        async getPropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string) : Promise<v1.skill.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse> {
                 const apiResponse: ApiResponse = await this.callGetPropertiesForNLUAnnotationSetsV1(skillId, annotationId);
-                return apiResponse.body as v1.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse;
+                return apiResponse.body as v1.skill.nlu.annotationSets.GetNLUAnnotationSetPropertiesResponse;
         }
         /**
          *
          * @param {string} skillId The skill ID.
          * @param {string} annotationId Identifier of the NLU annotation set.
-         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
+         * @param {v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
          */
-        async callUpdatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<ApiResponse> {
+        async callUpdatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callUpdatePropertiesForNLUAnnotationSetsV1';
             // verify required parameter 'skillId' is not null or undefined
             if (skillId == null) {
@@ -9892,9 +10062,9 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} annotationId Identifier of the NLU annotation set.
-         * @param {v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
+         * @param {v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest} updateNLUAnnotationSetPropertiesRequest Payload sent to the update NLU annotation set properties API.
          */
-        async updatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<void> {
+        async updatePropertiesForNLUAnnotationSetsV1(skillId : string, annotationId : string, updateNLUAnnotationSetPropertiesRequest : v1.skill.nlu.annotationSets.UpdateNLUAnnotationSetPropertiesRequest) : Promise<void> {
                 await this.callUpdatePropertiesForNLUAnnotationSetsV1(skillId, annotationId, updateNLUAnnotationSetPropertiesRequest);
         }
         /**
@@ -9954,16 +10124,16 @@ export namespace services.skillManagement {
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
          */
-        async listNLUAnnotationSetsV1(skillId : string, locale? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.annotationSets.ListNLUAnnotationSetsResponse> {
+        async listNLUAnnotationSetsV1(skillId : string, locale? : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.nlu.annotationSets.ListNLUAnnotationSetsResponse> {
                 const apiResponse: ApiResponse = await this.callListNLUAnnotationSetsV1(skillId, locale, nextToken, maxResults);
-                return apiResponse.body as v1.nlu.annotationSets.ListNLUAnnotationSetsResponse;
+                return apiResponse.body as v1.skill.nlu.annotationSets.ListNLUAnnotationSetsResponse;
         }
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {v1.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
+         * @param {v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
          */
-        async callCreateNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<ApiResponse> {
+        async callCreateNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callCreateNLUAnnotationSetV1';
             // verify required parameter 'skillId' is not null or undefined
             if (skillId == null) {
@@ -10006,11 +10176,11 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {v1.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
+         * @param {v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest} createNLUAnnotationSetRequest Payload sent to the create NLU annotation set API.
          */
-        async createNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<v1.nlu.annotationSets.CreateNLUAnnotationSetResponse> {
+        async createNLUAnnotationSetV1(skillId : string, createNLUAnnotationSetRequest : v1.skill.nlu.annotationSets.CreateNLUAnnotationSetRequest) : Promise<v1.skill.nlu.annotationSets.CreateNLUAnnotationSetResponse> {
                 const apiResponse: ApiResponse = await this.callCreateNLUAnnotationSetV1(skillId, createNLUAnnotationSetRequest);
-                return apiResponse.body as v1.nlu.annotationSets.CreateNLUAnnotationSetResponse;
+                return apiResponse.body as v1.skill.nlu.annotationSets.CreateNLUAnnotationSetResponse;
         }
         /**
          *
@@ -10061,9 +10231,9 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} evaluationId Identifier of the evaluation.
          */
-        async getNLUEvaluationV1(skillId : string, evaluationId : string) : Promise<v1.nlu.evaluations.GetNLUEvaluationResponse> {
+        async getNLUEvaluationV1(skillId : string, evaluationId : string) : Promise<v1.skill.nlu.evaluations.GetNLUEvaluationResponse> {
                 const apiResponse: ApiResponse = await this.callGetNLUEvaluationV1(skillId, evaluationId);
-                return apiResponse.body as v1.nlu.evaluations.GetNLUEvaluationResponse;
+                return apiResponse.body as v1.skill.nlu.evaluations.GetNLUEvaluationResponse;
         }
         /**
          *
@@ -10144,9 +10314,9 @@ export namespace services.skillManagement {
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href. 
          */
-        async getResultForNLUEvaluationsV1(skillId : string, evaluationId : string, sortField? : string, testCaseStatus? : string, actualIntentName? : string, expectedIntentName? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.evaluations.GetNLUEvaluationResultsResponse> {
+        async getResultForNLUEvaluationsV1(skillId : string, evaluationId : string, sortField? : string, testCaseStatus? : string, actualIntentName? : string, expectedIntentName? : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.nlu.evaluations.GetNLUEvaluationResultsResponse> {
                 const apiResponse: ApiResponse = await this.callGetResultForNLUEvaluationsV1(skillId, evaluationId, sortField, testCaseStatus, actualIntentName, expectedIntentName, nextToken, maxResults);
-                return apiResponse.body as v1.nlu.evaluations.GetNLUEvaluationResultsResponse;
+                return apiResponse.body as v1.skill.nlu.evaluations.GetNLUEvaluationResultsResponse;
         }
         /**
          *
@@ -10215,16 +10385,16 @@ export namespace services.skillManagement {
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href. 
          */
-        async listNLUEvaluationsV1(skillId : string, locale? : string, stage? : string, annotationId? : string, nextToken? : string, maxResults? : number) : Promise<v1.nlu.evaluations.ListNLUEvaluationsResponse> {
+        async listNLUEvaluationsV1(skillId : string, locale? : string, stage? : string, annotationId? : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.nlu.evaluations.ListNLUEvaluationsResponse> {
                 const apiResponse: ApiResponse = await this.callListNLUEvaluationsV1(skillId, locale, stage, annotationId, nextToken, maxResults);
-                return apiResponse.body as v1.nlu.evaluations.ListNLUEvaluationsResponse;
+                return apiResponse.body as v1.skill.nlu.evaluations.ListNLUEvaluationsResponse;
         }
         /**
          *
-         * @param {v1.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
+         * @param {v1.skill.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
          * @param {string} skillId The skill ID.
          */
-        async callCreateNLUEvaluationsV1(evaluateNLURequest : v1.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<ApiResponse> {
+        async callCreateNLUEvaluationsV1(evaluateNLURequest : v1.skill.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callCreateNLUEvaluationsV1';
             // verify required parameter 'evaluateNLURequest' is not null or undefined
             if (evaluateNLURequest == null) {
@@ -10265,12 +10435,12 @@ export namespace services.skillManagement {
         
         /**
          *
-         * @param {v1.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
+         * @param {v1.skill.nlu.evaluations.EvaluateNLURequest} evaluateNLURequest Payload sent to the evaluate NLU API.
          * @param {string} skillId The skill ID.
          */
-        async createNLUEvaluationsV1(evaluateNLURequest : v1.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<v1.nlu.evaluations.EvaluateResponse> {
+        async createNLUEvaluationsV1(evaluateNLURequest : v1.skill.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<v1.skill.nlu.evaluations.EvaluateResponse> {
                 const apiResponse: ApiResponse = await this.callCreateNLUEvaluationsV1(evaluateNLURequest, skillId);
-                return apiResponse.body as v1.nlu.evaluations.EvaluateResponse;
+                return apiResponse.body as v1.skill.nlu.evaluations.EvaluateResponse;
         }
         /**
          *
@@ -10817,6 +10987,152 @@ export namespace services.skillManagement {
         async profileNluV1(profileNluRequest : v1.skill.evaluations.ProfileNluRequest, skillId : string, stage : string, locale : string) : Promise<v1.skill.evaluations.ProfileNluResponse> {
                 const apiResponse: ApiResponse = await this.callProfileNluV1(profileNluRequest, skillId, stage, locale);
                 return apiResponse.body as v1.skill.evaluations.ProfileNluResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
+         * @param {string} stage Stage of the interaction model.
+         * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
+         */
+        async callGetConflictDetectionJobStatusForInteractionModelV1(skillId : string, locale : string, stage : string, version : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetConflictDetectionJobStatusForInteractionModelV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'locale' is not null or undefined
+            if (locale == null) {
+                throw new Error(`Required parameter locale was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('locale', locale);
+            pathParams.set('stage', stage);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}/versions/{version}/conflictDetectionJobStatus";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Get conflict detection results sucessfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no catalog defined for the catalogId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
+         * @param {string} stage Stage of the interaction model.
+         * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
+         */
+        async getConflictDetectionJobStatusForInteractionModelV1(skillId : string, locale : string, stage : string, version : string) : Promise<v1.skill.interactionModel.conflictDetection.GetConflictDetectionJobStatusResponse> {
+                const apiResponse: ApiResponse = await this.callGetConflictDetectionJobStatusForInteractionModelV1(skillId, locale, stage, version);
+                return apiResponse.body as v1.skill.interactionModel.conflictDetection.GetConflictDetectionJobStatusResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
+         * @param {string} stage Stage of the interaction model.
+         * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
+         */
+        async callGetConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetConflictsForInteractionModelV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'locale' is not null or undefined
+            if (locale == null) {
+                throw new Error(`Required parameter locale was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                queryParams.push({ key: 'nextToken', value: nextToken });
+            }
+            if(maxResults != null) {
+                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('locale', locale);
+            pathParams.set('stage', stage);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}/versions/{version}/conflicts";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Get conflict detection results sucessfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "There is no catalog defined for the catalogId.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
+         * @param {string} stage Stage of the interaction model.
+         * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
+         */
+        async getConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.interactionModel.conflictDetection.GetConflictsResponse> {
+                const apiResponse: ApiResponse = await this.callGetConflictsForInteractionModelV1(skillId, locale, stage, version, nextToken, maxResults);
+                return apiResponse.body as v1.skill.interactionModel.conflictDetection.GetConflictsResponse;
         }
         /**
          *
