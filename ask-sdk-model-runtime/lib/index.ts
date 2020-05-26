@@ -316,7 +316,9 @@ export abstract class BaseServiceClient {
             headers : headerParams,
         };
         if (bodyParam != null) {
-            request.body = nonJsonBody ? bodyParam : JSON.stringify(bodyParam);
+            const contentType = headerParams.find((header) => header.key.toLowerCase() === 'content-type');
+            const contentTypeNonJson = contentType && !contentType.value.includes('application/json');
+            request.body = nonJsonBody || contentTypeNonJson ? bodyParam : JSON.stringify(bodyParam);
         }
 
         const apiClient = this.apiConfiguration.apiClient;
