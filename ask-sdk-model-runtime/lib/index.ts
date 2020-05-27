@@ -279,12 +279,41 @@ export abstract class BaseServiceClient {
      */
     protected apiConfiguration : ApiConfiguration;
 
+    private requestInterceptors : Array<(request : ApiClientRequest) => void | Promise<void>> = [];
+    private responseInterceptors : Array<(response : ApiClientResponse) => void | Promise<void>> = [];
+
     /**
      * Creates new instance of the BaseServiceClient
      * @param {ApiConfiguration} apiConfiguration configuration parameter to provide dependencies to service client instance
      */
     protected constructor(apiConfiguration : ApiConfiguration) {
         this.apiConfiguration = apiConfiguration;
+    }
+
+    /**
+     * Sets array of functions that is going to be executed before the request is send
+     * @param {Function} requestInterceptor request interceptor function
+     * @returns {BaseServiceClient}
+     */
+    public withRequestInterceptors(...requestInterceptors : Array<(request : ApiClientRequest) => void | Promise<void>>) : BaseServiceClient {
+        for ( const interceptor of requestInterceptors ) {
+            this.requestInterceptors.push(interceptor);
+        }
+
+        return this;
+    }
+
+    /**
+     * Sets array of functions that is going to be executed after the request is send
+     * @param {Function} responseInterceptor response interceptor function
+     * @returns {BaseServiceClient}
+     */
+    public withResponseInterceptors(...responseInterceptors : Array<(response : ApiClientResponse) => void | Promise<void>>) : BaseServiceClient {
+        for ( const interceptor of responseInterceptors ) {
+            this.responseInterceptors.push(interceptor);
+        }
+
+        return this;
     }
 
     /**
@@ -324,7 +353,13 @@ export abstract class BaseServiceClient {
         const apiClient = this.apiConfiguration.apiClient;
         let response : ApiClientResponse;
         try {
+            for (const requestInterceptor of this.requestInterceptors) {
+                await requestInterceptor(request);
+            }
             response = await apiClient.invoke(request);
+            for (const responseInterceptor of this.responseInterceptors) {
+                await responseInterceptor(response);
+            }
         } catch (err) {
             err.message = `Call to service failed: ${err.message}`;
 
