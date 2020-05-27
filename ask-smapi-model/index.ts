@@ -22,24 +22,6 @@ import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
 import createUserAgent = runtime.createUserAgent;
 
-/**
- *
- * @interface
- */
-export interface InlineResponse400 {
-    'message'?: string;
-    'violations'?: Array<v1.Error>;
-}
-
-/**
- *
- * @interface
- */
-export interface InlineResponse401 {
-    'code'?: string;
-    'message': string;
-}
-
 export namespace v0 {
     /**
      *
@@ -535,14 +517,11 @@ export namespace v1 {
 }
 
 export namespace v1 {
-    /**
-     *
-     * @interface
-     */
-    export interface Error {
-        'code'?: string;
-        'message': string;
-    }
+   /**
+    *
+    * @interface
+    */
+    export type Error = v1.skill.StandardizedError;
 }
 
 export namespace v1 {
@@ -604,7 +583,7 @@ export namespace v1.auditLogs {
      * @interface
      */
     export interface AuditLogsRequest {
-        'vendorId'?: string;
+        'vendorId': string;
         'requestFilters'?: v1.auditLogs.RequestFilters;
         'sortDirection'?: v1.auditLogs.SortDirection;
         'sortField'?: v1.auditLogs.SortField;
@@ -775,7 +754,7 @@ export namespace v1.catalog {
      * @interface
      */
     export interface CreateContentUploadUrlRequest {
-        'numberOfUploadParts'?: number;
+        'numberOfUploadParts': number;
     }
 }
 
@@ -1338,7 +1317,7 @@ export namespace v1.skill.AlexaHosted {
      * @interface
      */
     export interface HostedSkillRepositoryCredentialsRequest {
-        'repository'?: v1.skill.AlexaHosted.HostedSkillRepositoryInfo;
+        'repository': v1.skill.AlexaHosted.HostedSkillRepositoryInfo;
     }
 }
 
@@ -1348,8 +1327,8 @@ export namespace v1.skill.AlexaHosted {
      * @interface
      */
     export interface HostedSkillRepositoryInfo {
-        'url'?: string;
-        'type'?: v1.skill.AlexaHosted.HostedSkillRepository;
+        'url': string;
+        'type': v1.skill.AlexaHosted.HostedSkillRepository;
     }
 }
 
@@ -1432,6 +1411,14 @@ export namespace v1.skill {
         'location'?: string;
         'expiresAt'?: string;
     }
+}
+
+export namespace v1.skill {
+    /**
+     * Format in which instance value is expected in.
+     * @enum
+     */
+    export type Format = 'URI';
 }
 
 export namespace v1.skill {
@@ -1567,30 +1554,6 @@ export namespace v1.skill {
         'errors'?: Array<v1.skill.StandardizedError>;
         'warnings'?: Array<v1.skill.StandardizedError>;
         'buildDetails'?: v1.skill.BuildDetails;
-    }
-}
-
-export namespace v1.skill {
-    /**
-     * Interface related objects.
-     * @interface
-     */
-    export interface InterfaceDefinition {
-        'isGlobal'?: boolean;
-        'locales'?: Array<string>;
-        'intents'?: Array<v1.skill.InterfaceIntent>;
-    }
-}
-
-export namespace v1.skill {
-    /**
-     *
-     * @interface
-     */
-    export interface InterfaceIntent {
-        'isExtensible'?: boolean;
-        'name'?: string;
-        'isRequired'?: boolean;
     }
 }
 
@@ -2462,7 +2425,7 @@ export namespace v1.skill {
      * Status for a Response resource.
      * @enum
      */
-    export type ResponseStatus = 'FAILED' | 'IN_PROGRESS' | 'SUCCEEDED' | 'ROLLBACK_SUCCEEDED' | 'ROLLBACK_FAILED';
+    export type ResponseStatus = 'FAILED' | 'IN_PROGRESS' | 'SUCCEEDED' | 'ROLLBACK_SUCCEEDED' | 'ROLLBACK_FAILED' | 'SKIPPED';
 }
 
 export namespace v1.skill {
@@ -2482,6 +2445,7 @@ export namespace v1.skill {
      * @interface
      */
     export interface SkillCredentials {
+        'skillMessagingCredentials'?: v1.skill.SkillMessagingCredentials;
     }
 }
 
@@ -2551,9 +2515,9 @@ export namespace v1.skill {
      * @interface
      */
     export interface StandardizedError {
-        'code'?: v1.skill.StandardizedErrorCode;
-        'message'?: string;
         'validationDetails'?: v1.skill.ValidationDetails;
+        'code'?: string;
+        'message': string;
     }
 }
 
@@ -2571,7 +2535,7 @@ export namespace v1.skill {
      * @interface
      */
     export interface SubmitSkillForCertificationRequest {
-        'publicationMethod': v1.skill.PublicationMethod;
+        'publicationMethod'?: v1.skill.PublicationMethod;
     }
 }
 
@@ -2608,6 +2572,24 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Object representing what is wrong in the request.
+     * @interface
+     */
+    export interface ValidationFailureReason {
+        'type'?: v1.skill.ValidationFailureType;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Enum for type of validation failure in the request.
+     * @enum
+     */
+    export type ValidationFailureType = 'RESOURCE_DOES_NOT_EXIST' | 'RESOURCE_VERSION_DOES_NOT_MATCH' | 'MALFORMED_INPUT' | 'EXPECTED_NOT_EMPTY_VALUE' | 'INVALID_NUMBER_OF_OCCURENCES' | 'INVALID_NUMBER_OF_PROPERTIES' | 'EXPECTED_ATLEAST_ONE_RELATED_INSTANCE' | 'EXPECTED_EXACTLY_ONE_RELATED_INSTANCE' | 'RESOURCE_LOCKED' | 'UNEXPECTED_RESOURCE_STAGE' | 'UNEXPECTED_RESOURCE_PROPERTY' | 'MISSING_RESOURCE_PROPERTY';
+}
+
+export namespace v1.skill {
+    /**
      * Structure representing a public feature.
      * @interface
      */
@@ -2623,7 +2605,7 @@ export namespace v1.skill {
      * @interface
      */
     export interface WithdrawRequest {
-        'reason'?: v1.skill.Reason;
+        'reason': v1.skill.Reason;
         'message'?: string;
     }
 }
@@ -2680,6 +2662,325 @@ export namespace v1.skill.accountLinking {
      * @enum
      */
     export type AccountLinkingType = 'AUTH_CODE' | 'IMPLICIT';
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface Annotation {
+        'uploadId': string;
+        'filePathInUpload': string;
+        'evaluationWeight': number;
+        'expectedTranscription': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSetMetadata {
+        'name': string;
+        'annotationCount': number;
+        'lastUpdatedTimestamp': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * Object containing information about downloading audio file
+     * @interface
+     */
+    export interface AudioAsset {
+        'downloadUrl': v1.skill.asr.annotationSets.AudioAssetDownloadUrl;
+        'expiryTime': v1.skill.asr.annotationSets.AudioAssetDownloadUrlExpiryTime;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * S3 presigned download url for downloading the audio file
+     * @interface
+     */
+    export interface AudioAssetDownloadUrl {
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * timestamp when the audio download url expire in ISO 8601 format
+     * @interface
+     */
+    export interface AudioAssetDownloadUrlExpiryTime {
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateAsrAnnotationSetRequestObject {
+        'name': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface CreateAsrAnnotationSetResponse {
+        'id': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * This the payload schema for annotation set contents. Note that 'audioAsset' is always included in the returned annotation set content payload in case the payload content type is 'application/json'. For 'text/csv' annotation set content type, 'audioAssetDownloadUrl' and 'audioAssetDownloadUrlExpiryTime' are included in the csv headers for representing the audio download url and the expiry time of the  presigned audio download url. 
+     * @interface
+     */
+    export interface GetAsrAnnotationSetAnnotationsResponse {
+        'annotations': Array<v1.skill.asr.annotationSets.AnnotationWithAudioAsset>;
+        'paginationContext'?: v1.skill.asr.annotationSets.PaginationContext;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface ListASRAnnotationSetsResponse {
+        'annotationSets': Array<v1.skill.asr.annotationSets.AnnotationSetItems>;
+        'paginationContext'?: v1.skill.asr.annotationSets.PaginationContext;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * This holds all data needed to control pagination from the user. 
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * This is the payload shema for updating asr annotation set contents. Note for text/csv content type, the  csv header definitions need to follow the properties of '#/definitions/Annotaion' 
+     * @interface
+     */
+    export interface UpdateAsrAnnotationSetContentsPayload {
+        'annotations': Array<v1.skill.asr.annotationSets.Annotation>;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdateAsrAnnotationSetPropertiesRequestObject {
+        'name': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Annotation {
+        'uploadId': string;
+        'filePathInUpload': string;
+        'evaluationWeight': number;
+        'expectedTranscription': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * Object containing information about downloading audio file
+     * @interface
+     */
+    export interface AudioAsset {
+        'downloadUrl': v1.skill.asr.evaluations.AudioAssetDownloadUrl;
+        'expiryTime': v1.skill.asr.evaluations.AudioAssetDownloadUrlExpiryTime;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * S3 presigned download url for downloading the audio file
+     * @interface
+     */
+    export interface AudioAssetDownloadUrl {
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * timestamp when the audio download url expire in ISO 8601 format
+     * @interface
+     */
+    export interface AudioAssetDownloadUrlExpiryTime {
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * Object containing information about the error occurred during an evaluation run. This filed would present if an unexpected error occurred during an evaluatin run. 
+     * @interface
+     */
+    export interface ErrorObject {
+        'message': string;
+        'code': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * response body for GetAsrEvaluationsStatus API
+     * @interface
+     */
+    export interface EvaluationMetadata {
+        'status': v1.skill.asr.evaluations.EvaluationStatus;
+        'totalEvaluationCount': number;
+        'completedEvaluationCount': number;
+        'startTimestamp': string;
+        'request': v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject;
+        'error'?: v1.skill.asr.evaluations.ErrorObject;
+        'result'?: v1.skill.asr.evaluations.EvaluationMetadataResult;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * indicate the result of the evaluation. This field would be present if the evaluation status is `COMPLETED`
+     * @interface
+     */
+    export interface EvaluationMetadataResult {
+        'status': v1.skill.asr.evaluations.EvaluationResultStatus;
+        'metrics': v1.skill.asr.evaluations.Metrics;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * evaluation detailed result
+     * @interface
+     */
+    export interface EvaluationResult {
+        'status': v1.skill.asr.evaluations.EvaluationResultStatus;
+        'annotation': v1.skill.asr.evaluations.AnnotationWithAudioAsset;
+        'output'?: v1.skill.asr.evaluations.EvaluationResultOutput;
+        'error'?: v1.skill.asr.evaluations.ErrorObject;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationResultOutput {
+        'transcription': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * enum indicating the evaluation result status.   * `PASSED` - evaluation result is considered passed   * `FAILED` - evaluation result is considered failed 
+     * @enum
+     */
+    export type EvaluationResultStatus = 'PASSED' | 'FAILED';
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * Evaluation status:   * `IN_PROGRESS` - indicate the evaluation is in progress.   * `COMPLETED` - indicate the evaluation has been completed.   * `FAILED` - indicate the evaluation has run into an error. 
+     * @enum
+     */
+    export type EvaluationStatus = 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * response for GetAsrEvaluationsResults
+     * @interface
+     */
+    export interface GetAsrEvaluationsResultsResponse {
+        'results': Array<v1.skill.asr.evaluations.EvaluationResult>;
+        'paginationContext'?: v1.skill.asr.evaluations.PaginationContext;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * response body for a list evaluation API
+     * @interface
+     */
+    export interface ListAsrEvaluationsResponse {
+        'evaluations': Array<v1.skill.asr.evaluations.EvaluationItems>;
+        'paginationContext'?: v1.skill.asr.evaluations.PaginationContext;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Metrics {
+        'overallErrorRate': number;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * This holds all data needed to control pagination from the user. 
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PostAsrEvaluationsRequestObject {
+        'skill': v1.skill.asr.evaluations.Skill;
+        'annotationSetId': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface PostAsrEvaluationsResponseObject {
+        'id': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface Skill {
+        'stage': v1.StageType;
+        'locale': string;
+    }
 }
 
 export namespace v1.skill.betaTest {
@@ -2904,7 +3205,7 @@ export namespace v1.skill {
      */
     export interface CreateSkillWithPackageRequest {
         'vendorId'?: string;
-        'location'?: string;
+        'location': string;
     }
 }
 
@@ -3462,7 +3763,7 @@ export namespace v1.skill.interactionModel.catalog {
      * @interface
      */
     export interface CatalogInput {
-        'name'?: string;
+        'name': string;
         'description'?: string;
     }
 }
@@ -3514,8 +3815,8 @@ export namespace v1.skill.interactionModel.catalog {
      * @interface
      */
     export interface DefinitionData {
-        'catalog'?: v1.skill.interactionModel.catalog.CatalogInput;
-        'vendorId'?: string;
+        'catalog': v1.skill.interactionModel.catalog.CatalogInput;
+        'vendorId': string;
     }
 }
 
@@ -3660,17 +3961,6 @@ export namespace v1.skill.interactionModel {
         'types'?: Array<v1.skill.interactionModel.SlotType>;
         'intents'?: Array<v1.skill.interactionModel.Intent>;
         'modelConfiguration'?: v1.skill.interactionModel.ModelConfiguration;
-    }
-}
-
-export namespace v1.skill.interactionModel.type {
-    /**
-     * The body of the bad request exception.
-     * @interface
-     */
-    export interface BadRequest {
-        'errors'?: Array<v1.skill.interactionModel.type.Error>;
-        'warnings'?: Array<v1.skill.interactionModel.type.Warning>;
     }
 }
 
@@ -3925,6 +4215,19 @@ export namespace v1.skill.interactionModel.typeVersion {
 
 export namespace v1.skill.interactionModel.version {
     /**
+     * Version metadata about the catalog entity version.
+     * @interface
+     */
+    export interface CatalogEntityVersion {
+        'version'?: string;
+        'creationTime'?: string;
+        'description'?: string;
+        '_links'?: v1.skill.interactionModel.version.Links;
+    }
+}
+
+export namespace v1.skill.interactionModel.version {
+    /**
      * List of catalog values.
      * @interface
      */
@@ -3967,6 +4270,20 @@ export namespace v1.skill.interactionModel.version {
      */
     export interface Links {
         'self'?: v1.Link;
+    }
+}
+
+export namespace v1.skill.interactionModel.version {
+    /**
+     * List of catalog versions of a catalog for the vendor in sortDirection order, descending as default.
+     * @interface
+     */
+    export interface ListCatalogEntityVersionsResponse {
+        '_links'?: v1.skill.interactionModel.version.Links;
+        'catalogVersions'?: Array<v1.skill.interactionModel.version.CatalogEntityVersion>;
+        'isTruncated'?: boolean;
+        'nextToken'?: string;
+        'totalCount'?: number;
     }
 }
 
@@ -4039,6 +4356,108 @@ export namespace v1.skill.interactionModel.version {
     }
 }
 
+export namespace v1.skill.invocations {
+    /**
+     * Region of endpoint to be called.
+     * @enum
+     */
+    export type EndPointRegions = 'NA' | 'EU' | 'FE';
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvocationResponseResult {
+        'skillExecutionInfo'?: v1.skill.invocations.SkillExecutionInfo;
+        'error'?: v1.skill.StandardizedError;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     * String that specifies the status of skill invocation. Possible values are \"SUCCEEDED\", and \"FAILED\". 
+     * @enum
+     */
+    export type InvocationResponseStatus = 'SUCCEEDED' | 'FAILED';
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvokeSkillRequest {
+        'endpointRegion': v1.skill.invocations.EndPointRegions;
+        'skillRequest': v1.skill.invocations.SkillRequest;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface InvokeSkillResponse {
+        'status'?: v1.skill.invocations.InvocationResponseStatus;
+        'result'?: v1.skill.invocations.InvocationResponseResult;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface Metrics {
+        'skillExecutionTimeInMilliseconds'?: number;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface Request {
+        'endpoint'?: string;
+        'body'?: any;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface Response {
+        'body'?: any;
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface SkillExecutionInfo {
+        'invocationRequest'?: { [key: string]: v1.skill.invocations.Request; };
+        'invocationResponse'?: { [key: string]: v1.skill.invocations.Response; };
+        'metrics'?: { [key: string]: v1.skill.invocations.Metrics; };
+    }
+}
+
+export namespace v1.skill.invocations {
+    /**
+     *
+     * @interface
+     */
+    export interface SkillRequest {
+        'body': any;
+    }
+}
+
 export namespace v1.skill.metrics {
     /**
      * Response object for the API call which contains metrics data.
@@ -4103,8 +4522,8 @@ export namespace v1.skill.nlu.annotationSets {
      * @interface
      */
     export interface CreateNLUAnnotationSetRequest {
-        'locale'?: string;
-        'name'?: string;
+        'locale': string;
+        'name': string;
     }
 }
 
@@ -4166,7 +4585,7 @@ export namespace v1.skill.nlu.annotationSets {
      * @interface
      */
     export interface UpdateNLUAnnotationSetPropertiesRequest {
-        'name'?: string;
+        'name': string;
     }
 }
 
@@ -4362,7 +4781,7 @@ export namespace v1.skill.nlu.evaluations {
      * @interface
      */
     export interface Resolutions {
-        'resolutionsPerAuthority'?: Array<v1.skill.nlu.evaluations.ResolutionsPerAuthority>;
+        'resolutionsPerAuthority'?: Array<{ [key: string]: v1.skill.nlu.evaluations.ResolutionsPerAuthority; }>;
     }
 }
 
@@ -4372,6 +4791,38 @@ export namespace v1.skill.nlu.evaluations {
      * @interface
      */
     export interface ResolutionsPerAuthority {
+        'authority'?: string;
+        'status'?: v1.skill.nlu.evaluations.ResolutionsPerAuthorityStatus;
+        'values'?: Array<v1.skill.nlu.evaluations.ResolutionsPerAuthorityValue>;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResolutionsPerAuthorityStatus {
+        'code'?: v1.skill.nlu.evaluations.ResolutionsPerAuthorityStatusCode;
+    }
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     * A code indicating the results of attempting to resolve the user utterance against the defined slot types. This can be one of the following: ER_SUCCESS_MATCH: The spoken value matched a value or synonym explicitly defined in your custom slot type. ER_SUCCESS_NO_MATCH: The spoken value did not match any values or synonyms explicitly defined in your custom slot type. ER_ERROR_TIMEOUT: An error occurred due to a timeout. ER_ERROR_EXCEPTION: An error occurred due to an exception during processing. 
+     * @enum
+     */
+    export type ResolutionsPerAuthorityStatusCode = 'ER_SUCCESS_MATCH' | 'ER_SUCCESS_NO_MATCH' | 'ER_ERROR_TIMEOUT' | 'ER_ERROR_EXCEPTION';
+}
+
+export namespace v1.skill.nlu.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResolutionsPerAuthorityValue {
+        'name'?: string;
+        'id'?: string;
     }
 }
 
@@ -4603,19 +5054,11 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * List of standardized error codes
-     * @enum
-     */
-    export type StandardizedErrorCode = 'INVALID_DATA_TYPE' | 'RESOURCE_NOT_FOUND' | 'INVALID_CONTENT_TYPE' | 'INVALID_IMAGE_ATTRIBUTES' | 'DENIED_FEATURE_ACCESS' | 'INVALID_URL_DOMAIN' | 'INVALID_URL_FORMAT' | 'UNEXPECTED_PROPERTY' | 'MISSING_REQUIRED_PROPERTY' | 'UNEXPECTED_EMPTY_OBJECT' | 'INVALID_ARRAY_SIZE' | 'DUPLICATE_ARRAY_ITEMS' | 'INVALID_INTEGER_VALUE' | 'INVALID_STRING_LENGTH' | 'INVALID_ENUM_VALUE' | 'INVALID_STRING_PATTERN' | 'INCONSISTENT_ENDPOINTS' | 'MUTUALLY_EXCLUSIVE_ARRAY_ITEMS' | 'EXPECTED_RELATED_INSTANCE' | 'CONFLICTING_INSTANCES' | 'EXPECTED_COMPLIANCE_AGREEMENT';
-}
-
-export namespace v1.skill {
-    /**
      *
      * @interface
      */
     export interface UpdateSkillWithPackageRequest {
-        'location'?: string;
+        'location': string;
     }
 }
 
@@ -4632,6 +5075,7 @@ export namespace v1.skill {
         'allowedDataTypes'?: Array<v1.skill.ValidationDataTypes>;
         'allowedImageAttributes'?: Array<v1.skill.ImageAttributes>;
         'conflictingInstance'?: v1.skill.Instance;
+        'expectedFormat'?: v1.skill.Format;
         'expectedInstance'?: v1.skill.Instance;
         'expectedRegexPattern'?: string;
         'agreementType'?: v1.skill.AgreementType;
@@ -4645,6 +5089,7 @@ export namespace v1.skill {
         'maximumStringLength'?: number;
         'originalEndpoint'?: v1.skill.ValidationEndpoint;
         'originalInstance'?: v1.skill.Instance;
+        'reason'?: v1.skill.ValidationFailureReason;
         'requiredProperty'?: string;
         'unexpectedProperty'?: string;
     }
@@ -4687,7 +5132,7 @@ export namespace v1.skill.validations {
      * @interface
      */
     export interface ValidationsApiRequest {
-        'locales'?: Array<string>;
+        'locales': Array<string>;
     }
 }
 
@@ -5276,6 +5721,92 @@ export namespace v1.skill.Manifest {
     }
 }
 
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface AnnotationSetItems {
+        'name': string;
+        'annotationCount': number;
+        'lastUpdatedTimestamp': string;
+        'id': string;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     * object containing annotation content and audio file download information.
+     * @interface
+     */
+    export interface AnnotationWithAudioAsset {
+        'uploadId': string;
+        'filePathInUpload': string;
+        'evaluationWeight': number;
+        'expectedTranscription': string;
+        'audioAsset': v1.skill.asr.annotationSets.AudioAsset;
+    }
+}
+
+export namespace v1.skill.asr.annotationSets {
+    /**
+     *
+     * @interface
+     */
+    export interface GetASRAnnotationSetsPropertiesResponse {
+        'name': string;
+        'annotationCount': number;
+        'lastUpdatedTimestamp': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     * object containing annotation content and audio file download information.
+     * @interface
+     */
+    export interface AnnotationWithAudioAsset {
+        'uploadId': string;
+        'filePathInUpload': string;
+        'evaluationWeight': number;
+        'expectedTranscription': string;
+        'audioAsset': v1.skill.asr.evaluations.AudioAsset;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationItems {
+        'status': v1.skill.asr.evaluations.EvaluationStatus;
+        'totalEvaluationCount': number;
+        'completedEvaluationCount': number;
+        'startTimestamp': string;
+        'request': v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject;
+        'error'?: v1.skill.asr.evaluations.ErrorObject;
+        'result'?: v1.skill.asr.evaluations.EvaluationMetadataResult;
+        'id': string;
+    }
+}
+
+export namespace v1.skill.asr.evaluations {
+    /**
+     *
+     * @interface
+     */
+    export interface GetAsrEvaluationStatusResponseObject {
+        'status': v1.skill.asr.evaluations.EvaluationStatus;
+        'totalEvaluationCount': number;
+        'completedEvaluationCount': number;
+        'startTimestamp': string;
+        'request': v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject;
+        'error'?: v1.skill.asr.evaluations.ErrorObject;
+        'result'?: v1.skill.asr.evaluations.EvaluationMetadataResult;
+    }
+}
+
 export namespace v1.skill.evaluations {
     /**
      * The intent that Alexa selected for the utterance in the request.
@@ -5549,6 +6080,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
 
@@ -5583,7 +6115,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -5595,14 +6127,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -5630,7 +6165,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.upload.ListUploadsResponse> {
@@ -5656,8 +6191,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -5711,6 +6249,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -5769,8 +6308,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -5808,7 +6350,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -5820,15 +6362,19 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5855,7 +6401,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
@@ -5876,8 +6422,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5912,7 +6461,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -5923,16 +6472,20 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5959,7 +6512,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.developmentEvents.subscriber.ListSubscribersResponse> {
@@ -5980,8 +6533,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6025,6 +6581,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriberId', subscriberId);
@@ -6071,6 +6628,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriberId', subscriberId);
@@ -6122,8 +6680,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriberId', subscriberId);
@@ -6159,7 +6720,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
          */
@@ -6171,19 +6732,24 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(subscriberId != null) {
-                queryParams.push({ key: 'subscriberId', value: subscriberId });
+                const subscriberIdValues: any[] = Array.isArray(subscriberId) ? subscriberId : [subscriberId];
+                subscriberIdValues.forEach(val => queryParams.push({ key: 'subscriberId', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6210,7 +6776,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
          */
@@ -6228,8 +6794,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6275,6 +6844,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriptionId', subscriptionId);
@@ -6322,6 +6892,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriptionId', subscriptionId);
 
@@ -6368,8 +6939,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('subscriptionId', subscriptionId);
@@ -6423,6 +6997,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('catalogId', catalogId);
@@ -6458,7 +7033,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -6470,14 +7045,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -6505,7 +7083,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
@@ -6531,8 +7109,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -6586,6 +7167,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
             pathParams.set('uploadId', uploadId);
@@ -6637,8 +7219,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -6686,8 +7271,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6722,7 +7310,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} productId The list of in-skill product IDs that you wish to get the summary for. A maximum of 50 in-skill product IDs can be specified in a single listInSkillProducts call. Please note that this parameter must not be used with &#39;nextToken&#39; and/or &#39;maxResults&#39; parameter.
          * @param {string} stage Filter in-skill products by specified stage.
@@ -6739,34 +7327,44 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(productId != null) {
-                queryParams.push({ key: 'productId', value: productId.toString() });
+                const productIdValues: any[] = Array.isArray(productId) ? productId : [productId];
+                productIdValues.forEach(val => queryParams.push({ key: 'productId', value: val!.toString() }));
             }
             if(stage != null) {
-                queryParams.push({ key: 'stage', value: stage });
+                const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+                stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
             }
             if(type != null) {
-                queryParams.push({ key: 'type', value: type });
+                const typeValues: any[] = Array.isArray(type) ? type : [type];
+                typeValues.forEach(val => queryParams.push({ key: 'type', value: val }));
             }
             if(referenceName != null) {
-                queryParams.push({ key: 'referenceName', value: referenceName });
+                const referenceNameValues: any[] = Array.isArray(referenceName) ? referenceName : [referenceName];
+                referenceNameValues.forEach(val => queryParams.push({ key: 'referenceName', value: val }));
             }
             if(status != null) {
-                queryParams.push({ key: 'status', value: status });
+                const statusValues: any[] = Array.isArray(status) ? status : [status];
+                statusValues.forEach(val => queryParams.push({ key: 'status', value: val }));
             }
             if(isAssociatedWithSkill != null) {
-                queryParams.push({ key: 'isAssociatedWithSkill', value: isAssociatedWithSkill });
+                const isAssociatedWithSkillValues: any[] = Array.isArray(isAssociatedWithSkill) ? isAssociatedWithSkill : [isAssociatedWithSkill];
+                isAssociatedWithSkillValues.forEach(val => queryParams.push({ key: 'isAssociatedWithSkill', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6790,7 +7388,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} productId The list of in-skill product IDs that you wish to get the summary for. A maximum of 50 in-skill product IDs can be specified in a single listInSkillProducts call. Please note that this parameter must not be used with &#39;nextToken&#39; and/or &#39;maxResults&#39; parameter.
          * @param {string} stage Filter in-skill products by specified stage.
@@ -6817,8 +7415,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6867,6 +7468,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -6919,6 +7521,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -6976,6 +7579,7 @@ export namespace services.skillManagement {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
             }
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
             pathParams.set('stage', stage);
@@ -7030,6 +7634,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
             pathParams.set('stage', stage);
@@ -7082,6 +7687,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -7139,10 +7745,13 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
+            }
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
             }
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -7183,7 +7792,7 @@ export namespace services.skillManagement {
          *
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetIspAssociatedSkillsV1(productId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -7199,14 +7808,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -7233,7 +7845,7 @@ export namespace services.skillManagement {
          *
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getIspAssociatedSkillsV1(productId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.isp.AssociatedSkillResponse> {
@@ -7260,6 +7872,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -7307,6 +7920,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
 
@@ -7353,6 +7967,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
 
@@ -7387,9 +8002,9 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
+         * @param {v1.skill.interactionModel.catalog.UpdateRequest} updateRequest 
          */
-        async callUpdateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<ApiResponse> {
+        async callUpdateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.catalog.UpdateRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callUpdateInteractionModelCatalogV1';
             // verify required parameter 'catalogId' is not null or undefined
             if (catalogId == null) {
@@ -7403,8 +8018,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7432,9 +8050,9 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {v1.skill.interactionModel.type.UpdateRequest} updateRequest 
+         * @param {v1.skill.interactionModel.catalog.UpdateRequest} updateRequest 
          */
-        async updateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.type.UpdateRequest) : Promise<void> {
+        async updateInteractionModelCatalogV1(catalogId : string, updateRequest : v1.skill.interactionModel.catalog.UpdateRequest) : Promise<void> {
                 await this.callUpdateInteractionModelCatalogV1(catalogId, updateRequest);
         }
         /**
@@ -7457,6 +8075,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7494,6 +8113,85 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
+         * @param {string} version Version for interaction model.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         * @param {string} sortField Sets the field on which the sorting would be applied.
+         */
+        async callListInteractionModelCatalogVersionsV1(catalogId : string, version : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListInteractionModelCatalogVersionsV1';
+            // verify required parameter 'catalogId' is not null or undefined
+            if (catalogId == null) {
+                throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'version' is not null or undefined
+            if (version == null) {
+                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(sortDirection != null) {
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
+            }
+            if(sortField != null) {
+                const sortFieldValues: any[] = Array.isArray(sortField) ? sortField : [sortField];
+                sortFieldValues.forEach(val => queryParams.push({ key: 'sortField', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('catalogId', catalogId);
+            pathParams.set('version', version);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/catalogs/{catalogId}/versions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns list of catalogs for the vendor.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error e.g. the catalog definition is invalid.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The specified catalog does not exist.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} catalogId Provides a unique identifier of the catalog
+         * @param {string} version Version for interaction model.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         * @param {string} sortField Sets the field on which the sorting would be applied.
+         */
+        async listInteractionModelCatalogVersionsV1(catalogId : string, version : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<v1.skill.interactionModel.version.ListCatalogEntityVersionsResponse> {
+                const apiResponse: ApiResponse = await this.callListInteractionModelCatalogVersionsV1(catalogId, version, maxResults, nextToken, sortDirection, sortField);
+                return apiResponse.body as v1.skill.interactionModel.version.ListCatalogEntityVersionsResponse;
+        }
+        /**
+         *
+         * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {v1.skill.interactionModel.version.VersionData} catalog 
          */
         async callCreateInteractionModelCatalogVersionV1(catalogId : string, catalog : v1.skill.interactionModel.version.VersionData) : Promise<ApiResponse> {
@@ -7510,8 +8208,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7564,6 +8265,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7618,6 +8320,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
             pathParams.set('version', version);
@@ -7671,8 +8374,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7712,7 +8418,7 @@ export namespace services.skillManagement {
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          */
         async callGetInteractionModelCatalogValuesV1(catalogId : string, version : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetInteractionModelCatalogValuesV1';
@@ -7727,14 +8433,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
@@ -7765,7 +8474,7 @@ export namespace services.skillManagement {
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          */
         async getInteractionModelCatalogValuesV1(catalogId : string, version : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.interactionModel.version.CatalogValues> {
                 const apiResponse: ApiResponse = await this.callGetInteractionModelCatalogValuesV1(catalogId, version, maxResults, nextToken);
@@ -7775,7 +8484,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelCatalogsV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -7786,19 +8495,24 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(sortDirection != null) {
-                queryParams.push({ key: 'sortDirection', value: sortDirection });
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7826,7 +8540,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelCatalogsV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.catalog.ListCatalogResponse> {
@@ -7847,8 +8561,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7884,7 +8601,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -7895,19 +8612,24 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(sortDirection != null) {
-                queryParams.push({ key: 'sortDirection', value: sortDirection });
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7934,7 +8656,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.type.ListSlotTypeResponse> {
@@ -7955,8 +8677,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -8001,6 +8726,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8047,6 +8773,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8098,8 +8825,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8153,6 +8883,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
             pathParams.set('updateRequestId', updateRequestId);
@@ -8190,7 +8921,7 @@ export namespace services.skillManagement {
          *
          * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -8202,17 +8933,21 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(sortDirection != null) {
-                queryParams.push({ key: 'sortDirection', value: sortDirection });
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8240,7 +8975,7 @@ export namespace services.skillManagement {
          *
          * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.typeVersion.ListSlotTypeVersionResponse> {
@@ -8266,8 +9001,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8321,6 +9059,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
             pathParams.set('version', version);
@@ -8373,6 +9112,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8431,8 +9171,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('slotTypeId', slotTypeId);
@@ -8483,6 +9226,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('exportId', exportId);
 
@@ -8515,9 +9259,9 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {Array<string>} skillId the list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
+         * @param {Array<string>} skillId The list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
          */
         async callListSkillsForVendorV1(vendorId : string, nextToken? : string, maxResults? : number, skillId? : Array<string>) : Promise<ApiResponse> {
             const __operationId__ = 'callListSkillsForVendorV1';
@@ -8527,19 +9271,24 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'vendorId', value: vendorId});
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(skillId != null) {
-                queryParams.push({ key: 'skillId', value: skillId.toString() });
+                const skillIdValues: any[] = Array.isArray(skillId) ? skillId : [skillId];
+                skillIdValues.forEach(val => queryParams.push({ key: 'skillId', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -8564,9 +9313,9 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {Array<string>} skillId the list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
+         * @param {Array<string>} skillId The list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
          */
         async listSkillsForVendorV1(vendorId : string, nextToken? : string, maxResults? : number, skillId? : Array<string>) : Promise<v1.skill.ListSkillResponse> {
                 const apiResponse: ApiResponse = await this.callListSkillsForVendorV1(vendorId, nextToken, maxResults, skillId);
@@ -8587,6 +9336,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('importId', importId);
@@ -8631,8 +9381,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -8676,8 +9429,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -8723,6 +9479,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -8773,8 +9530,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -8810,6 +9570,751 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {string} accept - &#x60;application/json&#x60;: indicate to download annotation set contents in JSON format - &#x60;text/csv&#x60;: indicate to download annotation set contents in CSV format 
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
+         */
+        async callGetAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, accept : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetAnnotationsForASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationSetId' is not null or undefined
+            if (annotationSetId == null) {
+                throw new Error(`Required parameter annotationSetId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'accept' is not null or undefined
+            if (accept == null) {
+                throw new Error(`Required parameter accept was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Accept', value : accept });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationSetId', annotationSetId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets/{annotationSetId}/annotations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "The annotation set contents payload in specified format.  This API also supports pagination for annotation set contents requested in  &#x60;application/json&#x60; content type. Paginaiton for requested content  type &#x60;text/csv&#x60; is not supported. In this case, the nextToken and  maxResults query parameters would be ignored even if they are  specified as query parameters. ");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {string} accept - &#x60;application/json&#x60;: indicate to download annotation set contents in JSON format - &#x60;text/csv&#x60;: indicate to download annotation set contents in CSV format 
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
+         */
+        async getAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, accept : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.asr.annotationSets.GetAsrAnnotationSetAnnotationsResponse> {
+                const apiResponse: ApiResponse = await this.callGetAnnotationsForASRAnnotationSetV1(skillId, annotationSetId, accept, nextToken, maxResults);
+                return apiResponse.body as v1.skill.asr.annotationSets.GetAsrAnnotationSetAnnotationsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {v1.skill.asr.annotationSets.UpdateAsrAnnotationSetContentsPayload} updateAsrAnnotationSetContentsRequest Payload containing annotation set contents. Two formats are accepted here: - &#x60;application/json&#x60;: Annotation set payload in JSON format. - &#x60;text/csv&#x60;: Annotation set payload in CSV format. Note that for CSV format, the first row should describe the column attributes. Columns should be delimited by comma.  The subsequent rows should describe annotation data and each annotation attributes has to follow the strict ordering defined in the first row. Each annotation fields should be delimited by comma. 
+         */
+        async callSetAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, updateAsrAnnotationSetContentsRequest : v1.skill.asr.annotationSets.UpdateAsrAnnotationSetContentsPayload) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetAnnotationsForASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationSetId' is not null or undefined
+            if (annotationSetId == null) {
+                throw new Error(`Required parameter annotationSetId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateAsrAnnotationSetContentsRequest' is not null or undefined
+            if (updateAsrAnnotationSetContentsRequest == null) {
+                throw new Error(`Required parameter updateAsrAnnotationSetContentsRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationSetId', annotationSetId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets/{annotationSetId}/annotations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "ASR annotation set contents have been updated successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateAsrAnnotationSetContentsRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {v1.skill.asr.annotationSets.UpdateAsrAnnotationSetContentsPayload} updateAsrAnnotationSetContentsRequest Payload containing annotation set contents. Two formats are accepted here: - &#x60;application/json&#x60;: Annotation set payload in JSON format. - &#x60;text/csv&#x60;: Annotation set payload in CSV format. Note that for CSV format, the first row should describe the column attributes. Columns should be delimited by comma.  The subsequent rows should describe annotation data and each annotation attributes has to follow the strict ordering defined in the first row. Each annotation fields should be delimited by comma. 
+         */
+        async setAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, updateAsrAnnotationSetContentsRequest : v1.skill.asr.annotationSets.UpdateAsrAnnotationSetContentsPayload) : Promise<void> {
+                await this.callSetAnnotationsForASRAnnotationSetV1(skillId, annotationSetId, updateAsrAnnotationSetContentsRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         */
+        async callDeleteASRAnnotationSetV1(skillId : string, annotationSetId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationSetId' is not null or undefined
+            if (annotationSetId == null) {
+                throw new Error(`Required parameter annotationSetId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationSetId', annotationSetId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets/{annotationSetId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "ASR annotation set exists and is deleted successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         */
+        async deleteASRAnnotationSetV1(skillId : string, annotationSetId : string) : Promise<void> {
+                await this.callDeleteASRAnnotationSetV1(skillId, annotationSetId);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         */
+        async callGetASRAnnotationSetV1(skillId : string, annotationSetId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationSetId' is not null or undefined
+            if (annotationSetId == null) {
+                throw new Error(`Required parameter annotationSetId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationSetId', annotationSetId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets/{annotationSetId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "The ASR annotation set exists.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         */
+        async getASRAnnotationSetV1(skillId : string, annotationSetId : string) : Promise<v1.skill.asr.annotationSets.GetASRAnnotationSetsPropertiesResponse> {
+                const apiResponse: ApiResponse = await this.callGetASRAnnotationSetV1(skillId, annotationSetId);
+                return apiResponse.body as v1.skill.asr.annotationSets.GetASRAnnotationSetsPropertiesResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {v1.skill.asr.annotationSets.UpdateAsrAnnotationSetPropertiesRequestObject} updateAsrAnnotationSetPropertiesRequestV1 Payload sent to the update ASR annotation set properties API.
+         */
+        async callSetASRAnnotationSetV1(skillId : string, annotationSetId : string, updateAsrAnnotationSetPropertiesRequestV1 : v1.skill.asr.annotationSets.UpdateAsrAnnotationSetPropertiesRequestObject) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'annotationSetId' is not null or undefined
+            if (annotationSetId == null) {
+                throw new Error(`Required parameter annotationSetId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateAsrAnnotationSetPropertiesRequestV1' is not null or undefined
+            if (updateAsrAnnotationSetPropertiesRequestV1 == null) {
+                throw new Error(`Required parameter updateAsrAnnotationSetPropertiesRequestV1 was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('annotationSetId', annotationSetId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets/{annotationSetId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "ASR annotation set exists and properties are updated successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateAsrAnnotationSetPropertiesRequestV1, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} annotationSetId Identifier of the ASR annotation set.
+         * @param {v1.skill.asr.annotationSets.UpdateAsrAnnotationSetPropertiesRequestObject} updateAsrAnnotationSetPropertiesRequestV1 Payload sent to the update ASR annotation set properties API.
+         */
+        async setASRAnnotationSetV1(skillId : string, annotationSetId : string, updateAsrAnnotationSetPropertiesRequestV1 : v1.skill.asr.annotationSets.UpdateAsrAnnotationSetPropertiesRequestObject) : Promise<void> {
+                await this.callSetASRAnnotationSetV1(skillId, annotationSetId, updateAsrAnnotationSetPropertiesRequestV1);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
+         */
+        async callListASRAnnotationSetsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListASRAnnotationSetsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "ASR annotation sets metadata are returned.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
+         */
+        async listASRAnnotationSetsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.asr.annotationSets.ListASRAnnotationSetsResponse> {
+                const apiResponse: ApiResponse = await this.callListASRAnnotationSetsV1(skillId, nextToken, maxResults);
+                return apiResponse.body as v1.skill.asr.annotationSets.ListASRAnnotationSetsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.asr.annotationSets.CreateAsrAnnotationSetRequestObject} createAsrAnnotationSetRequest Payload sent to the create ASR annotation set API.
+         */
+        async callCreateASRAnnotationSetV1(skillId : string, createAsrAnnotationSetRequest : v1.skill.asr.annotationSets.CreateAsrAnnotationSetRequestObject) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateASRAnnotationSetV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'createAsrAnnotationSetRequest' is not null or undefined
+            if (createAsrAnnotationSetRequest == null) {
+                throw new Error(`Required parameter createAsrAnnotationSetRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrAnnotationSets";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "ASR annotation set created successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createAsrAnnotationSetRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.asr.annotationSets.CreateAsrAnnotationSetRequestObject} createAsrAnnotationSetRequest Payload sent to the create ASR annotation set API.
+         */
+        async createASRAnnotationSetV1(skillId : string, createAsrAnnotationSetRequest : v1.skill.asr.annotationSets.CreateAsrAnnotationSetRequestObject) : Promise<v1.skill.asr.annotationSets.CreateAsrAnnotationSetResponse> {
+                const apiResponse: ApiResponse = await this.callCreateASRAnnotationSetV1(skillId, createAsrAnnotationSetRequest);
+                return apiResponse.body as v1.skill.asr.annotationSets.CreateAsrAnnotationSetResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async callDeleteASREvaluationV1(skillId : string, evaluationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteASREvaluationV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrEvaluations/{evaluationId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "ASR evaluation exists and is deleted successfully.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async deleteASREvaluationV1(skillId : string, evaluationId : string) : Promise<void> {
+                await this.callDeleteASREvaluationV1(skillId, evaluationId);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
+         * @param {string} status query parameter used to filter evaluation result status.   * &#x60;PASSED&#x60; - filter evaluation result status of &#x60;PASSED&#x60;   * &#x60;FAILED&#x60; - filter evaluation result status of &#x60;FAILED&#x60; 
+         */
+        async callListASREvaluationsResultsV1(skillId : string, evaluationId : string, nextToken? : string, maxResults? : number, status? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListASREvaluationsResultsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(status != null) {
+                const statusValues: any[] = Array.isArray(status) ? status : [status];
+                statusValues.forEach(val => queryParams.push({ key: 'status', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrEvaluations/{evaluationId}/results";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation exists and its status is queryable.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
+         * @param {string} status query parameter used to filter evaluation result status.   * &#x60;PASSED&#x60; - filter evaluation result status of &#x60;PASSED&#x60;   * &#x60;FAILED&#x60; - filter evaluation result status of &#x60;FAILED&#x60; 
+         */
+        async listASREvaluationsResultsV1(skillId : string, evaluationId : string, nextToken? : string, maxResults? : number, status? : string) : Promise<v1.skill.asr.evaluations.GetAsrEvaluationsResultsResponse> {
+                const apiResponse: ApiResponse = await this.callListASREvaluationsResultsV1(skillId, evaluationId, nextToken, maxResults, status);
+                return apiResponse.body as v1.skill.asr.evaluations.GetAsrEvaluationsResultsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async callGetASREvaluationStatusV1(skillId : string, evaluationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetASREvaluationStatusV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrEvaluations/{evaluationId}/status";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation exists and its status is queryable.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId Identifier of the evaluation.
+         */
+        async getASREvaluationStatusV1(skillId : string, evaluationId : string) : Promise<v1.skill.asr.evaluations.GetAsrEvaluationStatusResponseObject> {
+                const apiResponse: ApiResponse = await this.callGetASREvaluationStatusV1(skillId, evaluationId);
+                return apiResponse.body as v1.skill.asr.evaluations.GetAsrEvaluationStatusResponseObject;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} locale locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation
+         * @param {string} stage Query parameter used to filter evaluations with specified skill stage.   * &#x60;development&#x60; - skill in &#x60;development&#x60; stage   * &#x60;live&#x60; - skill in &#x60;live&#x60; stage 
+         * @param {string} annotationSetId filter to evaluations started using this annotationSetId
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
+         */
+        async callListASREvaluationsV1(skillId : string, nextToken? : string, locale? : string, stage? : string, annotationSetId? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListASREvaluationsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(locale != null) {
+                const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
+                localeValues.forEach(val => queryParams.push({ key: 'locale', value: val }));
+            }
+            if(stage != null) {
+                const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+                stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
+            }
+            if(annotationSetId != null) {
+                const annotationSetIdValues: any[] = Array.isArray(annotationSetId) ? annotationSetId : [annotationSetId];
+                annotationSetIdValues.forEach(val => queryParams.push({ key: 'annotationSetId', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluations are returned.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} locale locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation
+         * @param {string} stage Query parameter used to filter evaluations with specified skill stage.   * &#x60;development&#x60; - skill in &#x60;development&#x60; stage   * &#x60;live&#x60; - skill in &#x60;live&#x60; stage 
+         * @param {string} annotationSetId filter to evaluations started using this annotationSetId
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
+         */
+        async listASREvaluationsV1(skillId : string, nextToken? : string, locale? : string, stage? : string, annotationSetId? : string, maxResults? : number) : Promise<v1.skill.asr.evaluations.ListAsrEvaluationsResponse> {
+                const apiResponse: ApiResponse = await this.callListASREvaluationsV1(skillId, nextToken, locale, stage, annotationSetId, maxResults);
+                return apiResponse.body as v1.skill.asr.evaluations.ListAsrEvaluationsResponse;
+        }
+        /**
+         *
+         * @param {v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject} postAsrEvaluationsRequest Payload sent to trigger evaluation run.
+         * @param {string} skillId The skill ID.
+         */
+        async callCreateASREvaluationV1(postAsrEvaluationsRequest : v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject, skillId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateASREvaluationV1';
+            // verify required parameter 'postAsrEvaluationsRequest' is not null or undefined
+            if (postAsrEvaluationsRequest == null) {
+                throw new Error(`Required parameter postAsrEvaluationsRequest was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/asrEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation has successfully begun.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(503, "Service Unavailable.");
+            errorDefinitions.set(0, "Internal Server Error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, postAsrEvaluationsRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject} postAsrEvaluationsRequest Payload sent to trigger evaluation run.
+         * @param {string} skillId The skill ID.
+         */
+        async createASREvaluationV1(postAsrEvaluationsRequest : v1.skill.asr.evaluations.PostAsrEvaluationsRequestObject, skillId : string) : Promise<v1.skill.asr.evaluations.PostAsrEvaluationsResponseObject> {
+                const apiResponse: ApiResponse = await this.callCreateASREvaluationV1(postAsrEvaluationsRequest, skillId);
+                return apiResponse.body as v1.skill.asr.evaluations.PostAsrEvaluationsResponseObject;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
          */
         async callEndBetaTestV1(skillId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callEndBetaTestV1';
@@ -8822,6 +10327,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -8868,6 +10374,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
 
@@ -8912,8 +10419,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -8960,8 +10470,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9007,6 +10520,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9056,8 +10570,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9091,7 +10608,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetListOfTestersV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -9103,14 +10620,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9136,7 +10656,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getListOfTestersV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.betaTest.testers.ListTestersResponse> {
@@ -9162,8 +10682,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9213,8 +10736,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9265,8 +10791,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9323,6 +10852,7 @@ export namespace services.skillManagement {
                 headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
             }
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('certificationId', certificationId);
@@ -9357,7 +10887,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetCertificationsListV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -9369,14 +10899,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9402,7 +10935,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getCertificationsListV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.certification.ListCertificationsResponse> {
@@ -9424,6 +10957,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9470,6 +11004,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
 
@@ -9502,7 +11037,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -9525,47 +11060,61 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(sortDirection != null) {
-                queryParams.push({ key: 'sortDirection', value: sortDirection });
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
             }
             if(sortField != null) {
-                queryParams.push({ key: 'sortField', value: sortField });
+                const sortFieldValues: any[] = Array.isArray(sortField) ? sortField : [sortField];
+                sortFieldValues.forEach(val => queryParams.push({ key: 'sortField', value: val }));
             }
             if(stage != null) {
-                queryParams.push({ key: 'stage', value: stage.toString() });
+                const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+                stageValues.forEach(val => queryParams.push({ key: 'stage', value: val!.toString() }));
             }
             if(locale != null) {
-                queryParams.push({ key: 'locale', value: locale.toString() });
+                const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
+                localeValues.forEach(val => queryParams.push({ key: 'locale', value: val!.toString() }));
             }
             if(dialogActName != null) {
-                queryParams.push({ key: 'dialogAct.name', value: dialogActName.toString() });
+                const dialogActNameValues: any[] = Array.isArray(dialogActName) ? dialogActName : [dialogActName];
+                dialogActNameValues.forEach(val => queryParams.push({ key: 'dialogAct.name', value: val!.toString() }));
             }
             if(intentConfidenceBin != null) {
-                queryParams.push({ key: 'intent.confidence.bin', value: intentConfidenceBin.toString() });
+                const intentConfidenceBinValues: any[] = Array.isArray(intentConfidenceBin) ? intentConfidenceBin : [intentConfidenceBin];
+                intentConfidenceBinValues.forEach(val => queryParams.push({ key: 'intent.confidence.bin', value: val!.toString() }));
             }
             if(intentName != null) {
-                queryParams.push({ key: 'intent.name', value: intentName.toString() });
+                const intentNameValues: any[] = Array.isArray(intentName) ? intentName : [intentName];
+                intentNameValues.forEach(val => queryParams.push({ key: 'intent.name', value: val!.toString() }));
             }
             if(intentSlotsName != null) {
-                queryParams.push({ key: 'intent.slots.name', value: intentSlotsName.toString() });
+                const intentSlotsNameValues: any[] = Array.isArray(intentSlotsName) ? intentSlotsName : [intentSlotsName];
+                intentSlotsNameValues.forEach(val => queryParams.push({ key: 'intent.slots.name', value: val!.toString() }));
             }
             if(interactionType != null) {
-                queryParams.push({ key: 'interactionType', value: interactionType.toString() });
+                const interactionTypeValues: any[] = Array.isArray(interactionType) ? interactionType : [interactionType];
+                interactionTypeValues.forEach(val => queryParams.push({ key: 'interactionType', value: val!.toString() }));
             }
             if(publicationStatus != null) {
-                queryParams.push({ key: 'publicationStatus', value: publicationStatus.toString() });
+                const publicationStatusValues: any[] = Array.isArray(publicationStatus) ? publicationStatus : [publicationStatus];
+                publicationStatusValues.forEach(val => queryParams.push({ key: 'publicationStatus', value: val!.toString() }));
             }
             if(utteranceText != null) {
-                queryParams.push({ key: 'utteranceText', value: utteranceText.toString() });
+                const utteranceTextValues: any[] = Array.isArray(utteranceText) ? utteranceText : [utteranceText];
+                utteranceTextValues.forEach(val => queryParams.push({ key: 'utteranceText', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9592,7 +11141,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -9630,10 +11179,13 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
+            }
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
             }
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -9672,6 +11224,62 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {v1.skill.invocations.InvokeSkillRequest} invokeSkillRequest Payload sent to the skill invocation API.
+         */
+        async callInvokeSkillV1(skillId : string, invokeSkillRequest : v1.skill.invocations.InvokeSkillRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callInvokeSkillV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'invokeSkillRequest' is not null or undefined
+            if (invokeSkillRequest == null) {
+                throw new Error(`Required parameter invokeSkillRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/invocations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Skill was invoked.");
+            errorDefinitions.set(400, "Bad request due to invalid or missing data.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "API user does not have permission to call this API or is currently in a state that does not allow invocation of this skill. ");
+            errorDefinitions.set(404, "The specified skill does not exist.");
+            errorDefinitions.set(429, "API user has exceeded the permitted request rate.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, invokeSkillRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.invocations.InvokeSkillRequest} invokeSkillRequest Payload sent to the skill invocation API.
+         */
+        async invokeSkillV1(skillId : string, invokeSkillRequest : v1.skill.invocations.InvokeSkillRequest) : Promise<v1.skill.invocations.InvokeSkillResponse> {
+                const apiResponse: ApiResponse = await this.callInvokeSkillV1(skillId, invokeSkillRequest);
+                return apiResponse.body as v1.skill.invocations.InvokeSkillResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
          * @param {string} startTime The start time of query.
          * @param {string} endTime The end time of query (The maximum time duration is 1 week)
          * @param {string} period The aggregation period to use when retrieving the metric, follows ISO_8601#Durations format.
@@ -9681,7 +11289,7 @@ export namespace services.skillManagement {
          * @param {string} intent The intent of the skill.
          * @param {string} locale The locale for the skill. e.g. en-GB, en-US, de-DE and etc.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          */
         async callGetSkillMetricsV1(skillId : string, startTime : string, endTime : string, period : string, metric : string, stage : string, skillType : string, intent? : string, locale? : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetSkillMetricsV1';
@@ -9715,27 +11323,38 @@ export namespace services.skillManagement {
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
-            queryParams.push({ key: 'startTime', value: startTime.toString()});
-            queryParams.push({ key: 'endTime', value: endTime.toString()});
-            queryParams.push({ key: 'period', value: period});
-            queryParams.push({ key: 'metric', value: metric});
-            queryParams.push({ key: 'stage', value: stage});
-            queryParams.push({ key: 'skillType', value: skillType});
+            const startTimeValues: any[] = Array.isArray(startTime) ? startTime : [startTime];
+            startTimeValues.forEach(val => queryParams.push({ key: 'startTime', value: val!.toString() }));
+            const endTimeValues: any[] = Array.isArray(endTime) ? endTime : [endTime];
+            endTimeValues.forEach(val => queryParams.push({ key: 'endTime', value: val!.toString() }));
+            const periodValues: any[] = Array.isArray(period) ? period : [period];
+            periodValues.forEach(val => queryParams.push({ key: 'period', value: val }));
+            const metricValues: any[] = Array.isArray(metric) ? metric : [metric];
+            metricValues.forEach(val => queryParams.push({ key: 'metric', value: val }));
+            const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+            stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
+            const skillTypeValues: any[] = Array.isArray(skillType) ? skillType : [skillType];
+            skillTypeValues.forEach(val => queryParams.push({ key: 'skillType', value: val }));
             if(intent != null) {
-                queryParams.push({ key: 'intent', value: intent });
+                const intentValues: any[] = Array.isArray(intent) ? intent : [intent];
+                intentValues.forEach(val => queryParams.push({ key: 'intent', value: val }));
             }
             if(locale != null) {
-                queryParams.push({ key: 'locale', value: locale });
+                const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
+                localeValues.forEach(val => queryParams.push({ key: 'locale', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9772,7 +11391,7 @@ export namespace services.skillManagement {
          * @param {string} intent The intent of the skill.
          * @param {string} locale The locale for the skill. e.g. en-GB, en-US, de-DE and etc.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          */
         async getSkillMetricsV1(skillId : string, startTime : string, endTime : string, period : string, metric : string, stage : string, skillType : string, intent? : string, locale? : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.metrics.GetMetricDataResponse> {
                 const apiResponse: ApiResponse = await this.callGetSkillMetricsV1(skillId, startTime, endTime, period, metric, stage, skillType, intent, locale, maxResults, nextToken);
@@ -9804,6 +11423,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept', value : accept });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9866,9 +11486,12 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Content-Type', value : contentType });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -9924,6 +11547,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('annotationId', annotationId);
@@ -9975,6 +11599,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10032,8 +11657,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10083,17 +11711,21 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(locale != null) {
-                queryParams.push({ key: 'locale', value: locale });
+                const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
+                localeValues.forEach(val => queryParams.push({ key: 'locale', value: val }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10147,8 +11779,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10202,6 +11837,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10259,26 +11895,33 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(sortField != null) {
-                queryParams.push({ key: 'sort.field', value: sortField });
+                const sortFieldValues: any[] = Array.isArray(sortField) ? sortField : [sortField];
+                sortFieldValues.forEach(val => queryParams.push({ key: 'sort.field', value: val }));
             }
             if(testCaseStatus != null) {
-                queryParams.push({ key: 'testCaseStatus', value: testCaseStatus });
+                const testCaseStatusValues: any[] = Array.isArray(testCaseStatus) ? testCaseStatus : [testCaseStatus];
+                testCaseStatusValues.forEach(val => queryParams.push({ key: 'testCaseStatus', value: val }));
             }
             if(actualIntentName != null) {
-                queryParams.push({ key: 'actualIntentName', value: actualIntentName });
+                const actualIntentNameValues: any[] = Array.isArray(actualIntentName) ? actualIntentName : [actualIntentName];
+                actualIntentNameValues.forEach(val => queryParams.push({ key: 'actualIntentName', value: val }));
             }
             if(expectedIntentName != null) {
-                queryParams.push({ key: 'expectedIntentName', value: expectedIntentName });
+                const expectedIntentNameValues: any[] = Array.isArray(expectedIntentName) ? expectedIntentName : [expectedIntentName];
+                expectedIntentNameValues.forEach(val => queryParams.push({ key: 'expectedIntentName', value: val }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10336,23 +11979,29 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(locale != null) {
-                queryParams.push({ key: 'locale', value: locale });
+                const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
+                localeValues.forEach(val => queryParams.push({ key: 'locale', value: val }));
             }
             if(stage != null) {
-                queryParams.push({ key: 'stage', value: stage });
+                const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+                stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
             }
             if(annotationId != null) {
-                queryParams.push({ key: 'annotationId', value: annotationId });
+                const annotationIdValues: any[] = Array.isArray(annotationId) ? annotationId : [annotationId];
+                annotationIdValues.forEach(val => queryParams.push({ key: 'annotationId', value: val }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10408,8 +12057,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10461,8 +12113,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10518,6 +12173,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('simulationId', simulationId);
@@ -10565,6 +12221,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10614,8 +12271,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10667,6 +12327,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10721,6 +12382,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('stage', stage);
@@ -10773,6 +12435,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10828,6 +12491,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('stage', stage);
@@ -10863,7 +12527,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetIspListForSkillIdV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -10879,14 +12543,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -10914,7 +12581,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getIspListForSkillIdV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.isp.ListInSkillProductResponse> {
@@ -10950,8 +12617,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11019,6 +12689,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('locale', locale);
@@ -11062,7 +12733,7 @@ export namespace services.skillManagement {
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
          * @param {string} stage Stage of the interaction model.
          * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
          */
         async callGetConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -11086,14 +12757,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11127,7 +12801,7 @@ export namespace services.skillManagement {
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
          * @param {string} stage Stage of the interaction model.
          * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
          */
         async getConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.interactionModel.conflictDetection.GetConflictsResponse> {
@@ -11138,7 +12812,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListPrivateDistributionAccountsV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -11154,14 +12828,17 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11191,7 +12868,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listPrivateDistributionAccountsV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.Private.ListPrivateDistributionAccountsResponse> {
@@ -11223,6 +12900,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11284,6 +12962,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('stage', stage);
@@ -11339,6 +13018,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('stageV2', stageV2);
@@ -11390,6 +13070,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11448,10 +13129,13 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
+            }
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
             }
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -11515,6 +13199,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('stageV2', stageV2);
@@ -11575,6 +13260,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11640,10 +13326,13 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
+            }
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
             }
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -11688,7 +13377,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} stageV2 Stages of a skill including the new certified stage. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. * &#x60;certified&#x60; -  skills which have completed certification and ready for publishing corresponds to this stage. * &#x60;live&#x60; - skills which are currently live corresponds to this stage. 
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -11710,20 +13399,25 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
             if(sortDirection != null) {
-                queryParams.push({ key: 'sortDirection', value: sortDirection });
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
             }
             if(sortField != null) {
-                queryParams.push({ key: 'sortField', value: sortField });
+                const sortFieldValues: any[] = Array.isArray(sortField) ? sortField : [sortField];
+                sortFieldValues.forEach(val => queryParams.push({ key: 'sortField', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11755,7 +13449,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} stageV2 Stages of a skill including the new certified stage. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. * &#x60;certified&#x60; -  skills which have completed certification and ready for publishing corresponds to this stage. * &#x60;live&#x60; - skills which are currently live corresponds to this stage. 
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
-         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -11794,6 +13488,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11852,6 +13547,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -11912,10 +13608,13 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             if(ifMatch != null) {
                 headerParams.push({ key : 'If-Match', value : ifMatch });
+            }
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
             }
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -11978,8 +13677,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12045,6 +13747,7 @@ export namespace services.skillManagement {
                 headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
             }
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
             pathParams.set('validationId', validationId);
@@ -12093,11 +13796,13 @@ export namespace services.skillManagement {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(resource != null) {
-                queryParams.push({ key: 'resource', value: resource });
+                const resourceValues: any[] = Array.isArray(resource) ? resource : [resource];
+                resourceValues.forEach(val => queryParams.push({ key: 'resource', value: val }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12146,8 +13851,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12199,8 +13907,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12244,6 +13955,7 @@ export namespace services.skillManagement {
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
 
+
             const pathParams : Map<string, string> = new Map<string, string>();
 
             const accessToken : string = await this.lwaServiceClient.getAccessToken();
@@ -12280,6 +13992,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -12327,6 +14040,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('vendorId', vendorId);
@@ -12383,8 +14097,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12444,8 +14161,11 @@ export namespace services.skillManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
@@ -12507,6 +14227,7 @@ export namespace services.skillManagement {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('skillId', skillId);
