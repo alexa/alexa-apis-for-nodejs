@@ -124,6 +124,35 @@ describe('BaseServiceClient', () => {
                                 });
     });
 
+    it('should not serialize the request body when content type header is not application/json', async() => {
+        const apiClient = new MockApiClient();
+        apiClient.response = {
+            statusCode : 200,
+            headers : [],
+            body: null,
+        };
+        const client = new MockServiceClient(apiClient);
+
+        const result = await client.invokePublic(
+            '',
+            '',
+            '',
+            emptyParamsMap,
+            emptyQueryParams,
+            [{key: 'Content-type', value: 'text/csv'}],
+            'nonJson body',
+            emptyErrorsMap,
+        );
+
+        expect(apiClient.request.url).eq('');
+        expect(apiClient.request.method).eq('');
+        expect(apiClient.request.body).eq('nonJson body');
+        expect(result).deep.eq({headers: [],
+                                statusCode: 200,
+                                body: undefined,
+                                });
+    });
+
     it('should build url', async() => {
         const apiClient = new MockApiClient();
         apiClient.response = {
