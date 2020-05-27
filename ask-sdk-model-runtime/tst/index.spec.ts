@@ -412,6 +412,81 @@ describe('BaseServiceClient', () => {
             expect(err.message).eq('Call to service failed: Internal ApiClient Error');
         }
     });
+
+    it('should invoke request interceptors', async() => {
+        const apiClient = new MockApiClient();
+        apiClient.response = {
+            statusCode : 200,
+            headers : [],
+            body: JSON.stringify({k1 : 'v1'}),
+        };
+
+        let called = false;
+        const requestInterceptor = () => {
+            called = true;
+        };
+
+        let calledPromise = false;
+        const requestInterceptorPromise = (): Promise<void> => {
+            return new Promise((resolve) => {
+                calledPromise = true;
+                resolve();
+            });
+        };
+        const client = new MockServiceClient(apiClient);
+
+        client.withRequestInterceptors(requestInterceptor, requestInterceptorPromise);
+
+        await client.invokePublic(
+            '',
+            'fake://url',
+            '/some/',
+            emptyParamsMap,
+            emptyQueryParams,
+            [],
+            null,
+            emptyErrorsMap,
+        );
+        expect(called).eq(true);
+        expect(calledPromise).eq(true);
+    });
+
+    it('should invoke response interceptors', async() => {
+        const apiClient = new MockApiClient();
+        apiClient.response = {
+            statusCode : 200,
+            headers : [],
+            body: JSON.stringify({k1 : 'v1'}),
+        };
+
+        let called = false;
+        const responseInterceptor = () => {
+            called = true;
+        };
+
+        let calledPromise = false;
+        const responseInterceptorPromise = () : Promise<void> => {
+            return new Promise((resolve) => {
+                calledPromise = true;
+                resolve();
+            });
+        };
+        const client = new MockServiceClient(apiClient);
+        client.withResponseInterceptors(responseInterceptor, responseInterceptorPromise);
+
+        await client.invokePublic(
+            '',
+            'fake://url',
+            '/some/',
+            emptyParamsMap,
+            emptyQueryParams,
+            [],
+            null,
+            emptyErrorsMap,
+        );
+        expect(called).eq(true);
+        expect(calledPromise).eq(true);
+    });
 });
 
 describe('LwaServiceClient', () => {
