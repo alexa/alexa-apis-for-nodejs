@@ -5905,14 +5905,6 @@
             "type": "string"
           },
           {
-            "name": "version",
-            "in": "path",
-            "description": "Version for interaction model.",
-            "required": true,
-            "type": "string",
-            "pattern": "^~current|^~latest|[0-9]+$"
-          },
-          {
             "name": "maxResults",
             "in": "query",
             "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",

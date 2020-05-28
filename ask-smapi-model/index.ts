@@ -8113,21 +8113,16 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
          */
-        async callListInteractionModelCatalogVersionsV1(catalogId : string, version : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<ApiResponse> {
+        async callListInteractionModelCatalogVersionsV1(catalogId : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callListInteractionModelCatalogVersionsV1';
             // verify required parameter 'catalogId' is not null or undefined
             if (catalogId == null) {
                 throw new Error(`Required parameter catalogId was null or undefined when calling ${__operationId__}.`);
-            }
-            // verify required parameter 'version' is not null or undefined
-            if (version == null) {
-                throw new Error(`Required parameter version was null or undefined when calling ${__operationId__}.`);
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
@@ -8154,7 +8149,6 @@ export namespace services.skillManagement {
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('catalogId', catalogId);
-            pathParams.set('version', version);
 
             const accessToken : string = await this.lwaServiceClient.getAccessToken();
             const authorizationValue = "Bearer " + accessToken;
@@ -8179,14 +8173,13 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
          */
-        async listInteractionModelCatalogVersionsV1(catalogId : string, version : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<v1.skill.interactionModel.version.ListCatalogEntityVersionsResponse> {
-                const apiResponse: ApiResponse = await this.callListInteractionModelCatalogVersionsV1(catalogId, version, maxResults, nextToken, sortDirection, sortField);
+        async listInteractionModelCatalogVersionsV1(catalogId : string, maxResults? : number, nextToken? : string, sortDirection? : string, sortField? : string) : Promise<v1.skill.interactionModel.version.ListCatalogEntityVersionsResponse> {
+                const apiResponse: ApiResponse = await this.callListInteractionModelCatalogVersionsV1(catalogId, maxResults, nextToken, sortDirection, sortField);
                 return apiResponse.body as v1.skill.interactionModel.version.ListCatalogEntityVersionsResponse;
         }
         /**
