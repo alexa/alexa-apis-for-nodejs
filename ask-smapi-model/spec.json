@@ -16064,7 +16064,7 @@
           "description": "Describes whether confirmation of the intent is required."
         },
         "prompts": {
-          "$ref": "v1.skill.interactionModel.DialogIntents_prompts"
+          "$ref": "#/definitions/v1.skill.interactionModel.DialogIntentsPrompts"
         }
       }
     },
@@ -16140,6 +16140,20 @@
         }
       },
       "description": "Validation on a slot with support for prompt and confirmation."
+    },
+    "v1.skill.interactionModel.DialogIntentsPrompts": {
+      "type": "object",
+      "properties": {
+        "elicitation": {
+          "type": "string",
+          "description": "Enum value in the dialog_slots map to reference the elicitation prompt id."
+        },
+        "confirmation": {
+          "type": "string",
+          "description": "Enum value in the dialog_slots map to reference the confirmation prompt id."
+        }
+      },
+      "description": "Collection of prompts for this intent."
     },
     "v1.skill.interactionModel.IsGreaterThan": {
       "allOf": [
@@ -16578,7 +16592,7 @@
         "results": {
           "type": "array",
           "items": {
-            "$ref": "#/definitinos/v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult"
+            "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult"
           }
         }
       },
@@ -22142,19 +22156,6 @@
           "$ref": "#/definitions/v2.Error"
         }
       }
-    },
-    "v1.skill.interactionModel.DialogIntents_prompts": {
-      "properties": {
-        "elicitation": {
-          "type": "string",
-          "description": "Enum value in the dialog_slots map to reference the elicitation prompt id."
-        },
-        "confirmation": {
-          "type": "string",
-          "description": "Enum value in the dialog_slots map to reference the confirmation prompt id."
-        }
-      },
-      "description": "Collection of prompts for this intent."
     }
   }
 }
