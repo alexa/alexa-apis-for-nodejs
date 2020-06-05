@@ -18087,7 +18087,9 @@
         "PlaybackController.PreviousCommandIssued",
         "EffectsController.RequestEffectChangeRequest",
         "EffectsController.RequestGuiChangeRequest",
-        "EffectsController.StateReceiptChangeRequest"
+        "EffectsController.StateReceiptChangeRequest",
+        "Alexa.Video.Xray.ShowDetailsSuccessful",
+        "Alexa.Video.Xray.ShowDetailsFailed"
       ]
     },
     "v1.skill.Manifest.EventPublications": {
@@ -22102,7 +22104,8 @@
       "enum": [
         "NA",
         "EU",
-        "FE"
+        "FE",
+        "default"
       ]
     },
     "v2.skill.invocations.SkillRequest": {
