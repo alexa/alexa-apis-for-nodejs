@@ -147,12 +147,41 @@ export namespace services {
          */
         protected apiConfiguration : ApiConfiguration;
 
+        private requestInterceptors : Array<(request : ApiClientRequest) => void | Promise<void>> = [];
+        private responseInterceptors : Array<(response : ApiClientResponse) => void | Promise<void>> = [];
+
         /**
          * Creates new instance of the BaseServiceClient
          * @param {ApiConfiguration} apiConfiguration configuration parameter to provide dependencies to service client instance
          */
         protected constructor(apiConfiguration : ApiConfiguration) {
             this.apiConfiguration = apiConfiguration;
+        }
+
+        /**
+         * Sets array of functions that is going to be executed before the request is send
+         * @param {Function} requestInterceptor request interceptor function
+         * @returns {BaseServiceClient}
+         */
+        public withRequestInterceptors(...requestInterceptors : Array<(request : ApiClientRequest) => void | Promise<void>>) : BaseServiceClient {
+            for ( const interceptor of requestInterceptors ) {
+                this.requestInterceptors.push(interceptor);
+            }
+
+            return this;
+        }
+
+        /**
+         * Sets array of functions that is going to be executed after the request is send
+         * @param {Function} responseInterceptor response interceptor function
+         * @returns {BaseServiceClient}
+         */
+        public withResponseInterceptors(...responseInterceptors : Array<(response : ApiClientResponse) => void | Promise<void>>) : BaseServiceClient {
+            for ( const interceptor of responseInterceptors ) {
+                this.responseInterceptors.push(interceptor);
+            }
+
+            return this;
         }
 
         /**
@@ -190,7 +219,13 @@ export namespace services {
             const apiClient = this.apiConfiguration.apiClient;
             let response : ApiClientResponse;
             try {
+                for (const requestInterceptor of this.requestInterceptors) {
+                    await requestInterceptor(request);
+                }
                 response = await apiClient.invoke(request);
+                for (const responseInterceptor of this.responseInterceptors) {
+                    await responseInterceptor(response);
+                }
             } catch (err) {
                 err.message = `Call to service failed: ${err.message}`;
 
@@ -200,7 +235,12 @@ export namespace services {
             let body;
 
             try {
-                body = response.body ? JSON.parse(response.body) : undefined;
+                const contentType = response.headers.find((h) => h.key === 'content-type');
+                // json if no content type or content type is application/json
+                const isJson = !contentType || contentType.value.includes('application/json');
+                body = response.body && isJson ? JSON.parse(response.body) : response.body;
+                // converting to undefined if empty string
+                body = body || undefined;
             } catch (err) {
                 throw new SyntaxError(`Failed trying to parse the response body: ${response.body}`);
             }
@@ -262,6 +302,7 @@ export namespace services {
         clientId : string;
         clientSecret : string;
         refreshToken? : string;
+        authEndpoint? : string;
     }
 
     /**
@@ -272,6 +313,7 @@ export namespace services {
         protected static REFRESH_ACCESS_TOKEN : string = 'refresh_access_token';
         protected static CLIENT_CREDENTIALS_GRANT_TYPE : string = 'client_credentials';
         protected static LWA_CREDENTIALS_GRANT_TYPE : string = 'refresh_token';
+        protected static AUTH_ENDPOINT : string = 'https://api.amazon.com';
 
         protected authenticationConfiguration : AuthenticationConfiguration;
         protected tokenStore : {[cacheKey : string] : AccessToken};
@@ -332,6 +374,8 @@ export namespace services {
         }
 
         protected async generateAccessToken(accessTokenRequest : AccessTokenRequest) : Promise<AccessTokenResponse> {
+            const authEndpoint = this.authenticationConfiguration.authEndpoint || LwaServiceClient.AUTH_ENDPOINT;
+
             if (accessTokenRequest == null) {
                 throw new Error(`Required parameter accessTokenRequest was null or undefined when calling generateAccessToken.`);
             }
@@ -354,7 +398,7 @@ export namespace services {
 
             const apiResponse : ApiResponse = await this.invoke(
                 'POST',
-                'https://api.amazon.com',
+                authEndpoint,
                 '/auth/O2/token',
                 pathParams,
                 queryParams,
@@ -576,6 +620,7 @@ export interface Slot {
     'value'?: string;
     'confirmationStatus': SlotConfirmationStatus;
     'resolutions'?: slu.entityresolution.Resolutions;
+    'slotValue'?: SlotValue;
 }
 
 /**
@@ -583,6 +628,12 @@ export interface Slot {
  * @enum
  */
 export type SlotConfirmationStatus = 'NONE' | 'DENIED' | 'CONFIRMED';
+
+/**
+ * Object representing the value captured in the slot.
+ * @interface
+ */
+export type SlotValue = ListSlotValue | SimpleSlotValue;
 
 /**
  * Status indicates a high level understanding of the result of an execution.
@@ -672,6 +723,27 @@ export namespace canfulfill {
      * @enum
      */
     export type CanUnderstandSlotValues = 'YES' | 'NO' | 'MAYBE';
+}
+
+export namespace dynamicEndpoints {
+   /**
+    * Base response type.
+    * @interface
+    */
+    export type BaseResponse = dynamicEndpoints.FailureResponse | dynamicEndpoints.SuccessResponse;
+}
+
+export namespace dynamicEndpoints {
+    /**
+     * Request from a Dynamic endpoint connection.
+     * @interface
+     */
+    export interface Request {
+        'version': string;
+        'type': string;
+        'requestId': string;
+        'requestPayload': string;
+    }
 }
 
 export namespace er.dynamic {
@@ -3422,6 +3494,15 @@ export interface LaunchRequest {
 }
 
 /**
+ * Slot value containing a list of other slot value objects.
+ * @interface
+ */
+export interface ListSlotValue {
+    'type' : 'List';
+    'values': Array<SlotValue>;
+}
+
+/**
  * A SessionEndedRequest is an object that represents a request made to an Alexa skill to notify that a session was ended. Your service receives a SessionEndedRequest when a currently open session is closed for one of the following reasons: <ol><li>The user says “exit”</li><li>the user does not respond or says something that does not match an intent defined in your voice interface while the device is listening for the user’s response</li><li>an error occurs</li></ol>
  * @interface
  */
@@ -3444,6 +3525,16 @@ export interface SessionResumedRequest {
     'timestamp': string;
     'locale'?: string;
     'cause'?: Cause;
+}
+
+/**
+ * Slot value containing a single string value and resolutions.
+ * @interface
+ */
+export interface SimpleSlotValue {
+    'type' : 'Simple';
+    'value'?: string;
+    'resolutions'?: slu.entityresolution.Resolutions;
 }
 
 export namespace canfulfill {
@@ -3516,6 +3607,33 @@ export namespace dialog {
         'type' : 'Dialog.ElicitSlot';
         'updatedIntent'?: Intent;
         'slotToElicit': string;
+    }
+}
+
+export namespace dynamicEndpoints {
+    /**
+     * Failure skill response for a Dynamic endpoint request.
+     * @interface
+     */
+    export interface FailureResponse {
+        'type' : 'SkillResponseFailureMessage';
+        'version': string;
+        'originalRequestId': string;
+        'errorCode'?: string;
+        'errorMessage'?: string;
+    }
+}
+
+export namespace dynamicEndpoints {
+    /**
+     * Success response for a Dynamic endpoint request.
+     * @interface
+     */
+    export interface SuccessResponse {
+        'type' : 'SkillResponseSuccessMessage';
+        'version': string;
+        'originalRequestId': string;
+        'responsePayload'?: string;
     }
 }
 
@@ -5721,8 +5839,8 @@ export namespace services.deviceAddress {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -5766,8 +5884,8 @@ export namespace services.deviceAddress {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -5828,8 +5946,11 @@ export namespace services.directive {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5882,8 +6003,8 @@ export namespace services.endpointEnumeration {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5938,8 +6059,8 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -5978,8 +6099,8 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6026,8 +6147,8 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6076,8 +6197,8 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6132,8 +6253,11 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6185,8 +6309,11 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6236,8 +6363,11 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6288,8 +6418,8 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('listId', listId);
@@ -6335,8 +6465,11 @@ export namespace services.listManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6400,25 +6533,30 @@ export namespace services.monetization {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(purchasable != null) {
-                queryParams.push({ key: 'purchasable', value: purchasable });
+                const purchasableValues: any[] = Array.isArray(purchasable) ? purchasable : [purchasable];
+                purchasableValues.forEach(val => queryParams.push({ key: 'purchasable', value: val }));
             }
             if(entitled != null) {
-                queryParams.push({ key: 'entitled', value: entitled });
+                const entitledValues: any[] = Array.isArray(entitled) ? entitled : [entitled];
+                entitledValues.forEach(val => queryParams.push({ key: 'entitled', value: val }));
             }
             if(productType != null) {
-                queryParams.push({ key: 'productType', value: productType });
+                const productTypeValues: any[] = Array.isArray(productType) ? productType : [productType];
+                productTypeValues.forEach(val => queryParams.push({ key: 'productType', value: val }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6469,9 +6607,9 @@ export namespace services.monetization {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('productId', productId);
@@ -6520,28 +6658,34 @@ export namespace services.monetization {
 
             const queryParams : Array<{ key : string, value : string }> = [];
             if(productId != null) {
-                queryParams.push({ key: 'productId', value: productId });
+                const productIdValues: any[] = Array.isArray(productId) ? productId : [productId];
+                productIdValues.forEach(val => queryParams.push({ key: 'productId', value: val }));
             }
             if(status != null) {
-                queryParams.push({ key: 'status', value: status });
+                const statusValues: any[] = Array.isArray(status) ? status : [status];
+                statusValues.forEach(val => queryParams.push({ key: 'status', value: val }));
             }
             if(fromLastModifiedTime != null) {
-                queryParams.push({ key: 'fromLastModifiedTime', value: fromLastModifiedTime.toString() });
+                const fromLastModifiedTimeValues: any[] = Array.isArray(fromLastModifiedTime) ? fromLastModifiedTime : [fromLastModifiedTime];
+                fromLastModifiedTimeValues.forEach(val => queryParams.push({ key: 'fromLastModifiedTime', value: val!.toString() }));
             }
             if(toLastModifiedTime != null) {
-                queryParams.push({ key: 'toLastModifiedTime', value: toLastModifiedTime.toString() });
+                const toLastModifiedTimeValues: any[] = Array.isArray(toLastModifiedTime) ? toLastModifiedTime : [toLastModifiedTime];
+                toLastModifiedTimeValues.forEach(val => queryParams.push({ key: 'toLastModifiedTime', value: val!.toString() }));
             }
             if(nextToken != null) {
-                queryParams.push({ key: 'nextToken', value: nextToken });
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
             }
             if(maxResults != null) {
-                queryParams.push({ key: 'maxResults', value: maxResults.toString() });
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
             }
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
             headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6587,8 +6731,8 @@ export namespace services.monetization {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6650,8 +6794,11 @@ export namespace services.proactiveEvents {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6715,8 +6862,8 @@ export namespace services.reminderManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6757,8 +6904,8 @@ export namespace services.reminderManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6805,8 +6952,11 @@ export namespace services.reminderManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('alertToken', alertToken);
@@ -6846,8 +6996,8 @@ export namespace services.reminderManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6887,8 +7037,11 @@ export namespace services.reminderManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -6959,8 +7112,11 @@ export namespace services.skillMessaging {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('userId', userId);
@@ -7018,8 +7174,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7053,8 +7209,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7094,8 +7250,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('id', id);
@@ -7137,8 +7293,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('id', id);
@@ -7181,8 +7337,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('id', id);
@@ -7225,8 +7381,8 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('id', id);
@@ -7269,8 +7425,11 @@ export namespace services.timerManagement {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7325,8 +7484,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7363,8 +7522,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7401,8 +7560,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7439,8 +7598,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
 
@@ -7482,8 +7641,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -7527,8 +7686,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -7572,8 +7731,8 @@ export namespace services.ups {
             const queryParams : Array<{ key : string, value : string }> = [];
 
             const headerParams : Array<{ key : string, value : string }> = [];
-            headerParams.push({ key : 'Content-type', value : 'application/json' });
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
 
             const pathParams : Map<string, string> = new Map<string, string>();
             pathParams.set('deviceId', deviceId);
@@ -7601,6 +7760,120 @@ export namespace services.ups {
          */
         async getSystemTimeZone(deviceId : string) : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetSystemTimeZone(deviceId);
+                return apiResponse.body as string;
+        }
+        /**
+         *
+         */
+        async callGetPersonsProfileGivenName() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetPersonsProfileGivenName';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/persons/~current/profile/givenName";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the requested information.");
+            errorDefinitions.set(204, "The query did not return any results.");
+            errorDefinitions.set(401, "The authentication token is malformed or invalid.");
+            errorDefinitions.set(403, "The authentication token does not have access to resource.");
+            errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
+            errorDefinitions.set(0, "An unexpected error occurred.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async getPersonsProfileGivenName() : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetPersonsProfileGivenName();
+                return apiResponse.body as string;
+        }
+        /**
+         *
+         */
+        async callGetPersonsProfileMobileNumber() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetPersonsProfileMobileNumber';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/persons/~current/profile/mobileNumber";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the requested information.");
+            errorDefinitions.set(204, "The query did not return any results.");
+            errorDefinitions.set(401, "The authentication token is malformed or invalid.");
+            errorDefinitions.set(403, "The authentication token does not have access to resource.");
+            errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
+            errorDefinitions.set(0, "An unexpected error occurred.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async getPersonsProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
+                const apiResponse: ApiResponse = await this.callGetPersonsProfileMobileNumber();
+                return apiResponse.body as services.ups.PhoneNumber;
+        }
+        /**
+         *
+         */
+        async callGetPersonsProfileName() : Promise<ApiResponse> {
+            const __operationId__ = 'callGetPersonsProfileName';
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v2/persons/~current/profile/name";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the requested information.");
+            errorDefinitions.set(204, "The query did not return any results.");
+            errorDefinitions.set(401, "The authentication token is malformed or invalid.");
+            errorDefinitions.set(403, "The authentication token does not have access to resource.");
+            errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
+            errorDefinitions.set(0, "An unexpected error occurred.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         */
+        async getPersonsProfileName() : Promise<string> {
+                const apiResponse: ApiResponse = await this.callGetPersonsProfileName();
                 return apiResponse.body as string;
         }
     }
