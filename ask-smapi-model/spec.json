@@ -23,7 +23,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -262,7 +262,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -431,7 +431,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -776,7 +776,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -1157,7 +1157,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -1803,7 +1803,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -2015,7 +2015,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -2453,7 +2453,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -3631,7 +3631,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -4031,7 +4031,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -4687,7 +4687,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -5182,7 +5182,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -5703,7 +5703,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get conflict detection results sucessfully.",
+            "description": "Get conflict detection results successfully.",
             "headers": {
               "Content-Type": {
                 "type": "string",
@@ -5810,7 +5810,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -5917,7 +5917,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -6371,7 +6371,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           }
@@ -6580,7 +6580,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -6701,7 +6701,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -7187,7 +7187,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -7975,7 +7975,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           }
@@ -8285,7 +8285,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -8893,7 +8893,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -9588,6 +9588,283 @@
         "x-operation-name": "withdrawSkillFromCertificationV1"
       }
     },
+    "/v1/skills/{skillId}/versions": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieve a list of all skill versions associated with this skill id",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved skill versions",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.ListSkillVersionsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "listVersionsForSkillV1"
+      }
+    },
+    "/v1/skills/{skillId}/rollbacks": {
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Submit a target skill version to rollback to. Only one rollback or publish operation can be outstanding for a given skillId.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "createRollbackRequest",
+            "description": "defines the request body to create a rollback request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.CreateRollbackRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Rollback request created; Returns the generated identifier to track the rollback request and returns a URL to track the status in Location header.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "contains content type of the response; only application/json supported."
+              },
+              "Location": {
+                "type": "string",
+                "description": "Relative url to track rollback status"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.CreateRollbackResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "rollbackSkillV1"
+      }
+    },
+    "/v1/skills/{skillId}/rollbacks/{rollbackRequestId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Get the rollback status of a skill given an associated rollbackRequestId. Use ~latest in place of rollbackRequestId to get the latest rollback status.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "rollbackRequestId",
+            "in": "path",
+            "description": "Defines the identifier for a rollback request. If set to ~latest, request returns the status of the latest rollback request.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the rollback status for a given skillId and rollbackRequestId. Returns the latest rollback status if ~latest is used in place of rollbackRequestId.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "contains content type of the response; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.RollbackRequestStatus"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getRollbackForSkillV1"
+      }
+    },
     "/v1/skills/{skillId}/stages/{stage}/exports": {
       "post": {
         "tags": [
@@ -10029,6 +10306,199 @@
       }
     },
     "/v1/skill/definitions/apis/custom/interfaces/{interfaceType}": {},
+    "/v1/skills/{skillId}/stages/{stageV2}/cloneLocale": {
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new clone locale workflow for a skill with given skillId, source locale, and target locales. In a single workflow, a locale can be cloned to multiple target locales. However, only one such workflow can be started at any time.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "stageV2",
+            "in": "path",
+            "description": "Stages of a skill on which locales can be cloned. Currently only `development` stage is supported.\n* `development` - skills which are currently in development corresponds to this stage.\n",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "cloneLocaleRequest",
+            "description": "Defines the request body for the cloneLocale API.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.CloneLocaleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted.",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "Returns relative URL to track the progress of the workflow."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "cloneLocaleV1"
+      }
+    },
+    "/v1/skills/{skillId}/stages/{stageV2}/cloneLocaleRequests/{cloneLocaleRequestId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Returns the status of a clone locale workflow associated with the unique identifier of cloneLocaleRequestId.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "stageV2",
+            "in": "path",
+            "description": "Stages of a skill on which locales can be cloned. Currently only `development` stage is supported.\n* `development` - skills which are currently in development corresponds to this stage.\n",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cloneLocaleRequestId",
+            "in": "path",
+            "description": "Defines the identifier for a clone locale workflow.\nIf set to ~latest, request returns the status of the latest clone locale workflow.\n",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, only \"application/json\" supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.CloneLocaleStatusResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getCloneLocaleStatusV1"
+      }
+    },
     "/v1/vendors": {
       "get": {
         "tags": [
@@ -11287,7 +11757,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -11742,7 +12212,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -11952,7 +12422,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -12350,7 +12820,7 @@
           {
             "name": "nextToken",
             "in": "query",
-            "description": "A token provided to continue returning results from a previous request which was partial.\n",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
             "required": false,
             "type": "string"
           },
@@ -14836,6 +15306,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "authorizationUrlsByPlatform": {
+          "type": "array",
+          "description": "The list of valid authorization urls for allowed platforms to initiate account linking.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl"
+          }
         }
       },
       "description": "The account linking information of a skill."
@@ -14854,6 +15331,32 @@
       "enum": [
         "HTTP_BASIC",
         "REQUEST_BODY_CREDENTIALS"
+      ]
+    },
+    "v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl": {
+      "type": "object",
+      "required": [
+        "platformAuthorizationUrl",
+        "platformType"
+      ],
+      "properties": {
+        "platformType": {
+          "$ref": "#/definitions/v1.skill.accountLinking.PlatformType",
+          "x-isEnum": true
+        },
+        "platformAuthorizationUrl": {
+          "type": "string",
+          "description": "Defines the OAuth2 Authorization URL that will be used in this platform to authenticate the customer / person."
+        }
+      },
+      "description": "A key-value pair object that contains the OAuth2 authorization url to initiate the skill account linking process."
+    },
+    "v1.skill.accountLinking.PlatformType": {
+      "type": "string",
+      "description": "Defines the type of platform that will be used by the customer to perform account linking.",
+      "enum": [
+        "iOS",
+        "Android"
       ]
     },
     "v1.skill.accountLinking.AccountLinkingRequest": {
@@ -14910,6 +15413,13 @@
           "description": "The list of valid urls to redirect back to, when the linking process is initiated from a third party system.",
           "items": {
             "type": "string"
+          }
+        },
+        "authorizationUrlsByPlatform": {
+          "type": "array",
+          "description": "The list of valid authorization urls for allowed platforms to initiate account linking.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl"
           }
         }
       },
@@ -16004,6 +16514,10 @@
           "type": "string",
           "description": "The type of the slot. It can be a built-in or custom type."
         },
+        "multipleValues": {
+          "description": "Configuration object for multiple values capturing behavior for this slot.",
+          "$ref": "#/definitions/v1.skill.interactionModel.MultipleValuesConfig"
+        },
         "samples": {
           "type": "array",
           "description": "Phrases the user can speak e.g. to trigger an intent or provide value for a slot elicitation.",
@@ -16013,6 +16527,16 @@
         }
       },
       "description": "Slot definition."
+    },
+    "v1.skill.interactionModel.MultipleValuesConfig": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Boolean that indicates whether this slot can capture multiple values."
+        }
+      },
+      "description": "Configuration object for multiple values capturing behavior for this slot."
     },
     "v1.skill.interactionModel.Dialog": {
       "type": "object",
@@ -16640,15 +17164,12 @@
           "description": "Conflict intent name"
         },
         "slots": {
-          "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntentSlots"
+          "type": "object",
+          "description": "List of conflict intent slots",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntentSlot"
+          }
         }
-      }
-    },
-    "v1.skill.interactionModel.conflictDetection.ConflictIntentSlots": {
-      "type": "object",
-      "description": "List of conflict intent slots",
-      "additionalProperties": {
-        "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.ConflictIntentSlot"
       }
     },
     "v1.skill.interactionModel.conflictDetection.ConflictIntentSlot": {
@@ -18141,6 +18662,7 @@
         "alexa::customer_id:read",
         "alexa::person_id:read",
         "alexa::raw_person_id:read",
+        "alexa::utterance_id:read",
         "alexa::devices:all:notifications:write",
         "alexa::devices:all:notifications:urgent:write",
         "alexa::alerts:reminders:skill:readwrite",
@@ -19480,6 +20002,79 @@
       },
       "description": "List of skills for the vendor."
     },
+    "v1.skill.ListSkillVersionsResponse": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/v1.Links"
+        },
+        "skillVersions": {
+          "type": "array",
+          "description": "Skill version metadata",
+          "items": {
+            "$ref": "#/definitions/v1.skill.SkillVersion"
+          }
+        },
+        "isTruncated": {
+          "type": "boolean"
+        },
+        "nextToken": {
+          "type": "string"
+        }
+      },
+      "description": "List of all skill versions"
+    },
+    "v1.skill.SkillVersion": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string",
+          "description": "Description of the version (limited to 300 characters).\n"
+        },
+        "creationTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "submissions": {
+          "type": "array",
+          "description": "List of submissions for the skill version\n",
+          "items": {
+            "$ref": "#/definitions/v1.skill.VersionSubmission"
+          }
+        }
+      },
+      "description": "Information about the skill version"
+    },
+    "v1.skill.VersionSubmission": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.VersionSubmissionStatus",
+          "x-isEnum": true
+        },
+        "submissionTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "Submission for a skill version\n"
+    },
+    "v1.skill.VersionSubmissionStatus": {
+      "type": "string",
+      "description": "The lifecycle status of the skill version submission.\n* `LIVE` - The skill version is in the live stage\n* `CERTIFIED` - The skill version has gone through the certification review process and has been certified.\n* `IN_REVIEW` - The skill version is currently under review for certification and publication. During this time, you cannot edit the configuration.\n* `FAILED_CERTIFICATION` - The skill version has been submitted for certification, however it has failed certification review. Please submit a new version for certification.\n* `HIDDEN` - The skill version has been published but is no longer available to new users for activation. Existing users can still invoke this skill if it is the most recent version.\n* `REMOVED` - The skill version has been published but removed for use, due to Amazon's policy violation. You can update your skill and publish a new version to live to address the policy violation.\n* `WITHDRAWN_FROM_CERTIFICATION` - The skill version was submitted for certification but was withdrawn from review.\n",
+      "enum": [
+        "LIVE",
+        "CERTIFIED",
+        "IN_REVIEW",
+        "FAILED_CERTIFICATION",
+        "HIDDEN",
+        "REMOVED",
+        "WITHDRAWN_FROM_CERTIFICATION"
+      ]
+    },
     "v1.skill.SkillSummary": {
       "type": "object",
       "properties": {
@@ -19846,6 +20441,10 @@
         "publicationMethod": {
           "$ref": "#/definitions/v1.skill.PublicationMethod",
           "x-isEnum": true
+        },
+        "versionMessage": {
+          "type": "string",
+          "description": "Description of the version (limited to 300 characters)."
         }
       }
     },
@@ -20333,6 +20932,175 @@
         "UNEXPECTED_RESOURCE_STAGE",
         "UNEXPECTED_RESOURCE_PROPERTY",
         "MISSING_RESOURCE_PROPERTY"
+      ]
+    },
+    "v1.skill.CreateRollbackRequest": {
+      "type": "object",
+      "required": [
+        "targetVersion"
+      ],
+      "properties": {
+        "targetVersion": {
+          "type": "string",
+          "description": "The target skill version to rollback to."
+        }
+      },
+      "description": "defines the request body to create a rollback request"
+    },
+    "v1.skill.CreateRollbackResponse": {
+      "type": "object",
+      "properties": {
+        "rollbackRequestId": {
+          "type": "string",
+          "description": "defines the identifier for a rollback request."
+        }
+      },
+      "description": "defines the response body when a rollback request is created"
+    },
+    "v1.skill.RollbackRequestStatus": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "rollback request id"
+        },
+        "targetVersion": {
+          "type": "string",
+          "description": "The target skill version to rollback to."
+        },
+        "submissionTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1.skill.RollbackRequestStatusTypes",
+          "x-isEnum": true
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        }
+      },
+      "description": "Rollback request for a skill"
+    },
+    "v1.skill.RollbackRequestStatusTypes": {
+      "type": "string",
+      "description": "The rollback status of the rollback request.\n* `FAILED` - The rollback has failed. Please retry the rollback.\n* `INELIGIBLE` - The target version is ineligible for rollback.\n* `IN_PROGRESS` - The rollback is in progress.\n* `SUCCEEDED` - The rollback has succeeded.\n",
+      "enum": [
+        "FAILED",
+        "INELIGIBLE",
+        "IN_PROGRESS",
+        "SUCCEEDED"
+      ]
+    },
+    "v1.skill.CloneLocaleStatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.CloneLocaleRequestStatus",
+          "x-isEnum": true
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        },
+        "sourceLocale": {
+          "type": "string",
+          "description": "source locale which is cloned to target locales."
+        },
+        "targetLocales": {
+          "type": "object",
+          "description": "Mapping of statuses per locale.",
+          "additionalProperties": {
+            "$ref": "#/definitions/CloneLocaleResourceStatus"
+          }
+        }
+      },
+      "description": "A mapping of statuses per locale detailing progress of resource or error if encountered."
+    },
+    "CloneLocaleResourceStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/CloneLocaleStatus",
+          "x-isEnum": true
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.StandardizedError"
+          }
+        }
+      },
+      "description": "an object detailing the status of a locale clone request and if applicable the errors occurred when saving/building resources during clone process."
+    },
+    "CloneLocaleStatus": {
+      "type": "string",
+      "description": "Status for a locale clone on a particular target locale\n  * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.\n  * `FAILED` status would indicate the source locale was not cloned the target locale successfully.\n  * `ROLLBACK_SUCCEEDED` status would indicate the locale was rollbacked to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed.\n",
+      "enum": [
+        "FAILED",
+        "INELIGIBLE",
+        "IN_PROGRESS",
+        "ROLLBACK_FAILED",
+        "ROLLBACK_SUCCEEDED",
+        "SUCCEEDED"
+      ]
+    },
+    "v1.skill.CloneLocaleRequestStatus": {
+      "type": "string",
+      "description": "Status for a locale clone request\nCloneLocale API initiates cloning from a source locale to all target locales.\n  * `IN_PROGRESS` status would indicate the clone is still in progress.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.\n  * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.\n  * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.\n  * `ROLLBACK_SUCCEEDED` status would indicate the skill was rollbacked to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed.\n",
+      "enum": [
+        "FAILED",
+        "INELIGIBLE",
+        "IN_PROGRESS",
+        "MIXED",
+        "ROLLBACK_FAILED",
+        "ROLLBACK_SUCCEEDED",
+        "SUCCEEDED"
+      ]
+    },
+    "v1.skill.CloneLocaleRequest": {
+      "type": "object",
+      "required": [
+        "sourceLocale",
+        "targetLocales"
+      ],
+      "properties": {
+        "sourceLocale": {
+          "type": "string",
+          "description": "Locale with the assets that will be cloned."
+        },
+        "targetLocales": {
+          "type": "array",
+          "description": "A list of locale(s) where the assets will be copied to.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "overwriteMode": {
+          "description": "Can locale of skill be overwritten. Default value is DO_NOT_OVERWRITE.",
+          "$ref": "#/definitions/v1.skill.OverwriteMode",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the request body for the cloneLocale API."
+    },
+    "v1.skill.OverwriteMode": {
+      "type": "string",
+      "description": "Can locale of skill be overwritten. Default value is DO_NOT_OVERWRITE.",
+      "enum": [
+        "DO_NOT_OVERWRITE",
+        "OVERWRITE"
+      ]
+    },
+    "v1.skill.CloneLocaleStageType": {
+      "type": "string",
+      "enum": [
+        "development"
       ]
     },
     "v1.vendorManagement.Vendors": {
@@ -21615,21 +22383,15 @@
       ],
       "properties": {
         "downloadUrl": {
-          "$ref": "#/definitions/v1.skill.asr.evaluations.AudioAssetDownloadUrl"
+          "type": "string",
+          "description": "S3 presigned download url for downloading the audio file"
         },
         "expiryTime": {
-          "$ref": "#/definitions/v1.skill.asr.evaluations.AudioAssetDownloadUrlExpiryTime"
+          "type": "string",
+          "description": "timestamp when the audio download url expire in ISO 8601 format"
         }
       },
       "description": "Object containing information about downloading audio file"
-    },
-    "v1.skill.asr.evaluations.AudioAssetDownloadUrl": {
-      "type": "string",
-      "description": "S3 presigned download url for downloading the audio file"
-    },
-    "v1.skill.asr.evaluations.AudioAssetDownloadUrlExpiryTime": {
-      "type": "string",
-      "description": "timestamp when the audio download url expire in ISO 8601 format"
     },
     "v1.skill.asr.evaluations.EvaluationResultOutput": {
       "type": "object",

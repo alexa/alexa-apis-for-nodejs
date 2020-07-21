@@ -22,6 +22,21 @@ import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
 import createUserAgent = runtime.createUserAgent;
 
+/**
+ * an object detailing the status of a locale clone request and if applicable the errors occurred when saving/building resources during clone process.
+ * @interface
+ */
+export interface CloneLocaleResourceStatus {
+    'status'?: CloneLocaleStatus;
+    'errors'?: Array<v1.skill.StandardizedError>;
+}
+
+/**
+ * Status for a locale clone on a particular target locale   * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.   * `FAILED` status would indicate the source locale was not cloned the target locale successfully.   * `ROLLBACK_SUCCEEDED` status would indicate the locale was rollbacked to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed. 
+ * @enum
+ */
+export type CloneLocaleStatus = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'ROLLBACK_FAILED' | 'ROLLBACK_SUCCEEDED' | 'SUCCEEDED';
+
 export namespace v0 {
     /**
      *
@@ -1382,6 +1397,67 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Defines the request body for the cloneLocale API.
+     * @interface
+     */
+    export interface CloneLocaleRequest {
+        'sourceLocale': string;
+        'targetLocales': Array<string>;
+        'overwriteMode'?: v1.skill.OverwriteMode;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * Status for a locale clone request CloneLocale API initiates cloning from a source locale to all target locales.   * `IN_PROGRESS` status would indicate the clone is still in progress.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.   * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.   * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.   * `ROLLBACK_SUCCEEDED` status would indicate the skill was rollbacked to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed. 
+     * @enum
+     */
+    export type CloneLocaleRequestStatus = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'MIXED' | 'ROLLBACK_FAILED' | 'ROLLBACK_SUCCEEDED' | 'SUCCEEDED';
+}
+
+export namespace v1.skill {
+    /**
+     *
+     * @enum
+     */
+    export type CloneLocaleStageType = 'development';
+}
+
+export namespace v1.skill {
+    /**
+     * A mapping of statuses per locale detailing progress of resource or error if encountered.
+     * @interface
+     */
+    export interface CloneLocaleStatusResponse {
+        'status'?: v1.skill.CloneLocaleRequestStatus;
+        'errors'?: Array<v1.skill.StandardizedError>;
+        'sourceLocale'?: string;
+        'targetLocales'?: { [key: string]: CloneLocaleResourceStatus; };
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * defines the request body to create a rollback request
+     * @interface
+     */
+    export interface CreateRollbackRequest {
+        'targetVersion': string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * defines the response body when a rollback request is created
+     * @interface
+     */
+    export interface CreateRollbackResponse {
+        'rollbackRequestId'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
      * SkillId information.
      * @interface
      */
@@ -1565,6 +1641,19 @@ export namespace v1.skill {
     export interface ListSkillResponse {
         '_links'?: v1.Links;
         'skills'?: Array<v1.skill.SkillSummary>;
+        'isTruncated'?: boolean;
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * List of all skill versions
+     * @interface
+     */
+    export interface ListSkillVersionsResponse {
+        '_links'?: v1.Links;
+        'skillVersions'?: Array<v1.skill.SkillVersion>;
         'isTruncated'?: boolean;
         'nextToken'?: string;
     }
@@ -2013,7 +2102,7 @@ export namespace v1.skill.Manifest {
      * Name of the required permission.
      * @enum
      */
-    export type PermissionName = 'payments:autopay_consent' | 'alexa::async_event:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::devices:all:geolocation:read' | 'alexa::health:profile:write' | 'alexa::household:lists:read' | 'alexa::household:lists:write' | 'alexa::personality:explicit:read' | 'alexa::personality:explicit:write' | 'alexa::profile:name:read' | 'alexa::profile:email:read' | 'alexa::profile:mobile_number:read' | 'alexa::profile:given_name:read' | 'alexa::customer_id:read' | 'alexa::person_id:read' | 'alexa::raw_person_id:read' | 'alexa::devices:all:notifications:write' | 'alexa::devices:all:notifications:urgent:write' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::skill:products:entitlements' | 'alexa::skill:proactive_enablement' | 'alexa::authenticate:2:mandatory' | 'alexa::authenticate:2:optional' | 'alexa::user_experience_guidance:read' | 'alexa::device_id:read' | 'alexa::device_type:read';
+    export type PermissionName = 'payments:autopay_consent' | 'alexa::async_event:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::devices:all:geolocation:read' | 'alexa::health:profile:write' | 'alexa::household:lists:read' | 'alexa::household:lists:write' | 'alexa::personality:explicit:read' | 'alexa::personality:explicit:write' | 'alexa::profile:name:read' | 'alexa::profile:email:read' | 'alexa::profile:mobile_number:read' | 'alexa::profile:given_name:read' | 'alexa::customer_id:read' | 'alexa::person_id:read' | 'alexa::raw_person_id:read' | 'alexa::utterance_id:read' | 'alexa::devices:all:notifications:write' | 'alexa::devices:all:notifications:urgent:write' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::skill:products:entitlements' | 'alexa::skill:proactive_enablement' | 'alexa::authenticate:2:mandatory' | 'alexa::authenticate:2:optional' | 'alexa::user_experience_guidance:read' | 'alexa::device_id:read' | 'alexa::device_type:read';
 }
 
 export namespace v1.skill.Manifest {
@@ -2341,6 +2430,14 @@ export namespace v1.skill {
     }
 }
 
+export namespace v1.skill {
+    /**
+     * Can locale of skill be overwritten. Default value is DO_NOT_OVERWRITE.
+     * @enum
+     */
+    export type OverwriteMode = 'DO_NOT_OVERWRITE' | 'OVERWRITE';
+}
+
 export namespace v1.skill.Private {
     /**
      * Enterprise IT administrators' action on the private distribution.
@@ -2430,6 +2527,28 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Rollback request for a skill
+     * @interface
+     */
+    export interface RollbackRequestStatus {
+        'id'?: string;
+        'targetVersion'?: string;
+        'submissionTime'?: string;
+        'status'?: v1.skill.RollbackRequestStatusTypes;
+        'errors'?: Array<v1.skill.StandardizedError>;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * The rollback status of the rollback request. * `FAILED` - The rollback has failed. Please retry the rollback. * `INELIGIBLE` - The target version is ineligible for rollback. * `IN_PROGRESS` - The rollback is in progress. * `SUCCEEDED` - The rollback has succeeded. 
+     * @enum
+     */
+    export type RollbackRequestStatusTypes = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'SUCCEEDED';
+}
+
+export namespace v1.skill {
+    /**
      *
      * @interface
      */
@@ -2511,6 +2630,19 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Information about the skill version
+     * @interface
+     */
+    export interface SkillVersion {
+        'version'?: string;
+        'message'?: string;
+        'creationTime'?: string;
+        'submissions'?: Array<v1.skill.VersionSubmission>;
+    }
+}
+
+export namespace v1.skill {
+    /**
      * Standardized structure which wraps machine parsable and human readable information about an error.
      * @interface
      */
@@ -2536,6 +2668,7 @@ export namespace v1.skill {
      */
     export interface SubmitSkillForCertificationRequest {
         'publicationMethod'?: v1.skill.PublicationMethod;
+        'versionMessage'?: string;
     }
 }
 
@@ -2601,6 +2734,25 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Submission for a skill version 
+     * @interface
+     */
+    export interface VersionSubmission {
+        'status'?: v1.skill.VersionSubmissionStatus;
+        'submissionTime'?: string;
+    }
+}
+
+export namespace v1.skill {
+    /**
+     * The lifecycle status of the skill version submission. * `LIVE` - The skill version is in the live stage * `CERTIFIED` - The skill version has gone through the certification review process and has been certified. * `IN_REVIEW` - The skill version is currently under review for certification and publication. During this time, you cannot edit the configuration. * `FAILED_CERTIFICATION` - The skill version has been submitted for certification, however it has failed certification review. Please submit a new version for certification. * `HIDDEN` - The skill version has been published but is no longer available to new users for activation. Existing users can still invoke this skill if it is the most recent version. * `REMOVED` - The skill version has been published but removed for use, due to Amazon's policy violation. You can update your skill and publish a new version to live to address the policy violation. * `WITHDRAWN_FROM_CERTIFICATION` - The skill version was submitted for certification but was withdrawn from review. 
+     * @enum
+     */
+    export type VersionSubmissionStatus = 'LIVE' | 'CERTIFIED' | 'IN_REVIEW' | 'FAILED_CERTIFICATION' | 'HIDDEN' | 'REMOVED' | 'WITHDRAWN_FROM_CERTIFICATION';
+}
+
+export namespace v1.skill {
+    /**
      * The payload for the withdraw operation.
      * @interface
      */
@@ -2620,6 +2772,17 @@ export namespace v1.skill.accountLinking {
 
 export namespace v1.skill.accountLinking {
     /**
+     * A key-value pair object that contains the OAuth2 authorization url to initiate the skill account linking process.
+     * @interface
+     */
+    export interface AccountLinkingPlatformAuthorizationUrl {
+        'platformType': v1.skill.accountLinking.PlatformType;
+        'platformAuthorizationUrl': string;
+    }
+}
+
+export namespace v1.skill.accountLinking {
+    /**
      * The payload for creating the account linking partner.
      * @interface
      */
@@ -2635,6 +2798,7 @@ export namespace v1.skill.accountLinking {
         'defaultTokenExpirationInSeconds'?: number;
         'reciprocalAccessTokenUrl'?: string;
         'redirectUrls'?: Array<string>;
+        'authorizationUrlsByPlatform'?: Array<v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl>;
     }
 }
 
@@ -2653,6 +2817,7 @@ export namespace v1.skill.accountLinking {
         'accessTokenScheme'?: v1.skill.accountLinking.AccessTokenSchemeType;
         'defaultTokenExpirationInSeconds'?: number;
         'redirectUrls'?: Array<string>;
+        'authorizationUrlsByPlatform'?: Array<v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl>;
     }
 }
 
@@ -2662,6 +2827,14 @@ export namespace v1.skill.accountLinking {
      * @enum
      */
     export type AccountLinkingType = 'AUTH_CODE' | 'IMPLICIT';
+}
+
+export namespace v1.skill.accountLinking {
+    /**
+     * Defines the type of platform that will be used by the customer to perform account linking.
+     * @enum
+     */
+    export type PlatformType = 'iOS' | 'Android';
 }
 
 export namespace v1.skill.asr.annotationSets {
@@ -2809,26 +2982,8 @@ export namespace v1.skill.asr.evaluations {
      * @interface
      */
     export interface AudioAsset {
-        'downloadUrl': v1.skill.asr.evaluations.AudioAssetDownloadUrl;
-        'expiryTime': v1.skill.asr.evaluations.AudioAssetDownloadUrlExpiryTime;
-    }
-}
-
-export namespace v1.skill.asr.evaluations {
-    /**
-     * S3 presigned download url for downloading the audio file
-     * @interface
-     */
-    export interface AudioAssetDownloadUrl {
-    }
-}
-
-export namespace v1.skill.asr.evaluations {
-    /**
-     * timestamp when the audio download url expire in ISO 8601 format
-     * @interface
-     */
-    export interface AudioAssetDownloadUrlExpiryTime {
+        'downloadUrl': string;
+        'expiryTime': string;
     }
 }
 
@@ -3633,6 +3788,16 @@ export namespace v1.skill.interactionModel {
 
 export namespace v1.skill.interactionModel {
     /**
+     * Configuration object for multiple values capturing behavior for this slot.
+     * @interface
+     */
+    export interface MultipleValuesConfig {
+        'enabled'?: boolean;
+    }
+}
+
+export namespace v1.skill.interactionModel {
+    /**
      *
      * @interface
      */
@@ -3669,6 +3834,7 @@ export namespace v1.skill.interactionModel {
     export interface SlotDefinition {
         'name'?: string;
         'type'?: string;
+        'multipleValues'?: v1.skill.interactionModel.MultipleValuesConfig;
         'samples'?: Array<string>;
     }
 }
@@ -3872,7 +4038,7 @@ export namespace v1.skill.interactionModel.conflictDetection {
      */
     export interface ConflictIntent {
         'name': string;
-        'slots'?: v1.skill.interactionModel.conflictDetection.ConflictIntentSlots;
+        'slots'?: { [key: string]: v1.skill.interactionModel.conflictDetection.ConflictIntentSlot; };
     }
 }
 
@@ -3884,15 +4050,6 @@ export namespace v1.skill.interactionModel.conflictDetection {
     export interface ConflictIntentSlot {
         'value'?: string;
         'type': string;
-    }
-}
-
-export namespace v1.skill.interactionModel.conflictDetection {
-    /**
-     * List of conflict intent slots
-     * @interface
-     */
-    export interface ConflictIntentSlots {
     }
 }
 
@@ -6115,7 +6272,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -6165,7 +6322,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listUploadsForCatalogV0(catalogId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.upload.ListUploadsResponse> {
@@ -6350,7 +6507,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -6401,7 +6558,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listCatalogsForVendorV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
@@ -6461,7 +6618,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -6512,7 +6669,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listSubscribersForDevelopmentEventsV0(vendorId : string, nextToken? : string, maxResults? : number) : Promise<v0.developmentEvents.subscriber.ListSubscribersResponse> {
@@ -6720,7 +6877,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
          */
@@ -6776,7 +6933,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} subscriberId Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.
          */
@@ -7033,7 +7190,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -7083,7 +7240,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listCatalogsForSkillV0(skillId : string, nextToken? : string, maxResults? : number) : Promise<v0.catalog.ListCatalogsResponse> {
@@ -7310,7 +7467,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} productId The list of in-skill product IDs that you wish to get the summary for. A maximum of 50 in-skill product IDs can be specified in a single listInSkillProducts call. Please note that this parameter must not be used with &#39;nextToken&#39; and/or &#39;maxResults&#39; parameter.
          * @param {string} stage Filter in-skill products by specified stage.
@@ -7388,7 +7545,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} productId The list of in-skill product IDs that you wish to get the summary for. A maximum of 50 in-skill product IDs can be specified in a single listInSkillProducts call. Please note that this parameter must not be used with &#39;nextToken&#39; and/or &#39;maxResults&#39; parameter.
          * @param {string} stage Filter in-skill products by specified stage.
@@ -7792,7 +7949,7 @@ export namespace services.skillManagement {
          *
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetIspAssociatedSkillsV1(productId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -7845,7 +8002,7 @@ export namespace services.skillManagement {
          *
          * @param {string} productId The in-skill product ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getIspAssociatedSkillsV1(productId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.isp.AssociatedSkillResponse> {
@@ -8114,7 +8271,7 @@ export namespace services.skillManagement {
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
          */
@@ -8174,7 +8331,7 @@ export namespace services.skillManagement {
          *
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
          */
@@ -8411,7 +8568,7 @@ export namespace services.skillManagement {
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          */
         async callGetInteractionModelCatalogValuesV1(catalogId : string, version : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetInteractionModelCatalogValuesV1';
@@ -8467,7 +8624,7 @@ export namespace services.skillManagement {
          * @param {string} catalogId Provides a unique identifier of the catalog
          * @param {string} version Version for interaction model.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          */
         async getInteractionModelCatalogValuesV1(catalogId : string, version : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.interactionModel.version.CatalogValues> {
                 const apiResponse: ApiResponse = await this.callGetInteractionModelCatalogValuesV1(catalogId, version, maxResults, nextToken);
@@ -8477,7 +8634,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelCatalogsV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -8533,7 +8690,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelCatalogsV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.catalog.ListCatalogResponse> {
@@ -8594,7 +8751,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -8649,7 +8806,7 @@ export namespace services.skillManagement {
          *
          * @param {string} vendorId The vendor ID.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelSlotTypesV1(vendorId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.type.ListSlotTypeResponse> {
@@ -8914,7 +9071,7 @@ export namespace services.skillManagement {
          *
          * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async callListInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
@@ -8968,7 +9125,7 @@ export namespace services.skillManagement {
          *
          * @param {string} slotTypeId The identifier for a slot type.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          */
         async listInteractionModelSlotTypeVersionsV1(slotTypeId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.typeVersion.ListSlotTypeVersionResponse> {
@@ -9252,7 +9409,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} skillId The list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
          */
@@ -9306,7 +9463,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} vendorId The vendor ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {Array<string>} skillId The list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with &#39;nextToken&#39; or/and &#39;maxResults&#39; parameter.
          */
@@ -9565,7 +9722,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} annotationSetId Identifier of the ASR annotation set.
          * @param {string} accept - &#x60;application/json&#x60;: indicate to download annotation set contents in JSON format - &#x60;text/csv&#x60;: indicate to download annotation set contents in CSV format 
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
          */
         async callGetAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, accept : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -9627,7 +9784,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} annotationSetId Identifier of the ASR annotation set.
          * @param {string} accept - &#x60;application/json&#x60;: indicate to download annotation set contents in JSON format - &#x60;text/csv&#x60;: indicate to download annotation set contents in CSV format 
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
          */
         async getAnnotationsForASRAnnotationSetV1(skillId : string, annotationSetId : string, accept : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.asr.annotationSets.GetAsrAnnotationSetAnnotationsResponse> {
@@ -9873,7 +10030,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
          */
         async callListASRAnnotationSetsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -9923,7 +10080,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext. 
          */
         async listASRAnnotationSetsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.asr.annotationSets.ListASRAnnotationSetsResponse> {
@@ -10045,7 +10202,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} evaluationId Identifier of the evaluation.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
          * @param {string} status query parameter used to filter evaluation result status.   * &#x60;PASSED&#x60; - filter evaluation result status of &#x60;PASSED&#x60;   * &#x60;FAILED&#x60; - filter evaluation result status of &#x60;FAILED&#x60; 
          */
@@ -10106,7 +10263,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} evaluationId Identifier of the evaluation.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken. 
          * @param {string} status query parameter used to filter evaluation result status.   * &#x60;PASSED&#x60; - filter evaluation result status of &#x60;PASSED&#x60;   * &#x60;FAILED&#x60; - filter evaluation result status of &#x60;FAILED&#x60; 
          */
@@ -10172,7 +10329,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} locale locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation
          * @param {string} stage Query parameter used to filter evaluations with specified skill stage.   * &#x60;development&#x60; - skill in &#x60;development&#x60; stage   * &#x60;live&#x60; - skill in &#x60;live&#x60; stage 
          * @param {string} annotationSetId filter to evaluations started using this annotationSetId
@@ -10237,7 +10394,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {string} locale locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation
          * @param {string} stage Query parameter used to filter evaluations with specified skill stage.   * &#x60;development&#x60; - skill in &#x60;development&#x60; stage   * &#x60;live&#x60; - skill in &#x60;live&#x60; stage 
          * @param {string} annotationSetId filter to evaluations started using this annotationSetId
@@ -10601,7 +10758,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetListOfTestersV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -10649,7 +10806,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getListOfTestersV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.betaTest.testers.ListTestersResponse> {
@@ -10880,7 +11037,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetCertificationsListV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -10928,7 +11085,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getCertificationsListV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.certification.ListCertificationsResponse> {
@@ -11030,7 +11187,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -11134,7 +11291,7 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -11282,7 +11439,7 @@ export namespace services.skillManagement {
          * @param {string} intent The intent of the skill.
          * @param {string} locale The locale for the skill. e.g. en-GB, en-US, de-DE and etc.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          */
         async callGetSkillMetricsV1(skillId : string, startTime : string, endTime : string, period : string, metric : string, stage : string, skillType : string, intent? : string, locale? : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callGetSkillMetricsV1';
@@ -11384,7 +11541,7 @@ export namespace services.skillManagement {
          * @param {string} intent The intent of the skill.
          * @param {string} locale The locale for the skill. e.g. en-GB, en-US, de-DE and etc.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          */
         async getSkillMetricsV1(skillId : string, startTime : string, endTime : string, period : string, metric : string, stage : string, skillType : string, intent? : string, locale? : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.metrics.GetMetricDataResponse> {
                 const apiResponse: ApiResponse = await this.callGetSkillMetricsV1(skillId, startTime, endTime, period, metric, stage, skillType, intent, locale, maxResults, nextToken);
@@ -12090,6 +12247,119 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {v1.skill.CreateRollbackRequest} createRollbackRequest defines the request body to create a rollback request
+         */
+        async callRollbackSkillV1(skillId : string, createRollbackRequest : v1.skill.CreateRollbackRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callRollbackSkillV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'createRollbackRequest' is not null or undefined
+            if (createRollbackRequest == null) {
+                throw new Error(`Required parameter createRollbackRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/rollbacks";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Rollback request created; Returns the generated identifier to track the rollback request and returns a URL to track the status in Location header.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createRollbackRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.CreateRollbackRequest} createRollbackRequest defines the request body to create a rollback request
+         */
+        async rollbackSkillV1(skillId : string, createRollbackRequest : v1.skill.CreateRollbackRequest) : Promise<v1.skill.CreateRollbackResponse> {
+                const apiResponse: ApiResponse = await this.callRollbackSkillV1(skillId, createRollbackRequest);
+                return apiResponse.body as v1.skill.CreateRollbackResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} rollbackRequestId Defines the identifier for a rollback request. If set to ~latest, request returns the status of the latest rollback request.
+         */
+        async callGetRollbackForSkillV1(skillId : string, rollbackRequestId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetRollbackForSkillV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'rollbackRequestId' is not null or undefined
+            if (rollbackRequestId == null) {
+                throw new Error(`Required parameter rollbackRequestId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('rollbackRequestId', rollbackRequestId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/rollbacks/{rollbackRequestId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns the rollback status for a given skillId and rollbackRequestId. Returns the latest rollback status if ~latest is used in place of rollbackRequestId.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} rollbackRequestId Defines the identifier for a rollback request. If set to ~latest, request returns the status of the latest rollback request.
+         */
+        async getRollbackForSkillV1(skillId : string, rollbackRequestId : string) : Promise<v1.skill.RollbackRequestStatus> {
+                const apiResponse: ApiResponse = await this.callGetRollbackForSkillV1(skillId, rollbackRequestId);
+                return apiResponse.body as v1.skill.RollbackRequestStatus;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
          * @param {v1.skill.simulations.SimulationsApiRequest} simulationsApiRequest Payload sent to the skill simulation API.
          */
         async callSimulateSkillV1(skillId : string, simulationsApiRequest : v1.skill.simulations.SimulationsApiRequest) : Promise<ApiResponse> {
@@ -12520,7 +12790,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callGetIspListForSkillIdV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -12574,7 +12844,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async getIspListForSkillIdV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.isp.ListInSkillProductResponse> {
@@ -12696,7 +12966,7 @@ export namespace services.skillManagement {
             let path : string = "/v1/skills/{skillId}/stages/{stage}/interactionModel/locales/{locale}/versions/{version}/conflictDetectionJobStatus";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
-            errorDefinitions.set(200, "Get conflict detection results sucessfully.");
+            errorDefinitions.set(200, "Get conflict detection results successfully.");
             errorDefinitions.set(400, "Server cannot process the request due to a client error.");
             errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
             errorDefinitions.set(403, "The operation being requested is not allowed.");
@@ -12726,7 +12996,7 @@ export namespace services.skillManagement {
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
          * @param {string} stage Stage of the interaction model.
          * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
          */
         async callGetConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -12794,7 +13064,7 @@ export namespace services.skillManagement {
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
          * @param {string} stage Stage of the interaction model.
          * @param {string} version Version of interaction model. Use \&quot;~current\&quot; to get the model of the current version.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.
          */
         async getConflictsForInteractionModelV1(skillId : string, locale : string, stage : string, version : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.interactionModel.conflictDetection.GetConflictsResponse> {
@@ -12805,7 +13075,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async callListPrivateDistributionAccountsV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
@@ -12861,7 +13131,7 @@ export namespace services.skillManagement {
          *
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          */
         async listPrivateDistributionAccountsV1(skillId : string, stage : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.Private.ListPrivateDistributionAccountsResponse> {
@@ -13169,6 +13439,132 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {string} stageV2 Stages of a skill on which locales can be cloned. Currently only &#x60;development&#x60; stage is supported. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. 
+         * @param {v1.skill.CloneLocaleRequest} cloneLocaleRequest Defines the request body for the cloneLocale API.
+         */
+        async callCloneLocaleV1(skillId : string, stageV2 : string, cloneLocaleRequest : v1.skill.CloneLocaleRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCloneLocaleV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stageV2' is not null or undefined
+            if (stageV2 == null) {
+                throw new Error(`Required parameter stageV2 was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'cloneLocaleRequest' is not null or undefined
+            if (cloneLocaleRequest == null) {
+                throw new Error(`Required parameter cloneLocaleRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('stageV2', stageV2);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/stages/{stageV2}/cloneLocale";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Accepted.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, cloneLocaleRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stageV2 Stages of a skill on which locales can be cloned. Currently only &#x60;development&#x60; stage is supported. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. 
+         * @param {v1.skill.CloneLocaleRequest} cloneLocaleRequest Defines the request body for the cloneLocale API.
+         */
+        async cloneLocaleV1(skillId : string, stageV2 : string, cloneLocaleRequest : v1.skill.CloneLocaleRequest) : Promise<void> {
+                await this.callCloneLocaleV1(skillId, stageV2, cloneLocaleRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stageV2 Stages of a skill on which locales can be cloned. Currently only &#x60;development&#x60; stage is supported. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. 
+         * @param {string} cloneLocaleRequestId Defines the identifier for a clone locale workflow. If set to ~latest, request returns the status of the latest clone locale workflow. 
+         */
+        async callGetCloneLocaleStatusV1(skillId : string, stageV2 : string, cloneLocaleRequestId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetCloneLocaleStatusV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stageV2' is not null or undefined
+            if (stageV2 == null) {
+                throw new Error(`Required parameter stageV2 was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'cloneLocaleRequestId' is not null or undefined
+            if (cloneLocaleRequestId == null) {
+                throw new Error(`Required parameter cloneLocaleRequestId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('stageV2', stageV2);
+            pathParams.set('cloneLocaleRequestId', cloneLocaleRequestId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/stages/{stageV2}/cloneLocaleRequests/{cloneLocaleRequestId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "OK.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stageV2 Stages of a skill on which locales can be cloned. Currently only &#x60;development&#x60; stage is supported. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. 
+         * @param {string} cloneLocaleRequestId Defines the identifier for a clone locale workflow. If set to ~latest, request returns the status of the latest clone locale workflow. 
+         */
+        async getCloneLocaleStatusV1(skillId : string, stageV2 : string, cloneLocaleRequestId : string) : Promise<v1.skill.CloneLocaleStatusResponse> {
+                const apiResponse: ApiResponse = await this.callGetCloneLocaleStatusV1(skillId, stageV2, cloneLocaleRequestId);
+                return apiResponse.body as v1.skill.CloneLocaleStatusResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
          * @param {string} stageV2 Stages of a skill including the new certified stage. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. * &#x60;certified&#x60; -  skills which have completed certification and ready for publishing corresponds to this stage. * &#x60;live&#x60; - skills which are currently live corresponds to this stage. 
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
          */
@@ -13370,7 +13766,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} stageV2 Stages of a skill including the new certified stage. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. * &#x60;certified&#x60; -  skills which have completed certification and ready for publishing corresponds to this stage. * &#x60;live&#x60; - skills which are currently live corresponds to this stage. 
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -13442,7 +13838,7 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {string} stageV2 Stages of a skill including the new certified stage. * &#x60;development&#x60; - skills which are currently in development corresponds to this stage. * &#x60;certified&#x60; -  skills which have completed certification and ready for publishing corresponds to this stage. * &#x60;live&#x60; - skills which are currently live corresponds to this stage. 
          * @param {string} locale The locale for the model requested e.g. en-GB, en-US, de-DE.
-         * @param {string} nextToken A token provided to continue returning results from a previous request which was partial. 
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
@@ -13880,6 +14276,66 @@ export namespace services.skillManagement {
          */
         async submitSkillForCertificationV1(skillId : string, submitSkillForCertificationRequest? : v1.skill.SubmitSkillForCertificationRequest) : Promise<void> {
                 await this.callSubmitSkillForCertificationV1(skillId, submitSkillForCertificationRequest);
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListVersionsForSkillV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListVersionsForSkillV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/versions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved skill versions");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listVersionsForSkillV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.ListSkillVersionsResponse> {
+                const apiResponse: ApiResponse = await this.callListVersionsForSkillV1(skillId, nextToken, maxResults);
+                return apiResponse.body as v1.skill.ListSkillVersionsResponse;
         }
         /**
          *
