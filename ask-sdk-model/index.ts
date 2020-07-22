@@ -487,7 +487,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
 
 /**
  * An object that represents what the user wants.
@@ -533,7 +533,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | IntentRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -555,6 +555,7 @@ export interface Response {
     'card'?: ui.Card;
     'reprompt'?: ui.Reprompt;
     'directives'?: Array<Directive>;
+    'apiResponse'?: any;
     'shouldEndSession'?: boolean;
     'canFulfillIntent'?: canfulfill.CanFulfillIntent;
 }
@@ -723,6 +724,43 @@ export namespace canfulfill {
      * @enum
      */
     export type CanUnderstandSlotValues = 'YES' | 'NO' | 'MAYBE';
+}
+
+export namespace dialog {
+    /**
+     * The delegation period.
+     * @interface
+     */
+    export interface DelegationPeriod {
+        'until'?: dialog.DelegationPeriodUntil;
+    }
+}
+
+export namespace dialog {
+    /**
+     * The end of the specified delegation period.   * EXPLICIT_RETURN - delegation lasts until the targeted dialog manager returns a delegate with a new target.   * NEXT_TURN - delegation lasts until the next turn, which resumes with the current focused dialog manager. 
+     * @enum
+     */
+    export type DelegationPeriodUntil = 'EXPLICIT_RETURN' | 'NEXT_TURN';
+}
+
+export namespace dialog {
+    /**
+     * Structured input data to send to a dialog manager. Currently, this is an Alexa Conversations input instance.
+     * @interface
+     */
+    export interface Input {
+        'name': string;
+        'slots'?: { [key: string]: Slot; };
+    }
+}
+
+export namespace dialog {
+   /**
+    * The updated request to delegate. Null will delegate the current request.
+    * @interface
+    */
+    export type UpdatedRequest = dialog.UpdatedInputRequest | dialog.UpdatedIntentRequest;
 }
 
 export namespace dynamicEndpoints {
@@ -1753,6 +1791,18 @@ export namespace interfaces.connections.requests {
     * @interface
     */
     export type BaseRequest = interfaces.connections.requests.ScheduleFoodEstablishmentReservationRequest | interfaces.connections.requests.PrintImageRequest | interfaces.connections.requests.PrintWebPageRequest | interfaces.connections.requests.PrintPDFRequest | interfaces.connections.requests.ScheduleTaxiReservationRequest;
+}
+
+export namespace interfaces.conversations {
+    /**
+     * API request object
+     * @interface
+     */
+    export interface APIRequest {
+        'name'?: string;
+        'arguments'?: { [key: string]: any; };
+        'slots'?: { [key: string]: SlotValue; };
+    }
 }
 
 export namespace interfaces.customInterfaceController {
@@ -3591,6 +3641,19 @@ export namespace dialog {
      *
      * @interface
      */
+    export interface DelegateRequestDirective {
+        'type' : 'Dialog.DelegateRequest';
+        'target': string;
+        'period': dialog.DelegationPeriod;
+        'updatedRequest'?: dialog.UpdatedRequest;
+    }
+}
+
+export namespace dialog {
+    /**
+     *
+     * @interface
+     */
     export interface DynamicEntitiesDirective {
         'type' : 'Dialog.UpdateDynamicEntities';
         'updateBehavior': er.dynamic.UpdateBehavior;
@@ -3607,6 +3670,42 @@ export namespace dialog {
         'type' : 'Dialog.ElicitSlot';
         'updatedIntent'?: Intent;
         'slotToElicit': string;
+    }
+}
+
+export namespace dialog {
+    /**
+     * A request representing structured data used to provide dialog input to a dialog manager.
+     * @interface
+     */
+    export interface InputRequest {
+        'type' : 'Dialog.InputRequest';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'input': dialog.Input;
+    }
+}
+
+export namespace dialog {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdatedInputRequest {
+        'type' : 'Dialog.InputRequest';
+        'input': dialog.Input;
+    }
+}
+
+export namespace dialog {
+    /**
+     *
+     * @interface
+     */
+    export interface UpdatedIntentRequest {
+        'type' : 'IntentRequest';
+        'intent': Intent;
     }
 }
 
@@ -4257,6 +4356,19 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
         'type' : 'SetItem';
         'index': number;
         'item': any;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     *
+     * @interface
+     */
+    export interface RenderDocumentDirective {
+        'type' : 'Alexa.Presentation.APLA.RenderDocument';
+        'token'?: string;
+        'document'?: { [key: string]: any; };
+        'datasources'?: { [key: string]: any; };
     }
 }
 
@@ -5004,6 +5116,20 @@ export namespace interfaces.connections.requests {
         'partySize'?: string;
         'pickupLocation'?: interfaces.connections.entities.PostalAddress;
         'dropOffLocation'?: interfaces.connections.entities.PostalAddress;
+    }
+}
+
+export namespace interfaces.conversations {
+    /**
+     *
+     * @interface
+     */
+    export interface APIInvocationRequest {
+        'type' : 'Dialog.API.Invoked';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'apiRequest'?: interfaces.conversations.APIRequest;
     }
 }
 
