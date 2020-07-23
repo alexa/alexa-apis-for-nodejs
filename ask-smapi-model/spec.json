@@ -8365,6 +8365,191 @@
         "x-operation-name": "listPrivateDistributionAccountsV1"
       }
     },
+    "/v1/skills/{skillId}/publications": {
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "If the skill is in certified stage, initiate publishing immediately or set a date at which the skill can publish at.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "User's locale/language in context.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "publishSkillRequest",
+            "description": "Defines the request body for publish skill API.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.publication.PublishSkillRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successfully processed skill publication request.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body. only application/json supported.",
+                "enum": [
+                  "application/json"
+                ]
+              },
+              "Content-Language": {
+                "type": "string",
+                "description": "Standard HTTP header for language for which the content of the response is intended. Only en-US, ja-JP supported for this API currently.\n"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.publication.SkillPublicationResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "publishSkillV1"
+      }
+    },
+    "/v1/skills/{skillId}/publications/~latest": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieves the latest skill publishing details of the certified stage of the skill. The publishesAtDate and\nstatus of skill publishing.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "User's locale/language in context.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved latest skill publication information.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body. only application/json supported.",
+                "enum": [
+                  "application/json"
+                ]
+              },
+              "Content-Language": {
+                "type": "string",
+                "description": "Standard HTTP header for language for which the content of the response is intended. Only en-US, ja-JP supported for this API currently.\n"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.publication.SkillPublicationResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getSkillPublicationsV1"
+      }
+    },
     "/v1/skills/{skillId}/simulations": {
       "post": {
         "tags": [
@@ -19681,6 +19866,41 @@
         "PENDING"
       ]
     },
+    "v1.skill.publication.PublishSkillRequest": {
+      "type": "object",
+      "properties": {
+        "publishesAtDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Used to determine when the skill Publishing should start. It takes the request timestamp as default value. The date range can be a maximum of upto 6 months from the current time stamp. The format should be the  RFC 3399 variant of ISO 8601. e.g 2019-04-12T23:20:50.52Z"
+        }
+      }
+    },
+    "v1.skill.publication.SkillPublicationResponse": {
+      "type": "object",
+      "properties": {
+        "publishesAtDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Used to determine when the skill Publishing should start."
+        },
+        "status": {
+          "$ref": "#/definitions/v1.skill.publication.SkillPublicationStatus",
+          "x-isEnum": true
+        }
+      }
+    },
+    "v1.skill.publication.SkillPublicationStatus": {
+      "type": "string",
+      "description": "Status of publishing",
+      "enum": [
+        "IN_PROGRESS",
+        "SUCCEEDED",
+        "FAILED",
+        "CANCELLED",
+        "SCHEDULED"
+      ]
+    },
     "v1.skill.simulations.SimulationsApiRequest": {
       "type": "object",
       "required": [
@@ -20945,17 +21165,17 @@
           "description": "The target skill version to rollback to."
         }
       },
-      "description": "defines the request body to create a rollback request"
+      "description": "Defines the request body to create a rollback request"
     },
     "v1.skill.CreateRollbackResponse": {
       "type": "object",
       "properties": {
         "rollbackRequestId": {
           "type": "string",
-          "description": "defines the identifier for a rollback request."
+          "description": "Defines the identifier for a rollback request."
         }
       },
-      "description": "defines the response body when a rollback request is created"
+      "description": "Defines the response body when a rollback request is created"
     },
     "v1.skill.RollbackRequestStatus": {
       "type": "object",
@@ -21010,23 +21230,23 @@
         },
         "sourceLocale": {
           "type": "string",
-          "description": "source locale which is cloned to target locales."
+          "description": "Source locale which is cloned to target locales."
         },
         "targetLocales": {
           "type": "object",
           "description": "Mapping of statuses per locale.",
           "additionalProperties": {
-            "$ref": "#/definitions/CloneLocaleResourceStatus"
+            "$ref": "#/definitions/v1.skill.CloneLocaleResourceStatus"
           }
         }
       },
       "description": "A mapping of statuses per locale detailing progress of resource or error if encountered."
     },
-    "CloneLocaleResourceStatus": {
+    "v1.skill.CloneLocaleResourceStatus": {
       "type": "object",
       "properties": {
         "status": {
-          "$ref": "#/definitions/CloneLocaleStatus",
+          "$ref": "#/definitions/v1.skill.CloneLocaleStatus",
           "x-isEnum": true
         },
         "errors": {
@@ -21038,9 +21258,9 @@
       },
       "description": "an object detailing the status of a locale clone request and if applicable the errors occurred when saving/building resources during clone process."
     },
-    "CloneLocaleStatus": {
+    "v1.skill.CloneLocaleStatus": {
       "type": "string",
-      "description": "Status for a locale clone on a particular target locale\n  * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.\n  * `FAILED` status would indicate the source locale was not cloned the target locale successfully.\n  * `ROLLBACK_SUCCEEDED` status would indicate the locale was rollbacked to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed.\n",
+      "description": "Status for a locale clone on a particular target locale\n  * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.\n  * `FAILED` status would indicate the source locale was not cloned the target locale successfully.\n  * `ROLLBACK_SUCCEEDED` status would indicate the locale was rolled back to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed.\n",
       "enum": [
         "FAILED",
         "INELIGIBLE",
@@ -21052,7 +21272,7 @@
     },
     "v1.skill.CloneLocaleRequestStatus": {
       "type": "string",
-      "description": "Status for a locale clone request\nCloneLocale API initiates cloning from a source locale to all target locales.\n  * `IN_PROGRESS` status would indicate the clone is still in progress.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.\n  * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.\n  * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.\n  * `ROLLBACK_SUCCEEDED` status would indicate the skill was rollbacked to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed.\n",
+      "description": "Status for a locale clone request\nCloneLocale API initiates cloning from a source locale to all target locales.\n  * `IN_PROGRESS` status would indicate the clone is still in progress.\n  * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.\n  * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.\n  * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.\n  * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.\n  * `ROLLBACK_SUCCEEDED` status would indicate the skill was rolled back to the previous state in case any failure.\n  * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed.\n",
       "enum": [
         "FAILED",
         "INELIGIBLE",
@@ -22686,10 +22906,21 @@
           "$ref": "#/definitions/v2.skill.simulations.AlexaExecutionInfo"
         },
         "skillExecutionInfo": {
-          "$ref": "#/definitions/v2.skill.Invocation"
+          "$ref": "#/definitions/v2.skill.simulations.SkillExecutionInfo"
         },
         "error": {
           "$ref": "#/definitions/v2.Error"
+        }
+      }
+    },
+    "v2.skill.simulations.SkillExecutionInfo": {
+      "type": "object",
+      "properties": {
+        "invocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v2.skill.Invocation"
+          }
         }
       }
     },

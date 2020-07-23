@@ -22,21 +22,6 @@ import BaseServiceClient = runtime.BaseServiceClient;
 import LwaServiceClient = runtime.LwaServiceClient;
 import createUserAgent = runtime.createUserAgent;
 
-/**
- * an object detailing the status of a locale clone request and if applicable the errors occurred when saving/building resources during clone process.
- * @interface
- */
-export interface CloneLocaleResourceStatus {
-    'status'?: CloneLocaleStatus;
-    'errors'?: Array<v1.skill.StandardizedError>;
-}
-
-/**
- * Status for a locale clone on a particular target locale   * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.   * `FAILED` status would indicate the source locale was not cloned the target locale successfully.   * `ROLLBACK_SUCCEEDED` status would indicate the locale was rollbacked to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed. 
- * @enum
- */
-export type CloneLocaleStatus = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'ROLLBACK_FAILED' | 'ROLLBACK_SUCCEEDED' | 'SUCCEEDED';
-
 export namespace v0 {
     /**
      *
@@ -1409,10 +1394,21 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * Status for a locale clone request CloneLocale API initiates cloning from a source locale to all target locales.   * `IN_PROGRESS` status would indicate the clone is still in progress.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.   * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.   * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.   * `ROLLBACK_SUCCEEDED` status would indicate the skill was rollbacked to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed. 
+     * Status for a locale clone request CloneLocale API initiates cloning from a source locale to all target locales.   * `IN_PROGRESS` status would indicate the clone is still in progress.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to all target locales.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned to all target locales.   * `MIXED` status would indicate the different status of clone on different locales, and individual target locale statues should be checked.   * `FAILED` status would indicate the source locale was not cloned all target locales successfully despite the request being eligible due to internal service issues.   * `ROLLBACK_SUCCEEDED` status would indicate the skill was rolled back to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the skill was attempted, but it failed. 
      * @enum
      */
     export type CloneLocaleRequestStatus = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'MIXED' | 'ROLLBACK_FAILED' | 'ROLLBACK_SUCCEEDED' | 'SUCCEEDED';
+}
+
+export namespace v1.skill {
+    /**
+     * an object detailing the status of a locale clone request and if applicable the errors occurred when saving/building resources during clone process.
+     * @interface
+     */
+    export interface CloneLocaleResourceStatus {
+        'status'?: v1.skill.CloneLocaleStatus;
+        'errors'?: Array<v1.skill.StandardizedError>;
+    }
 }
 
 export namespace v1.skill {
@@ -1425,6 +1421,14 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
+     * Status for a locale clone on a particular target locale   * `IN_PROGRESS` status would indicate the clone is still in progress to the target locale.   * `SUCCEEDED` status would indicate the source locale was cloned successfully to the target locale.   * `INELIGIBLE` status would indicate the source locale was ineligible to be cloned the target locale.   * `FAILED` status would indicate the source locale was not cloned the target locale successfully.   * `ROLLBACK_SUCCEEDED` status would indicate the locale was rolled back to the previous state in case any failure.   * `ROLLBACK_FAILED` status would indicate that in case of failure, the rollback to the previous state of the locale was attempted, but it failed. 
+     * @enum
+     */
+    export type CloneLocaleStatus = 'FAILED' | 'INELIGIBLE' | 'IN_PROGRESS' | 'ROLLBACK_FAILED' | 'ROLLBACK_SUCCEEDED' | 'SUCCEEDED';
+}
+
+export namespace v1.skill {
+    /**
      * A mapping of statuses per locale detailing progress of resource or error if encountered.
      * @interface
      */
@@ -1432,13 +1436,13 @@ export namespace v1.skill {
         'status'?: v1.skill.CloneLocaleRequestStatus;
         'errors'?: Array<v1.skill.StandardizedError>;
         'sourceLocale'?: string;
-        'targetLocales'?: { [key: string]: CloneLocaleResourceStatus; };
+        'targetLocales'?: { [key: string]: v1.skill.CloneLocaleResourceStatus; };
     }
 }
 
 export namespace v1.skill {
     /**
-     * defines the request body to create a rollback request
+     * Defines the request body to create a rollback request
      * @interface
      */
     export interface CreateRollbackRequest {
@@ -1448,7 +1452,7 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * defines the response body when a rollback request is created
+     * Defines the response body when a rollback request is created
      * @interface
      */
     export interface CreateRollbackResponse {
@@ -5045,6 +5049,35 @@ export namespace v1.skill.nlu.evaluations {
     }
 }
 
+export namespace v1.skill.publication {
+    /**
+     *
+     * @interface
+     */
+    export interface PublishSkillRequest {
+        'publishesAtDate'?: string;
+    }
+}
+
+export namespace v1.skill.publication {
+    /**
+     *
+     * @interface
+     */
+    export interface SkillPublicationResponse {
+        'publishesAtDate'?: string;
+        'status'?: v1.skill.publication.SkillPublicationStatus;
+    }
+}
+
+export namespace v1.skill.publication {
+    /**
+     * Status of publishing
+     * @enum
+     */
+    export type SkillPublicationStatus = 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED' | 'SCHEDULED';
+}
+
 export namespace v1.skill.simulations {
     /**
      *
@@ -5608,7 +5641,7 @@ export namespace v2.skill.simulations {
      */
     export interface SimulationResult {
         'alexaExecutionInfo'?: v2.skill.simulations.AlexaExecutionInfo;
-        'skillExecutionInfo'?: v2.skill.Invocation;
+        'skillExecutionInfo'?: v2.skill.simulations.SkillExecutionInfo;
         'error'?: v2.Error;
     }
 }
@@ -5643,6 +5676,16 @@ export namespace v2.skill.simulations {
      * @enum
      */
     export type SimulationsApiResponseStatus = 'IN_PROGRESS' | 'SUCCESSFUL' | 'FAILED';
+}
+
+export namespace v2.skill.simulations {
+    /**
+     *
+     * @interface
+     */
+    export interface SkillExecutionInfo {
+        'invocations'?: Array<v2.skill.Invocation>;
+    }
 }
 
 export namespace v2.skill.simulations {
@@ -12243,6 +12286,119 @@ export namespace services.skillManagement {
         async createNLUEvaluationsV1(evaluateNLURequest : v1.skill.nlu.evaluations.EvaluateNLURequest, skillId : string) : Promise<v1.skill.nlu.evaluations.EvaluateResponse> {
                 const apiResponse: ApiResponse = await this.callCreateNLUEvaluationsV1(evaluateNLURequest, skillId);
                 return apiResponse.body as v1.skill.nlu.evaluations.EvaluateResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} acceptLanguage User&#39;s locale/language in context.
+         * @param {v1.skill.publication.PublishSkillRequest} publishSkillRequest Defines the request body for publish skill API.
+         */
+        async callPublishSkillV1(skillId : string, acceptLanguage : string, publishSkillRequest? : v1.skill.publication.PublishSkillRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callPublishSkillV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'acceptLanguage' is not null or undefined
+            if (acceptLanguage == null) {
+                throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/publications";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Successfully processed skill publication request.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, publishSkillRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} acceptLanguage User&#39;s locale/language in context.
+         * @param {v1.skill.publication.PublishSkillRequest} publishSkillRequest Defines the request body for publish skill API.
+         */
+        async publishSkillV1(skillId : string, acceptLanguage : string, publishSkillRequest? : v1.skill.publication.PublishSkillRequest) : Promise<v1.skill.publication.SkillPublicationResponse> {
+                const apiResponse: ApiResponse = await this.callPublishSkillV1(skillId, acceptLanguage, publishSkillRequest);
+                return apiResponse.body as v1.skill.publication.SkillPublicationResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} acceptLanguage User&#39;s locale/language in context.
+         */
+        async callGetSkillPublicationsV1(skillId : string, acceptLanguage : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSkillPublicationsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'acceptLanguage' is not null or undefined
+            if (acceptLanguage == null) {
+                throw new Error(`Required parameter acceptLanguage was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Accept-Language', value : acceptLanguage });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/publications/~latest";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved latest skill publication information.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} acceptLanguage User&#39;s locale/language in context.
+         */
+        async getSkillPublicationsV1(skillId : string, acceptLanguage : string) : Promise<v1.skill.publication.SkillPublicationResponse> {
+                const apiResponse: ApiResponse = await this.callGetSkillPublicationsV1(skillId, acceptLanguage);
+                return apiResponse.body as v1.skill.publication.SkillPublicationResponse;
         }
         /**
          *
