@@ -12149,7 +12149,7 @@
             "headers": {
               "Content-Type": {
                 "type": "string",
-                "description": "returned content type, application/json supported",
+                "description": "Returned content type, application/json supported",
                 "enum": [
                   "application/json"
                 ]
@@ -22268,7 +22268,7 @@
           "properties": {
             "id": {
               "type": "string",
-              "description": "annotation set id"
+              "description": "The Annotation set id"
             }
           }
         }
@@ -22317,7 +22317,7 @@
           "$ref": "#/definitions/v1.skill.asr.annotationSets.PaginationContext"
         }
       },
-      "description": "This the payload schema for annotation set contents. Note that 'audioAsset' is always included in the returned annotation set content payload in case the payload content type is 'application/json'. For 'text/csv' annotation set content type, 'audioAssetDownloadUrl' and 'audioAssetDownloadUrlExpiryTime' are included in the csv headers for representing the audio download url and the expiry time of the  presigned audio download url.\n"
+      "description": "This is the payload schema for annotation set contents. Note that when uploadId and filePathInUpload is present, and the payload content type is 'application/json', audioAsset is included in the returned annotation set content payload. For 'text/csv' annotation set content type, audioAssetDownloadUrl and audioAssetDownloadUrlExpiryTime are included in the csv headers for representing the audio download url and the expiry time of the presigned audio download.\n"
     },
     "v1.skill.asr.annotationSets.AudioAsset": {
       "type": "object",
@@ -22341,7 +22341,7 @@
     },
     "v1.skill.asr.annotationSets.AudioAssetDownloadUrlExpiryTime": {
       "type": "string",
-      "description": "timestamp when the audio download url expire in ISO 8601 format"
+      "description": "Timestamp when the audio download url expire in ISO 8601 format"
     },
     "v1.skill.asr.annotationSets.AnnotationWithAudioAsset": {
       "allOf": [
@@ -22350,9 +22350,6 @@
         },
         {
           "type": "object",
-          "required": [
-            "audioAsset"
-          ],
           "properties": {
             "audioAsset": {
               "$ref": "#/definitions/v1.skill.asr.annotationSets.AudioAsset"
@@ -22360,36 +22357,31 @@
           }
         }
       ],
-      "description": "object containing annotation content and audio file download information."
+      "description": "Object containing annotation content and audio file download information."
     },
     "v1.skill.asr.annotationSets.Annotation": {
       "type": "object",
-      "required": [
-        "evaluationWeight",
-        "expectedTranscription",
-        "filePathInUpload",
-        "uploadId"
-      ],
       "properties": {
         "uploadId": {
           "type": "string",
-          "description": "upload id obtained when developer creates an upload using catalog API"
+          "description": "Upload id obtained when developer creates an upload using catalog API. Required to be present when expectedTranscription is missing. When uploadId is present, filePathInUpload must also be present."
         },
         "filePathInUpload": {
           "type": "string",
-          "description": "file path in the uploaded zip file. For example, a zip containing a folder named 'a' and there is an audio b.mp3 in that folder. The file path is a/b.mp3. Notice that forward slash ('/') should be used to concatenate directories."
+          "description": "File path in the uploaded zip file. For example, a zip containing a folder named 'a' and there is an audio b.mp3 in that folder. The file path is a/b.mp3. Notice that forward slash ('/') should be used to concatenate directories. Required to be present when expectedTranscription is missing. When filePathInUpload is present, uploadId must also be present."
         },
         "evaluationWeight": {
           "type": "number",
-          "description": "weight of the test case in an evaluation, the value would be used for calculating metrics such as overall error rate.  The acceptable values are from 1 - 1000. 1 means least significant, 1000 means mot significant. Here is how weight  impact the `OVERALL_ERROR_RATE` calculation: For example, an annotation set consists of 3 annotations and they have weight of 8, 1, 1. The evaluation results  show that only the first annotation test case passed while the rest of the test cases failed. In this case,  the overall error rate is (8 / (8 + 1 + 1)) = 0.8\n",
+          "description": "Weight of the test case in an evaluation, the value would be used for calculating metrics such as overall error rate.  The acceptable values are from 1 - 1000. 1 means least significant, 1000 means mot significant. Here is how weight  impact the `OVERALL_ERROR_RATE` calculation: For example, an annotation set consists of 3 annotations and they have weight of 8, 1, 1. The evaluation results  show that only the first annotation test case passed while the rest of the test cases failed. In this case,  the overall error rate is (8 / (8 + 1 + 1)) = 0.8\n",
           "minimum": 1,
           "maximum": 1000
         },
         "expectedTranscription": {
           "type": "string",
-          "description": "expected transcription text for the input audio. The acceptable length of the string is between 1 and 500 Unicode characters"
+          "description": "Expected transcription text for the input audio. The acceptable length of the string is between 1 and 500 Unicode characters. Required to be present when uploadId and filePathInUpload are missing."
         }
-      }
+      },
+      "description": "A single test case that describes the audio reference, expected transcriptions, test case weight etc. Each annotation object must have at least expectedTranscription or, uploadId and filePathInUpload in pair. In any case, filePathInUpload and uploadId must be present or missing in pair."
     },
     "v1.skill.asr.annotationSets.GetASRAnnotationSetsPropertiesResponse": {
       "allOf": [
@@ -22431,6 +22423,10 @@
           "type": "string",
           "format": "date-time",
           "description": "The timestamp for the most recent update of ASR annotation set"
+        },
+        "eligibleForEvaluation": {
+          "type": "boolean",
+          "description": "Indicates if the annotation set is eligible for evaluation. A set is not eligible for evaluation if any annotation within the set has a missing uploadId, filePathInUpload, expectedTranscription, or evaluationWeight."
         }
       }
     },

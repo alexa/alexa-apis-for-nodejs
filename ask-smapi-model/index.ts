@@ -2843,14 +2843,14 @@ export namespace v1.skill.accountLinking {
 
 export namespace v1.skill.asr.annotationSets {
     /**
-     *
+     * A single test case that describes the audio reference, expected transcriptions, test case weight etc. Each annotation object must have at least expectedTranscription or, uploadId and filePathInUpload in pair. In any case, filePathInUpload and uploadId must be present or missing in pair.
      * @interface
      */
     export interface Annotation {
-        'uploadId': string;
-        'filePathInUpload': string;
-        'evaluationWeight': number;
-        'expectedTranscription': string;
+        'uploadId'?: string;
+        'filePathInUpload'?: string;
+        'evaluationWeight'?: number;
+        'expectedTranscription'?: string;
     }
 }
 
@@ -2863,6 +2863,7 @@ export namespace v1.skill.asr.annotationSets {
         'name': string;
         'annotationCount': number;
         'lastUpdatedTimestamp': string;
+        'eligibleForEvaluation'?: boolean;
     }
 }
 
@@ -2888,7 +2889,7 @@ export namespace v1.skill.asr.annotationSets {
 
 export namespace v1.skill.asr.annotationSets {
     /**
-     * timestamp when the audio download url expire in ISO 8601 format
+     * Timestamp when the audio download url expire in ISO 8601 format
      * @interface
      */
     export interface AudioAssetDownloadUrlExpiryTime {
@@ -2917,7 +2918,7 @@ export namespace v1.skill.asr.annotationSets {
 
 export namespace v1.skill.asr.annotationSets {
     /**
-     * This the payload schema for annotation set contents. Note that 'audioAsset' is always included in the returned annotation set content payload in case the payload content type is 'application/json'. For 'text/csv' annotation set content type, 'audioAssetDownloadUrl' and 'audioAssetDownloadUrlExpiryTime' are included in the csv headers for representing the audio download url and the expiry time of the  presigned audio download url. 
+     * This is the payload schema for annotation set contents. Note that when uploadId and filePathInUpload is present, and the payload content type is 'application/json', audioAsset is included in the returned annotation set content payload. For 'text/csv' annotation set content type, audioAssetDownloadUrl and audioAssetDownloadUrlExpiryTime are included in the csv headers for representing the audio download url and the expiry time of the presigned audio download. 
      * @interface
      */
     export interface GetAsrAnnotationSetAnnotationsResponse {
@@ -5930,21 +5931,22 @@ export namespace v1.skill.asr.annotationSets {
         'name': string;
         'annotationCount': number;
         'lastUpdatedTimestamp': string;
+        'eligibleForEvaluation'?: boolean;
         'id': string;
     }
 }
 
 export namespace v1.skill.asr.annotationSets {
     /**
-     * object containing annotation content and audio file download information.
+     * Object containing annotation content and audio file download information.
      * @interface
      */
     export interface AnnotationWithAudioAsset {
-        'uploadId': string;
-        'filePathInUpload': string;
-        'evaluationWeight': number;
-        'expectedTranscription': string;
-        'audioAsset': v1.skill.asr.annotationSets.AudioAsset;
+        'uploadId'?: string;
+        'filePathInUpload'?: string;
+        'evaluationWeight'?: number;
+        'expectedTranscription'?: string;
+        'audioAsset'?: v1.skill.asr.annotationSets.AudioAsset;
     }
 }
 
@@ -5957,6 +5959,7 @@ export namespace v1.skill.asr.annotationSets {
         'name': string;
         'annotationCount': number;
         'lastUpdatedTimestamp': string;
+        'eligibleForEvaluation'?: boolean;
     }
 }
 
