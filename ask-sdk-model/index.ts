@@ -852,6 +852,7 @@ export namespace events.skillevents {
      */
     export interface PermissionBody {
         'acceptedPermissions'?: Array<events.skillevents.Permission>;
+        'acceptedPersonPermissions'?: Array<events.skillevents.Permission>;
     }
 }
 
@@ -3786,7 +3787,7 @@ export namespace events.skillevents {
 
 export namespace events.skillevents {
     /**
-     * This event indicates a customer subscription to receive events from your skill and contains information for that user. You need this information to know the userId in order to send events to individual users. Note that these events can arrive out of order, so ensure that your skill service uses the timestamp in the event to correctly record the latest subscription state for a customer. 
+     * This event indicates a customer subscription to receive events from your skill and contains information for that user and person, if recognized. You need this information to know the userId and personId in order to send events to individual users. Note that these events can arrive out of order, so ensure that your skill service uses the timestamp in the event to correctly record the latest subscription state for a customer. 
      * @interface
      */
     export interface ProactiveSubscriptionChangedRequest {
@@ -4546,7 +4547,7 @@ export namespace interfaces.alexa.presentation.aplt {
 
 export namespace interfaces.alexa.presentation.html {
     /**
-     * The HandleMessage directive sends a message to a skill's web application that runs on the device browser. To use this directive, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * The HandleMessage directive sends a message to a skill's web application that runs on the device browser. 
      * @interface
      */
     export interface HandleMessageDirective {
@@ -4558,7 +4559,7 @@ export namespace interfaces.alexa.presentation.html {
 
 export namespace interfaces.alexa.presentation.html {
     /**
-     * The Message request sends a message to the skill lambda. To use this request, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * The Message request sends a message to the skill lambda. 
      * @interface
      */
     export interface MessageRequest {
@@ -4572,7 +4573,7 @@ export namespace interfaces.alexa.presentation.html {
 
 export namespace interfaces.alexa.presentation.html {
     /**
-     * The RuntimeError request occurs when the device software encounters an error with loading a skill's web application. To use this request, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * The RuntimeError request occurs when the device software encounters an error with loading a skill's web application. 
      * @interface
      */
     export interface RuntimeErrorRequest {
@@ -4586,7 +4587,7 @@ export namespace interfaces.alexa.presentation.html {
 
 export namespace interfaces.alexa.presentation.html {
     /**
-     * The Start directive provides the data necessary to load an HTML page on the target device. To use this directive, [apply to participate](https://build.amazonalexadev.com/AlexaWebAPIforGamesDeveloperPreview_AlexaWebAPIforGames.html) in the Alexa Web API for Games developer preview. 
+     * The Start directive provides the data necessary to load an HTML page on the target device. 
      * @interface
      */
     export interface StartDirective {
