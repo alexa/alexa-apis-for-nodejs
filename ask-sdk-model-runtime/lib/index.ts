@@ -114,7 +114,7 @@ export class DefaultApiClient implements ApiClient {
                 });
 
                 response.on('end', () => {
-                    const responseStr = chunks.join('');
+                    const responseStr = Buffer.concat(chunks).toString();
                     const responseObj : ApiClientResponse = {
                         statusCode : response.statusCode,
                         body : responseStr,
