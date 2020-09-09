@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import * as nock from 'nock';
+import { Readable } from 'stream';
 import { ApiClient, ApiClientRequest, ApiClientResponse, createUserAgent, DefaultApiClient, LwaServiceClient } from '../lib/index';
 import { MockApiClient } from './mocks/MockApiClient';
 import { MockErrorApiClient } from './mocks/MockErrorApiClient';
@@ -427,7 +428,7 @@ describe('BaseServiceClient', () => {
         };
 
         let calledPromise = false;
-        const requestInterceptorPromise = (): Promise<void> => {
+        const requestInterceptorPromise = () : Promise<void> => {
             return new Promise((resolve) => {
                 calledPromise = true;
                 resolve();
@@ -571,7 +572,7 @@ describe('LwaServiceClient', () => {
                 clientSecret : 'mockSecret',
                 clientId : 'mockId',
                 refreshToken: 'mockRefreshToken',
-                authEndpoint: 'https://someendpoint.com'
+                authEndpoint: 'https://someendpoint.com',
             },
             apiConfiguration : {
                 apiClient,
@@ -853,6 +854,38 @@ describe('DefaultApiClient', () => {
         expect(response.body).equal('Success');
         expect(response.headers[0]).deep.equal({key : 'v1', value : 'k_1'});
         expect(response.headers[1]).deep.equal({key : 'v1', value : 'k_2'});
+    });
+
+    it('should be able to receive responses with unicode information', async() => {
+        const request : ApiClientRequest = {
+            headers : [
+                {key : 'k1', value : 'v1'},
+            ],
+            method : 'GET',
+            url : testHttpUrl,
+        };
+
+        // Creating a long unicode string
+        const longUnicodeStr = 'ハロー'.repeat(10);
+        const longUnicodeStrBuffer = Buffer.from(longUnicodeStr, 'utf-8');
+
+        // Create a stream and slice the buffer mimicking response chunks
+        const readable = new Readable();
+        readable.push(longUnicodeStrBuffer.slice(0, 10));
+        readable.push(longUnicodeStrBuffer.slice(10, longUnicodeStrBuffer.byteLength));
+        readable.push(null);
+
+        const apiFake = nock(testHttpUrl)
+            .matchHeader('k1', 'v1')
+            .get('/')
+            .reply(200, readable, {
+                v1 : ['k_1'],
+            });
+
+        const response : ApiClientResponse = await apiClient.invoke(request);
+
+        expect(apiFake.isDone()).equal(true);
+        expect(response.body).equal(longUnicodeStr);
     });
 
     it('should be able to send DELETE request', async() => {
