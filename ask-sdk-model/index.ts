@@ -533,7 +533,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -678,6 +678,35 @@ export interface User {
     'userId': string;
     'accessToken'?: string;
     'permissions'?: Permissions;
+}
+
+export namespace authorization {
+    /**
+     * Authorization grant body.
+     * @interface
+     */
+    export interface AuthorizationGrantBody {
+        'grant': authorization.Grant;
+    }
+}
+
+export namespace authorization {
+    /**
+     * Information that identifies a user in Amazon Alexa systems.
+     * @interface
+     */
+    export interface Grant {
+        'type': authorization.GrantType;
+        'code': string;
+    }
+}
+
+export namespace authorization {
+    /**
+     * One of the grant types supported.
+     * @enum
+     */
+    export type GrantType = 'OAuth2.AuthorizationCode';
 }
 
 export namespace canfulfill {
@@ -1776,6 +1805,14 @@ export namespace interfaces.connections {
         'code': string;
         'message'?: string;
     }
+}
+
+export namespace interfaces.connections {
+    /**
+     * This defines the callback mechanism when the task is completed, i.e., whether the requester wants to be resumed after the task is fulfilled or just be notified about errors without being resumed.
+     * @enum
+     */
+    export type OnCompletion = 'RESUME_SESSION' | 'SEND_ERRORS_ONLY';
 }
 
 export namespace interfaces.connections.entities {
@@ -3600,6 +3637,20 @@ export interface SimpleSlotValue {
     'resolutions'?: slu.entityresolution.Resolutions;
 }
 
+export namespace authorization {
+    /**
+     * Represents an authorization code delivered to a skill that has out-of-session permissions without requiring account linking.
+     * @interface
+     */
+    export interface AuthorizationGrantRequest {
+        'type' : 'Alexa.Authorization.Grant';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'body': authorization.AuthorizationGrantBody;
+    }
+}
+
 export namespace canfulfill {
     /**
      * An object that represents a request made to skill to query whether the skill can understand and fulfill the intent request with detected slots, before actually asking the skill to take action. Skill should be aware this is not to actually take action, skill should handle this request without causing side-effect, skill should not modify some state outside its scope or has an observable interaction with its calling functions or the outside world besides returning a value, such as playing sound,turning on/off lights, committing a transaction or a charge.
@@ -5026,6 +5077,7 @@ export namespace interfaces.connections.V1 {
     export interface StartConnectionDirective {
         'type' : 'Connections.StartConnection';
         'uri': string;
+        'onCompletion'?: interfaces.connections.OnCompletion;
         'input'?: { [key: string]: any; };
         'token'?: string;
     }
@@ -8146,3 +8198,4 @@ export namespace services {
         }
     }
 }
+
