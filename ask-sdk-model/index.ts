@@ -2140,8 +2140,20 @@ export namespace interfaces.system {
         'user': User;
         'device'?: Device;
         'person'?: Person;
+        'unit'?: interfaces.systemUnit.Unit;
         'apiEndpoint': string;
         'apiAccessToken'?: string;
+    }
+}
+
+export namespace interfaces.systemUnit {
+    /**
+     * An object that represents a logical entity for organizing actors and resources that interact with Alexa systems.
+     * @interface
+     */
+    export interface Unit {
+        'unitId'?: string;
+        'persistentUnitId'?: string;
     }
 }
 
@@ -8134,4 +8146,3 @@ export namespace services {
         }
     }
 }
-
