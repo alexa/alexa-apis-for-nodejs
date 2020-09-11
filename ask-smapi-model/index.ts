@@ -2798,6 +2798,7 @@ export namespace v1.skill.accountLinking {
         'scopes'?: Array<string>;
         'accessTokenUrl'?: string;
         'clientSecret'?: string;
+        'skipOnEnablement'?: boolean;
         'accessTokenScheme'?: v1.skill.accountLinking.AccessTokenSchemeType;
         'defaultTokenExpirationInSeconds'?: number;
         'reciprocalAccessTokenUrl'?: string;
