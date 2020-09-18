@@ -2013,7 +2013,7 @@ export namespace v1.skill.Manifest {
         'regions'?: { [key: string]: v1.skill.Manifest.LambdaRegion; };
         'endpoint'?: v1.skill.Manifest.LambdaEndpoint;
         'capabilities'?: Array<v1.skill.Manifest.MusicCapability>;
-        'interfaces'?: v1.skill.Manifest.MusicInterfaces;
+        'interfaces'?: Array<v1.skill.Manifest.MusicInterfaces>;
         'locales'?: { [key: string]: v1.skill.Manifest.LocalizedMusicInfo; };
         'contentTypes'?: Array<v1.skill.Manifest.MusicContentType>;
     }
@@ -4113,6 +4113,171 @@ export namespace v1.skill.interactionModel.conflictDetection {
     }
 }
 
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Request to create job definitions.
+     * @interface
+     */
+    export interface CreateJobDefinitionRequest {
+        'vendorId'?: string;
+        'jobDefinition'?: v1.skill.interactionModel.jobs.JobDefinition;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * The response of create job definition.
+     * @interface
+     */
+    export interface CreateJobDefinitionResponse {
+        'jobId'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Error schema for dynamic update.
+     * @interface
+     */
+    export interface DynamicUpdateError {
+        'code'?: string;
+        'message'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Execution data.
+     * @interface
+     */
+    export interface Execution {
+        'executionId'?: string;
+        'timestamp'?: string;
+        'errorCode'?: string;
+        'status'?: string;
+        'errorDetails'?: v1.skill.interactionModel.jobs.JobErrorDetails;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * ExecutionMetadata for executions.
+     * @interface
+     */
+    export interface ExecutionMetadata {
+        'jobId'?: string;
+        'errorCode'?: string;
+        'status'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * The response of get execution history.
+     * @interface
+     */
+    export interface GetExecutionsResponse {
+        'paginationContext'?: v1.skill.interactionModel.jobs.JobAPIPaginationContext;
+        '_links'?: v1.Links;
+        'executions'?: Array<v1.skill.interactionModel.jobs.Execution>;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     *
+     * @interface
+     */
+    export interface JobAPIPaginationContext {
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+   /**
+    * Definition for dynamic job.
+    * @interface
+    */
+    export type JobDefinition = v1.skill.interactionModel.jobs.ReferenceVersionUpdate | v1.skill.interactionModel.jobs.CatalogAutoRefresh;
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Metadata of the job definition.
+     * @interface
+     */
+    export interface JobDefinitionMetadata {
+        'id'?: string;
+        'type'?: string;
+        'status'?: v1.skill.interactionModel.jobs.JobDefinitionStatus;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Current status of the job definition.
+     * @enum
+     */
+    export type JobDefinitionStatus = 'DISABLED' | 'ENALBED';
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Optional details if the execution is depending on other executions.
+     * @interface
+     */
+    export interface JobErrorDetails {
+        'executionMetadata'?: Array<v1.skill.interactionModel.jobs.ExecutionMetadata>;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * The response of list job definitions.
+     * @interface
+     */
+    export interface ListJobDefinitionsResponse {
+        'paginationContext'?: v1.skill.interactionModel.jobs.JobAPIPaginationContext;
+        '_links'?: v1.Links;
+        'jobs'?: Array<v1.skill.interactionModel.jobs.JobDefinitionMetadata>;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+   /**
+    * Resource object where the job is applied on.
+    * @interface
+    */
+    export type ResourceObject = v1.skill.interactionModel.jobs.InteractionModel | v1.skill.interactionModel.jobs.Catalog | v1.skill.interactionModel.jobs.SlotTypeReference;
+}
+
+export namespace v1.skill.interactionModel.jobs {
+   /**
+    * Condition when jobs will be executed.
+    * @interface
+    */
+    export type Trigger = v1.skill.interactionModel.jobs.ReferencedResourceJobsComplete | v1.skill.interactionModel.jobs.Scheduled;
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Update job status.
+     * @interface
+     */
+    export interface UpdateJobStatusRequest {
+        'status': v1.skill.interactionModel.jobs.JobDefinitionStatus;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * The list of errors.
+     * @interface
+     */
+    export interface ValidationErrors {
+        'errors'?: Array<v1.skill.interactionModel.jobs.DynamicUpdateError>;
+    }
+}
+
 export namespace v1.skill.interactionModel {
     /**
      * Define the language model.
@@ -6161,6 +6326,90 @@ export namespace v1.skill.interactionModel.conflictDetection {
     export interface GetConflictsResponse {
         'paginationContext'?: v1.skill.interactionModel.conflictDetection.PaginationContext;
         '_links'?: v1.Links;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Catalog the job is applied on.
+     * @interface
+     */
+    export interface Catalog {
+        'type' : 'Catalog';
+        'id'?: string;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Definition for CatalogAutoRefresh job.
+     * @interface
+     */
+    export interface CatalogAutoRefresh {
+        'type' : 'CatalogAutoRefresh';
+        'trigger'?: v1.skill.interactionModel.jobs.Scheduled;
+        'status'?: string;
+        'resource'?: v1.skill.interactionModel.jobs.Catalog;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Interaction model the job is applied on.
+     * @interface
+     */
+    export interface InteractionModel {
+        'type' : 'InteractionModel';
+        'id': string;
+        'locales': Array<string>;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Definition for ReferenceVersionUpdate job.
+     * @interface
+     */
+    export interface ReferenceVersionUpdate {
+        'type' : 'ReferenceVersionUpdate';
+        'trigger'?: v1.skill.interactionModel.jobs.ReferencedResourceJobsComplete;
+        'status'?: string;
+        'resource'?: v1.skill.interactionModel.jobs.ResourceObject;
+        'references'?: Array<v1.skill.interactionModel.jobs.ResourceObject>;
+        'publishToLive'?: boolean;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Dependent job condition when jobs will be executed.
+     * @interface
+     */
+    export interface ReferencedResourceJobsComplete {
+        'type' : 'ReferencedResourceJobsComplete';
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Time-based condition when jobs will be executed.
+     * @interface
+     */
+    export interface Scheduled {
+        'type' : 'Scheduled';
+        'hour': number;
+        'dayOfWeek'?: number;
+    }
+}
+
+export namespace v1.skill.interactionModel.jobs {
+    /**
+     * Slot type reference the job is applied on.
+     * @interface
+     */
+    export interface SlotTypeReference {
+        'type' : 'SlotTypeReference';
+        'id'?: string;
     }
 }
 
@@ -8792,6 +9041,383 @@ export namespace services.skillManagement {
         async createInteractionModelCatalogV1(catalog : v1.skill.interactionModel.catalog.DefinitionData) : Promise<v1.skill.interactionModel.catalog.CatalogResponse> {
                 const apiResponse: ApiResponse = await this.callCreateInteractionModelCatalogV1(catalog);
                 return apiResponse.body as v1.skill.interactionModel.catalog.CatalogResponse;
+        }
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async callListJobDefinitionsForInteractionModelV1(vendorId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListJobDefinitionsForInteractionModelV1';
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "List of all jobs associated with the vendor.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} vendorId The vendor ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async listJobDefinitionsForInteractionModelV1(vendorId : string, maxResults? : number, nextToken? : string) : Promise<v1.skill.interactionModel.jobs.ListJobDefinitionsResponse> {
+                const apiResponse: ApiResponse = await this.callListJobDefinitionsForInteractionModelV1(vendorId, maxResults, nextToken);
+                return apiResponse.body as v1.skill.interactionModel.jobs.ListJobDefinitionsResponse;
+        }
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         */
+        async callDeleteJobDefinitionForInteractionModelV1(jobId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteJobDefinitionForInteractionModelV1';
+            // verify required parameter 'jobId' is not null or undefined
+            if (jobId == null) {
+                throw new Error(`Required parameter jobId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('jobId', jobId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs/{jobId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No content, confirms the resource is updated.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         */
+        async deleteJobDefinitionForInteractionModelV1(jobId : string) : Promise<void> {
+                await this.callDeleteJobDefinitionForInteractionModelV1(jobId);
+        }
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {string} executionId The identifier for dynamic job executions. Currently only allowed for scheduled executions.
+         */
+        async callCancelNextJobExecutionForInteractionModelV1(jobId : string, executionId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callCancelNextJobExecutionForInteractionModelV1';
+            // verify required parameter 'jobId' is not null or undefined
+            if (jobId == null) {
+                throw new Error(`Required parameter jobId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'executionId' is not null or undefined
+            if (executionId == null) {
+                throw new Error(`Required parameter executionId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('jobId', jobId);
+            pathParams.set('executionId', executionId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs/{jobId}/executions/{executionId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No Content; Confirms that the next execution is canceled.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {string} executionId The identifier for dynamic job executions. Currently only allowed for scheduled executions.
+         */
+        async cancelNextJobExecutionForInteractionModelV1(jobId : string, executionId : string) : Promise<void> {
+                await this.callCancelNextJobExecutionForInteractionModelV1(jobId, executionId);
+        }
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async callListJobExecutionsForInteractionModelV1(jobId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListJobExecutionsForInteractionModelV1';
+            // verify required parameter 'jobId' is not null or undefined
+            if (jobId == null) {
+                throw new Error(`Required parameter jobId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(sortDirection != null) {
+                const sortDirectionValues: any[] = Array.isArray(sortDirection) ? sortDirection : [sortDirection];
+                sortDirectionValues.forEach(val => queryParams.push({ key: 'sortDirection', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('jobId', jobId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs/{jobId}/executions";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Retrun list of executions associated with the job definition.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
+         */
+        async listJobExecutionsForInteractionModelV1(jobId : string, maxResults? : number, nextToken? : string, sortDirection? : string) : Promise<v1.skill.interactionModel.jobs.GetExecutionsResponse> {
+                const apiResponse: ApiResponse = await this.callListJobExecutionsForInteractionModelV1(jobId, maxResults, nextToken, sortDirection);
+                return apiResponse.body as v1.skill.interactionModel.jobs.GetExecutionsResponse;
+        }
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         */
+        async callGetJobDefinitionForInteractionModelV1(jobId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetJobDefinitionForInteractionModelV1';
+            // verify required parameter 'jobId' is not null or undefined
+            if (jobId == null) {
+                throw new Error(`Required parameter jobId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('jobId', jobId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs/{jobId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "The job definition for a given jobId.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         */
+        async getJobDefinitionForInteractionModelV1(jobId : string) : Promise<void> {
+                await this.callGetJobDefinitionForInteractionModelV1(jobId);
+        }
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {v1.skill.interactionModel.jobs.UpdateJobStatusRequest} updateJobStatusRequest Request to update Job Definition status.
+         */
+        async callSetJobStatusForInteractionModelV1(jobId : string, updateJobStatusRequest : v1.skill.interactionModel.jobs.UpdateJobStatusRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetJobStatusForInteractionModelV1';
+            // verify required parameter 'jobId' is not null or undefined
+            if (jobId == null) {
+                throw new Error(`Required parameter jobId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateJobStatusRequest' is not null or undefined
+            if (updateJobStatusRequest == null) {
+                throw new Error(`Required parameter updateJobStatusRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('jobId', jobId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs/{jobId}/status";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "No content; Confirms that the fields are updated.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, updateJobStatusRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} jobId The identifier for dynamic jobs.
+         * @param {v1.skill.interactionModel.jobs.UpdateJobStatusRequest} updateJobStatusRequest Request to update Job Definition status.
+         */
+        async setJobStatusForInteractionModelV1(jobId : string, updateJobStatusRequest : v1.skill.interactionModel.jobs.UpdateJobStatusRequest) : Promise<void> {
+                await this.callSetJobStatusForInteractionModelV1(jobId, updateJobStatusRequest);
+        }
+        /**
+         *
+         * @param {v1.skill.interactionModel.jobs.CreateJobDefinitionRequest} createJobDefinitionRequest Request to create a new Job Definition.
+         */
+        async callCreateJobDefinitionForInteractionModelV1(createJobDefinitionRequest : v1.skill.interactionModel.jobs.CreateJobDefinitionRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateJobDefinitionForInteractionModelV1';
+            // verify required parameter 'createJobDefinitionRequest' is not null or undefined
+            if (createJobDefinitionRequest == null) {
+                throw new Error(`Required parameter createJobDefinitionRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/api/custom/interactionModel/jobs";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Returns the generated jobId.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, createJobDefinitionRequest, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {v1.skill.interactionModel.jobs.CreateJobDefinitionRequest} createJobDefinitionRequest Request to create a new Job Definition.
+         */
+        async createJobDefinitionForInteractionModelV1(createJobDefinitionRequest : v1.skill.interactionModel.jobs.CreateJobDefinitionRequest) : Promise<v1.skill.interactionModel.jobs.CreateJobDefinitionResponse> {
+                const apiResponse: ApiResponse = await this.callCreateJobDefinitionForInteractionModelV1(createJobDefinitionRequest);
+                return apiResponse.body as v1.skill.interactionModel.jobs.CreateJobDefinitionResponse;
         }
         /**
          *
@@ -14890,4 +15516,3 @@ export namespace services {
         }
     }
 }
-
