@@ -2787,10 +2787,20 @@ export namespace v1.skill.accountLinking {
 
 export namespace v1.skill.accountLinking {
     /**
-     * The payload for creating the account linking partner.
+     * The request body of AccountLinkingRequest.
      * @interface
      */
     export interface AccountLinkingRequest {
+        'accountLinkingRequest'?: v1.skill.accountLinking.AccountLinkingRequestPayload;
+    }
+}
+
+export namespace v1.skill.accountLinking {
+    /**
+     * The payload for creating the account linking partner.
+     * @interface
+     */
+    export interface AccountLinkingRequestPayload {
         'type'?: v1.skill.accountLinking.AccountLinkingType;
         'authorizationUrl'?: string;
         'domains'?: Array<string>;
@@ -2803,6 +2813,7 @@ export namespace v1.skill.accountLinking {
         'reciprocalAccessTokenUrl'?: string;
         'redirectUrls'?: Array<string>;
         'authorizationUrlsByPlatform'?: Array<v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl>;
+        'skipOnEnablement'?: boolean;
     }
 }
 
@@ -6326,6 +6337,7 @@ export namespace v1.skill.interactionModel.conflictDetection {
     export interface GetConflictsResponse {
         'paginationContext'?: v1.skill.interactionModel.conflictDetection.PaginationContext;
         '_links'?: v1.Links;
+        'results': Array<v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult>;
     }
 }
 
@@ -15516,3 +15528,4 @@ export namespace services {
         }
     }
 }
+

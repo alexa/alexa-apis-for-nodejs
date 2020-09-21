@@ -7160,6 +7160,594 @@
         "x-operation-name": "updateInteractionModelSlotTypeV1"
       }
     },
+    "/v1/skills/api/custom/interactionModel/jobs": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieve a list of jobs associated with the vendor.",
+        "parameters": [
+          {
+            "name": "vendorId",
+            "in": "query",
+            "description": "The vendor ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all jobs associated with the vendor.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Contains content type of the response; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ListJobDefinitionsResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "listJobDefinitionsForInteractionModelV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Creates a new Job Definition from the Job Definition request provided. This can be either a CatalogAutoRefresh, which supports time-based configurations for catalogs, or a ReferencedResourceVersionUpdate, which is used for slotTypes and Interaction models to be automatically updated on the dynamic update of their referenced catalog.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "createJobDefinitionRequest",
+            "description": "Request to create a new Job Definition.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.CreateJobDefinitionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Returns the generated jobId.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/hal+json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.CreateJobDefinitionResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ValidationErrors"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "createJobDefinitionForInteractionModelV1"
+      }
+    },
+    "/v1/skills/api/custom/interactionModel/jobs/{jobId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Get the job definition for a given jobId.\n",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The identifier for dynamic jobs.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The job definition for a given jobId.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/hal+json supported."
+              },
+              "schema": {
+                "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
+              }
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getJobDefinitionForInteractionModelV1"
+      },
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Delete the job definition for a given jobId.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The identifier for dynamic jobs.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content, confirms the resource is updated."
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ValidationErrors"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "deleteJobDefinitionForInteractionModelV1"
+      }
+    },
+    "/v1/skills/api/custom/interactionModel/jobs/{jobId}/status": {
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Update the JobStatus to Enable or Disable a job.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The identifier for dynamic jobs.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "updateJobStatusRequest",
+            "description": "Request to update Job Definition status.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.UpdateJobStatusRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content; Confirms that the fields are updated.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/hal+json supported."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Contains content type of the response; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ValidationErrors"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "setJobStatusForInteractionModelV1"
+      }
+    },
+    "/v1/skills/api/custom/interactionModel/jobs/{jobId}/executions": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "List the execution history associated with the job definition, with default sortField to be the executions' timestamp.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The identifier for dynamic jobs.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "description": "Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrun list of executions associated with the job definition.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Contains content type of the response; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.GetExecutionsResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "listJobExecutionsForInteractionModelV1"
+      }
+    },
+    "/v1/skills/api/custom/interactionModel/jobs/{jobId}/executions/{executionId}": {
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Cancel the next execution for the given job.",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The identifier for dynamic jobs.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "executionId",
+            "in": "path",
+            "description": "The identifier for dynamic job executions. Currently only allowed for scheduled executions.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content; Confirms that the next execution is canceled.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/hal+json supported."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/hal+json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ValidationErrors"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "cancelNextJobExecutionForInteractionModelV1"
+      }
+    },
     "/v1/skills/api/custom/interactionModel/slotTypes/{slotTypeId}/versions": {
       "get": {
         "tags": [
@@ -15547,6 +16135,15 @@
     "v1.skill.accountLinking.AccountLinkingRequest": {
       "type": "object",
       "properties": {
+        "accountLinkingRequest": {
+          "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingRequestPayload"
+        }
+      },
+      "description": "The request body of AccountLinkingRequest."
+    },
+    "v1.skill.accountLinking.AccountLinkingRequestPayload": {
+      "type": "object",
+      "properties": {
         "type": {
           "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingType",
           "x-isEnum": true
@@ -15606,6 +16203,10 @@
           "items": {
             "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl"
           }
+        },
+        "skipOnEnablement": {
+          "type": "boolean",
+          "description": "Set to true to let users enable the skill without starting the account linking flow. Set to false to require the normal account linking flow when users enable the skill."
         }
       },
       "description": "The payload for creating the account linking partner."
@@ -17289,17 +17890,23 @@
       ]
     },
     "v1.skill.interactionModel.conflictDetection.GetConflictsResponse": {
-      "properties": {
-        "results": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult"
-          }
-        }
-      },
       "allOf": [
         {
           "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.PagedResponse"
+        },
+        {
+          "type": "object",
+          "required": [
+            "results"
+          ],
+          "properties": {
+            "results": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.skill.interactionModel.conflictDetection.GetConflictsResponseResult"
+              }
+            }
+          }
         }
       ]
     },
@@ -17901,6 +18508,392 @@
         }
       },
       "description": "List of slot type versions of a skill for the vendor."
+    },
+    "v1.skill.interactionModel.jobs.JobDefinition": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Polymorphic type of the job",
+          "x-isDiscriminator": true
+        },
+        "trigger": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.Trigger"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the job definition."
+        }
+      },
+      "description": "Definition for dynamic job."
+    },
+    "v1.skill.interactionModel.jobs.CatalogAutoRefresh": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "trigger": {
+              "description": "CatalogAutoRefresh can only have CatalogAutoRefresh trigger.",
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.Scheduled"
+            },
+            "resource": {
+              "description": "The resource that the job is act on. Only catalog is allowed.",
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.Catalog"
+            }
+          }
+        }
+      ],
+      "description": "Definition for CatalogAutoRefresh job.",
+      "x-discriminator-value": "CatalogAutoRefresh"
+    },
+    "v1.skill.interactionModel.jobs.ReferenceVersionUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "trigger": {
+              "description": "Can only have ReferencedResourceJobsComplete trigger.",
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ReferencedResourceJobsComplete"
+            },
+            "resource": {
+              "description": "The resource that the job is act on. Only slot and interactionModel are allowed.",
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.ResourceObject"
+            },
+            "references": {
+              "type": "array",
+              "description": "Referenced resources working with ReferencedResourceJobsComplete trigger.",
+              "items": {
+                "$ref": "#/definitions/v1.skill.interactionModel.jobs.ResourceObject"
+              }
+            },
+            "publishToLive": {
+              "type": "boolean",
+              "description": "Whether publish development stage to live after the updates."
+            }
+          }
+        }
+      ],
+      "description": "Definition for ReferenceVersionUpdate job.",
+      "x-discriminator-value": "ReferenceVersionUpdate"
+    },
+    "v1.skill.interactionModel.jobs.ResourceObject": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Polymorphic type of the ResourceObject.",
+          "x-isDiscriminator": true
+        }
+      },
+      "description": "Resource object where the job is applied on."
+    },
+    "v1.skill.interactionModel.jobs.Catalog": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.ResourceObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Catalog identifier."
+            }
+          }
+        }
+      ],
+      "description": "Catalog the job is applied on.",
+      "x-discriminator-value": "Catalog"
+    },
+    "v1.skill.interactionModel.jobs.SlotTypeReference": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.ResourceObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "SlotTypeReference identifier."
+            }
+          }
+        }
+      ],
+      "description": "Slot type reference the job is applied on.",
+      "x-discriminator-value": "SlotTypeReference"
+    },
+    "v1.skill.interactionModel.jobs.InteractionModel": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.ResourceObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "locales"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Skill identifier."
+            },
+            "locales": {
+              "type": "array",
+              "description": "Locale identifier and default is empty list which means all available locales.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "description": "Interaction model the job is applied on.",
+      "x-discriminator-value": "InteractionModel"
+    },
+    "v1.skill.interactionModel.jobs.Trigger": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Polymorphic type of the trigger",
+          "x-isDiscriminator": true
+        }
+      },
+      "description": "Condition when jobs will be executed."
+    },
+    "v1.skill.interactionModel.jobs.Scheduled": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.Trigger"
+        },
+        {
+          "type": "object",
+          "required": [
+            "hour"
+          ],
+          "properties": {
+            "hour": {
+              "type": "integer",
+              "description": "The cron-like attribute in UTC time to describe the hour of the day and currently can only be 0,4,8,12,16,20."
+            },
+            "dayOfWeek": {
+              "type": "integer",
+              "description": "If not null, this means the scheudule is weekly. the cron-like attribute in UTC time to describe the day of the week (0-6)."
+            }
+          }
+        }
+      ],
+      "description": "Time-based condition when jobs will be executed.",
+      "x-discriminator-value": "Scheduled"
+    },
+    "v1.skill.interactionModel.jobs.ReferencedResourceJobsComplete": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.Trigger"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "description": "Dependent job condition when jobs will be executed.",
+      "x-discriminator-value": "ReferencedResourceJobsComplete"
+    },
+    "v1.skill.interactionModel.jobs.Execution": {
+      "type": "object",
+      "properties": {
+        "executionId": {
+          "type": "string",
+          "description": "Identifier of the execution."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-10-25T20:00:02.135Z",
+          "description": "ISO date-time timestamp when the execution starts."
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "ErrorCode to explain what went wrong in case of FAILUREs."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the job execution."
+        },
+        "errorDetails": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobErrorDetails"
+        }
+      },
+      "description": "Execution data."
+    },
+    "v1.skill.interactionModel.jobs.JobErrorDetails": {
+      "type": "object",
+      "properties": {
+        "executionMetadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.interactionModel.jobs.ExecutionMetadata"
+          }
+        }
+      },
+      "description": "Optional details if the execution is depending on other executions."
+    },
+    "v1.skill.interactionModel.jobs.JobDefinitionMetadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Job identifier."
+        },
+        "type": {
+          "type": "string",
+          "description": "Polymorphic type of the job."
+        },
+        "status": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinitionStatus",
+          "x-isEnum": true
+        }
+      },
+      "description": "Metadata of the job definition."
+    },
+    "v1.skill.interactionModel.jobs.ExecutionMetadata": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "description": "Identifier of the job."
+        },
+        "errorCode": {
+          "type": "string",
+          "description": "ErrorCode to explain what went wrong in case of FAILUREs."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the job execution."
+        }
+      },
+      "description": "ExecutionMetadata for executions."
+    },
+    "v1.skill.interactionModel.jobs.ListJobDefinitionsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobAPIPaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.Links"
+        },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinitionMetadata"
+          }
+        }
+      },
+      "description": "The response of list job definitions."
+    },
+    "v1.skill.interactionModel.jobs.CreateJobDefinitionRequest": {
+      "type": "object",
+      "properties": {
+        "vendorId": {
+          "type": "string",
+          "description": "ID of the vendor owning the skill."
+        },
+        "jobDefinition": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
+        }
+      },
+      "description": "Request to create job definitions."
+    },
+    "v1.skill.interactionModel.jobs.CreateJobDefinitionResponse": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "description": "Idenitifier of the job definition."
+        }
+      },
+      "description": "The response of create job definition."
+    },
+    "v1.skill.interactionModel.jobs.GetExecutionsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobAPIPaginationContext"
+        },
+        "_links": {
+          "$ref": "#/definitions/v1.Links"
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.interactionModel.jobs.Execution"
+          }
+        }
+      },
+      "description": "The response of get execution history."
+    },
+    "v1.skill.interactionModel.jobs.UpdateJobStatusRequest": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinitionStatus",
+          "x-isEnum": true
+        }
+      },
+      "description": "Update job status."
+    },
+    "v1.skill.interactionModel.jobs.JobAPIPaginationContext": {
+      "type": "object",
+      "properties": {}
+    },
+    "v1.skill.interactionModel.jobs.ValidationErrors": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "The list of errors.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.interactionModel.jobs.DynamicUpdateError"
+          }
+        }
+      },
+      "description": "The list of errors."
+    },
+    "v1.skill.interactionModel.jobs.DynamicUpdateError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Dynamic update error code."
+        },
+        "message": {
+          "type": "string",
+          "description": "Readable description of error."
+        }
+      },
+      "description": "Error schema for dynamic update."
+    },
+    "v1.skill.interactionModel.jobs.JobDefinitionStatus": {
+      "type": "string",
+      "description": "Current status of the job definition.",
+      "enum": [
+        "DISABLED",
+        "ENALBED"
+      ]
     },
     "v1.skill.invocations.InvokeSkillRequest": {
       "type": "object",
@@ -19609,7 +20602,11 @@
           }
         },
         "interfaces": {
-          "$ref": "#/definitions/v1.skill.Manifest.MusicInterfaces"
+          "type": "array",
+          "description": "A list of music skill interfaces that your skill supports.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.MusicInterfaces"
+          }
         },
         "locales": {
           "type": "object",
@@ -21063,6 +22060,7 @@
       ]
     },
     "v1.skill.Instance": {
+      "type": "object",
       "properties": {
         "propertyPath": {
           "type": "string",
