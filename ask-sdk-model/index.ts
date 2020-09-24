@@ -466,6 +466,7 @@ export interface Context {
     'Geolocation'?: interfaces.geolocation.GeolocationState;
     'Viewport'?: interfaces.viewport.ViewportState;
     'Viewports'?: Array<interfaces.viewport.TypedViewportState>;
+    'Extensions'?: interfaces.alexa.extension.ExtensionsState;
 }
 
 /**
@@ -913,6 +914,25 @@ export namespace interfaces.alexa.comms.messagingcontroller {
     export interface StatusMap {
         'read'?: Array<string>;
         'deleted'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.extension {
+    /**
+     * This object describes an extension that skill can request at runtime.
+     * @interface
+     */
+    export interface AvailableExtension {
+    }
+}
+
+export namespace interfaces.alexa.extension {
+    /**
+     *
+     * @interface
+     */
+    export interface ExtensionsState {
+        'available': { [key: string]: interfaces.alexa.extension.AvailableExtension; };
     }
 }
 
