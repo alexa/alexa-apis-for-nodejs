@@ -901,7 +901,7 @@ export namespace v1.isp {
      */
     export interface CustomProductPrompts {
         'purchasePromptDescription'?: string;
-        'boughtConfirmationPrompt'?: string;
+        'boughtCardDescription'?: string;
     }
 }
 
@@ -2615,6 +2615,7 @@ export namespace v1.skill {
      */
     export interface SkillSummary {
         'skillId'?: string;
+        'stage'?: v1.StageV2Type;
         'apis'?: Array<v1.skill.SkillSummaryApis>;
         'publicationStatus'?: v1.skill.PublicationStatus;
         'lastUpdated'?: string;
@@ -2884,26 +2885,8 @@ export namespace v1.skill.asr.annotationSets {
      * @interface
      */
     export interface AudioAsset {
-        'downloadUrl': v1.skill.asr.annotationSets.AudioAssetDownloadUrl;
-        'expiryTime': v1.skill.asr.annotationSets.AudioAssetDownloadUrlExpiryTime;
-    }
-}
-
-export namespace v1.skill.asr.annotationSets {
-    /**
-     * S3 presigned download url for downloading the audio file
-     * @interface
-     */
-    export interface AudioAssetDownloadUrl {
-    }
-}
-
-export namespace v1.skill.asr.annotationSets {
-    /**
-     * Timestamp when the audio download url expire in ISO 8601 format
-     * @interface
-     */
-    export interface AudioAssetDownloadUrlExpiryTime {
+        'downloadUrl': string;
+        'expiryTime': string;
     }
 }
 
@@ -4200,6 +4183,7 @@ export namespace v1.skill.interactionModel.jobs {
      * @interface
      */
     export interface JobAPIPaginationContext {
+        'nextToken'?: string;
     }
 }
 
@@ -4952,7 +4936,7 @@ export namespace v1.skill.nlu.evaluations {
      * @interface
      */
     export interface EvaluateNLURequest {
-        'stage': string;
+        'stage': any;
         'locale': string;
         'source': v1.skill.nlu.evaluations.Source;
     }
@@ -4989,7 +4973,7 @@ export namespace v1.skill.nlu.evaluations {
      */
     export interface EvaluationInputs {
         'locale'?: string;
-        'stage'?: string;
+        'stage'?: any;
         'source'?: v1.skill.nlu.evaluations.Source;
     }
 }
@@ -9323,8 +9307,9 @@ export namespace services.skillManagement {
          *
          * @param {string} jobId The identifier for dynamic jobs.
          */
-        async getJobDefinitionForInteractionModelV1(jobId : string) : Promise<void> {
-                await this.callGetJobDefinitionForInteractionModelV1(jobId);
+        async getJobDefinitionForInteractionModelV1(jobId : string) : Promise<v1.skill.interactionModel.jobs.JobDefinition> {
+                const apiResponse: ApiResponse = await this.callGetJobDefinitionForInteractionModelV1(jobId);
+                return apiResponse.body as v1.skill.interactionModel.jobs.JobDefinition;
         }
         /**
          *

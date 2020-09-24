@@ -7347,10 +7347,10 @@
               "Content-Type": {
                 "type": "string",
                 "description": "Returned content type; only application/hal+json supported."
-              },
-              "schema": {
-                "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
               }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.interactionModel.jobs.JobDefinition"
             }
           },
           "401": {
@@ -14054,6 +14054,8 @@
   "securityDefinitions": {
     "skillManagement": {
       "type": "oauth2",
+      "authorizationUrl": "api.amazon.com/ap/oa",
+      "tokenUrl": "https://api.amazon.com/auth/o2/token",
       "flow": "accessCode",
       "x-use-refresh-grant": true
     }
@@ -15663,10 +15665,10 @@
           "example": "{PREMIUM_CONTENT_TITLE} includes <emphasis level=\"moderate\"> an assortment of fifty questions on a broad range of historical topics.<break time=\"150ms\">",
           "description": "Description of in-skill product heard before customer is prompted for purchase."
         },
-        "boughtConfirmationPrompt": {
+        "boughtCardDescription": {
           "type": "string",
-          "example": "Enjoy your new {PREMIUM_CONTENT_TITLE}! To play anytime say Alexa, ask Ultimate History Quiz for my packs.",
-          "description": "Confirmation of in-skill product purchase."
+          "example": "Enjoy {PREMIUM_CONTENT_TITLE}! Ask for a list of adventures to explore your purchase..",
+          "description": "A description of the product that displays on the skill card in the Alexa app."
         }
       },
       "description": "Custom prompts used for in-skill product purchasing options. Supports Speech Synthesis Markup Language (SSML), which can be used to control pronunciation, intonation, timing, and emotion."
@@ -16282,6 +16284,7 @@
       }
     },
     "v1.skill.AlexaHosted.HostedSkillMetadata": {
+      "type": "object",
       "properties": {
         "alexaHosted": {
           "$ref": "#/definitions/v1.skill.AlexaHosted.HostedSkillInfo"
@@ -18858,7 +18861,11 @@
     },
     "v1.skill.interactionModel.jobs.JobAPIPaginationContext": {
       "type": "object",
-      "properties": {}
+      "properties": {
+        "nextToken": {
+          "type": "string"
+        }
+      }
     },
     "v1.skill.interactionModel.jobs.ValidationErrors": {
       "type": "object",
@@ -20553,6 +20560,7 @@
       }
     },
     "v1.skill.Manifest.LocalizedHealthInfo": {
+      "type": "object",
       "properties": {
         "promptName": {
           "type": "string",
@@ -21297,6 +21305,10 @@
       "properties": {
         "skillId": {
           "type": "string"
+        },
+        "stage": {
+          "$ref": "#/definitions/v1.StageV2Type",
+          "x-isEnum": true
         },
         "apis": {
           "type": "array",
@@ -22643,8 +22655,8 @@
       ],
       "properties": {
         "stage": {
-          "type": "string",
-          "default": "development"
+          "type": "object",
+          "properties": {}
         },
         "locale": {
           "type": "string"
@@ -22726,7 +22738,8 @@
           "type": "string"
         },
         "stage": {
-          "type": "string"
+          "type": "object",
+          "properties": {}
         },
         "source": {
           "$ref": "#/definitions/v1.skill.nlu.evaluations.Source"
@@ -22734,6 +22747,7 @@
       }
     },
     "v1.skill.nlu.evaluations.Source": {
+      "type": "object",
       "properties": {
         "annotationId": {
           "type": "string",
@@ -23325,21 +23339,15 @@
       ],
       "properties": {
         "downloadUrl": {
-          "$ref": "#/definitions/v1.skill.asr.annotationSets.AudioAssetDownloadUrl"
+          "type": "string",
+          "description": "S3 presigned download url for downloading the audio file"
         },
         "expiryTime": {
-          "$ref": "#/definitions/v1.skill.asr.annotationSets.AudioAssetDownloadUrlExpiryTime"
+          "type": "string",
+          "description": "Timestamp when the audio download url expire in ISO 8601 format"
         }
       },
       "description": "Object containing information about downloading audio file"
-    },
-    "v1.skill.asr.annotationSets.AudioAssetDownloadUrl": {
-      "type": "string",
-      "description": "S3 presigned download url for downloading the audio file"
-    },
-    "v1.skill.asr.annotationSets.AudioAssetDownloadUrlExpiryTime": {
-      "type": "string",
-      "description": "Timestamp when the audio download url expire in ISO 8601 format"
     },
     "v1.skill.asr.annotationSets.AnnotationWithAudioAsset": {
       "allOf": [
