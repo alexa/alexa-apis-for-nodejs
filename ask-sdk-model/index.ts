@@ -4124,6 +4124,7 @@ export namespace interfaces.alexa.presentation.apl {
         'token'?: string;
         'document'?: { [key: string]: any; };
         'datasources'?: { [key: string]: any; };
+        'sources'?: { [key: string]: any; };
         'packages'?: Array<any>;
     }
 }
@@ -6222,7 +6223,7 @@ export namespace services.endpointEnumeration {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/endpoints/";
+            let path : string = "/v1/endpoints";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the list of connected endpoints.");
@@ -6278,7 +6279,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/";
+            let path : string = "/v2/householdlists";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6319,7 +6320,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/";
+            let path : string = "/v2/householdlists/{listId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6368,7 +6369,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6418,7 +6419,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6477,7 +6478,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}/";
+            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6532,7 +6533,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/";
+            let path : string = "/v2/householdlists/{listId}/items";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -6586,7 +6587,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/";
+            let path : string = "/v2/householdlists/{listId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6639,7 +6640,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/{status}/";
+            let path : string = "/v2/householdlists/{listId}/{status}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -6687,7 +6688,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/";
+            let path : string = "/v2/householdlists";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -7215,7 +7216,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders/";
+            let path : string = "/v1/alerts/reminders";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -7259,7 +7260,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders/";
+            let path : string = "/v1/alerts/reminders";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -7393,7 +7394,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/";
+            let path : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -7428,7 +7429,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/";
+            let path : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -7647,7 +7648,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/";
+            let path : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
