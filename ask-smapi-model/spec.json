@@ -19758,6 +19758,8 @@
         "Alexa.FileManager.UploadController.UploadFailed",
         "Alexa.FileManager.UploadController.UploadFinished",
         "Alexa.FileManager.UploadController.UploadStarted",
+        "Alexa.Presentation.APL.LoadIndexListData",
+        "Alexa.Presentation.APL.RuntimeError",
         "Alexa.Presentation.APL.UserEvent",
         "Alexa.Presentation.HTML.Event",
         "Alexa.Presentation.HTML.LifecycleStateChanged",
