@@ -15364,6 +15364,14 @@
         "NOT_PURCHASABLE"
       ]
     },
+    "v1.isp.PromotableState": {
+      "type": "string",
+      "description": "Promote this ISP on Amazon channels such as Amazon.com. Enabling this setting will allow customers to view ISP detail pages and purchase the ISP on Amazon.com.",
+      "enum": [
+        "IN_SKILL_ONLY",
+        "ALL_AMAZON_CHANNELS"
+      ]
+    },
     "v1.isp.InSkillProductSummaryResponse": {
       "type": "object",
       "properties": {
@@ -15413,6 +15421,10 @@
         },
         "purchasableState": {
           "$ref": "#/definitions/v1.isp.PurchasableState",
+          "x-isEnum": true
+        },
+        "promotableState": {
+          "$ref": "#/definitions/v1.isp.PromotableState",
           "x-isEnum": true
         },
         "_links": {
@@ -15544,6 +15556,10 @@
         },
         "purchasableState": {
           "$ref": "#/definitions/v1.isp.PurchasableState",
+          "x-isEnum": true
+        },
+        "promotableState": {
+          "$ref": "#/definitions/v1.isp.PromotableState",
           "x-isEnum": true
         },
         "subscriptionInformation": {
@@ -20253,7 +20269,10 @@
       "description": "Defines the mode of viewport that comply with this specification. E.g. HUB TV.",
       "enum": [
         "HUB",
-        "TV"
+        "TV",
+        "MOBILE",
+        "PC",
+        "AUTO"
       ]
     },
     "v1.skill.Manifest.ViewportShape": {

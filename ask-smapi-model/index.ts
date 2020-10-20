@@ -931,6 +931,7 @@ export namespace v1.isp {
         'type'?: v1.isp.ProductType;
         'referenceName'?: string;
         'purchasableState'?: v1.isp.PurchasableState;
+        'promotableState'?: v1.isp.PromotableState;
         'subscriptionInformation'?: v1.isp.SubscriptionInformation;
         'publishingInformation'?: v1.isp.PublishingInformation;
         'privacyAndCompliance'?: v1.isp.PrivacyAndCompliance;
@@ -963,6 +964,7 @@ export namespace v1.isp {
         'stage'?: v1.isp.Stage;
         'editableState'?: v1.isp.EditableState;
         'purchasableState'?: v1.isp.PurchasableState;
+        'promotableState'?: v1.isp.PromotableState;
         '_links'?: v1.isp.IspSummaryLinks;
         'pricing'?: { [key: string]: v1.isp.SummaryMarketplacePricing; };
     }
@@ -1086,6 +1088,14 @@ export namespace v1.isp {
      * @enum
      */
     export type ProductType = 'SUBSCRIPTION' | 'ENTITLEMENT' | 'CONSUMABLE';
+}
+
+export namespace v1.isp {
+    /**
+     * Promote this ISP on Amazon channels such as Amazon.com. Enabling this setting will allow customers to view ISP detail pages and purchase the ISP on Amazon.com.
+     * @enum
+     */
+    export type PromotableState = 'IN_SKILL_ONLY' | 'ALL_AMAZON_CHANNELS';
 }
 
 export namespace v1.isp {
@@ -2384,7 +2394,7 @@ export namespace v1.skill.Manifest {
      * Defines the mode of viewport that comply with this specification. E.g. HUB TV.
      * @enum
      */
-    export type ViewportMode = 'HUB' | 'TV';
+    export type ViewportMode = 'HUB' | 'TV' | 'MOBILE' | 'PC' | 'AUTO';
 }
 
 export namespace v1.skill.Manifest {
