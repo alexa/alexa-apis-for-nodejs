@@ -5249,6 +5249,17 @@ export namespace v1.skill.publication {
     export type SkillPublicationStatus = 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELLED' | 'SCHEDULED';
 }
 
+export namespace v1.skill.resourceSchema {
+    /**
+     *
+     * @interface
+     */
+    export interface GetResourceSchemaResponse {
+        'schemaLocationUrl'?: string;
+        'expiryTime'?: string;
+    }
+}
+
 export namespace v1.skill.simulations {
     /**
      *
@@ -5526,6 +5537,222 @@ export namespace v1.skill.validations {
      * @enum
      */
     export type ValidationsApiResponseStatus = 'IN_PROGRESS' | 'SUCCESSFUL' | 'FAILED';
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface CapabilityTestPlan {
+        'id'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface Endpoint {
+        'endpointId'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateSHCapabilityRequest {
+        'capabilityTestPlan': v1.smartHomeEvaluation.CapabilityTestPlan;
+        'endpoint': v1.smartHomeEvaluation.Endpoint;
+        'stage': v1.smartHomeEvaluation.Stage;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @enum
+     */
+    export type EvaluationEntityStatus = 'PASSED' | 'FAILED' | 'IN_PROGRESS' | 'ERROR';
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluationObject {
+        'endTimestamp'?: string;
+        'startTimestamp'?: string;
+        'status'?: v1.smartHomeEvaluation.EvaluationEntityStatus;
+        'endpointId'?: string;
+        'id'?: string;
+        'sourceTestPlanIds'?: Array<string>;
+        'testPlanId'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface GetSHCapabilityEvaluationResponse {
+        'endTimestamp'?: string;
+        'startTimestamp'?: string;
+        'status'?: v1.smartHomeEvaluation.EvaluationEntityStatus;
+        'error'?: v1.smartHomeEvaluation.SHCapabilityError;
+        'input'?: v1.smartHomeEvaluation.EvaluateSHCapabilityRequest;
+        'metrics'?: { [key: string]: v1.smartHomeEvaluation.SHEvaluationResultsMetric; };
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface ListSHCapabilityEvaluationsResponse {
+        'paginationContextToken'?: v1.smartHomeEvaluation.PaginationContextToken;
+        'evaluations'?: Array<v1.smartHomeEvaluation.EvaluationObject>;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface ListSHTestPlanItem {
+        'id'?: string;
+        'name'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface PagedResponse {
+        'paginationContext'?: v1.smartHomeEvaluation.PaginationContext;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface SHCapabilityDirective {
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface SHCapabilityError {
+        'code'?: v1.smartHomeEvaluation.SHCapabilityErrorCode;
+        'message'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @enum
+     */
+    export type SHCapabilityErrorCode = 'NO_SUCH_ENDPOINT' | 'NO_SUCH_SKILL_STAGE' | 'NO_SUCH_TEST_PLAN' | 'MULTIPLE_MATCHED_ENDPOINTS' | 'MULTIPLE_MATCHED_TEST_PLANS' | 'CAPABILITY_NOT_SUPPORTED' | 'DISCOVERY_FAILED' | 'TEST_CASE_TIME_OUT';
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface SHCapabilityResponse {
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface SHCapabilityState {
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface SHEvaluationResultsMetric {
+        'errorTestCases'?: number;
+        'failedTestCases'?: number;
+        'passedTestCases'?: number;
+        'totalTestCases'?: number;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @enum
+     */
+    export type Stage = 'development' | 'live';
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface TestCaseResult {
+        'actualCapabilityStates'?: Array<v1.smartHomeEvaluation.SHCapabilityState>;
+        'actualResponse'?: v1.smartHomeEvaluation.SHCapabilityResponse;
+        'directive'?: v1.smartHomeEvaluation.SHCapabilityDirective;
+        'error'?: v1.smartHomeEvaluation.SHCapabilityError;
+        'expectedCapabilityStates'?: Array<v1.smartHomeEvaluation.SHCapabilityState>;
+        'expectedResponse'?: v1.smartHomeEvaluation.SHCapabilityResponse;
+        'name'?: string;
+        'status'?: v1.smartHomeEvaluation.TestCaseResultStatus;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @enum
+     */
+    export type TestCaseResultStatus = 'PASSED' | 'FAILED' | 'ERROR';
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContext {
+        'nextToken'?: string;
+        'totalCount'?: number;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface PaginationContextToken {
+        'nextToken'?: string;
+    }
 }
 
 export namespace v1.vendorManagement {
@@ -6498,6 +6725,41 @@ export namespace v1.skill.nlu.evaluations {
         'paginationContext'?: v1.skill.nlu.evaluations.PaginationContext;
         '_links'?: v1.skill.nlu.evaluations.Links;
         'evaluations'?: Array<v1.skill.nlu.evaluations.Evaluation>;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface EvaluateSHCapabilityResponse {
+        'capabilityTestPlan': v1.smartHomeEvaluation.CapabilityTestPlan;
+        'endpoint': v1.smartHomeEvaluation.Endpoint;
+        'stage': v1.smartHomeEvaluation.Stage;
+        'id'?: string;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface GetSHCapabilityEvaluationResultsResponse {
+        'paginationContext'?: v1.smartHomeEvaluation.PaginationContext;
+        'testCaseResults'?: Array<v1.smartHomeEvaluation.TestCaseResult>;
+    }
+}
+
+export namespace v1.smartHomeEvaluation {
+    /**
+     *
+     * @interface
+     */
+    export interface ListSHCapabilityTestPlansResponse {
+        'paginationContext'?: v1.smartHomeEvaluation.PaginationContext;
+        'testPlans'?: Array<v1.smartHomeEvaluation.ListSHTestPlanItem>;
     }
 }
 
@@ -10295,6 +10557,67 @@ export namespace services.skillManagement {
         }
         /**
          *
+         * @param {string} resource Name of the ASK resource for which schema is requested.
+         * @param {string} vendorId The vendor ID.
+         * @param {string} operation This parameter is required when resource is manifest because skill manifest schema differs based on operation. For example, submit for certification schema has more validations than create skill schema.
+         */
+        async callGetResourceSchemaV1(resource : string, vendorId : string, operation? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetResourceSchemaV1';
+            // verify required parameter 'resource' is not null or undefined
+            if (resource == null) {
+                throw new Error(`Required parameter resource was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'vendorId' is not null or undefined
+            if (vendorId == null) {
+                throw new Error(`Required parameter vendorId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            const vendorIdValues: any[] = Array.isArray(vendorId) ? vendorId : [vendorId];
+            vendorIdValues.forEach(val => queryParams.push({ key: 'vendorId', value: val }));
+            if(operation != null) {
+                const operationValues: any[] = Array.isArray(operation) ? operation : [operation];
+                operationValues.forEach(val => queryParams.push({ key: 'operation', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('resource', resource);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/resourceSchema/{resource}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returns a S3 presigned URL to location of schema");
+            errorDefinitions.set(400, "Invalid request");
+            errorDefinitions.set(401, "Unauthorized");
+            errorDefinitions.set(403, "Forbidden");
+            errorDefinitions.set(429, "Too Many Requests");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} resource Name of the ASK resource for which schema is requested.
+         * @param {string} vendorId The vendor ID.
+         * @param {string} operation This parameter is required when resource is manifest because skill manifest schema differs based on operation. For example, submit for certification schema has more validations than create skill schema.
+         */
+        async getResourceSchemaV1(resource : string, vendorId : string, operation? : string) : Promise<v1.skill.resourceSchema.GetResourceSchemaResponse> {
+                const apiResponse: ApiResponse = await this.callGetResourceSchemaV1(resource, vendorId, operation);
+                return apiResponse.body as v1.skill.resourceSchema.GetResourceSchemaResponse;
+        }
+        /**
+         *
          * @param {string} skillId The skill ID.
          */
         async callGetAlexaHostedSkillMetadataV1(skillId : string) : Promise<ApiResponse> {
@@ -11866,11 +12189,11 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {string} stage The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
-         * @param {Array<v1.StageType>} stage A filter used to retrieve items where the stage is equal to the given value.
          * @param {Array<v1.skill.history.LocaleInQuery>} locale 
          * @param {Array<v1.skill.history.DialogActName>} dialogActName A filter used to retrieve items where the dialogAct name is equal to the given value. * &#x60;Dialog.ElicitSlot&#x60;: Alexa asked the user for the value of a specific slot. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#elicitslot) * &#x60;Dialog.ConfirmSlot&#x60;: Alexa confirmed the value of a specific slot before continuing with the dialog. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmslot) * &#x60;Dialog.ConfirmIntent&#x60;: Alexa confirmed the all the information the user has provided for the intent before the skill took action. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmintent) 
          * @param {Array<v1.skill.history.IntentConfidenceBin>} intentConfidenceBin 
@@ -11880,11 +12203,15 @@ export namespace services.skillManagement {
          * @param {Array<v1.skill.history.PublicationStatus>} publicationStatus 
          * @param {Array<string>} utteranceText A filter used to retrieve items where the utterance text contains the given phrase. Each filter value can be at-least 1 character and at-most 100 characters long.
          */
-        async callGetUtteranceDataV1(skillId : string, nextToken? : string, maxResults? : number, sortDirection? : string, sortField? : string, stage? : Array<v1.StageType>, locale? : Array<v1.skill.history.LocaleInQuery>, dialogActName? : Array<v1.skill.history.DialogActName>, intentConfidenceBin? : Array<v1.skill.history.IntentConfidenceBin>, intentName? : Array<string>, intentSlotsName? : Array<string>, interactionType? : Array<v1.skill.history.InteractionType>, publicationStatus? : Array<v1.skill.history.PublicationStatus>, utteranceText? : Array<string>) : Promise<ApiResponse> {
+        async callGetUtteranceDataV1(skillId : string, stage : string, nextToken? : string, maxResults? : number, sortDirection? : string, sortField? : string, locale? : Array<v1.skill.history.LocaleInQuery>, dialogActName? : Array<v1.skill.history.DialogActName>, intentConfidenceBin? : Array<v1.skill.history.IntentConfidenceBin>, intentName? : Array<string>, intentSlotsName? : Array<string>, interactionType? : Array<v1.skill.history.InteractionType>, publicationStatus? : Array<v1.skill.history.PublicationStatus>, utteranceText? : Array<string>) : Promise<ApiResponse> {
             const __operationId__ = 'callGetUtteranceDataV1';
             // verify required parameter 'skillId' is not null or undefined
             if (skillId == null) {
                 throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
             }
 
             const queryParams : Array<{ key : string, value : string }> = [];
@@ -11904,10 +12231,8 @@ export namespace services.skillManagement {
                 const sortFieldValues: any[] = Array.isArray(sortField) ? sortField : [sortField];
                 sortFieldValues.forEach(val => queryParams.push({ key: 'sortField', value: val }));
             }
-            if(stage != null) {
-                const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
-                stageValues.forEach(val => queryParams.push({ key: 'stage', value: val!.toString() }));
-            }
+            const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+            stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
             if(locale != null) {
                 const localeValues: any[] = Array.isArray(locale) ? locale : [locale];
                 localeValues.forEach(val => queryParams.push({ key: 'locale', value: val!.toString() }));
@@ -11970,11 +12295,11 @@ export namespace services.skillManagement {
         /**
          *
          * @param {string} skillId The skill ID.
+         * @param {string} stage The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.
          * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
          * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
          * @param {string} sortDirection Sets the sorting direction of the result items. When set to &#39;asc&#39; these items are returned in ascending order of sortField value and when set to &#39;desc&#39; these items are returned in descending order of sortField value.
          * @param {string} sortField Sets the field on which the sorting would be applied.
-         * @param {Array<v1.StageType>} stage A filter used to retrieve items where the stage is equal to the given value.
          * @param {Array<v1.skill.history.LocaleInQuery>} locale 
          * @param {Array<v1.skill.history.DialogActName>} dialogActName A filter used to retrieve items where the dialogAct name is equal to the given value. * &#x60;Dialog.ElicitSlot&#x60;: Alexa asked the user for the value of a specific slot. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#elicitslot) * &#x60;Dialog.ConfirmSlot&#x60;: Alexa confirmed the value of a specific slot before continuing with the dialog. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmslot) * &#x60;Dialog.ConfirmIntent&#x60;: Alexa confirmed the all the information the user has provided for the intent before the skill took action. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmintent) 
          * @param {Array<v1.skill.history.IntentConfidenceBin>} intentConfidenceBin 
@@ -11984,8 +12309,8 @@ export namespace services.skillManagement {
          * @param {Array<v1.skill.history.PublicationStatus>} publicationStatus 
          * @param {Array<string>} utteranceText A filter used to retrieve items where the utterance text contains the given phrase. Each filter value can be at-least 1 character and at-most 100 characters long.
          */
-        async getUtteranceDataV1(skillId : string, nextToken? : string, maxResults? : number, sortDirection? : string, sortField? : string, stage? : Array<v1.StageType>, locale? : Array<v1.skill.history.LocaleInQuery>, dialogActName? : Array<v1.skill.history.DialogActName>, intentConfidenceBin? : Array<v1.skill.history.IntentConfidenceBin>, intentName? : Array<string>, intentSlotsName? : Array<string>, interactionType? : Array<v1.skill.history.InteractionType>, publicationStatus? : Array<v1.skill.history.PublicationStatus>, utteranceText? : Array<string>) : Promise<v1.skill.history.IntentRequests> {
-                const apiResponse: ApiResponse = await this.callGetUtteranceDataV1(skillId, nextToken, maxResults, sortDirection, sortField, stage, locale, dialogActName, intentConfidenceBin, intentName, intentSlotsName, interactionType, publicationStatus, utteranceText);
+        async getUtteranceDataV1(skillId : string, stage : string, nextToken? : string, maxResults? : number, sortDirection? : string, sortField? : string, locale? : Array<v1.skill.history.LocaleInQuery>, dialogActName? : Array<v1.skill.history.DialogActName>, intentConfidenceBin? : Array<v1.skill.history.IntentConfidenceBin>, intentName? : Array<string>, intentSlotsName? : Array<string>, interactionType? : Array<v1.skill.history.InteractionType>, publicationStatus? : Array<v1.skill.history.PublicationStatus>, utteranceText? : Array<string>) : Promise<v1.skill.history.IntentRequests> {
+                const apiResponse: ApiResponse = await this.callGetUtteranceDataV1(skillId, stage, nextToken, maxResults, sortDirection, sortField, locale, dialogActName, intentConfidenceBin, intentName, intentSlotsName, interactionType, publicationStatus, utteranceText);
                 return apiResponse.body as v1.skill.history.IntentRequests;
         }
         /**
@@ -13260,6 +13585,317 @@ export namespace services.skillManagement {
         async getSkillSimulationV1(skillId : string, simulationId : string) : Promise<v1.skill.simulations.SimulationsApiResponse> {
                 const apiResponse: ApiResponse = await this.callGetSkillSimulationV1(skillId, simulationId);
                 return apiResponse.body as v1.skill.simulations.SimulationsApiResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId A unique ID to identify each Smart Home capability evaluation.
+         */
+        async callGetSmartHomeCapabilityEvaluationV1(skillId : string, evaluationId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSmartHomeCapabilityEvaluationV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations/{evaluationId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the evaluation status.");
+            errorDefinitions.set(400, "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid. ");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource. ");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(429, "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId. ");
+            errorDefinitions.set(0, "Internal server error. ");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId A unique ID to identify each Smart Home capability evaluation.
+         */
+        async getSmartHomeCapabilityEvaluationV1(skillId : string, evaluationId : string) : Promise<v1.smartHomeEvaluation.GetSHCapabilityEvaluationResponse> {
+                const apiResponse: ApiResponse = await this.callGetSmartHomeCapabilityEvaluationV1(skillId, evaluationId);
+                return apiResponse.body as v1.smartHomeEvaluation.GetSHCapabilityEvaluationResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId A unique ID to identify each Smart Home capability evaluation.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async callGetSmarthomeCapablityEvaluationResultsV1(skillId : string, evaluationId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetSmarthomeCapablityEvaluationResultsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'evaluationId' is not null or undefined
+            if (evaluationId == null) {
+                throw new Error(`Required parameter evaluationId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('evaluationId', evaluationId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations/{evaluationId}/results";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the evaluation result content.");
+            errorDefinitions.set(400, "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid. ");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource. ");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(429, "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId. ");
+            errorDefinitions.set(0, "Internal server error. ");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} evaluationId A unique ID to identify each Smart Home capability evaluation.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async getSmarthomeCapablityEvaluationResultsV1(skillId : string, evaluationId : string, maxResults? : number, nextToken? : string) : Promise<v1.smartHomeEvaluation.GetSHCapabilityEvaluationResultsResponse> {
+                const apiResponse: ApiResponse = await this.callGetSmarthomeCapablityEvaluationResultsV1(skillId, evaluationId, maxResults, nextToken);
+                return apiResponse.body as v1.smartHomeEvaluation.GetSHCapabilityEvaluationResultsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.
+         * @param {string} startTimestampFrom The begnning of the start time to query evaluation result.
+         * @param {string} startTimestampTo The end of the start time to query evaluation result.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async callListSmarthomeCapabilityEvaluationsV1(skillId : string, stage : string, startTimestampFrom? : string, startTimestampTo? : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListSmarthomeCapabilityEvaluationsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'stage' is not null or undefined
+            if (stage == null) {
+                throw new Error(`Required parameter stage was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            const stageValues: any[] = Array.isArray(stage) ? stage : [stage];
+            stageValues.forEach(val => queryParams.push({ key: 'stage', value: val }));
+            if(startTimestampFrom != null) {
+                const startTimestampFromValues: any[] = Array.isArray(startTimestampFrom) ? startTimestampFrom : [startTimestampFrom];
+                startTimestampFromValues.forEach(val => queryParams.push({ key: 'startTimestampFrom', value: val!.toString() }));
+            }
+            if(startTimestampTo != null) {
+                const startTimestampToValues: any[] = Array.isArray(startTimestampTo) ? startTimestampTo : [startTimestampTo];
+                startTimestampToValues.forEach(val => queryParams.push({ key: 'startTimestampTo', value: val!.toString() }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully retrieved the evaluation infomation.");
+            errorDefinitions.set(400, "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid. ");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource. ");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(429, "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId. ");
+            errorDefinitions.set(0, "Internal server error. ");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {string} stage The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.
+         * @param {string} startTimestampFrom The begnning of the start time to query evaluation result.
+         * @param {string} startTimestampTo The end of the start time to query evaluation result.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async listSmarthomeCapabilityEvaluationsV1(skillId : string, stage : string, startTimestampFrom? : string, startTimestampTo? : string, maxResults? : number, nextToken? : string) : Promise<v1.smartHomeEvaluation.ListSHCapabilityEvaluationsResponse> {
+                const apiResponse: ApiResponse = await this.callListSmarthomeCapabilityEvaluationsV1(skillId, stage, startTimestampFrom, startTimestampTo, maxResults, nextToken);
+                return apiResponse.body as v1.smartHomeEvaluation.ListSHCapabilityEvaluationsResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.smartHomeEvaluation.EvaluateSHCapabilityRequest} evaluateSHCapabilityPayload Payload sent to start a capability evaluation against a Smart Home skill.
+         */
+        async callCreateSmarthomeCapabilityEvaluationV1(skillId : string, evaluateSHCapabilityPayload? : v1.smartHomeEvaluation.EvaluateSHCapabilityRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateSmarthomeCapabilityEvaluationV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Evaluation has successfully begun.");
+            errorDefinitions.set(400, "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid. ");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource. ");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(409, "A test run is already in progress for the specified endpoint. Please retry after some time. ");
+            errorDefinitions.set(429, "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId. ");
+            errorDefinitions.set(0, "Internal server error. ");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, evaluateSHCapabilityPayload, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {v1.smartHomeEvaluation.EvaluateSHCapabilityRequest} evaluateSHCapabilityPayload Payload sent to start a capability evaluation against a Smart Home skill.
+         */
+        async createSmarthomeCapabilityEvaluationV1(skillId : string, evaluateSHCapabilityPayload? : v1.smartHomeEvaluation.EvaluateSHCapabilityRequest) : Promise<v1.smartHomeEvaluation.EvaluateSHCapabilityResponse> {
+                const apiResponse: ApiResponse = await this.callCreateSmarthomeCapabilityEvaluationV1(skillId, evaluateSHCapabilityPayload);
+                return apiResponse.body as v1.smartHomeEvaluation.EvaluateSHCapabilityResponse;
+        }
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async callListSmarthomeCapabilityTestPlansV1(skillId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callListSmarthomeCapabilityTestPlansV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let path : string = "/v1/skills/{skillId}/smartHome/testing/capabilityTestPlans";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Successfully got the list of test plans.");
+            errorDefinitions.set(400, "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid. ");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource. ");
+            errorDefinitions.set(403, "API user does not have permission or is currently in a state that does not allow calls to this API. ");
+            errorDefinitions.set(404, "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found. ");
+            errorDefinitions.set(429, "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId. ");
+            errorDefinitions.set(0, "Internal server error. ");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         *
+         * @param {string} skillId The skill ID.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         */
+        async listSmarthomeCapabilityTestPlansV1(skillId : string, maxResults? : number, nextToken? : string) : Promise<v1.smartHomeEvaluation.ListSHCapabilityTestPlansResponse> {
+                const apiResponse: ApiResponse = await this.callListSmarthomeCapabilityTestPlansV1(skillId, maxResults, nextToken);
+                return apiResponse.body as v1.smartHomeEvaluation.ListSHCapabilityTestPlansResponse;
         }
         /**
          *

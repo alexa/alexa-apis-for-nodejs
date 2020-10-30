@@ -4718,12 +4718,13 @@
           {
             "name": "stage",
             "in": "query",
-            "description": "A filter used to retrieve items where the stage is equal to the given value.",
-            "required": false,
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/v1.StageType"
-            }
+            "description": "The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "development",
+              "live"
+            ]
           },
           {
             "name": "locale",
@@ -11444,6 +11445,134 @@
         "x-operation-name": "queryDevelopmentAuditLogsV1"
       }
     },
+    "/v1/skills/resourceSchema/{resource}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "GetResourceSchema API provides schema for skill related resources. The schema returned by this API will be specific to vendor because it considers public beta features allowed for the vendor.",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "description": "Name of the ASK resource for which schema is requested.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "manifest",
+              "skillPackageStructure"
+            ]
+          },
+          {
+            "name": "vendorId",
+            "in": "query",
+            "description": "The vendor ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "operation",
+            "in": "query",
+            "description": "This parameter is required when resource is manifest because skill manifest schema differs based on operation. For example, submit for certification schema has more validations than create skill schema.",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CREATE_SKILL",
+              "UPDATE_SKILL",
+              "SUBMIT_SKILL",
+              "ENABLE_SKILL"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a S3 presigned URL to location of schema",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.resourceSchema.getResourceSchemaResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only application/json supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "getResourceSchemaV1"
+      }
+    },
     "/v1/skills/{skillId}/nluEvaluations": {
       "get": {
         "tags": [
@@ -13692,6 +13821,478 @@
           }
         },
         "x-operation-name": "listASREvaluationsResultsV1"
+      }
+    },
+    "/v1/skills/{skillId}/smartHome/testing/capabilityTestPlans": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "List all the test plan names and ids for a given skill ID.",
+        "description": "List all the test plan names and ids for a given skill ID.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully got the list of test plans.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.ListSHCapabilityTestPlansResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "403": {
+            "description": "API user does not have permission or is currently in a state that does not allow calls to this API.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "429": {
+            "description": "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "default": {
+            "description": "Internal server error.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "listSmarthomeCapabilityTestPlansV1"
+      }
+    },
+    "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations/{evaluationId}/results": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get test case results for an evaluation run.",
+        "description": "Get test case results for an evaluation run.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "evaluationId",
+            "in": "path",
+            "description": "A unique ID to identify each Smart Home capability evaluation.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the evaluation result content.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.GetSHCapabilityEvaluationResultsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "403": {
+            "description": "API user does not have permission or is currently in a state that does not allow calls to this API.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "429": {
+            "description": "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "default": {
+            "description": "Internal server error.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "getSmarthomeCapablityEvaluationResultsV1"
+      }
+    },
+    "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations/{evaluationId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Get top level information and status of a Smart Home capability evaluation.",
+        "description": "Get top level information and status of a Smart Home capability evaluation.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "evaluationId",
+            "in": "path",
+            "description": "A unique ID to identify each Smart Home capability evaluation.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the evaluation status.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.GetSHCapabilityEvaluationResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "403": {
+            "description": "API user does not have permission or is currently in a state that does not allow calls to this API.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "429": {
+            "description": "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "default": {
+            "description": "Internal server error.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "getSmartHomeCapabilityEvaluationV1"
+      }
+    },
+    "/v1/skills/{skillId}/smartHome/testing/capabilityEvaluations": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "List Smart Home capability evaluation runs for a skill.",
+        "description": "List Smart Home capability evaluation runs for a skill.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "description": "The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "development",
+              "live"
+            ]
+          },
+          {
+            "name": "startTimestampFrom",
+            "in": "query",
+            "description": "The begnning of the start time to query evaluation result.",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "startTimestampTo",
+            "in": "query",
+            "description": "The end of the start time to query evaluation result.",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "number",
+            "maximum": 50,
+            "minimum": 1,
+            "multipleOf": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the evaluation infomation.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.ListSHCapabilityEvaluationsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "403": {
+            "description": "API user does not have permission or is currently in a state that does not allow calls to this API.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "429": {
+            "description": "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "default": {
+            "description": "Internal server error.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "listSmarthomeCapabilityEvaluationsV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "summary": "Start a capability evaluation against a Smart Home skill.",
+        "description": "Start a capability evaluation against a Smart Home skill.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "EvaluateSHCapabilityPayload",
+            "description": "Payload sent to start a capability evaluation against a Smart Home skill.",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluateSHCapabilityRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evaluation has successfully begun.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "The content type of the response body."
+              },
+              "Location": {
+                "type": "string",
+                "description": "Get location of the capability evaluaiton."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluateSHCapabilityResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request. Returned when the request payload is malformed or when, at least, one required property is missing or invalid.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "403": {
+            "description": "API user does not have permission or is currently in a state that does not allow calls to this API.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The specified skill, test plan, or evaluation does not exist. The error response will contain a description that indicates the specific resource type that was not found.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "409": {
+            "description": "A test run is already in progress for the specified endpoint. Please retry after some time.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          },
+          "429": {
+            "description": "Exceeded the permitted request limit. Throttling criteria includes total requests, per API and CustomerId.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "default": {
+            "description": "Internal server error.\n",
+            "schema": {
+              "$ref": "#/definitions/v1.Error"
+            }
+          }
+        },
+        "x-operation-name": "createSmarthomeCapabilityEvaluationV1"
       }
     },
     "/v2/skills/{skillId}/stages/{stage}/simulations": {
@@ -23781,6 +24382,333 @@
       "enum": [
         "PASSED",
         "FAILED"
+      ]
+    },
+    "v1.skill.resourceSchema.getResourceSchemaResponse": {
+      "type": "object",
+      "properties": {
+        "schemaLocationUrl": {
+          "type": "string",
+          "description": "S3 presigned URL to schema location."
+        },
+        "expiryTime": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-10-19T23:50:02.135Z",
+          "description": "Timestamp when the schema location url expires in ISO 8601 format."
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.EvaluationObject": {
+      "type": "object",
+      "properties": {
+        "endTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluationEntityStatus",
+          "x-isEnum": true
+        },
+        "endpointId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "sourceTestPlanIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "testPlanId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.paginationContextToken": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.ListSHCapabilityEvaluationsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContextToken": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.paginationContextToken"
+        },
+        "evaluations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluationObject"
+          }
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.EvaluationEntityStatus": {
+      "type": "string",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "IN_PROGRESS",
+        "ERROR"
+      ]
+    },
+    "v1.smartHomeEvaluation.EvaluateSHCapabilityResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluateSHCapabilityRequest"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "v1.smartHomeEvaluation.EvaluateSHCapabilityRequest": {
+      "type": "object",
+      "required": [
+        "capabilityTestPlan",
+        "endpoint",
+        "stage"
+      ],
+      "properties": {
+        "capabilityTestPlan": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.CapabilityTestPlan"
+        },
+        "endpoint": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.Endpoint"
+        },
+        "stage": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.Stage",
+          "x-isEnum": true
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.CapabilityTestPlan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.Endpoint": {
+      "type": "object",
+      "properties": {
+        "endpointId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.Stage": {
+      "type": "string",
+      "enum": [
+        "development",
+        "live"
+      ]
+    },
+    "v1.smartHomeEvaluation.SHEvaluationResultsMetric": {
+      "type": "object",
+      "properties": {
+        "errorTestCases": {
+          "type": "integer"
+        },
+        "failedTestCases": {
+          "type": "integer"
+        },
+        "passedTestCases": {
+          "type": "integer"
+        },
+        "totalTestCases": {
+          "type": "integer"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.GetSHCapabilityEvaluationResponse": {
+      "type": "object",
+      "properties": {
+        "endTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startTimestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluationEntityStatus",
+          "x-isEnum": true
+        },
+        "error": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityError"
+        },
+        "input": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.EvaluateSHCapabilityRequest"
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/v1.smartHomeEvaluation.SHEvaluationResultsMetric"
+          }
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.ListSHTestPlanItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.paginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string"
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.PagedResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.paginationContext"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.ListSHCapabilityTestPlansResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.PagedResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "testPlans": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.smartHomeEvaluation.ListSHTestPlanItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "v1.smartHomeEvaluation.TestCaseResultStatus": {
+      "type": "string",
+      "enum": [
+        "PASSED",
+        "FAILED",
+        "ERROR"
+      ]
+    },
+    "v1.smartHomeEvaluation.TestCaseResult": {
+      "type": "object",
+      "properties": {
+        "actualCapabilityStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityState"
+          }
+        },
+        "actualResponse": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityResponse"
+        },
+        "directive": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityDirective"
+        },
+        "error": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityError"
+        },
+        "expectedCapabilityStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityState"
+          }
+        },
+        "expectedResponse": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityResponse"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.TestCaseResultStatus",
+          "x-isEnum": true
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.GetSHCapabilityEvaluationResultsResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.PagedResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "testCaseResults": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.smartHomeEvaluation.TestCaseResult"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "v1.smartHomeEvaluation.SHCapabilityState": {
+      "type": "object"
+    },
+    "v1.smartHomeEvaluation.SHCapabilityResponse": {
+      "type": "object"
+    },
+    "v1.smartHomeEvaluation.SHCapabilityDirective": {
+      "type": "object"
+    },
+    "v1.smartHomeEvaluation.SHCapabilityError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/v1.smartHomeEvaluation.SHCapabilityErrorCode",
+          "x-isEnum": true
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "v1.smartHomeEvaluation.SHCapabilityErrorCode": {
+      "type": "string",
+      "enum": [
+        "NO_SUCH_ENDPOINT",
+        "NO_SUCH_SKILL_STAGE",
+        "NO_SUCH_TEST_PLAN",
+        "MULTIPLE_MATCHED_ENDPOINTS",
+        "MULTIPLE_MATCHED_TEST_PLANS",
+        "CAPABILITY_NOT_SUPPORTED",
+        "DISCOVERY_FAILED",
+        "TEST_CASE_TIME_OUT"
       ]
     },
     "v2.skill.Invocation": {
