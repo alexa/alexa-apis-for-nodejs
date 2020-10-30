@@ -534,7 +534,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -1226,6 +1226,46 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
     * @interface
     */
     export type Operation = interfaces.alexa.presentation.apl.listoperations.SetItemOperation | interfaces.alexa.presentation.apl.listoperations.InsertMultipleItemsOperation | interfaces.alexa.presentation.apl.listoperations.DeleteMultipleItemsOperation | interfaces.alexa.presentation.apl.listoperations.InsertItemOperation | interfaces.alexa.presentation.apl.listoperations.DeleteItemOperation;
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * The reason for the failure.
+     * @enum
+     */
+    export type AudioSourceErrorReason = 'UNKNOWN_ERROR' | 'INTERNAL_SERVER_ERROR' | 'NOT_FOUND_ERROR' | 'SSL_HANDSHAKE_ERROR' | 'TIMEOUT_ERROR' | 'INVALID_URI_ERROR' | 'HTTPS_ERROR';
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * The reason for the failure.
+     * @enum
+     */
+    export type DocumentErrorReason = 'UNKNOWN_ERROR' | 'INTERNAL_SERVER_ERROR';
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * The reason for the failure.
+     * @enum
+     */
+    export type LinkErrorReason = 'UNKNOWN_ERROR' | 'INTERNAL_SERVER_ERROR' | 'NOT_FOUND_ERROR';
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * The reason for the failure.
+     * @enum
+     */
+    export type RenderErrorReason = 'UNKNOWN_ERROR' | 'INTERNAL_SERVER_ERROR';
+}
+
+export namespace interfaces.alexa.presentation.apla {
+   /**
+    * A description of an error in APLA functionality.
+    * @interface
+    */
+    export type RuntimeError = interfaces.alexa.presentation.apla.AudioSourceRuntimeError | interfaces.alexa.presentation.apla.RenderRuntimeError | interfaces.alexa.presentation.apla.DocumentRuntimeError | interfaces.alexa.presentation.apla.LinkRuntimeError;
 }
 
 export namespace interfaces.alexa.presentation.aplt {
@@ -4446,6 +4486,42 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
 
 export namespace interfaces.alexa.presentation.apla {
     /**
+     * This error type occurs when the cloud fails to retrieve an audio file from a remote source, such as one specified from within an Audio component.
+     * @interface
+     */
+    export interface AudioSourceRuntimeError {
+        'type' : 'AUDIO_SOURCE_ERROR';
+        'message': string;
+        'reason': interfaces.alexa.presentation.apla.AudioSourceErrorReason;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * This error type occurs when the cloud fails to render due to an incorrect or malformed document or data sources.
+     * @interface
+     */
+    export interface DocumentRuntimeError {
+        'type' : 'DOCUMENT_ERROR';
+        'message': string;
+        'reason': interfaces.alexa.presentation.apla.DocumentErrorReason;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * This error type occurs when the cloud fails to execute a Link typed document.
+     * @interface
+     */
+    export interface LinkRuntimeError {
+        'type' : 'LINK_ERROR';
+        'message': string;
+        'reason': interfaces.alexa.presentation.apla.LinkErrorReason;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
      *
      * @interface
      */
@@ -4454,6 +4530,33 @@ export namespace interfaces.alexa.presentation.apla {
         'token'?: string;
         'document'?: { [key: string]: any; };
         'datasources'?: { [key: string]: any; };
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * This error type occurs when the the cloud based audio mixing service fails to render the audio due to service or user failure.
+     * @interface
+     */
+    export interface RenderRuntimeError {
+        'type' : 'RENDER_ERROR';
+        'message': string;
+        'reason': interfaces.alexa.presentation.apla.RenderErrorReason;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apla {
+    /**
+     * Notifies the skill of any errors in APLA functionality.
+     * @interface
+     */
+    export interface RuntimeErrorEvent {
+        'type' : 'Alexa.Presentation.APLA.RuntimeError';
+        'requestId': string;
+        'timestamp': string;
+        'locale'?: string;
+        'token': string;
+        'errors': Array<interfaces.alexa.presentation.apla.RuntimeError>;
     }
 }
 
