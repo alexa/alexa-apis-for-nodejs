@@ -983,7 +983,7 @@ export namespace interfaces.alexa.presentation.apl {
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.FinishCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SelectCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.ScrollToComponentCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -4054,6 +4054,19 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * The finish command closes the current APL document and exits.
+     * @interface
+     */
+    export interface FinishCommand {
+        'type' : 'Finish';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * The idle command does nothing. It may be a placeholder or used to insert a calculated delay in a longer series of commands.
      * @interface
      */
@@ -4223,6 +4236,21 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * Scroll forward or backward through a ScrollView or Sequence to ensure that a particular component is in view.
+     * @interface
+     */
+    export interface ScrollToComponentCommand {
+        'type' : 'ScrollToComponent';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+        'align'?: interfaces.alexa.presentation.apl.Align;
+        'componentId'?: string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * Scroll forward or backward through a ScrollView or Sequence to ensure that a particular child component is in view.
      * @interface
      */
@@ -4234,6 +4262,22 @@ export namespace interfaces.alexa.presentation.apl {
         'align'?: interfaces.alexa.presentation.apl.Align;
         'componentId': string;
         'index': number | string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * Select a single command from an array of commands and data.
+     * @interface
+     */
+    export interface SelectCommand {
+        'type' : 'Select';
+        'delay'?: number | string;
+        'description'?: string;
+        'when'?: boolean;
+        'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        'data'?: Array<any>;
+        'otherwise'?: Array<interfaces.alexa.presentation.apl.Command>;
     }
 }
 
