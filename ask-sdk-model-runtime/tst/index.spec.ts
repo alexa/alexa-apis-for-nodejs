@@ -559,6 +559,28 @@ describe('LwaServiceClient', () => {
         expect(token).eq('mockToken');
     });
 
+    it('should retrieve access token that was provided in the configuration', async() => {
+        const apiClient = new MockApiClient();
+
+        const client = new LwaServiceClient({
+            authenticationConfiguration : {
+                clientSecret : 'mockSecret',
+                clientId : 'mockId',
+                accessToken: 'mockAccessToken',
+            },
+            apiConfiguration : {
+                apiClient,
+                apiEndpoint : null,
+                authorizationValue : null,
+            },
+            grantType: 'refresh_token',
+        });
+
+        const token = await client.getAccessToken();
+
+        expect(token).eq('mockAccessToken');
+    });
+
     it('should call custom auth endpoint', async() => {
         const apiClient = new MockApiClient();
         apiClient.response = {
