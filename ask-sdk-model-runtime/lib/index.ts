@@ -431,6 +431,7 @@ export interface AccessTokenResponse {
 export interface AuthenticationConfiguration {
     clientId : string;
     clientSecret : string;
+    accessToken? : string;
     refreshToken? : string;
     authEndpoint? : string;
 }
@@ -471,7 +472,10 @@ export class LwaServiceClient extends BaseServiceClient {
         return this.getAccessToken(scope);
     }
 
-    public async getAccessToken(scope? : string) : Promise<string> {
+    public async getAccessToken(scope? : string) : Promise<string> {             
+        if (this.authenticationConfiguration.accessToken)  {
+            return this.authenticationConfiguration.accessToken;
+        }
         const cacheKey : string = scope ? scope : LwaServiceClient.REFRESH_ACCESS_TOKEN;
         const accessToken = this.tokenStore[cacheKey];
 
