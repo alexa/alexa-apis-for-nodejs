@@ -444,6 +444,9 @@ export function createUserAgent(packageVersion : string, customUserAgent : strin
  * @interface
  */
 export interface Application {
+    /**
+     * A string representing the application identifier for your skill.
+     */
     'applicationId': string;
 }
 
@@ -458,14 +461,41 @@ export type Cause = ConnectionCompleted;
  * @interface
  */
 export interface Context {
+    /**
+     * Provides information about the current state of the Alexa service and the device interacting with your skill.
+     */
     'System': interfaces.system.SystemState;
+    /**
+     * Provides the current state for the Alexa.Presentation.APL interface.
+     */
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.RenderedDocumentState;
+    /**
+     * Provides the current state for the AudioPlayer interface.
+     */
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerState;
+    /**
+     * Provides the automotive specific information of the device.
+     */
     'Automotive'?: interfaces.automotive.AutomotiveState;
+    /**
+     * Provides the current state for the Display interface.
+     */
     'Display'?: interfaces.display.DisplayState;
+    /**
+     * Provides the last gathered geolocation information of the device.
+     */
     'Geolocation'?: interfaces.geolocation.GeolocationState;
+    /**
+     * Provides the characteristics of a device's viewport.
+     */
     'Viewport'?: interfaces.viewport.ViewportState;
+    /**
+     * This object contains a list of viewports characteristics related to the device's viewports.
+     */
     'Viewports'?: Array<interfaces.viewport.TypedViewportState>;
+    /**
+     * Provides the current state for Extensions interface
+     */
     'Extensions'?: interfaces.alexa.extension.ExtensionsState;
 }
 
@@ -474,7 +504,13 @@ export interface Context {
  * @interface
  */
 export interface Device {
+    /**
+     * The deviceId property uniquely identifies the device.
+     */
     'deviceId': string;
+    /**
+     * Lists each interface that the device supports. For example, if supportedInterfaces includes AudioPlayer {}, then you know that the device supports streaming audio using the AudioPlayer interface
+     */
     'supportedInterfaces': SupportedInterfaces;
 }
 
@@ -495,7 +531,13 @@ export type Directive = interfaces.customInterfaceController.StopEventHandlerDir
  * @interface
  */
 export interface Intent {
+    /**
+     * A string representing the name of the intent.
+     */
     'name': string;
+    /**
+     * A map of key-value pairs that further describes what the user meant based on a predefined intent schema. The map can be empty.
+     */
     'slots'?: { [key: string]: Slot; };
     'confirmationStatus': IntentConfirmationStatus;
 }
@@ -517,7 +559,13 @@ export type PermissionStatus = 'GRANTED' | 'DENIED';
  * @interface
  */
 export interface Permissions {
+    /**
+     * A token listing all the permissions granted for this user.
+     */
     'consentToken'?: string;
+    /**
+     * A map where the key is a LoginWithAmazon(LWA) scope and value is a list of key:value pairs which describe the state of user actions on the LWA scope. For e.g. \"scopes\" :{ \"alexa::devices:all:geolocation:read\":{\"status\":\"GRANTED\"}} This value of \"alexa::devices:all:geolocation:read\" will determine if the Geolocation data access is granted by the user, or else it will show a card of type AskForPermissionsConsent to the user to get this permission.
+     */
     'scopes'?: { [key: string]: Scope; };
 }
 
@@ -526,7 +574,13 @@ export interface Permissions {
  * @interface
  */
 export interface Person {
+    /**
+     * A string that represents a unique identifier for the person who is making the request. The length of this identifier can vary, but is never more than 255 characters. It is generated when a recognized user makes a request to your skill.
+     */
     'personId'?: string;
+    /**
+     * A token identifying the user in another system. This is only provided if the recognized user has successfully linked their skill account with their Alexa profile. The accessToken field will not appear if null.
+     */
     'accessToken'?: string;
 }
 
@@ -541,9 +595,21 @@ export type Request = events.skillevents.SkillEnabledRequest | services.listMana
  * @interface
  */
 export interface RequestEnvelope {
+    /**
+     * The version specifier for the request.
+     */
     'version': string;
+    /**
+     * The session object provides additional context associated with the request.
+     */
     'session'?: Session;
+    /**
+     * The context object provides your skill with information about the current state of the Alexa service and device at the time the request is sent to your service. This is included on all requests. For requests sent in the context of a session (LaunchRequest and IntentRequest), the context object duplicates the user and application information that is also available in the session.
+     */
     'context': Context;
+    /**
+     * A request object that provides the details of the user’s request.
+     */
     'request': Request;
 }
 
@@ -556,6 +622,9 @@ export interface Response {
     'card'?: ui.Card;
     'reprompt'?: ui.Reprompt;
     'directives'?: Array<Directive>;
+    /**
+     * API response object containing API response value(s)
+     */
     'apiResponse'?: any;
     'shouldEndSession'?: boolean;
     'canFulfillIntent'?: canfulfill.CanFulfillIntent;
@@ -585,9 +654,21 @@ export interface Scope {
  * @interface
  */
 export interface Session {
+    /**
+     * A boolean value indicating whether this is a new session. Returns true for a new session or false for an existing session.
+     */
     'new': boolean;
+    /**
+     * A string that represents a unique identifier per a user’s active session.
+     */
     'sessionId': string;
+    /**
+     * An object that describes the user making the request.
+     */
     'user': User;
+    /**
+     * A map of key-value pairs. The attributes map is empty for requests where a new session has started with the property new set to true. When returning your response, you can include data you need to persist during the session in the sessionAttributes property. The attributes you provide are then passed back to your skill on the next request.
+     */
     'attributes'?: { [key: string]: any; };
     'application': Application;
 }
@@ -597,7 +678,13 @@ export interface Session {
  * @interface
  */
 export interface SessionEndedError {
+    /**
+     * A string indicating the type of error that occurred.
+     */
     'type': SessionEndedErrorType;
+    /**
+     * A string providing more information about the error.
+     */
     'message': string;
 }
 
@@ -618,10 +705,25 @@ export type SessionEndedReason = 'USER_INITIATED' | 'ERROR' | 'EXCEEDED_MAX_REPR
  * @interface
  */
 export interface Slot {
+    /**
+     * A string that represents the name of the slot.
+     */
     'name': string;
+    /**
+     * A string that represents the value the user spoke for the slot. This is the actual value the user spoke, not necessarily the canonical value or one of the synonyms defined for the entity. Note that AMAZON.LITERAL slot values sent to your service are always in all lower case.
+     */
     'value'?: string;
+    /**
+     * Indication of whether an intent or slot has been explicitly confirmed or denied by the user, or neither.
+     */
     'confirmationStatus': SlotConfirmationStatus;
+    /**
+     * Contains the resultsof entity resolution. These are organized by authority. An authority represents the source for the data provided for the slot. For a custom slot type, the authority is the slot type you defined.
+     */
     'resolutions'?: slu.entityresolution.Resolutions;
+    /**
+     * Object representing the value of the slot.
+     */
     'slotValue'?: SlotValue;
 }
 
@@ -642,7 +744,13 @@ export type SlotValue = ListSlotValue | SimpleSlotValue;
  * @interface
  */
 export interface Status {
+    /**
+     * This is a code signifying the status of the execution initiated by the skill. Protocol adheres to HTTP status codes.
+     */
     'code': string;
+    /**
+     * This is a message that goes along with response code that can provide more information about what occurred.
+     */
     'message': string;
 }
 
@@ -666,8 +774,17 @@ export interface SupportedInterfaces {
  * @interface
  */
 export interface Task {
+    /**
+     * Represents the name of the task.
+     */
     'name': string;
+    /**
+     * Represents the version of the task.
+     */
     'version': string;
+    /**
+     * Represents the input to handle the task.
+     */
     'input'?: any;
 }
 
@@ -676,7 +793,13 @@ export interface Task {
  * @interface
  */
 export interface User {
+    /**
+     * A string that represents a unique identifier for the user who made the request. The length of this identifier can vary, but is never more than 255 characters. The userId is automatically generated when a user enables the skill in the Alexa app. Note: Disabling and re-enabling a skill generates a new identifier.
+     */
     'userId': string;
+    /**
+     * A token identifying the user in another system. This is only provided if the user has successfully linked their skill account with their Amazon account.
+     */
     'accessToken'?: string;
     'permissions'?: Permissions;
 }
@@ -697,7 +820,13 @@ export namespace authorization {
      * @interface
      */
     export interface Grant {
+        /**
+         * Type of the grant.
+         */
         'type': authorization.GrantType;
+        /**
+         * The authorization code for the user.
+         */
         'code': string;
     }
 }
@@ -717,6 +846,9 @@ export namespace canfulfill {
      */
     export interface CanFulfillIntent {
         'canFulfill': canfulfill.CanFulfillIntentValues;
+        /**
+         * A map that represents skill's detailed response to each detected slot within the intent such as if skill can understand and fulfill the detected slot. This supplements the overall canFulfillIntent response and help Alexa make better ranking and arbitration decisions. The key is the name of the slot. The value is an object of type CanFulfillSlot.
+         */
         'slots'?: { [key: string]: canfulfill.CanFulfillSlot; };
     }
 }
@@ -780,7 +912,13 @@ export namespace dialog {
      * @interface
      */
     export interface Input {
+        /**
+         * The Alexa Conversations input name as dictated in the Conversations model.
+         */
         'name': string;
+        /**
+         * A map of input slots by slot name.
+         */
         'slots'?: { [key: string]: Slot; };
     }
 }
@@ -807,9 +945,21 @@ export namespace dynamicEndpoints {
      * @interface
      */
     export interface Request {
+        /**
+         * The version of the request message schema used.
+         */
         'version': string;
+        /**
+         * Denotes type of request.
+         */
         'type': string;
+        /**
+         * The requestId for the dynamic endpoint request.
+         */
         'requestId': string;
+        /**
+         * The request payload.
+         */
         'requestPayload': string;
     }
 }
@@ -820,6 +970,9 @@ export namespace er.dynamic {
      * @interface
      */
     export interface Entity {
+        /**
+         * An unique id associated with the entity
+         */
         'id'?: string;
         'name': er.dynamic.EntityValueAndSynonyms;
     }
@@ -831,7 +984,13 @@ export namespace er.dynamic {
      * @interface
      */
     export interface EntityListItem {
+        /**
+         * The entity type. Must match the slot type as defined in the interaction model.
+         */
         'name': string;
+        /**
+         * A list of dynamic entities which are of the same type
+         */
         'values': Array<er.dynamic.Entity>;
     }
 }
@@ -842,7 +1001,13 @@ export namespace er.dynamic {
      * @interface
      */
     export interface EntityValueAndSynonyms {
+        /**
+         * The entity value
+         */
         'value': string;
+        /**
+         * An array of synonyms for the entity
+         */
         'synonyms'?: Array<string>;
     }
 }
@@ -871,6 +1036,9 @@ export namespace events.skillevents {
      * @interface
      */
     export interface Permission {
+        /**
+         * The value representing the permission scope. 
+         */
         'scope'?: string;
     }
 }
@@ -881,7 +1049,13 @@ export namespace events.skillevents {
      * @interface
      */
     export interface PermissionBody {
+        /**
+         * The current list of permissions consented to on the account level. It can be an empty list if there are no account level permissions consented to. 
+         */
         'acceptedPermissions'?: Array<events.skillevents.Permission>;
+        /**
+         * The current list of permissions consented to on the person level. This is only present if the request contains the ```person``` object. It can be an empty list if there are no person level permissions consented to. 
+         */
         'acceptedPersonPermissions'?: Array<events.skillevents.Permission>;
     }
 }
@@ -892,6 +1066,9 @@ export namespace events.skillevents {
      * @interface
      */
     export interface ProactiveSubscriptionChangedBody {
+        /**
+         * The list of events that this customer is currently subscribed to. If a customer unsubscribes from an event, this list will contain remaining event types to which the customer is still subscribed to receive from your skill. If the list of subscriptions is empty, this customer has unsubscribed from all event types from your skill. 
+         */
         'subscriptions'?: Array<events.skillevents.ProactiveSubscriptionEvent>;
     }
 }
@@ -912,7 +1089,13 @@ export namespace interfaces.alexa.comms.messagingcontroller {
      * @interface
      */
     export interface StatusMap {
+        /**
+         * List of read messages
+         */
         'read'?: Array<string>;
+        /**
+         * List of deleted messages
+         */
         'deleted'?: Array<string>;
     }
 }
@@ -932,6 +1115,9 @@ export namespace interfaces.alexa.extension {
      * @interface
      */
     export interface ExtensionsState {
+        /**
+         * A map from extension URI to extension object where the object space is reserved for providing authorization information or other such data in the future.
+         */
         'available': { [key: string]: interfaces.alexa.extension.AvailableExtension; };
     }
 }
@@ -983,7 +1169,7 @@ export namespace interfaces.alexa.presentation.apl {
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.FinishCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SelectCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.ScrollToComponentCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.FinishCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SelectCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ReinflateCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.ScrollToComponentCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -1012,14 +1198,41 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreen {
+        /**
+         * All child elements of the displayed element.
+         */
         'children'?: Array<interfaces.alexa.presentation.apl.ComponentVisibleOnScreen>;
+        /**
+         * The entities which were attached to the element.
+         */
         'entities'?: Array<interfaces.alexa.presentation.apl.ComponentEntity>;
+        /**
+         * The id of the element.
+         */
         'id': string;
+        /**
+         * Global position of the element (as seen by the device user).
+         */
         'position': string;
+        /**
+         * The tags which were attached to the element.
+         */
         'tags': interfaces.alexa.presentation.apl.ComponentVisibleOnScreenTags;
+        /**
+         * The transform which was applied to the element's position, specified as a 6-element numeric array containing the 2D homogeneous transformation matrix. The center of the transformation coordinate system is the center of the component. The transformation array is ordered as [A,B,C,D,Tx,Ty]. For more information refer to the W3C's CSS transforms documentation. 
+         */
         'transform'?: Array<number>;
+        /**
+         * The visual appearance of the element.
+         */
         'type': string;
+        /**
+         * The system-generated uid of the element.
+         */
         'uid': string;
+        /**
+         * The relative visibility of the element. 0 = not visible, 1 = fully visible on screen.
+         */
         'visibility'?: number;
     }
 }
@@ -1030,6 +1243,9 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreenListItemTag {
+        /**
+         * The zero-based index of this item in its parent.
+         */
         'index'?: number;
     }
 }
@@ -1040,10 +1256,25 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreenListTag {
+        /**
+         * The total number of items in the list.
+         */
         'itemCount'?: number;
+        /**
+         * The index of the lowest item seen.
+         */
         'lowestIndexSeen'?: number;
+        /**
+         * The index of the highest item seen.
+         */
         'highestIndexSeen'?: number;
+        /**
+         * The ordinal of the lowest ordinal-equipped item seen.
+         */
         'lowestOrdinalSeen'?: number;
+        /**
+         * The ordinal of the highest ordinal-equipped item seen.
+         */
         'highestOrdinalSeen'?: number;
     }
 }
@@ -1054,13 +1285,31 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreenMediaTag {
+        /**
+         * Current position of the play head from the start of the track.
+         */
         'positionInMilliseconds'?: number;
         'state'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenMediaTagStateEnum;
+        /**
+         * Whether the user may seek forward relative to the current position.
+         */
         'allowAdjustSeekPositionForward'?: boolean;
+        /**
+         * Whether the user may seek backwards relative to the current position.
+         */
         'allowAdjustSeekPositionBackwards'?: boolean;
+        /**
+         * Whether the user may move forward to the next track.
+         */
         'allowNext'?: boolean;
+        /**
+         * Whether the user may move backward to the previous track.
+         */
         'allowPrevious'?: boolean;
         'entities'?: Array<interfaces.alexa.presentation.apl.ComponentEntity>;
+        /**
+         * The URL of the current media track.
+         */
         'url'?: string;
     }
 }
@@ -1079,9 +1328,21 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreenPagerTag {
+        /**
+         * The index of the current page.
+         */
         'index'?: number;
+        /**
+         * The total number of pages.
+         */
         'pageCount'?: number;
+        /**
+         * Indicates whether the pager will accept a forward command.
+         */
         'allowForward'?: boolean;
+        /**
+         * Indicates whether the pager will accept a backward command.
+         */
         'allowBackwards'?: boolean;
     }
 }
@@ -1093,7 +1354,13 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ComponentVisibleOnScreenScrollableTag {
         'direction'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenScrollableTagDirectionEnum;
+        /**
+         * Whether scrolling forward is accepted.
+         */
         'allowForward'?: boolean;
+        /**
+         * Whether scrolling backward is accepted.
+         */
         'allowBackward'?: boolean;
     }
 }
@@ -1112,17 +1379,53 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ComponentVisibleOnScreenTags {
+        /**
+         * The checked state of a component that has two states.
+         */
         'checked'?: boolean;
+        /**
+         * A button or item that can be pressed.
+         */
         'clickable'?: boolean;
+        /**
+         * Whether the element is disabled.
+         */
         'disabled'?: boolean;
+        /**
+         * The focused state of a component that can take focus.
+         */
         'focused'?: boolean;
+        /**
+         * An ordered list of items.
+         */
         'list'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenListTag;
+        /**
+         * An element in a sequence.
+         */
         'listItem'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenListItemTag;
+        /**
+         * Media player
+         */
         'media'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenMediaTag;
+        /**
+         * A visibly numbered element.
+         */
         'ordinal'?: number;
+        /**
+         * A collection of items that are displayed one at a time.
+         */
         'pager'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenPagerTag;
+        /**
+         * A scrolling region
+         */
         'scrollable'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenScrollableTag;
+        /**
+         * A region of the screen that can be read out by TTS
+         */
         'spoken'?: boolean;
+        /**
+         * The entire screen in which a document is rendered.
+         */
         'viewport'?: interfaces.alexa.presentation.apl.ComponentVisibleOnScreenViewportTag;
     }
 }
@@ -1174,8 +1477,17 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface RenderedDocumentState {
+        /**
+         * The token specified in the RenderDocument directive which rendered the content shown on screen.
+         */
         'token': string;
+        /**
+         * The APL version of the document which rendered the content shown on screen.
+         */
         'version'?: string;
+        /**
+         * List of the visible APL components currently shown on screen.
+         */
         'componentsVisibleOnScreen'?: Array<interfaces.alexa.presentation.apl.ComponentVisibleOnScreen>;
     }
 }
@@ -1186,6 +1498,9 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface Runtime {
+        /**
+         * Maximum APL version supported by the runtime.
+         */
         'maxVersion'?: string;
     }
 }
@@ -1212,10 +1527,25 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface VideoSource {
+        /**
+         * Optional description of this source material
+         */
         'description'?: string;
+        /**
+         * Duration of time to play. If not set, defaults to the entire stream. Expressed in milliseconds.
+         */
         'duration'?: number | string;
+        /**
+         * Media source material
+         */
         'url': string;
+        /**
+         * Number of times to loop the video. Defaults to 0.
+         */
         'repeatCount'?: number | string;
+        /**
+         * Offset to start playing at in the stream (defaults to 0).
+         */
         'offset'?: number | string;
     }
 }
@@ -1300,6 +1630,9 @@ export namespace interfaces.alexa.presentation.aplt {
      * @interface
      */
     export interface Runtime {
+        /**
+         * Maximum APL-T version supported by the runtime.
+         */
         'maxVersion'?: string;
     }
 }
@@ -1328,6 +1661,9 @@ export namespace interfaces.alexa.presentation.html {
      * @interface
      */
     export interface Configuration {
+        /**
+         * The number of seconds the content can stay on the screen without user interaction. Default value is 30 seconds. Maximum allowed value is 5 minutes.
+         */
         'timeoutInSeconds'?: number;
     }
 }
@@ -1338,6 +1674,9 @@ export namespace interfaces.alexa.presentation.html {
      * @interface
      */
     export interface Runtime {
+        /**
+         * The max version of the HTML runtime supported by the device.
+         */
         'maxVersion': string;
     }
 }
@@ -1349,7 +1688,13 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface RuntimeError {
         'reason': interfaces.alexa.presentation.html.RuntimeErrorReason;
+        /**
+         * Details about why the error occurred
+         */
         'message'?: string;
+        /**
+         * Error code
+         */
         'code'?: string;
     }
 }
@@ -1369,7 +1714,13 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface StartRequest {
         'method': interfaces.alexa.presentation.html.StartRequestMethod;
+        /**
+         * HTTPS URI of the HTML page to load. This URI must abide by the [URI RFC 3986](https://tools.ietf.org/html/rfc3986). The HTML runtime must perform secure requests, using the HTTPS schema. Maximum size 8000 characters 
+         */
         'uri'?: string;
+        /**
+         * HTTP headers that the HTML runtime requires to access resources. Only the Authorization header and custom headers are allowed
+         */
         'headers'?: any;
     }
 }
@@ -1389,7 +1740,13 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface Transformer {
         'transformer': interfaces.alexa.presentation.html.TransformerType;
+        /**
+         * A JSON path that points to either a single entity in the message object, or a set of entities using wildcard or unresolved arrays. Examples 'family[*].name', 'address.street'. See [APL transformer properties](https://developer.amazon.com/docs/alexa-presentation-language/apl-data-source.html#transformer-properties-and-conversion-rules) for more details. 
+         */
         'inputPath': string;
+        /**
+         * Name of the output property to add to the message object. For example, if the inputPath is \"address.street\", the transformer output will be stored at \"address.outputName\". If no outputName is supplied, the transformer output will override the value at inputPath. 
+         */
         'outputName'?: string;
     }
 }
@@ -1448,18 +1805,45 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface AuthorizationDetails {
+        /**
+         * This is AmazonPay generated identifier for this authorization transaction.
+         */
         'amazonAuthorizationId'?: string;
+        /**
+         * This is 3P seller's identifier for this authorization transaction. This identifier must be unique for all of your authorization transactions.
+         */
         'authorizationReferenceId'?: string;
+        /**
+         * A description for the transaction that is included in emails to the user. Appears only when AuthorizeAndCapture is chosen.
+         */
         'sellerAuthorizationNote'?: string;
         'authorizationAmount'?: interfaces.amazonpay.model.v1.Price;
         'capturedAmount'?: interfaces.amazonpay.model.v1.Price;
         'authorizationFee'?: interfaces.amazonpay.model.v1.Price;
+        /**
+         * list of AmazonCaptureId identifiers that have been requested on this Authorization object.
+         */
         'idList'?: Array<string>;
+        /**
+         * This is the time at which the authorization was created.
+         */
         'creationTimestamp'?: string;
+        /**
+         * This is the time at which the authorization expires.
+         */
         'expirationTimestamp'?: string;
         'authorizationStatus'?: interfaces.amazonpay.model.v1.AuthorizationStatus;
+        /**
+         * This indicates whether an authorization resulted in a soft decline.
+         */
         'softDecline'?: boolean;
+        /**
+         * This indicates whether a direct capture against the payment contract was specified.
+         */
         'captureNow'?: boolean;
+        /**
+         * This is the description to be shown on the buyer's payment instrument statement if AuthorizeAndCapture was chosen.
+         */
         'softDescriptor'?: string;
     }
 }
@@ -1471,8 +1855,17 @@ export namespace interfaces.amazonpay.model.v1 {
      */
     export interface AuthorizationStatus {
         'state'?: interfaces.amazonpay.model.v1.State;
+        /**
+         * The reason that the Authorization object, Capture object, or Refund object is in the current state. For more information, see - https://pay.amazon.com/us/developer/documentation/apireference/201752950
+         */
         'reasonCode'?: string;
+        /**
+         * Reason desciption corresponding to the reason code
+         */
         'reasonDescription'?: string;
+        /**
+         * A timestamp that indicates the time when the authorization, capture, or refund state was last updated. In ISO 8601 format
+         */
         'lastUpdateTimestamp'?: string;
     }
 }
@@ -1483,10 +1876,22 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface AuthorizeAttributes {
+        /**
+         * This is 3P seller's identifier for this authorization transaction. This identifier must be unique for all of your authorization transactions.
+         */
         'authorizationReferenceId': string;
         'authorizationAmount': interfaces.amazonpay.model.v1.Price;
+        /**
+         * The maximum number of minutes allocated for the Authorize operation call to be processed. After this the authorization is automatically declined and you cannot capture funds against the authorization. The default value for Alexa transactions is 0. In order to speed up checkout time for voice users we recommend to not change this value.
+         */
         'transactionTimeout'?: number;
+        /**
+         * A description for the transaction that is included in emails to the user. Appears only when AuthorizeAndCapture is chosen.
+         */
         'sellerAuthorizationNote'?: string;
+        /**
+         * The description to be shown on the user's payment instrument statement if AuthorizeAndCapture is chosen. Format of soft descriptor sent to the payment processor is \"AMZ* <soft descriptor specified here>\". Default is \"AMZ*<SELLER_NAME> amzn.com/ pmts WA\". Maximum length can be 16 characters.
+         */
         'softDescriptor'?: string;
     }
 }
@@ -1497,7 +1902,13 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface BillingAgreementAttributes {
+        /**
+         * Represents the SellerId of the Solution Provider that developed the eCommerce platform. This value is only used by Solution Providers, for whom it is required. It should not be provided by merchants creating their own custom integration. Do not specify the SellerId of the merchant for this request parameter. If you are a merchant, do not enter a PlatformId.
+         */
         'platformId'?: string;
+        /**
+         * Represents a description of the billing agreement that is displayed in emails to the buyer.
+         */
         'sellerNote'?: string;
         'sellerBillingAgreementAttributes'?: interfaces.amazonpay.model.v1.SellerBillingAgreementAttributes;
         'billingAgreementType'?: interfaces.amazonpay.model.v1.BillingAgreementType;
@@ -1511,9 +1922,21 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface BillingAgreementDetails {
+        /**
+         * Billing agreement id which can be used for one time and recurring purchases
+         */
         'billingAgreementId': string;
+        /**
+         * Time at which billing agreement details created.
+         */
         'creationTimestamp'?: string;
+        /**
+         * The default shipping address of the buyer. Returned if needAmazonShippingAddress is set to true.
+         */
         'destination'?: interfaces.amazonpay.model.v1.Destination;
+        /**
+         * Merchant's preferred language of checkout.
+         */
         'checkoutLanguage'?: string;
         'releaseEnvironment': interfaces.amazonpay.model.v1.ReleaseEnvironment;
         'billingAgreementStatus': interfaces.amazonpay.model.v1.BillingAgreementStatus;
@@ -1542,16 +1965,49 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface Destination {
+        /**
+         * The name or business name
+         */
         'name'?: string;
+        /**
+         * The company name
+         */
         'companyName'?: string;
+        /**
+         * The first line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine1'?: string;
+        /**
+         * The second line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine2'?: string;
+        /**
+         * The third line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine3'?: string;
+        /**
+         * The city
+         */
         'city'?: string;
+        /**
+         * The district or County
+         */
         'districtOrCounty'?: string;
+        /**
+         * The state or region. This element is free text and can be either a 2-character code, fully spelled out, or abbreviated. Required. Note :- This response element is returned only in the U.S.
+         */
         'stateOrRegion'?: string;
+        /**
+         * The postal code.
+         */
         'postalCode'?: string;
+        /**
+         * The country code, in ISO 3166 format
+         */
         'countryCode'?: string;
+        /**
+         * The phone number
+         */
         'phone'?: string;
     }
 }
@@ -1570,7 +2026,13 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface Price {
+        /**
+         * Amount authorized/captured.
+         */
         'amount': string;
+        /**
+         * Currency code for the amount.
+         */
         'currencyCode': string;
     }
 }
@@ -1581,7 +2043,13 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface ProviderAttributes {
+        /**
+         * Solution provider ID.
+         */
         'providerId': string;
+        /**
+         * List of provider credit.
+         */
         'providerCreditList': Array<interfaces.amazonpay.model.v1.ProviderCredit>;
     }
 }
@@ -1592,6 +2060,9 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface ProviderCredit {
+        /**
+         * This is required only for Ecommerce provider (Solution provider) use cases.
+         */
         'providerId'?: string;
         'credit'?: interfaces.amazonpay.model.v1.Price;
     }
@@ -1611,8 +2082,17 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface SellerBillingAgreementAttributes {
+        /**
+         * The merchant-specified identifier of this billing agreement. At least one request parameter must be specified. Amazon recommends that you use only the following characters:- lowercase a-z, uppercase A-Z, numbers 0-9, dash (-), underscore (_).
+         */
         'sellerBillingAgreementId'?: string;
+        /**
+         * The identifier of the store from which the order was placed. This overrides the default value in Seller Central under Settings > Account Settings. It is displayed to the buyer in their emails and transaction history on the Amazon Payments website.
+         */
         'storeName'?: string;
+        /**
+         * Any additional information that you wish to include with this billing agreement. At least one request parameter must be specified.
+         */
         'customInformation'?: string;
     }
 }
@@ -1623,9 +2103,21 @@ export namespace interfaces.amazonpay.model.v1 {
      * @interface
      */
     export interface SellerOrderAttributes {
+        /**
+         * The merchant-specified identifier of this order. This is shown to the buyer in their emails and transaction history on the Amazon Pay website.
+         */
         'sellerOrderId'?: string;
+        /**
+         * The identifier of the store from which the order was placed. This overrides the default value in Seller Central under Settings > Account Settings. It is displayed to the buyer in their emails and transaction history on the Amazon Payments website.
+         */
         'storeName'?: string;
+        /**
+         * Any additional information that you want to include with this order reference.
+         */
         'customInformation'?: string;
+        /**
+         * This represents a description of the order that is displayed in emails to the buyer.
+         */
         'sellerNote'?: string;
     }
 }
@@ -1654,7 +2146,13 @@ export namespace interfaces.amazonpay.v1 {
      * @interface
      */
     export interface AmazonPayErrorResponse {
+        /**
+         * Error code indicating the succinct cause of error
+         */
         'errorCode': string;
+        /**
+         * Description of the error.
+         */
         'errorMessage': string;
     }
 }
@@ -1665,8 +2163,17 @@ export namespace interfaces.amazonpay.v1 {
      * @interface
      */
     export interface ChargeAmazonPay {
+        /**
+         * Authorization token that contains the permissions consented to by the user.
+         */
         'consentToken'?: string;
+        /**
+         * The seller ID (also known as merchant ID). If you are an Ecommerce Provider (Solution Provider), please specify the ID of the merchant, not your provider ID.
+         */
         'sellerId': string;
+        /**
+         * The payment contract i.e. billing agreement created for the user.
+         */
         'billingAgreementId': string;
         'paymentAction': interfaces.amazonpay.model.v1.PaymentAction;
         'authorizeAttributes': interfaces.amazonpay.model.v1.AuthorizeAttributes;
@@ -1681,6 +2188,9 @@ export namespace interfaces.amazonpay.v1 {
      * @interface
      */
     export interface ChargeAmazonPayResult {
+        /**
+         * The order reference identifier.
+         */
         'amazonOrderReferenceId': string;
         'authorizationDetails': interfaces.amazonpay.model.v1.AuthorizationDetails;
     }
@@ -1692,14 +2202,38 @@ export namespace interfaces.amazonpay.v1 {
      * @interface
      */
     export interface SetupAmazonPay {
+        /**
+         * Authorization token that contains the permissions consented to by the user.
+         */
         'consentToken'?: string;
+        /**
+         * The seller ID (also known as merchant ID). If you are an Ecommerce Provider (Solution Provider), please specify the ID of the merchant, not your provider ID.
+         */
         'sellerId': string;
+        /**
+         * The country in which the merchant has registered, as an Amazon Payments legal entity.
+         */
         'countryOfEstablishment': string;
+        /**
+         * The currency of the merchant’s ledger account.
+         */
         'ledgerCurrency': string;
+        /**
+         * The merchant's preferred language for checkout.
+         */
         'checkoutLanguage'?: string;
         'billingAgreementAttributes'?: interfaces.amazonpay.model.v1.BillingAgreementAttributes;
+        /**
+         * To receive the default user shipping address in the response, set this parameter to true. Not required if a user shipping address is not required.
+         */
         'needAmazonShippingAddress'?: boolean;
+        /**
+         * To test in Sandbox mode, set this parameter to true.
+         */
         'sandboxMode'?: boolean;
+        /**
+         * Use this parameter to create a Sandbox payment object. In order to use this parameter, you first create a Sandbox user account in Seller Central. Then, pass the email address associated with that Sandbox user account.
+         */
         'sandboxCustomerEmailId'?: string;
     }
 }
@@ -1731,9 +2265,21 @@ export namespace interfaces.audioplayer {
      * @interface
      */
     export interface AudioItemMetadata {
+        /**
+         * An optional title of the audio item.
+         */
         'title'?: string;
+        /**
+         * An optional subtitle of the audio item.
+         */
         'subtitle'?: string;
+        /**
+         * An optional cover art image for the audio item.
+         */
         'art'?: interfaces.display.Image;
+        /**
+         * An optional background image for the audio item.
+         */
         'backgroundImage'?: interfaces.display.Image;
     }
 }
@@ -1765,7 +2311,13 @@ export namespace interfaces.audioplayer {
      * @interface
      */
     export interface CaptionData {
+        /**
+         * This contains the caption text.
+         */
         'content'?: string;
+        /**
+         * Type of the caption source.
+         */
         'type'?: interfaces.audioplayer.CaptionType;
     }
 }
@@ -1862,7 +2414,13 @@ export namespace interfaces.connections {
      * @interface
      */
     export interface ConnectionsStatus {
+        /**
+         * This is a code signifying the status of the request sent by the skill. Protocol adheres to HTTP status codes.
+         */
         'code': string;
+        /**
+         * This is a message that goes along with response code that can provide more information about what occurred
+         */
         'message'?: string;
     }
 }
@@ -1897,7 +2455,13 @@ export namespace interfaces.conversations {
      * @interface
      */
     export interface APIRequest {
+        /**
+         * API name
+         */
         'name'?: string;
+        /**
+         * Object containing values for API arguments
+         */
         'arguments'?: { [key: string]: any; };
         'slots'?: { [key: string]: SlotValue; };
     }
@@ -1909,6 +2473,9 @@ export namespace interfaces.customInterfaceController {
      * @interface
      */
     export interface Endpoint {
+        /**
+         * The endpoint ID of the gadget.
+         */
         'endpointId': string;
     }
 }
@@ -1919,8 +2486,17 @@ export namespace interfaces.customInterfaceController {
      * @interface
      */
     export interface Event {
+        /**
+         * The object that contains the header of the event.
+         */
         'header': interfaces.customInterfaceController.Header;
+        /**
+         * The free form JSON object.
+         */
         'payload': any;
+        /**
+         * Identifies where the event orginated from.
+         */
         'endpoint': interfaces.customInterfaceController.Endpoint;
     }
 }
@@ -1931,6 +2507,9 @@ export namespace interfaces.customInterfaceController {
      * @interface
      */
     export interface EventFilter {
+        /**
+         * The JSON object that represents the Jsonlogic expression against which the events are evaluated. If this expression is satisfied, the corresponding match action is performed.
+         */
         'filterExpression': any;
         'filterMatchAction': interfaces.customInterfaceController.FilterMatchAction;
     }
@@ -1942,7 +2521,13 @@ export namespace interfaces.customInterfaceController {
      * @interface
      */
     export interface Expiration {
+        /**
+         * The length of time, in milliseconds, for which events from connected gadgets will be  passed to the skill. Your skill will continue to receive events until this duration  expires or the event handler is otherwise stopped.
+         */
         'durationInMilliseconds': number;
+        /**
+         * The payload that was defined in the StartEventHandlerDirective. The skill will receive if and only if the Event Handler duration expired.
+         */
         'expirationPayload'?: any;
     }
 }
@@ -1961,7 +2546,13 @@ export namespace interfaces.customInterfaceController {
      * @interface
      */
     export interface Header {
+        /**
+         * The developer-defined namespace for the custom interface.
+         */
         'namespace': string;
+        /**
+         * The developer-defined name of the custom interface.
+         */
         'name': string;
     }
 }
@@ -2089,7 +2680,13 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface Altitude {
+        /**
+         * A double representing the altitude of the device in meters.
+         */
         'altitudeInMeters': number;
+        /**
+         * A double representing the accuracy of the altitude measurement in meters.
+         */
         'accuracyInMeters': number;
     }
 }
@@ -2100,8 +2697,17 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface Coordinate {
+        /**
+         * A double representing the latitude in degrees of the device.
+         */
         'latitudeInDegrees': number;
+        /**
+         * A double representing the longitude in degrees of the device.
+         */
         'longitudeInDegrees': number;
+        /**
+         * A double representing the accuracy of geolocation data in meters.
+         */
         'accuracyInMeters': number;
     }
 }
@@ -2121,6 +2727,9 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface GeolocationState {
+        /**
+         * Specifies the time when the geolocation data was last collected on the device.
+         */
         'timestamp'?: string;
         'coordinate'?: interfaces.geolocation.Coordinate;
         'altitude'?: interfaces.geolocation.Altitude;
@@ -2136,7 +2745,13 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface Heading {
+        /**
+         * A double representing the direction of the device in degrees.
+         */
         'directionInDegrees': number;
+        /**
+         * A double representing the accuracy of the heading measurement in degrees.
+         */
         'accuracyInDegrees'?: number;
     }
 }
@@ -2147,7 +2762,13 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface LocationServices {
+        /**
+         * A string representing the status of whether location services is currently running or not on the host OS of device.
+         */
         'status': interfaces.geolocation.Status;
+        /**
+         * A string representing if Alexa has access to location services running on the hostOS of device.
+         */
         'access': interfaces.geolocation.Access;
     }
 }
@@ -2158,7 +2779,13 @@ export namespace interfaces.geolocation {
      * @interface
      */
     export interface Speed {
+        /**
+         * A double representing the speed of the device in meters.
+         */
         'speedInMetersPerSecond': number;
+        /**
+         * A double representing the accuracy of the speed measurement in meters.
+         */
         'accuracyInMetersPerSecond'?: number;
     }
 }
@@ -2177,6 +2804,9 @@ export namespace interfaces.monetization.v1 {
      * @interface
      */
     export interface InSkillProduct {
+        /**
+         * The product ID of In Skill Product.
+         */
         'productId': string;
     }
 }
@@ -2238,7 +2868,13 @@ export namespace interfaces.system {
         'device'?: Device;
         'person'?: Person;
         'unit'?: interfaces.systemUnit.Unit;
+        /**
+         * A string that references the correct base URI to refer to by region, for use with APIs such as the Device Location API and Progressive Response API.
+         */
         'apiEndpoint': string;
+        /**
+         * A bearer token string that can be used by the skill (during the skill session) to access Alexa APIs resources of the registered Alexa customer and/or person who is making the request. This token encapsulates the permissions authorized under the registered Alexa account and device, and (optionally) the recognized person. Some resources, such as name or email, require explicit customer consent.\" 
+         */
         'apiAccessToken'?: string;
     }
 }
@@ -2249,7 +2885,13 @@ export namespace interfaces.systemUnit {
      * @interface
      */
     export interface Unit {
+        /**
+         * A string that represents unitId directed at skill level. Each skill gets a different directed identifier for same internal identifier. This is Skill enablement scoped identifier. This should be in format - amzn1.ask.unit.<skillDirectedId>
+         */
         'unitId'?: string;
+        /**
+         * A string that represents a unitId directed using directedIdConfuser associated with the respective Organization's developer account. This identifier is directed at an Organization level. Same identifier is shared across Organization's backend systems (which invokes API), Skills owned by the organization and authorized 3P skills. This should be in format - amzn1.alexa.unit.did.<LWAConfuserDirectedId>
+         */
         'persistentUnitId'?: string;
     }
 }
@@ -2299,9 +2941,21 @@ export namespace interfaces.viewport {
      * @interface
      */
     export interface Experience {
+        /**
+         * The number of horizontal arc minutes the viewport occupies in the user's visual field when viewed within this experience.
+         */
         'arcMinuteWidth'?: number;
+        /**
+         * The number of vertical arc minutes the viewport occupies in the user's visual field when viewed within this experience.
+         */
         'arcMinuteHeight'?: number;
+        /**
+         * Indicates if the viewport can be rotated through 90 degrees.
+         */
         'canRotate'?: boolean;
+        /**
+         * Indicates if the viewport can be resized, limiting the area which can be used to render the APL response.
+         */
         'canResize'?: boolean;
     }
 }
@@ -2360,15 +3014,39 @@ export namespace interfaces.viewport {
      * @interface
      */
     export interface ViewportState {
+        /**
+         * The experiences supported by the device, in descending order of arcMinuteWidth and arcMinuteHeight.
+         */
         'experiences'?: Array<interfaces.viewport.Experience>;
         'mode'?: interfaces.viewport.Mode;
         'shape'?: interfaces.viewport.Shape;
+        /**
+         * The number of pixels present in the viewport at its maximum width.
+         */
         'pixelWidth'?: number;
+        /**
+         * The number of pixels present in the viewport at its maximum height.
+         */
         'pixelHeight'?: number;
+        /**
+         * The pixel density of the viewport.
+         */
         'dpi'?: number;
+        /**
+         * The number of horizontal pixels in the viewport that are currently available for Alexa to render an experience.
+         */
         'currentPixelWidth'?: number;
+        /**
+         * The number of vertical pixels in the viewport that are currently available for Alexa to render an experience.
+         */
         'currentPixelHeight'?: number;
+        /**
+         * The types of touch supported by the device. An empty array indicates no touch support.
+         */
         'touch'?: Array<interfaces.viewport.Touch>;
+        /**
+         * The physical button input mechanisms supported by the device. An empty array indicates physical button input is unsupported.
+         */
         'keyboard'?: Array<interfaces.viewport.Keyboard>;
         'video'?: interfaces.viewport.ViewportStateVideo;
     }
@@ -2380,6 +3058,9 @@ export namespace interfaces.viewport {
      * @interface
      */
     export interface ViewportStateVideo {
+        /**
+         * Codecs which are available for playing video on the device.
+         */
         'codecs'?: Array<interfaces.viewport.video.Codecs>;
     }
 }
@@ -2390,6 +3071,9 @@ export namespace interfaces.viewport {
      * @interface
      */
     export interface ViewportVideo {
+        /**
+         * Codecs which are available for playing video on the device.
+         */
         'codecs'?: Array<interfaces.viewport.video.Codecs>;
     }
 }
@@ -2431,8 +3115,17 @@ export namespace interfaces.viewport.aplt {
      * @interface
      */
     export interface InterSegment {
+        /**
+         * horizontal position (0-based index) in characters
+         */
         'x': number;
+        /**
+         * vertical position (0-based index) in rows
+         */
         'y': number;
+        /**
+         * list of characters that can be rendered
+         */
         'characters': string;
     }
 }
@@ -2484,7 +3177,13 @@ export namespace services.deviceAddress {
      * @interface
      */
     export interface Error {
+        /**
+         * The corresponding type of the http status code being returned.
+         */
         'type'?: string;
+        /**
+         * A human readable description of error.
+         */
         'message'?: string;
     }
 }
@@ -2514,7 +3213,13 @@ export namespace services.directive {
      * @interface
      */
     export interface Error {
+        /**
+         * error code to find more information in developer.amazon.com.
+         */
         'code': number;
+        /**
+         * Readable description of error.
+         */
         'message': string;
     }
 }
@@ -2525,6 +3230,9 @@ export namespace services.directive {
      * @interface
      */
     export interface Header {
+        /**
+         * This represents the current requestId for what the skill/speechlet was invoked.
+         */
         'requestId': string;
     }
 }
@@ -2535,7 +3243,13 @@ export namespace services.directive {
      * @interface
      */
     export interface SendDirectiveRequest {
+        /**
+         * contains the header attributes of the send directive request.
+         */
         'header': services.directive.Header;
+        /**
+         * Directive Content.
+         */
         'directive': services.directive.Directive;
     }
 }
@@ -2546,8 +3260,17 @@ export namespace services.endpointEnumeration {
      * @interface
      */
     export interface EndpointCapability {
+        /**
+         * The name of the capability interface.
+         */
         'interface'?: string;
+        /**
+         * The type of capability interface. This is usually AlexaInterface.
+         */
         'type'?: string;
+        /**
+         * The version of the capability interface that the endpoint supports.
+         */
         'version'?: string;
     }
 }
@@ -2558,6 +3281,9 @@ export namespace services.endpointEnumeration {
      * @interface
      */
     export interface EndpointEnumerationResponse {
+        /**
+         * The list of endpoints.
+         */
         'endpoints'?: Array<services.endpointEnumeration.EndpointInfo>;
     }
 }
@@ -2568,8 +3294,17 @@ export namespace services.endpointEnumeration {
      * @interface
      */
     export interface EndpointInfo {
+        /**
+         * A unique identifier for the endpoint.
+         */
         'endpointId'?: string;
+        /**
+         * The name of the endpoint. Because this name might be changed by the user or the platform, it might be different than the Bluetooth friendly name.
+         */
         'friendlyName'?: string;
+        /**
+         * The list of endpoint capabilities.
+         */
         'capabilities'?: Array<services.endpointEnumeration.EndpointCapability>;
     }
 }
@@ -2580,7 +3315,13 @@ export namespace services.endpointEnumeration {
      * @interface
      */
     export interface Error {
+        /**
+         * Domain specific error code.
+         */
         'code'?: string;
+        /**
+         * Detailed error message.
+         */
         'message'?: string;
     }
 }
@@ -2599,8 +3340,17 @@ export namespace services.gadgetController {
      * @interface
      */
     export interface AnimationStep {
+        /**
+         * The duration in milliseconds to render this step. 
+         */
         'durationMs': number;
+        /**
+         * The color to render specified in RGB hexadecimal values. There are a number of Node.js libraries available for working with color. 
+         */
         'color': string;
+        /**
+         * A boolean that indicates whether to interpolate from the previous color into this one over the course of this directive's durationMs.
+         */
         'blend': boolean;
     }
 }
@@ -2611,8 +3361,17 @@ export namespace services.gadgetController {
      * @interface
      */
     export interface LightAnimation {
+        /**
+         * The number of times to play this animation. 
+         */
         'repeat'?: number;
+        /**
+         * An array of strings that represent the light addresses on the target gadgets that this animation will be applied to. Because the Echo Button has one light only, use [\"1\"] to signify that this animation should be sent to light one.
+         */
         'targetLights'?: Array<string>;
+        /**
+         * The animation steps to render in order. The maximum number of steps that you can define is 38. The minimum is 0. Each step must have the following fields, all of which are required.
+         */
         'sequence'?: Array<services.gadgetController.AnimationStep>;
     }
 }
@@ -2643,10 +3402,22 @@ export namespace services.gameEngine {
      * @interface
      */
     export interface InputEvent {
+        /**
+         * The identifier of the Echo Button in question. It matches the gadgetId that you will have discovered in roll call.
+         */
         'gadgetId'?: string;
+        /**
+         * The event's original moment of occurrence, in ISO format.
+         */
         'timestamp'?: string;
         'action'?: services.gameEngine.InputEventActionType;
+        /**
+         * The hexadecimal RGB values of the button LED at the time of the event.
+         */
         'color'?: string;
+        /**
+         * For gadgets with multiple features, this is the feature that the event represents. Echo Buttons have one feature only, so this is always `press`.
+         */
         'feature'?: string;
     }
 }
@@ -2665,7 +3436,13 @@ export namespace services.gameEngine {
      * @interface
      */
     export interface InputHandlerEvent {
+        /**
+         * The name of the event as you defined it in your GameEngine.StartInputHandler directive.
+         */
         'name'?: string;
+        /**
+         * A chronologically ordered report of the raw Button Events that contributed to this Input Handler Event.
+         */
         'inputEvents'?: Array<services.gameEngine.InputEvent>;
     }
 }
@@ -2684,11 +3461,20 @@ export namespace services.gameEngine {
      * @interface
      */
     export interface Event {
+        /**
+         * Whether the Input Handler should end after this event fires. If true, the Input Handler will stop and no further events will be sent to your skill unless you call StartInputHandler again.
+         */
         'shouldEndInputHandler': boolean;
         'meets': Array<string>;
         'fails'?: Array<string>;
         'reports'?: services.gameEngine.EventReportingType;
+        /**
+         * Enables you to limit the number of times that the skill is notified about the same event during the course of the Input Handler. The default value is 1. This property is mutually exclusive with triggerTimeMilliseconds. 
+         */
         'maximumInvocations'?: number;
+        /**
+         * Adds a time constraint to the event. Instead of being considered whenever a raw button event occurs, an event that has this parameter will only be considered once at triggerTimeMilliseconds after the Input Handler has started. Because a time-triggered event can only fire once, the maximumInvocations value is ignored. Omit this property entirely if you do not want to time-constrain the event. 
+         */
         'triggerTimeMilliseconds'?: number;
     }
 }
@@ -2699,9 +3485,18 @@ export namespace services.gameEngine {
      * @interface
      */
     export interface Pattern {
+        /**
+         * A whitelist of gadgetIds that are eligible for this match.
+         */
         'gadgetIds'?: Array<string>;
+        /**
+         * A whitelist of colors that are eligible for this match.
+         */
         'colors'?: Array<string>;
         'action'?: services.gameEngine.InputEventActionType;
+        /**
+         * The number of times that the specified action must occur to be considered complete.
+         */
         'repeat'?: number;
     }
 }
@@ -2741,6 +3536,9 @@ export namespace services.listManagement {
         'status'?: services.listManagement.ListItemState;
         'createdTime'?: string;
         'updatedTime'?: string;
+        /**
+         * URL to retrieve the item from.
+         */
         'href'?: string;
     }
 }
@@ -2876,8 +3674,17 @@ export namespace services.listManagement {
      * @interface
      */
     export interface UpdateListItemRequest {
+        /**
+         * New item value
+         */
         'value'?: string;
+        /**
+         * Item Status
+         */
         'status'?: services.listManagement.ListItemState;
+        /**
+         * Item version when it was read.
+         */
         'version'?: number;
     }
 }
@@ -2916,6 +3723,9 @@ export namespace services.monetization {
      * @interface
      */
     export interface Error {
+        /**
+         * Readable description of error
+         */
         'message'?: string;
     }
 }
@@ -2926,14 +3736,29 @@ export namespace services.monetization {
      * @interface
      */
     export interface InSkillProduct {
+        /**
+         * Product Id
+         */
         'productId': string;
+        /**
+         * Developer selected in-skill product name. This is for developer reference only.
+         */
         'referenceName': string;
+        /**
+         * Name of the product in the language from the \"Accept-Language\" header
+         */
         'name': string;
         'type': services.monetization.ProductType;
+        /**
+         * Product summary in the language from the \"Accept-Language\" header
+         */
         'summary': string;
         'purchasable': services.monetization.PurchasableState;
         'entitled': services.monetization.EntitledState;
         'entitlementReason': services.monetization.EntitlementReason;
+        /**
+         * Total active purchases of the product made by the user. Note - For ENTITLEMENT and SUBSCRIPTION product types, the value is either zero(NOT_ENTITLED) or one(ENTITLED). For CONSUMABLE product type the value is zero or more, as CONSUMABLE can be re-purchased.
+         */
         'activeEntitlementCount': number;
         'purchaseMode': services.monetization.PurchaseMode;
     }
@@ -2945,6 +3770,9 @@ export namespace services.monetization {
      * @interface
      */
     export interface InSkillProductTransactionsResponse {
+        /**
+         * List of transactions of in skill products purchases
+         */
         'results': Array<services.monetization.Transactions>;
         'metadata': services.monetization.Metadata;
     }
@@ -2956,6 +3784,9 @@ export namespace services.monetization {
      * @interface
      */
     export interface InSkillProductsResponse {
+        /**
+         * List of In-Skill Products
+         */
         'inSkillProducts': Array<services.monetization.InSkillProduct>;
         'isTruncated': boolean;
         'nextToken': string;
@@ -3021,8 +3852,17 @@ export namespace services.monetization {
      */
     export interface Transactions {
         'status'?: services.monetization.Status;
+        /**
+         * Product Id
+         */
         'productId'?: string;
+        /**
+         * Time at which transaction's was initiated in ISO 8601 format i.e. yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+         */
         'createdTime'?: string;
+        /**
+         * Time at which transaction's status was last updated in ISO 8601 format i.e. yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+         */
         'lastModifiedTime'?: string;
     }
 }
@@ -3033,10 +3873,22 @@ export namespace services.proactiveEvents {
      * @interface
      */
     export interface CreateProactiveEventRequest {
+        /**
+         * The date and time of the event associated with this request, in ISO 8601 format.
+         */
         'timestamp': string;
+        /**
+         * Client-supplied ID for correlating the event with external entities. The allowed characters for the referenceId field are alphanumeric and ~, and the length of the referenceId field must be 1-100 characters. 
+         */
         'referenceId': string;
+        /**
+         * The date and time, in ISO 8601 format, when the service will automatically delete the notification if it is still in the pending state. 
+         */
         'expiryTime': string;
         'event': services.proactiveEvents.Event;
+        /**
+         * A list of items, each of which contains the set of event attributes that requires localization support.
+         */
         'localizedAttributes': Array<any>;
         'relevantAudience': services.proactiveEvents.RelevantAudience;
     }
@@ -3071,6 +3923,9 @@ export namespace services.proactiveEvents {
      */
     export interface RelevantAudience {
         'type': services.proactiveEvents.RelevantAudienceType;
+        /**
+         * If relevantAudience.type is set to Multicast, then the payload object is empty. Otherwise, the userId value for which the event is targeted is required. 
+         */
         'payload': any;
     }
 }
@@ -3097,7 +3952,13 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface Error {
+        /**
+         * Domain specific error code
+         */
         'code'?: string;
+        /**
+         * Detailed error message
+         */
         'message'?: string;
     }
 }
@@ -3119,8 +3980,17 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface GetRemindersResponse {
+        /**
+         * Total count of reminders returned
+         */
         'totalCount'?: string;
+        /**
+         * List of reminders
+         */
         'alerts'?: Array<services.reminderManagement.Reminder>;
+        /**
+         * Link to retrieve next set of alerts if total count is greater than max results
+         */
         'links'?: string;
     }
 }
@@ -3131,13 +4001,25 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface Reminder {
+        /**
+         * Unique id of this reminder alert
+         */
         'alertToken'?: string;
+        /**
+         * Valid ISO 8601 format - Creation time of this reminder alert
+         */
         'createdTime'?: string;
+        /**
+         * Valid ISO 8601 format - Last updated time of this reminder alert
+         */
         'updatedTime'?: string;
         'status'?: services.reminderManagement.Status;
         'trigger'?: services.reminderManagement.Trigger;
         'alertInfo'?: services.reminderManagement.AlertInfo;
         'pushNotification'?: services.reminderManagement.PushNotification;
+        /**
+         * Version of reminder alert
+         */
         'version'?: string;
     }
 }
@@ -3158,6 +4040,9 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface ReminderRequest {
+        /**
+         * Valid ISO 8601 format - Creation time of this reminder alert
+         */
         'requestTime'?: string;
         'trigger'?: services.reminderManagement.Trigger;
         'alertInfo'?: services.reminderManagement.AlertInfo;
@@ -3171,11 +4056,26 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface ReminderResponse {
+        /**
+         * Unique id of this reminder alert
+         */
         'alertToken'?: string;
+        /**
+         * Valid ISO 8601 format - Creation time of this reminder alert
+         */
         'createdTime'?: string;
+        /**
+         * Valid ISO 8601 format - Last updated time of this reminder alert
+         */
         'updatedTime'?: string;
         'status'?: services.reminderManagement.Status;
+        /**
+         * Version of reminder alert
+         */
         'version'?: string;
+        /**
+         * URI to retrieve the created alert
+         */
         'href'?: string;
     }
 }
@@ -3226,8 +4126,17 @@ export namespace services.reminderManagement {
     export interface Recurrence {
         'freq'?: services.reminderManagement.RecurrenceFreq;
         'byDay'?: Array<services.reminderManagement.RecurrenceDay>;
+        /**
+         * contains a positive integer representing at which intervals the recurrence rule repeats
+         */
         'interval'?: number;
+        /**
+         * Valid ISO 8601 format - optional start DateTime of recurrence.
+         */
         'startDateTime'?: string;
+        /**
+         * Valid ISO 8601 format - optional end DateTime of recurrence
+         */
         'endDateTime'?: string;
         'recurrenceRules'?: Array<string>;
     }
@@ -3255,8 +4164,17 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface SpokenText {
+        /**
+         * The locale in which the spoken text is rendered. e.g. en-US
+         */
         'locale'?: string;
+        /**
+         * Spoken text in SSML format.
+         */
         'ssml'?: string;
+        /**
+         * Spoken text in plain text format.
+         */
         'text'?: string;
     }
 }
@@ -3276,8 +4194,17 @@ export namespace services.reminderManagement {
      */
     export interface Trigger {
         'type'?: services.reminderManagement.TriggerType;
+        /**
+         * Valid ISO 8601 format - Intended trigger time
+         */
         'scheduledTime'?: string;
+        /**
+         * If reminder is set using relative time, use this field to specify the time after which reminder ll ring (in seconds)
+         */
         'offsetInSeconds'?: number;
+        /**
+         * Intended reminder's timezone
+         */
         'timeZoneId'?: string;
         'recurrence'?: services.reminderManagement.Recurrence;
     }
@@ -3308,7 +4235,13 @@ export namespace services.skillMessaging {
      * @interface
      */
     export interface SendSkillMessagingRequest {
+        /**
+         * The payload data to send with the message. The data must be in the form of JSON-formatted key-value pairs. Both keys and values must be of type String. The total size of the data cannot be greater than 6KB. For calculation purposes, this includes keys and values, the quotes that surround them, the \":\" character that separates them, the commas that separate the pairs, and the opening and closing braces around the field. However, any whitespace between key/value pairs is not included in the calculation of the payload size. If the message does not include payload data, as in the case of a sync message, you can pass in an empty JSON object \"{}\". 
+         */
         'data': any;
+        /**
+         * The number of seconds that the message will be retained to retry if message delivery is not successful. Allowed values are from 60 (1 minute) to 86400 (1 day), inclusive. The default is 3600 (1 hour). Multiple retries may occur during this interval. The retry logic is exponential. The first retry executes after 30 seconds, and this time period doubles on every retry. The retries will end when the total time elapsed since the message was first sent has exceeded the value you provided for expiresAfterSeconds. Message expiry is rarely a problem if the message handler has been set up correctly. With a correct setup, you will receive the message once promptly. This mechanism for retries is provided as a safeguard in case your skill goes down during a message delivery. 
+         */
         'expiresAfterSeconds'?: number;
     }
 }
@@ -3339,7 +4272,13 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface Error {
+        /**
+         * Domain specific error code
+         */
         'code'?: string;
+        /**
+         * Detailed error message
+         */
         'message'?: string;
     }
 }
@@ -3350,6 +4289,9 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface NotificationConfig {
+        /**
+         * Whether the native trigger CX is employed for this timer. By extension, this also denote whether an explicit ‘Stop’ is required.
+         */
         'playAudible'?: boolean;
     }
 }
@@ -3376,8 +4318,17 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface Task {
+        /**
+         * task name
+         */
         'name'?: string;
+        /**
+         * task version E.g. \"1\"
+         */
         'version'?: string;
+        /**
+         * Developers can pass in any dictionary they need for the skill
+         */
         'input'?: any;
     }
 }
@@ -3388,7 +4339,13 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface TextToAnnounce {
+        /**
+         * The locale in which the announcement text is rendered.
+         */
         'locale'?: string;
+        /**
+         * If provided, triggerText will be delivered by Timers speechlet upon trigger dismissal or immediately upon timer expiry if playAudible = false.
+         */
         'text'?: string;
     }
 }
@@ -3399,7 +4356,13 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface TextToConfirm {
+        /**
+         * The locale in which the confirmation text is rendered.
+         */
         'locale'?: string;
+        /**
+         * Prompt will be given to user upon trigger dismissal or timer expiry (depending on playAudible). %s (placeholder for “continue with Skill Name”) is mandatory.
+         */
         'text'?: string;
     }
 }
@@ -3410,7 +4373,13 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface TimerRequest {
+        /**
+         * An ISO-8601 representation of duration. E.g. for 2 minutes and 3 seconds - \"PT2M3S\".
+         */
         'duration': string;
+        /**
+         * Label of this timer alert, maximum of 256 characters.
+         */
         'timerLabel'?: string;
         'creationBehavior': services.timerManagement.CreationBehavior;
         'triggeringBehavior': services.timerManagement.TriggeringBehavior;
@@ -3423,13 +4392,34 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface TimerResponse {
+        /**
+         * Unique id of this timer alert
+         */
         'id'?: string;
         'status'?: services.timerManagement.Status;
+        /**
+         * An ISO-8601 representation of duration. E.g. for 2 minutes and 3 seconds - \"PT2M3S\".
+         */
         'duration'?: string;
+        /**
+         * Valid ISO 8601 format - Trigger time of this timer alert.
+         */
         'triggerTime'?: string;
+        /**
+         * Label of this timer alert, maximum of 256 character.
+         */
         'timerLabel'?: string;
+        /**
+         * Valid ISO 8601 format - Creation time of this timer alert.
+         */
         'createdTime'?: string;
+        /**
+         * Valid ISO 8601 format - Last updated time of this timer alert.
+         */
         'updatedTime'?: string;
+        /**
+         * An ISO-8601 representation of duration remaining since the timer was last paused. E.g. for 1 hour, 3 minutes and 31 seconds - \"PT1H3M31S\".
+         */
         'remainingTimeWhenPaused'?: string;
     }
 }
@@ -3440,8 +4430,17 @@ export namespace services.timerManagement {
      * @interface
      */
     export interface TimersResponse {
+        /**
+         * Total count of timers returned.
+         */
         'totalCount'?: number;
+        /**
+         * List of multiple Timer objects
+         */
         'timers'?: Array<services.timerManagement.TimerResponse>;
+        /**
+         * Link to retrieve next set of timers if total count is greater than max results.
+         */
         'nextToken'?: string;
     }
 }
@@ -3480,6 +4479,9 @@ export namespace services.ups {
      */
     export interface Error {
         'code'?: services.ups.ErrorCode;
+        /**
+         * A human readable description of error.
+         */
         'message'?: string;
     }
 }
@@ -3539,6 +4541,9 @@ export namespace slu.entityresolution {
      * @interface
      */
     export interface Status {
+        /**
+         * Indication of the results of attempting to resolve the user utterance against the defined slot types.
+         */
         'code': slu.entityresolution.StatusCode;
     }
 }
@@ -3557,7 +4562,13 @@ export namespace slu.entityresolution {
      * @interface
      */
     export interface Value {
+        /**
+         * The name for the resolution value.
+         */
         'name': string;
+        /**
+         * The id for the resolution value.
+         */
         'id': string;
     }
 }
@@ -3623,8 +4634,14 @@ export namespace ui {
  */
 export interface ConnectionCompleted {
     'type' : 'ConnectionCompleted';
+    /**
+     * This is an echo back string that skills send when during Connections.StartConnection directive. They will receive it when they get the SessionResumedRequest. It is never sent to the skill handling the request.
+     */
     'token'?: string;
     'status'?: Status;
+    /**
+     * This is the result object to resume the skill's suspended session.
+     */
     'result'?: any;
 }
 
@@ -3634,10 +4651,25 @@ export interface ConnectionCompleted {
  */
 export interface IntentRequest {
     'type' : 'IntentRequest';
+    /**
+     * Represents the unique identifier for the specific request.
+     */
     'requestId': string;
+    /**
+     * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+     */
     'timestamp': string;
+    /**
+     * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+     */
     'locale'?: string;
+    /**
+     * Enumeration indicating the status of the multi-turn dialog. This property is included if the skill meets the requirements to use the Dialog directives. Note that COMPLETED is only possible when you use the Dialog.Delegate directive. If you use intent confirmation, dialogState is considered COMPLETED if the user denies the entire intent (for instance, by answering “no” when asked the confirmation prompt). Be sure to also check the confirmationStatus property on the Intent object before fulfilling the user’s request.
+     */
     'dialogState': DialogState;
+    /**
+     * An object that represents what the user wants.
+     */
     'intent': Intent;
 }
 
@@ -3647,8 +4679,17 @@ export interface IntentRequest {
  */
 export interface LaunchRequest {
     'type' : 'LaunchRequest';
+    /**
+     * Represents the unique identifier for the specific request.
+     */
     'requestId': string;
+    /**
+     * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+     */
     'timestamp': string;
+    /**
+     * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+     */
     'locale'?: string;
     'task'?: Task;
 }
@@ -3659,6 +4700,9 @@ export interface LaunchRequest {
  */
 export interface ListSlotValue {
     'type' : 'List';
+    /**
+     * An array containing the values captured for this slot.
+     */
     'values': Array<SlotValue>;
 }
 
@@ -3668,10 +4712,25 @@ export interface ListSlotValue {
  */
 export interface SessionEndedRequest {
     'type' : 'SessionEndedRequest';
+    /**
+     * Represents the unique identifier for the specific request.
+     */
     'requestId': string;
+    /**
+     * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+     */
     'timestamp': string;
+    /**
+     * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+     */
     'locale'?: string;
+    /**
+     * Describes why the session ended.
+     */
     'reason': SessionEndedReason;
+    /**
+     * An error object providing more information about the error that occurred.
+     */
     'error'?: SessionEndedError;
 }
 
@@ -3681,8 +4740,17 @@ export interface SessionEndedRequest {
  */
 export interface SessionResumedRequest {
     'type' : 'SessionResumedRequest';
+    /**
+     * Represents the unique identifier for the specific request.
+     */
     'requestId': string;
+    /**
+     * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+     */
     'timestamp': string;
+    /**
+     * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+     */
     'locale'?: string;
     'cause'?: Cause;
 }
@@ -3693,7 +4761,13 @@ export interface SessionResumedRequest {
  */
 export interface SimpleSlotValue {
     'type' : 'Simple';
+    /**
+     * A string that represents the value the user spoke for the slot. This is the actual value the user spoke, not necessarily the canonical value or one of the synonyms defined for the entity. Note that AMAZON.LITERAL slot values sent to your service are always in all lower case.
+     */
     'value'?: string;
+    /**
+     * Contains the results of entity resolution. These are organized by authority. An authority represents the source for the data provided for the slot. For a custom slot type, the authority is the slot type you defined.
+     */
     'resolutions'?: slu.entityresolution.Resolutions;
 }
 
@@ -3704,8 +4778,17 @@ export namespace authorization {
      */
     export interface AuthorizationGrantRequest {
         'type' : 'Alexa.Authorization.Grant';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body': authorization.AuthorizationGrantBody;
     }
@@ -3718,8 +4801,17 @@ export namespace canfulfill {
      */
     export interface CanFulfillIntentRequest {
         'type' : 'CanFulfillIntentRequest';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'dialogState'?: DialogState;
         'intent': Intent;
@@ -3767,6 +4859,9 @@ export namespace dialog {
      */
     export interface DelegateRequestDirective {
         'type' : 'Dialog.DelegateRequest';
+        /**
+         * The delegation target.
+         */
         'target': string;
         'period': dialog.DelegationPeriod;
         'updatedRequest'?: dialog.UpdatedRequest;
@@ -3804,8 +4899,17 @@ export namespace dialog {
      */
     export interface InputRequest {
         'type' : 'Dialog.InputRequest';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'input': dialog.Input;
     }
@@ -3840,9 +4944,21 @@ export namespace dynamicEndpoints {
      */
     export interface FailureResponse {
         'type' : 'SkillResponseFailureMessage';
+        /**
+         * The version of the response message schema used.
+         */
         'version': string;
+        /**
+         * The same request identifier as the Dynamic endpoint request for this response.
+         */
         'originalRequestId': string;
+        /**
+         * The error code for the failure. Standard HTTP error codes will be used.
+         */
         'errorCode'?: string;
+        /**
+         * Description of the failure.
+         */
         'errorMessage'?: string;
     }
 }
@@ -3854,8 +4970,17 @@ export namespace dynamicEndpoints {
      */
     export interface SuccessResponse {
         'type' : 'SkillResponseSuccessMessage';
+        /**
+         * The version of the response message schema used.
+         */
         'version': string;
+        /**
+         * The same request identifier as the Dynamic endpoint request for this response.
+         */
         'originalRequestId': string;
+        /**
+         * The response payload.
+         */
         'responsePayload'?: string;
     }
 }
@@ -3867,8 +4992,17 @@ export namespace events.skillevents {
      */
     export interface AccountLinkedRequest {
         'type' : 'AlexaSkillEvent.SkillAccountLinked';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body': events.skillevents.AccountLinkedBody;
         'eventCreationTime'?: string;
@@ -3883,8 +5017,17 @@ export namespace events.skillevents {
      */
     export interface PermissionAcceptedRequest {
         'type' : 'AlexaSkillEvent.SkillPermissionAccepted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: events.skillevents.PermissionBody;
         'eventCreationTime'?: string;
@@ -3899,8 +5042,17 @@ export namespace events.skillevents {
      */
     export interface PermissionChangedRequest {
         'type' : 'AlexaSkillEvent.SkillPermissionChanged';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: events.skillevents.PermissionBody;
         'eventCreationTime'?: string;
@@ -3915,8 +5067,17 @@ export namespace events.skillevents {
      */
     export interface ProactiveSubscriptionChangedRequest {
         'type' : 'AlexaSkillEvent.ProactiveSubscriptionChanged';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body': events.skillevents.ProactiveSubscriptionChangedBody;
     }
@@ -3929,8 +5090,17 @@ export namespace events.skillevents {
      */
     export interface SkillDisabledRequest {
         'type' : 'AlexaSkillEvent.SkillDisabled';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3944,8 +5114,17 @@ export namespace events.skillevents {
      */
     export interface SkillEnabledRequest {
         'type' : 'AlexaSkillEvent.SkillEnabled';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
@@ -3959,14 +5138,46 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface AnimateItemCommand {
         'type' : 'AnimateItem';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The ID of the animated component.
+         */
         'componentId': string;
+        /**
+         * The duration of the animation (in milliseconds).
+         */
         'duration': number | string;
+        /**
+         * The easing curve.
+         */
         'easing'?: string;
+        /**
+         * Number of times to repeat.
+         */
         'repeatCount'?: number | string;
         'repeatMode'?: interfaces.alexa.presentation.apl.AnimateItemRepeatMode;
+        /**
+         * An array of animated properties.
+         */
         'value': Array<interfaces.alexa.presentation.apl.AnimatedProperty>;
     }
 }
@@ -3978,7 +5189,13 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface AnimatedOpacityProperty {
         'property' : 'opacity';
+        /**
+         * The starting value of the property.
+         */
         'from'?: number | string;
+        /**
+         * The ending value of the property.
+         */
         'to': number | string;
     }
 }
@@ -3990,7 +5207,13 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface AnimatedTransformProperty {
         'property' : 'transform';
+        /**
+         * The starting value of the property.
+         */
         'from': Array<interfaces.alexa.presentation.apl.TransformProperty>;
+        /**
+         * The ending value of the property.
+         */
         'to': Array<interfaces.alexa.presentation.apl.TransformProperty>;
     }
 }
@@ -4002,11 +5225,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface AutoPageCommand {
         'type' : 'AutoPage';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The id of the Pager component.
+         */
         'componentId': string;
+        /**
+         * Number of pages to display. Defaults to all of them.
+         */
         'count'?: number | string;
+        /**
+         * Time to wait between pages (in milliseconds). Defaults to 0.
+         */
         'duration'?: number | string;
     }
 }
@@ -4018,8 +5267,25 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ClearFocusCommand {
         'type' : 'ClearFocus';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
     }
 }
@@ -4031,11 +5297,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ControlMediaCommand {
         'type' : 'ControlMedia';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The command to issue on the media player
+         */
         'command': interfaces.alexa.presentation.apl.MediaCommandType;
+        /**
+         * The name of the media playing component
+         */
         'componentId'?: string;
+        /**
+         * Optional data value
+         */
         'value'?: number | string;
     }
 }
@@ -4047,7 +5339,13 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ExecuteCommandsDirective {
         'type' : 'Alexa.Presentation.APL.ExecuteCommands';
+        /**
+         * List of Command instances
+         */
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        /**
+         * A skill defined token, unique for each presentation. Must match the token provided by the skill in the RenderDocument directive used to render the original APL document.
+         */
         'token': string;
     }
 }
@@ -4059,8 +5357,25 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface FinishCommand {
         'type' : 'Finish';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
     }
 }
@@ -4072,8 +5387,25 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface IdleCommand {
         'type' : 'Idle';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
     }
 }
@@ -4085,10 +5417,22 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ListRuntimeError {
         'type' : 'LIST_ERROR';
+        /**
+         * A human-readable description of the error.
+         */
         'message': string;
         'reason': interfaces.alexa.presentation.apl.ListRuntimeErrorReason;
+        /**
+         * The identifier of the list in which the error occurred.
+         */
         'listId': string;
+        /**
+         * The listVersion in which the error occurred.
+         */
         'listVersion'?: number;
+        /**
+         * The index of the operation which caused the error (if known)
+         */
         'operationIndex'?: number;
     }
 }
@@ -4100,13 +5444,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface LoadIndexListDataEvent {
         'type' : 'Alexa.Presentation.APL.LoadIndexListData';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * The token as specified in the presentation's RenderDocument directive.
+         */
         'token': string;
+        /**
+         * An identifier generated by a device that is used to correlate requests with their corresponding response directives.
+         */
         'correlationToken': string;
+        /**
+         * The identifier of the list whose items to fetch.
+         */
         'listId': string;
+        /**
+         * The lowest index of the items to fetch (inclusive)
+         */
         'startIndex': number;
+        /**
+         * The number of items to fetch. Examples:  startIndex = 10, count = 2: Skill is expected to return items at indexes 10 and 11. startIndex = -2, count = 5: Skill is expected to return items at indexes -2, -1, 0, 1 and 2 
+         */
         'count': number;
     }
 }
@@ -4117,7 +5485,13 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface MoveTransformProperty {
+        /**
+         * Distance to translate the object to the right.
+         */
         'translateX'?: string;
+        /**
+         * Distance to translate the object down.
+         */
         'translateY'?: string;
     }
 }
@@ -4129,10 +5503,33 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface OpenUrlCommand {
         'type' : 'OpenURL';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The URL to open
+         */
         'source': string;
+        /**
+         * Commands to execute if the URL fails to open
+         */
         'onFail'?: Array<interfaces.alexa.presentation.apl.Command>;
     }
 }
@@ -4144,9 +5541,29 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ParallelCommand {
         'type' : 'Parallel';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * An un-ordered array of commands to execute in parallel. Once all commands have finished executing the parallel command finishes. Please note that the delay of parallel command and the delay of each command are additive.
+         */
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
     }
 }
@@ -4158,12 +5575,68 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface PlayMediaCommand {
         'type' : 'PlayMedia';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The command to issue on the media player
+         */
         'audioTrack'?: interfaces.alexa.presentation.apl.AudioTrack;
+        /**
+         * The name of the media playing component
+         */
         'componentId'?: string;
+        /**
+         * The media source
+         */
         'source': Array<interfaces.alexa.presentation.apl.VideoSource>;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The reinflate command reinflates the current document with updated configuration properties.
+     * @interface
+     */
+    export interface ReinflateCommand {
+        'type' : 'Reinflate';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
+        'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
+        'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
+        'when'?: boolean;
     }
 }
 
@@ -4174,10 +5647,25 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface RenderDocumentDirective {
         'type' : 'Alexa.Presentation.APL.RenderDocument';
+        /**
+         * A unique identifier for the presentation.
+         */
         'token'?: string;
+        /**
+         * Depending on the document type, it represents either an entire APL document or a reference Link to the document. In a Link object, the value of the 'src' should follow a URI format defined like 'doc://alexa/apl/documents/<document_id>'. The 'document_id' is a reference to the APL document that the developer stores through APL Authoring Tool.
+         */
         'document'?: { [key: string]: any; };
+        /**
+         * Data sources to bind to the document when rendering.
+         */
         'datasources'?: { [key: string]: any; };
+        /**
+         * An object containing named documents or links. These documents can be referenced by the “template” parameter in the transformer.
+         */
         'sources'?: { [key: string]: any; };
+        /**
+         * A list of packages including layouts, styles, and images etc.
+         */
         'packages'?: Array<any>;
     }
 }
@@ -4188,6 +5676,9 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface RotateTransformProperty {
+        /**
+         * Rotation angle, in degrees. Positive angles rotate in the clockwise direction.
+         */
         'rotate'?: number | string;
     }
 }
@@ -4199,10 +5690,25 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface RuntimeErrorEvent {
         'type' : 'Alexa.Presentation.APL.RuntimeError';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * The unique identifier of the presentation in which the error occurred.
+         */
         'token': string;
+        /**
+         * An array of errors encountered while running the APL presentation.
+         */
         'errors': Array<interfaces.alexa.presentation.apl.RuntimeError>;
     }
 }
@@ -4213,8 +5719,17 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface ScaleTransformProperty {
+        /**
+         * Uniform scaling in both X and Y.
+         */
         'scale'?: number | string;
+        /**
+         * Scaling in the X direction (overrides “scale” if in same group).
+         */
         'scaleX'?: number | string;
+        /**
+         * Scaling in the Y direction (overrides “scale” if in same group).
+         */
         'scaleY'?: number | string;
     }
 }
@@ -4226,10 +5741,33 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ScrollCommand {
         'type' : 'Scroll';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The number of pages to scroll. Defaults to 1.
+         */
         'distance'?: number | string;
+        /**
+         * The id of the component.
+         */
         'componentId': string;
     }
 }
@@ -4241,10 +5779,30 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ScrollToComponentCommand {
         'type' : 'ScrollToComponent';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
+        /**
+         * The id of the component. If omitted, the component issuing the ScrollToComponent command is used.
+         */
         'componentId'?: string;
     }
 }
@@ -4256,11 +5814,34 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface ScrollToIndexCommand {
         'type' : 'ScrollToIndex';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
+        /**
+         * The id of the component.
+         */
         'componentId': string;
+        /**
+         * The 0-based index of the child to display.
+         */
         'index': number | string;
     }
 }
@@ -4272,11 +5853,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SelectCommand {
         'type' : 'Select';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * An ordered list of commands to select from.
+         */
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        /**
+         * A list of data to map against the commands.
+         */
         'data'?: Array<any>;
+        /**
+         * Commands to execute if nothing else runs.
+         */
         'otherwise'?: Array<interfaces.alexa.presentation.apl.Command>;
     }
 }
@@ -4288,10 +5895,33 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SendEventCommand {
         'type' : 'SendEvent';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * An array of argument data to pass to Alexa.
+         */
         'arguments'?: Array<string>;
+        /**
+         * An array of components to extract value data from and provide to Alexa.
+         */
         'components'?: Array<string>;
     }
 }
@@ -4303,12 +5933,33 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SendIndexListDataDirective {
         'type' : 'Alexa.Presentation.APL.SendIndexListData';
+        /**
+         * The correlation token supplied in the LoadTokenListData event. This parameter is mandatory if the skill is responding to a LoadIndexListData request, the skill response will be rejected if the expected correlationToken is not specified.
+         */
         'correlationToken'?: string;
+        /**
+         * The identifier of the list whose items are contained in this response.
+         */
         'listId': string;
+        /**
+         * The new version of the list after loading the items supplied in this directive. List versions increase sequentially, implicitly starting at 0 for the definition specified in the presentation's RenderDocument directive.
+         */
         'listVersion'?: number;
+        /**
+         * Index of the first element in the items array. 
+         */
         'startIndex': number;
+        /**
+         * The index of the 1st item in the skill-managed array. When populated, this value replaces any value that was specified in a previous interaction. Continued absence of this property indicates that the minimum index is not yet known and further backwards scrolling is possible. If this is equal to the index of the 1st item returned then no further backwards scrolling is possible.
+         */
         'minimumInclusiveIndex'?: number;
+        /**
+         * The last valid index of the skill-managed array plus one, i.e. exclusive value. When populated, this value replaces any value that was specified in a previous interaction. Continued absence of this property indicates that the maximum index is not yet known and further forwards scrolling is possible. If this is one more than the index of the last item returned then no further forwards scrolling is possible.
+         */
         'maximumExclusiveIndex'?: number;
+        /**
+         * Array of objects to be added to the device cache.
+         */
         'items'?: Array<any>;
     }
 }
@@ -4320,12 +5971,41 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SequentialCommand {
         'type' : 'Sequential';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * An ordered list of commands to execute if this sequence is prematurely terminated.
+         */
         'catch'?: Array<interfaces.alexa.presentation.apl.Command>;
+        /**
+         * An array of commands to execute. The commands execute in order; each command must finish before the next can begin. Please note that the delay of sequential command and the delay of the first command in the sequence are additive.
+         */
         'commands': Array<interfaces.alexa.presentation.apl.Command>;
+        /**
+         * An ordered list of commands to execute after the normal commands and the catch commands.
+         */
         'finally'?: Array<interfaces.alexa.presentation.apl.Command>;
+        /**
+         * The number of times to repeat this series of commands. Defaults to 0. Negative values will be ignored. Note that the delay assigned to overall sequential command only applies the first time. For example, in the sample sequential command below the first SendEvent fires at 3000 milliseconds, the second at 5000, the first SendEvent fires again at 7000 milliseconds, and so forth. {\"type\": \"Sequential\",\"delay\": 1000,\"repeatCount\": 2,\"commands\": [{ \"type\": \"SendEvent\",\"delay\": 2000},{\"type\": \"SendEvent\",\"delay\": 2000}]}
+         */
         'repeatCount'?: number | string;
     }
 }
@@ -4337,9 +6017,29 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetFocusCommand {
         'type' : 'SetFocus';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The ID of the component to set focus on.
+         */
         'componentId': string;
     }
 }
@@ -4351,11 +6051,34 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetPageCommand {
         'type' : 'SetPage';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The id of the Pager component.
+         */
         'componentId': string;
         'position'?: interfaces.alexa.presentation.apl.Position;
+        /**
+         * The distance to move. May be an absolute value or a relative value.
+         */
         'value': number | string;
     }
 }
@@ -4367,11 +6090,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetStateCommand {
         'type' : 'SetState';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The id of the component whose value should be set.
+         */
         'componentId'?: string;
+        /**
+         * The name of the state to set. Must be one of “checked”, “disabled”, and “focused”.
+         */
         'state': interfaces.alexa.presentation.apl.ComponentState;
+        /**
+         * The value to set on the property
+         */
         'value': boolean | string;
     }
 }
@@ -4383,11 +6132,37 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SetValueCommand {
         'type' : 'SetValue';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
+        /**
+         * The id of the component whose value to set.
+         */
         'componentId'?: string;
+        /**
+         * The name of the property to set.
+         */
         'property': string;
+        /**
+         * The property value to set.
+         */
         'value': string;
     }
 }
@@ -4398,7 +6173,13 @@ export namespace interfaces.alexa.presentation.apl {
      * @interface
      */
     export interface SkewTransformProperty {
+        /**
+         * Skew angle for the X-axis, in degrees. X-axis lines remain horizontal.
+         */
         'skewX'?: number | string;
+        /**
+         * Skew angle for the Y-axis, in degrees. Y-axis lines remain vertical.
+         */
         'skewY'?: number | string;
     }
 }
@@ -4410,12 +6191,35 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SpeakItemCommand {
         'type' : 'SpeakItem';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
+        /**
+         * The id of the component to speak.
+         */
         'componentId': string;
         'highlightMode'?: interfaces.alexa.presentation.apl.HighlightMode;
+        /**
+         * The minimum number of milliseconds that an item should be highlighted for. Defaults to 0.
+         */
         'minimumDwellTime'?: number | string;
     }
 }
@@ -4427,13 +6231,42 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface SpeakListCommand {
         'type' : 'SpeakList';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean;
         'align'?: interfaces.alexa.presentation.apl.Align;
+        /**
+         * The id of the component to read.
+         */
         'componentId': string;
+        /**
+         * The number of items to speak
+         */
         'count': number | string;
+        /**
+         * The minimum number of milliseconds that an item will be highlighted for. Defaults to 0.
+         */
         'minimumDwellTime'?: number | string;
+        /**
+         * The 0-based index of the first item to speak
+         */
         'start': number | string;
     }
 }
@@ -4445,9 +6278,21 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface UpdateIndexListDataDirective {
         'type' : 'Alexa.Presentation.APL.UpdateIndexListData';
+        /**
+         * The unique identifier for the presentation containing the dynamicIndexList.
+         */
         'token': string;
+        /**
+         * The identifier of the dynamicIndexList to update.
+         */
         'listId': string;
+        /**
+         * The new version of the list after applying the updates specified in this directive. List versions increase sequentially, implicitly starting at 0 for the definition specified in the presentation's RenderDocument directive.
+         */
         'listVersion': number;
+        /**
+         * An array of changes which are to be applied to the items in the dynamicIndexList.
+         */
         'operations': Array<interfaces.alexa.presentation.apl.listoperations.Operation>;
     }
 }
@@ -4459,12 +6304,33 @@ export namespace interfaces.alexa.presentation.apl {
      */
     export interface UserEvent {
         'type' : 'Alexa.Presentation.APL.UserEvent';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * A unique token for the active presentation.
+         */
         'token'?: string;
+        /**
+         * The array of argument data to pass to Alexa.
+         */
         'arguments'?: Array<any>;
+        /**
+         * Meta-information about what caused the event to be generated.
+         */
         'source'?: any;
+        /**
+         * Components associated with the request.
+         */
         'components'?: any;
     }
 }
@@ -4476,6 +6342,9 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
      */
     export interface DeleteItemOperation {
         'type' : 'DeleteItem';
+        /**
+         * The position of the item in the dynamicIndexList to which the operation is to be applied. For inserts and deletes that operate on multiple items, this value represents the starting index, with onward inserts/deletes applying to consecutively increasing positions.
+         */
         'index': number;
     }
 }
@@ -4487,7 +6356,13 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
      */
     export interface DeleteMultipleItemsOperation {
         'type' : 'DeleteMultipleItems';
+        /**
+         * The position of the item in the dynamicIndexList to which the operation is to be applied. For inserts and deletes that operate on multiple items, this value represents the starting index, with onward inserts/deletes applying to consecutively increasing positions.
+         */
         'index': number;
+        /**
+         * The number of items to delete.
+         */
         'count': number;
     }
 }
@@ -4499,7 +6374,13 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
      */
     export interface InsertItemOperation {
         'type' : 'InsertItem';
+        /**
+         * The position of the item in the dynamicIndexList to which the operation is to be applied. For inserts and deletes that operate on multiple items, this value represents the starting index, with onward inserts/deletes applying to consecutively increasing positions.
+         */
         'index': number;
+        /**
+         * The new item to be inserted.
+         */
         'item': any;
     }
 }
@@ -4511,7 +6392,13 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
      */
     export interface InsertMultipleItemsOperation {
         'type' : 'InsertMultipleItems';
+        /**
+         * The position of the item in the dynamicIndexList to which the operation is to be applied. For inserts and deletes that operate on multiple items, this value represents the starting index, with onward inserts/deletes applying to consecutively increasing positions.
+         */
         'index': number;
+        /**
+         * The new items to be inserted.
+         */
         'items': Array<any>;
     }
 }
@@ -4523,7 +6410,13 @@ export namespace interfaces.alexa.presentation.apl.listoperations {
      */
     export interface SetItemOperation {
         'type' : 'SetItem';
+        /**
+         * The position of the item in the dynamicIndexList to which the operation is to be applied. For inserts and deletes that operate on multiple items, this value represents the starting index, with onward inserts/deletes applying to consecutively increasing positions.
+         */
         'index': number;
+        /**
+         * The replacement item.
+         */
         'item': any;
     }
 }
@@ -4535,6 +6428,9 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface AudioSourceRuntimeError {
         'type' : 'AUDIO_SOURCE_ERROR';
+        /**
+         * A human-readable description of the error.
+         */
         'message': string;
         'reason': interfaces.alexa.presentation.apla.AudioSourceErrorReason;
     }
@@ -4547,6 +6443,9 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface DocumentRuntimeError {
         'type' : 'DOCUMENT_ERROR';
+        /**
+         * A human-readable description of the error.
+         */
         'message': string;
         'reason': interfaces.alexa.presentation.apla.DocumentErrorReason;
     }
@@ -4559,6 +6458,9 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface LinkRuntimeError {
         'type' : 'LINK_ERROR';
+        /**
+         * A human-readable description of the error.
+         */
         'message': string;
         'reason': interfaces.alexa.presentation.apla.LinkErrorReason;
     }
@@ -4571,8 +6473,17 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface RenderDocumentDirective {
         'type' : 'Alexa.Presentation.APLA.RenderDocument';
+        /**
+         * A unique identifier for the presentation.
+         */
         'token'?: string;
+        /**
+         * Depending on the document type, it represents either an entire APLA document or a reference Link to the document. In a Link object, the value of the 'src' should follow a URI format defined like 'doc://alexa/apla/documents/<document_id>'. The 'document_id' is a reference to the APLA document that the developer stores through APLA Authoring Tool.
+         */
         'document'?: { [key: string]: any; };
+        /**
+         * Data sources to bind to the document when rendering.
+         */
         'datasources'?: { [key: string]: any; };
     }
 }
@@ -4584,6 +6495,9 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface RenderRuntimeError {
         'type' : 'RENDER_ERROR';
+        /**
+         * A human-readable description of the error.
+         */
         'message': string;
         'reason': interfaces.alexa.presentation.apla.RenderErrorReason;
     }
@@ -4596,10 +6510,25 @@ export namespace interfaces.alexa.presentation.apla {
      */
     export interface RuntimeErrorEvent {
         'type' : 'Alexa.Presentation.APLA.RuntimeError';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * The unique identifier of the presentation in which the error occurred.
+         */
         'token': string;
+        /**
+         * An array of errors encountered while running the APLA presentation.
+         */
         'errors': Array<interfaces.alexa.presentation.apla.RuntimeError>;
     }
 }
@@ -4611,12 +6540,33 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface AutoPageCommand {
         'type' : 'AutoPage';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * The id of the Pager component.
+         */
         'componentId': string;
+        /**
+         * Number of pages to display. Defaults to all of them.
+         */
         'count'?: number | string;
+        /**
+         * Time to wait between pages (in milliseconds). Defaults to 0.
+         */
         'duration'?: number | string;
     }
 }
@@ -4628,7 +6578,13 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface ExecuteCommandsDirective {
         'type' : 'Alexa.Presentation.APLT.ExecuteCommands';
+        /**
+         * List of Command instances
+         */
         'commands': Array<interfaces.alexa.presentation.aplt.Command>;
+        /**
+         * A skill defined token, unique for each presentation. Must match the token provided by the skill in the RenderDocument directive used to render the original APL document.
+         */
         'token': string;
     }
 }
@@ -4640,9 +6596,21 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface IdleCommand {
         'type' : 'Idle';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
     }
 }
@@ -4654,10 +6622,25 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface ParallelCommand {
         'type' : 'Parallel';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * An un-ordered array of commands to execute in parallel. Once all commands have finished executing the parallel command finishes. Please note that the delay of parallel command and the delay of each command are additive.
+         */
         'commands': Array<interfaces.alexa.presentation.aplt.Command>;
     }
 }
@@ -4669,9 +6652,21 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface RenderDocumentDirective {
         'type' : 'Alexa.Presentation.APLT.RenderDocument';
+        /**
+         * A unique identifier for the presentation.
+         */
         'token'?: string;
+        /**
+         * One of supported profiles in character display. Default value is NONE.
+         */
         'targetProfile'?: interfaces.alexa.presentation.aplt.TargetProfile;
+        /**
+         * Depending on the document type, it represents either an entire APLT document or a reference Link to the document. In a Link object, the value of the 'src' should follow a URI format defined like 'doc://alexa/aplt/documents/<document_id>'. The 'document_id' is a reference to the APLT document that the developer stores through APL Authoring Tool.
+         */
         'document'?: { [key: string]: any; };
+        /**
+         * Data sources to bind to the document when rendering.
+         */
         'datasources'?: { [key: string]: any; };
     }
 }
@@ -4683,11 +6678,29 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface ScrollCommand {
         'type' : 'Scroll';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * The number of pages to scroll. Defaults to 1.
+         */
         'distance'?: number | string;
+        /**
+         * The id of the component.
+         */
         'componentId': string;
     }
 }
@@ -4699,11 +6712,29 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface SendEventCommand {
         'type' : 'SendEvent';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * An array of argument data to pass to Alexa.
+         */
         'arguments'?: Array<string>;
+        /**
+         * An array of components to extract value data from and provide to Alexa.
+         */
         'components'?: Array<string>;
     }
 }
@@ -4715,13 +6746,37 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface SequentialCommand {
         'type' : 'Sequential';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * An ordered list of commands to execute if this sequence is prematurely terminated.
+         */
         'catch'?: Array<interfaces.alexa.presentation.aplt.Command>;
+        /**
+         * An array of commands to execute. The commands execute in order; each command must finish before the next can begin. Please note that the delay of sequential command and the delay of the first command in the sequence are additive.
+         */
         'commands': Array<interfaces.alexa.presentation.aplt.Command>;
+        /**
+         * An ordered list of commands to execute after the normal commands and the catch commands.
+         */
         'finally'?: Array<interfaces.alexa.presentation.aplt.Command>;
+        /**
+         * The number of times to repeat this series of commands. Defaults to 0. Negative values will be ignored. Note that the delay assigned to overall sequential command only applies the first time. For example, in the sample sequential command below the first SendEvent fires at 3000 milliseconds, the second at 5000, the first SendEvent fires again at 7000 milliseconds, and so forth. {\"type\": \"Sequential\",\"delay\": 1000,\"repeatCount\": 2,\"commands\": [{ \"type\": \"SendEvent\",\"delay\": 2000},{\"type\": \"SendEvent\",\"delay\": 2000}]}
+         */
         'repeatCount'?: number | string;
     }
 }
@@ -4733,12 +6788,30 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface SetPageCommand {
         'type' : 'SetPage';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * The id of the Pager component.
+         */
         'componentId': string;
         'position'?: interfaces.alexa.presentation.aplt.Position;
+        /**
+         * The distance to move. May be an absolute value or a relative value.
+         */
         'value': number | string;
     }
 }
@@ -4750,12 +6823,33 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface SetValueCommand {
         'type' : 'SetValue';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
         'delay'?: number;
+        /**
+         * A user-provided description of this command.
+         */
         'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
         'screenLock'?: boolean;
+        /**
+         * A conditional expression to be evaluated in device. If false, the execution of the command is skipped. Defaults to true.
+         */
         'when'?: boolean | string;
+        /**
+         * The id of the component whose value to set.
+         */
         'componentId'?: string;
+        /**
+         * The name of the property to set.
+         */
         'property': string;
+        /**
+         * The property value to set.
+         */
         'value': string;
     }
 }
@@ -4767,11 +6861,29 @@ export namespace interfaces.alexa.presentation.aplt {
      */
     export interface UserEvent {
         'type' : 'Alexa.Presentation.APLT.UserEvent';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * A unique token for the active presentation.
+         */
         'token'?: string;
+        /**
+         * The array of argument data to pass to Alexa.
+         */
         'arguments'?: Array<any>;
+        /**
+         * Meta-information about what caused the event to be generated.
+         */
         'source'?: any;
     }
 }
@@ -4783,7 +6895,13 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface HandleMessageDirective {
         'type' : 'Alexa.Presentation.HTML.HandleMessage';
+        /**
+         * A free-form object containing data to deliver to a skill's HTML application running the device. Maximum size 18 KB.
+         */
         'message': any;
+        /**
+         * An array of objects for performing text-to-speech transformations with message data
+         */
         'transformers'?: Array<interfaces.alexa.presentation.html.Transformer>;
     }
 }
@@ -4795,9 +6913,21 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface MessageRequest {
         'type' : 'Alexa.Presentation.HTML.Message';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * A free-form object containing data from a skill's HTML application to deliver to the Alexa cloud. Maximum size 18 KB. 
+         */
         'message': any;
     }
 }
@@ -4809,8 +6939,17 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface RuntimeErrorRequest {
         'type' : 'Alexa.Presentation.HTML.RuntimeError';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'error': interfaces.alexa.presentation.html.RuntimeError;
     }
@@ -4823,7 +6962,13 @@ export namespace interfaces.alexa.presentation.html {
      */
     export interface StartDirective {
         'type' : 'Alexa.Presentation.HTML.Start';
+        /**
+         * Optional startup data which will be made available to the runtime for skill startup. Maximum size: 18 KB
+         */
         'data'?: any;
+        /**
+         * An array of objects for performing text-to-speech transformations with message data
+         */
         'transformers'?: Array<interfaces.alexa.presentation.html.Transformer>;
         'request': interfaces.alexa.presentation.html.StartRequest;
         'configuration': interfaces.alexa.presentation.html.Configuration;
@@ -4837,11 +6982,26 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface AuthorizeAttributes {
         '@type' : 'AuthorizeAttributes';
+        /**
+         * This is 3P seller's identifier for this authorization transaction. This identifier must be unique for all of your authorization transactions.
+         */
         'authorizationReferenceId': string;
         'authorizationAmount': interfaces.amazonpay.model.request.Price;
+        /**
+         * The maximum number of minutes allocated for the Authorize operation call to be processed. After this the authorization is automatically declined and you cannot capture funds against the authorization. The default value for Alexa transactions is 0. In order to speed up checkout time for voice users we recommend to not change this value.
+         */
         'transactionTimeout'?: number;
+        /**
+         * A description for the transaction that is included in emails to the user. Appears only when AuthorizeAndCapture is chosen.
+         */
         'sellerAuthorizationNote'?: string;
+        /**
+         * The description to be shown on the user's payment instrument statement if AuthorizeAndCapture is chosen. Format of soft descriptor sent to the payment processor is \"AMZ* <soft descriptor specified here>\". Default is \"AMZ*<SELLER_NAME> amzn.com/ pmts WA\". Maximum length can be 16 characters.
+         */
         'softDescriptor'?: string;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4853,11 +7013,20 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface BillingAgreementAttributes {
         '@type' : 'BillingAgreementAttributes';
+        /**
+         * Represents the SellerId of the Solution Provider that developed the eCommerce platform. This value is only used by Solution Providers, for whom it is required. It should not be provided by merchants creating their own custom integration. Do not specify the SellerId of the merchant for this request parameter. If you are a merchant, do not enter a PlatformId.
+         */
         'platformId'?: string;
+        /**
+         * Represents a description of the billing agreement that is displayed in emails to the buyer.
+         */
         'sellerNote'?: string;
         'sellerBillingAgreementAttributes'?: interfaces.amazonpay.model.request.SellerBillingAgreementAttributes;
         'billingAgreementType'?: interfaces.amazonpay.model.request.BillingAgreementType;
         'subscriptionAmount'?: interfaces.amazonpay.model.request.Price;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4869,8 +7038,17 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface Price {
         '@type' : 'Price';
+        /**
+         * Amount authorized/captured.
+         */
         'amount': string;
+        /**
+         * Currency code for the amount.
+         */
         'currencyCode': string;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4882,8 +7060,17 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface ProviderAttributes {
         '@type' : 'ProviderAttributes';
+        /**
+         * Solution provider ID.
+         */
         'providerId': string;
+        /**
+         * List of provider credit.
+         */
         'providerCreditList': Array<interfaces.amazonpay.model.request.ProviderCredit>;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4895,8 +7082,14 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface ProviderCredit {
         '@type' : 'ProviderCredit';
+        /**
+         * This is required only for Ecommerce provider (Solution provider) use cases.
+         */
         'providerId'?: string;
         'credit'?: interfaces.amazonpay.model.request.Price;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4908,9 +7101,21 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface SellerBillingAgreementAttributes {
         '@type' : 'SellerBillingAgreementAttributes';
+        /**
+         * The merchant-specified identifier of this billing agreement. At least one request parameter must be specified. Amazon recommends that you use only the following characters:- lowercase a-z, uppercase A-Z, numbers 0-9, dash (-), underscore (_).
+         */
         'sellerBillingAgreementId'?: string;
+        /**
+         * The identifier of the store from which the order was placed. This overrides the default value in Seller Central under Settings > Account Settings. It is displayed to the buyer in their emails and transaction history on the Amazon Payments website.
+         */
         'storeName'?: string;
+        /**
+         * Any additional information that you wish to include with this billing agreement. At least one request parameter must be specified.
+         */
         'customInformation'?: string;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4922,10 +7127,25 @@ export namespace interfaces.amazonpay.model.request {
      */
     export interface SellerOrderAttributes {
         '@type' : 'SellerOrderAttributes';
+        /**
+         * The merchant-specified identifier of this order. This is shown to the buyer in their emails and transaction history on the Amazon Pay website.
+         */
         'sellerOrderId'?: string;
+        /**
+         * The identifier of the store from which the order was placed. This overrides the default value in Seller Central under Settings > Account Settings. It is displayed to the buyer in their emails and transaction history on the Amazon Payments website.
+         */
         'storeName'?: string;
+        /**
+         * Any additional information that you want to include with this order reference.
+         */
         'customInformation'?: string;
+        /**
+         * This represents a description of the order that is displayed in emails to the buyer.
+         */
         'sellerNote'?: string;
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
     }
 }
@@ -4936,18 +7156,45 @@ export namespace interfaces.amazonpay.model.response {
      * @interface
      */
     export interface AuthorizationDetails {
+        /**
+         * This is AmazonPay generated identifier for this authorization transaction.
+         */
         'amazonAuthorizationId'?: string;
+        /**
+         * This is 3P seller's identifier for this authorization transaction. This identifier must be unique for all of your authorization transactions.
+         */
         'authorizationReferenceId'?: string;
+        /**
+         * A description for the transaction that is included in emails to the user. Appears only when AuthorizeAndCapture is chosen.
+         */
         'sellerAuthorizationNote'?: string;
         'authorizationAmount'?: interfaces.amazonpay.model.response.Price;
         'capturedAmount'?: interfaces.amazonpay.model.response.Price;
         'authorizationFee'?: interfaces.amazonpay.model.response.Price;
+        /**
+         * list of AmazonCaptureId identifiers that have been requested on this Authorization object.
+         */
         'idList'?: Array<string>;
+        /**
+         * This is the time at which the authorization was created.
+         */
         'creationTimestamp'?: string;
+        /**
+         * This is the time at which the authorization expires.
+         */
         'expirationTimestamp'?: string;
         'authorizationStatus'?: interfaces.amazonpay.model.response.AuthorizationStatus;
+        /**
+         * This indicates whether an authorization resulted in a soft decline.
+         */
         'softDecline'?: boolean;
+        /**
+         * This indicates whether a direct capture against the payment contract was specified.
+         */
         'captureNow'?: boolean;
+        /**
+         * This is the description to be shown on the buyer's payment instrument statement if AuthorizeAndCapture was chosen.
+         */
         'softDescriptor'?: string;
         'authorizationBillingAddress'?: interfaces.amazonpay.model.response.Destination;
     }
@@ -4960,8 +7207,17 @@ export namespace interfaces.amazonpay.model.response {
      */
     export interface AuthorizationStatus {
         'state'?: interfaces.amazonpay.model.response.State;
+        /**
+         * The reason that the Authorization object, Capture object, or Refund object is in the current state. For more information, see - https://pay.amazon.com/us/developer/documentation/apireference/201752950
+         */
         'reasonCode'?: string;
+        /**
+         * Reason desciption corresponding to the reason code
+         */
         'reasonDescription'?: string;
+        /**
+         * A timestamp that indicates the time when the authorization, capture, or refund state was last updated. In ISO 8601 format
+         */
         'lastUpdateTimestamp'?: string;
     }
 }
@@ -4972,12 +7228,27 @@ export namespace interfaces.amazonpay.model.response {
      * @interface
      */
     export interface BillingAgreementDetails {
+        /**
+         * Billing agreement id which can be used for one time and recurring purchases
+         */
         'billingAgreementId': string;
+        /**
+         * Time at which billing agreement details created.
+         */
         'creationTimestamp'?: string;
+        /**
+         * The default shipping address of the buyer. Returned if needAmazonShippingAddress is set to true.
+         */
         'destination'?: interfaces.amazonpay.model.v1.Destination;
+        /**
+         * Merchant's preferred language of checkout.
+         */
         'checkoutLanguage'?: string;
         'releaseEnvironment': interfaces.amazonpay.model.response.ReleaseEnvironment;
         'billingAgreementStatus': interfaces.amazonpay.model.v1.BillingAgreementStatus;
+        /**
+         * The Billing Address of the payment instrument associated with Billing Agreement.
+         */
         'billingAddress'?: interfaces.amazonpay.model.response.Destination;
     }
 }
@@ -4988,16 +7259,49 @@ export namespace interfaces.amazonpay.model.response {
      * @interface
      */
     export interface Destination {
+        /**
+         * The name or business name
+         */
         'name'?: string;
+        /**
+         * The company name
+         */
         'companyName'?: string;
+        /**
+         * The first line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine1'?: string;
+        /**
+         * The second line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine2'?: string;
+        /**
+         * The third line of the address. At least one AddressLine (AddressLine1, AddressLine2, or AddressLine3) is required.
+         */
         'addressLine3'?: string;
+        /**
+         * The city
+         */
         'city'?: string;
+        /**
+         * The district or County
+         */
         'districtOrCounty'?: string;
+        /**
+         * The state or region. This element is free text and can be either a 2-character code, fully spelled out, or abbreviated. Required. Note :- This response element is returned only in the U.S.
+         */
         'stateOrRegion'?: string;
+        /**
+         * The postal code.
+         */
         'postalCode'?: string;
+        /**
+         * The country code, in ISO 3166 format
+         */
         'countryCode'?: string;
+        /**
+         * The phone number
+         */
         'phone'?: string;
     }
 }
@@ -5008,7 +7312,13 @@ export namespace interfaces.amazonpay.model.response {
      * @interface
      */
     export interface Price {
+        /**
+         * Amount authorized/captured.
+         */
         'amount': string;
+        /**
+         * Currency code for the amount.
+         */
         'currencyCode': string;
     }
 }
@@ -5020,8 +7330,17 @@ export namespace interfaces.amazonpay.request {
      */
     export interface ChargeAmazonPayRequest {
         '@type' : 'ChargeAmazonPayRequest';
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
+        /**
+         * The seller ID (also known as merchant ID). If you are an Ecommerce Provider (Solution Provider), please specify the ID of the merchant, not your provider ID.
+         */
         'sellerId': string;
+        /**
+         * The payment contract i.e. billing agreement created for the user.
+         */
         'billingAgreementId': string;
         'paymentAction': interfaces.amazonpay.model.request.PaymentAction;
         'authorizeAttributes': interfaces.amazonpay.model.request.AuthorizeAttributes;
@@ -5037,14 +7356,38 @@ export namespace interfaces.amazonpay.request {
      */
     export interface SetupAmazonPayRequest {
         '@type' : 'SetupAmazonPayRequest';
+        /**
+         * Version of the Amazon Pay Entity. Can be 1 or greater.
+         */
         '@version': string;
+        /**
+         * The seller ID (also known as merchant ID). If you are an Ecommerce Provider (Solution Provider), please specify the ID of the merchant, not your provider ID.
+         */
         'sellerId': string;
+        /**
+         * The country in which the merchant has registered, as an Amazon Payments legal entity.
+         */
         'countryOfEstablishment': string;
+        /**
+         * The currency of the merchant’s ledger account.
+         */
         'ledgerCurrency': string;
+        /**
+         * The merchant's preferred language for checkout.
+         */
         'checkoutLanguage'?: string;
         'billingAgreementAttributes'?: interfaces.amazonpay.model.request.BillingAgreementAttributes;
+        /**
+         * To receive the default user shipping address in the response, set this parameter to true. Not required if a user shipping address is not required.
+         */
         'needAmazonShippingAddress'?: boolean;
+        /**
+         * To test in Sandbox mode, set this parameter to true.
+         */
         'sandboxMode'?: boolean;
+        /**
+         * Use this parameter to create a Sandbox payment object. In order to use this parameter, you first create a Sandbox user account in Seller Central. Then, pass the email address associated with that Sandbox user account.
+         */
         'sandboxCustomerEmailId'?: string;
     }
 }
@@ -5055,7 +7398,13 @@ export namespace interfaces.amazonpay.response {
      * @interface
      */
     export interface AmazonPayErrorResponse {
+        /**
+         * Error code indicating the succinct cause of error
+         */
         'errorCode': string;
+        /**
+         * Description of the error.
+         */
         'errorMessage': string;
     }
 }
@@ -5066,6 +7415,9 @@ export namespace interfaces.amazonpay.response {
      * @interface
      */
     export interface ChargeAmazonPayResult {
+        /**
+         * The order reference identifier.
+         */
         'amazonOrderReferenceId': string;
         'authorizationDetails': interfaces.amazonpay.model.response.AuthorizationDetails;
     }
@@ -5101,8 +7453,17 @@ export namespace interfaces.audioplayer {
      */
     export interface PlaybackFailedRequest {
         'type' : 'AudioPlayer.PlaybackFailed';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'currentPlaybackState'?: interfaces.audioplayer.CurrentPlaybackState;
         'error'?: interfaces.audioplayer.Error;
@@ -5117,8 +7478,17 @@ export namespace interfaces.audioplayer {
      */
     export interface PlaybackFinishedRequest {
         'type' : 'AudioPlayer.PlaybackFinished';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
@@ -5132,8 +7502,17 @@ export namespace interfaces.audioplayer {
      */
     export interface PlaybackNearlyFinishedRequest {
         'type' : 'AudioPlayer.PlaybackNearlyFinished';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
@@ -5147,8 +7526,17 @@ export namespace interfaces.audioplayer {
      */
     export interface PlaybackStartedRequest {
         'type' : 'AudioPlayer.PlaybackStarted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
@@ -5162,8 +7550,17 @@ export namespace interfaces.audioplayer {
      */
     export interface PlaybackStoppedRequest {
         'type' : 'AudioPlayer.PlaybackStopped';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'offsetInMilliseconds'?: number;
         'token'?: string;
@@ -5187,10 +7584,25 @@ export namespace interfaces.connections {
      */
     export interface ConnectionsRequest {
         'type' : 'Connections.Request';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * Name of the action sent by the referrer skill.
+         */
         'name'?: string;
+        /**
+         * This is an object sent between the two skills for processing a ConnectionsRequest or ConnectionsResponse. This will always be a valid payload based on Action schema for the requester action.
+         */
         'payload'?: { [key: string]: any; };
     }
 }
@@ -5202,12 +7614,30 @@ export namespace interfaces.connections {
      */
     export interface ConnectionsResponse {
         'type' : 'Connections.Response';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'status'?: interfaces.connections.ConnectionsStatus;
+        /**
+         * Name of the action for which response is received.
+         */
         'name'?: string;
+        /**
+         * This is an object sent from referrer skill as is.
+         */
         'payload'?: { [key: string]: any; };
+        /**
+         * This is the token that the skill originally sent with the ConnectionsSendRequest directive.
+         */
         'token'?: string;
     }
 }
@@ -5219,8 +7649,17 @@ export namespace interfaces.connections {
      */
     export interface SendRequestDirective {
         'type' : 'Connections.SendRequest';
+        /**
+         * This defines the name of the Connection skill is trying to execute. It must be a valid and supported Connection name.
+         */
         'name': string;
+        /**
+         * This is an object sent between the two skills for processing a ConnectionsRequest or ConnectionsResponse. The contract for the object is based on the schema of the Action used in the SendRequestDirective. Invalid payloads will result in errors sent back to the referrer.
+         */
         'payload'?: { [key: string]: any; };
+        /**
+         * This is an echo back string that skills send when during Connections.SendRequest directive. They will receive it when they get the ConnectionsResponse. It is never sent to the skill handling the request.
+         */
         'token': string;
     }
 }
@@ -5233,6 +7672,9 @@ export namespace interfaces.connections {
     export interface SendResponseDirective {
         'type' : 'Connections.SendResponse';
         'status': interfaces.connections.ConnectionsStatus;
+        /**
+         * This is an object sent to referrer skill as is.
+         */
         'payload'?: { [key: string]: any; };
     }
 }
@@ -5244,9 +7686,18 @@ export namespace interfaces.connections.V1 {
      */
     export interface StartConnectionDirective {
         'type' : 'Connections.StartConnection';
+        /**
+         * This defines the name and version of connection that the requester is trying to send. The format of the uri should follow this pattern: connection://connectionName/connectionVersion. Invalid uri will cause an error which will be sent back to the requester.
+         */
         'uri': string;
         'onCompletion'?: interfaces.connections.OnCompletion;
+        /**
+         * This is the input to the connection that the requester is trying to send. It is predefined by the handler of the connection. If the input format is incorrect, an error will be sent to to the requester.
+         */
         'input'?: { [key: string]: any; };
+        /**
+         * This is an echo back string that requester will receive it when it gets resumed. It is never sent to the handler of the connection.
+         */
         'token'?: string;
     }
 }
@@ -5258,11 +7709,29 @@ export namespace interfaces.connections.entities {
      */
     export interface PostalAddress {
         '@type' : 'PostalAddress';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * street address
+         */
         'streetAddress'?: string;
+        /**
+         * locality/city
+         */
         'locality'?: string;
+        /**
+         * state/region
+         */
         'region'?: string;
+        /**
+         * postal/zip code
+         */
         'postalCode'?: string;
+        /**
+         * country
+         */
         'country'?: string;
     }
 }
@@ -5274,8 +7743,17 @@ export namespace interfaces.connections.entities {
      */
     export interface Restaurant {
         '@type' : 'Restaurant';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * name of the restaurant
+         */
         'name': string;
+        /**
+         * location
+         */
         'location': interfaces.connections.entities.PostalAddress;
     }
 }
@@ -5287,10 +7765,25 @@ export namespace interfaces.connections.requests {
      */
     export interface PrintImageRequest {
         '@type' : 'PrintImageRequest';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * title of the image
+         */
         'title': string;
+        /**
+         * url of the image
+         */
         'url': string;
+        /**
+         * description of the image
+         */
         'description'?: string;
+        /**
+         * type of the image
+         */
         'imageType': string;
     }
 }
@@ -5302,9 +7795,21 @@ export namespace interfaces.connections.requests {
      */
     export interface PrintPDFRequest {
         '@type' : 'PrintPDFRequest';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * title of the image
+         */
         'title': string;
+        /**
+         * url of the image
+         */
         'url': string;
+        /**
+         * description of the image
+         */
         'description'?: string;
     }
 }
@@ -5316,9 +7821,21 @@ export namespace interfaces.connections.requests {
      */
     export interface PrintWebPageRequest {
         '@type' : 'PrintWebPageRequest';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * title of the image
+         */
         'title': string;
+        /**
+         * url of the image
+         */
         'url': string;
+        /**
+         * description of the image
+         */
         'description'?: string;
     }
 }
@@ -5330,9 +7847,21 @@ export namespace interfaces.connections.requests {
      */
     export interface ScheduleFoodEstablishmentReservationRequest {
         '@type' : 'ScheduleFoodEstablishmentReservationRequest';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * start time of the reservation
+         */
         'startTime'?: string;
+        /**
+         * party size
+         */
         'partySize'?: string;
+        /**
+         * restaurant
+         */
         'restaurant': interfaces.connections.entities.Restaurant;
     }
 }
@@ -5344,10 +7873,25 @@ export namespace interfaces.connections.requests {
      */
     export interface ScheduleTaxiReservationRequest {
         '@type' : 'ScheduleTaxiReservationRequest';
+        /**
+         * version of the request
+         */
         '@version': string;
+        /**
+         * pickup time
+         */
         'pickupTime'?: string;
+        /**
+         * party size
+         */
         'partySize'?: string;
+        /**
+         * pick up location
+         */
         'pickupLocation'?: interfaces.connections.entities.PostalAddress;
+        /**
+         * drop off location
+         */
         'dropOffLocation'?: interfaces.connections.entities.PostalAddress;
     }
 }
@@ -5359,8 +7903,17 @@ export namespace interfaces.conversations {
      */
     export interface APIInvocationRequest {
         'type' : 'Dialog.API.Invoked';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'apiRequest'?: interfaces.conversations.APIRequest;
     }
@@ -5373,10 +7926,25 @@ export namespace interfaces.customInterfaceController {
      */
     export interface EventsReceivedRequest {
         'type' : 'CustomInterfaceController.EventsReceived';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * Unique identifier associated with the Event Handler that dispatched this event.
+         */
         'token'?: string;
+        /**
+         * A list of events that meet the filter criteria.
+         */
         'events'?: Array<interfaces.customInterfaceController.Event>;
     }
 }
@@ -5388,10 +7956,25 @@ export namespace interfaces.customInterfaceController {
      */
     export interface ExpiredRequest {
         'type' : 'CustomInterfaceController.Expired';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * The unique token specified by the StartEventHandlerDirective.
+         */
         'token'?: string;
+        /**
+         * The free form JSON object that the skill will receive if and only if the  Event Handler duration expired.
+         */
         'expirationPayload'?: any;
     }
 }
@@ -5403,8 +7986,17 @@ export namespace interfaces.customInterfaceController {
      */
     export interface SendDirectiveDirective {
         'type' : 'CustomInterfaceController.SendDirective';
+        /**
+         * The object that contains the header of the directive.
+         */
         'header'?: interfaces.customInterfaceController.Header;
+        /**
+         * The free form JSON object.
+         */
         'payload'?: any;
+        /**
+         * Identifies the gadget where the directive should be sent to. Each directive is targeted to one gadget (that is, one endpointId). If the same directive is be sent to multiple gadgets,  include one directive for each gadget in the response.
+         */
         'endpoint'?: interfaces.customInterfaceController.Endpoint;
     }
 }
@@ -5416,6 +8008,9 @@ export namespace interfaces.customInterfaceController {
      */
     export interface StartEventHandlerDirective {
         'type' : 'CustomInterfaceController.StartEventHandler';
+        /**
+         * A unique string to identify the Event Handler. This identifier is associated with all events dispatched by the Event Handler while it is active.
+         */
         'token'?: string;
         'eventFilter'?: interfaces.customInterfaceController.EventFilter;
         'expiration'?: interfaces.customInterfaceController.Expiration;
@@ -5429,6 +8024,9 @@ export namespace interfaces.customInterfaceController {
      */
     export interface StopEventHandlerDirective {
         'type' : 'CustomInterfaceController.StopEventHandler';
+        /**
+         * Unique identifier required to close the Event Handler. This token must match the token used in the StartEventHandlerDirective.
+         */
         'token'?: string;
     }
 }
@@ -5517,8 +8115,17 @@ export namespace interfaces.display {
      */
     export interface ElementSelectedRequest {
         'type' : 'Display.ElementSelected';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'token': string;
     }
@@ -5616,7 +8223,13 @@ export namespace interfaces.gadgetController {
      */
     export interface SetLightDirective {
         'type' : 'GadgetController.SetLight';
+        /**
+         * The version of the directive. Must be set to 1.
+         */
         'version'?: number;
+        /**
+         * The gadget IDs that will receive the command. An empty array, or leaving this parameter out, signifies that all gadgets will receive the command.
+         */
         'targetGadgets'?: Array<string>;
         'parameters'?: services.gadgetController.SetLightParameters;
     }
@@ -5629,9 +8242,21 @@ export namespace interfaces.gameEngine {
      */
     export interface InputHandlerEventRequest {
         'type' : 'GameEngine.InputHandlerEvent';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
+        /**
+         * The corresponding identifier of the request that started the input handler.
+         */
         'originatingRequestId'?: string;
         'events'?: Array<services.gameEngine.InputHandlerEvent>;
     }
@@ -5644,9 +8269,21 @@ export namespace interfaces.gameEngine {
      */
     export interface StartInputHandlerDirective {
         'type' : 'GameEngine.StartInputHandler';
+        /**
+         * The maximum run time for this Input Handler, in milliseconds. Although this parameter is required, you can specify events with conditions on which to end the Input Handler earlier.
+         */
         'timeout'?: number;
+        /**
+         * Names for unknown gadget IDs to use in recognizers, allocated on a first-come, first-served basis.
+         */
         'proxies'?: Array<string>;
+        /**
+         * Conditions that, at any moment, are either true or false. You use recognizers when you specify the conditions under which your skill is notified of Echo Button input. 
+         */
         'recognizers'?: { [key: string]: services.gameEngine.Recognizer; };
+        /**
+         * The logic that determines when your skill is notified of Echo Button input. Events are listed here as object keys, where the keys specify the name of an event. 
+         */
         'events'?: { [key: string]: services.gameEngine.Event; };
     }
 }
@@ -5658,6 +8295,9 @@ export namespace interfaces.gameEngine {
      */
     export interface StopInputHandlerDirective {
         'type' : 'GameEngine.StopInputHandler';
+        /**
+         * The `requestId` of the request that started the input handler.
+         */
         'originatingRequestId'?: string;
     }
 }
@@ -5669,8 +8309,17 @@ export namespace interfaces.messaging {
      */
     export interface MessageReceivedRequest {
         'type' : 'Messaging.MessageReceived';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'message': { [key: string]: any; };
     }
@@ -5693,8 +8342,17 @@ export namespace interfaces.playbackcontroller {
      */
     export interface NextCommandIssuedRequest {
         'type' : 'PlaybackController.NextCommandIssued';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
     }
 }
@@ -5706,8 +8364,17 @@ export namespace interfaces.playbackcontroller {
      */
     export interface PauseCommandIssuedRequest {
         'type' : 'PlaybackController.PauseCommandIssued';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
     }
 }
@@ -5719,8 +8386,17 @@ export namespace interfaces.playbackcontroller {
      */
     export interface PlayCommandIssuedRequest {
         'type' : 'PlaybackController.PlayCommandIssued';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
     }
 }
@@ -5732,8 +8408,17 @@ export namespace interfaces.playbackcontroller {
      */
     export interface PreviousCommandIssuedRequest {
         'type' : 'PlaybackController.PreviousCommandIssued';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
     }
 }
@@ -5745,8 +8430,17 @@ export namespace interfaces.system {
      */
     export interface ExceptionEncounteredRequest {
         'type' : 'System.ExceptionEncountered';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'error': interfaces.system.Error;
         'cause': interfaces.system.ErrorCause;
@@ -5761,6 +8455,9 @@ export namespace interfaces.tasks {
     export interface CompleteTaskDirective {
         'type' : 'Tasks.CompleteTask';
         'status': Status;
+        /**
+         * This is an object sent to the requester.
+         */
         'result'?: { [key: string]: any; };
     }
 }
@@ -5783,11 +8480,26 @@ export namespace interfaces.viewport {
      */
     export interface APLTViewportState {
         'type' : 'APLT';
+        /**
+         * unique identifier of a viewport object
+         */
         'id'?: string;
+        /**
+         * List of profiles that device can emulate.
+         */
         'supportedProfiles': Array<interfaces.viewport.aplt.ViewportProfile>;
+        /**
+         * horizontal dimension of text display in number of characters
+         */
         'lineLength': number;
+        /**
+         * vertical dimension of text display in number of rows
+         */
         'lineCount': number;
         'characterFormat': interfaces.viewport.aplt.CharacterFormat;
+        /**
+         * list of inter-segment objects
+         */
         'interSegments'?: Array<interfaces.viewport.aplt.InterSegment>;
     }
 }
@@ -5799,10 +8511,19 @@ export namespace interfaces.viewport {
      */
     export interface APLViewportState {
         'type' : 'APL';
+        /**
+         * unique identifier of a viewport object
+         */
         'id'?: string;
         'shape': interfaces.viewport.Shape;
+        /**
+         * The pixel density of the viewport.
+         */
         'dpi': number;
         'presentationType': interfaces.viewport.PresentationType;
+        /**
+         * Indicates if the viewport can be rotated through 90 degrees.
+         */
         'canRotate': boolean;
         'configuration': interfaces.viewport.apl.ViewportConfiguration;
     }
@@ -5852,6 +8573,9 @@ export namespace services.gameEngine {
      */
     export interface DeviationRecognizer {
         'type' : 'deviation';
+        /**
+         * The name of the recognizer that defines a pattern that must not be deviated from.
+         */
         'recognizer'?: string;
     }
 }
@@ -5864,9 +8588,21 @@ export namespace services.gameEngine {
     export interface PatternRecognizer {
         'type' : 'match';
         'anchor'?: services.gameEngine.PatternRecognizerAnchorType;
+        /**
+         * When true, the recognizer will ignore additional events that occur between the events specified in the pattern.
+         */
         'fuzzy'?: boolean;
+        /**
+         * The gadget IDs of the Echo Buttons to consider in this pattern recognizer.
+         */
         'gadgetIds'?: Array<string>;
+        /**
+         * The actions to consider in this pattern recognizer. All other actions will be ignored.
+         */
         'actions'?: Array<string>;
+        /**
+         * An object that provides all of the events that need to occur, in a specific order, for this recognizer to be true. Omitting any parameters in this object means \"match anything\".
+         */
         'pattern'?: Array<services.gameEngine.Pattern>;
     }
 }
@@ -5878,7 +8614,13 @@ export namespace services.gameEngine {
      */
     export interface ProgressRecognizer {
         'type' : 'progress';
+        /**
+         * The name of a recognizer for which to track the progress.
+         */
         'recognizer'?: string;
+        /**
+         * The completion threshold, as a decimal percentage, of the specified recognizer before which this recognizer becomes true.
+         */
         'completion'?: number;
     }
 }
@@ -5890,8 +8632,17 @@ export namespace services.listManagement {
      */
     export interface ListCreatedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ListCreated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
@@ -5906,8 +8657,17 @@ export namespace services.listManagement {
      */
     export interface ListDeletedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ListDeleted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
@@ -5922,8 +8682,17 @@ export namespace services.listManagement {
      */
     export interface ListItemsCreatedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ItemsCreated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
@@ -5938,8 +8707,17 @@ export namespace services.listManagement {
      */
     export interface ListItemsDeletedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ItemsDeleted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
@@ -5954,8 +8732,17 @@ export namespace services.listManagement {
      */
     export interface ListItemsUpdatedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ItemsUpdated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListItemBody;
         'eventCreationTime'?: string;
@@ -5970,8 +8757,17 @@ export namespace services.listManagement {
      */
     export interface ListUpdatedEventRequest {
         'type' : 'AlexaHouseholdListEvent.ListUpdated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.listManagement.ListBody;
         'eventCreationTime'?: string;
@@ -5985,13 +8781,25 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface GetReminderResponse {
+        /**
+         * Unique id of this reminder alert
+         */
         'alertToken'?: string;
+        /**
+         * Valid ISO 8601 format - Creation time of this reminder alert
+         */
         'createdTime'?: string;
+        /**
+         * Valid ISO 8601 format - Last updated time of this reminder alert
+         */
         'updatedTime'?: string;
         'status'?: services.reminderManagement.Status;
         'trigger'?: services.reminderManagement.Trigger;
         'alertInfo'?: services.reminderManagement.AlertInfo;
         'pushNotification'?: services.reminderManagement.PushNotification;
+        /**
+         * Version of reminder alert
+         */
         'version'?: string;
     }
 }
@@ -6003,8 +8811,17 @@ export namespace services.reminderManagement {
      */
     export interface ReminderCreatedEventRequest {
         'type' : 'Reminders.ReminderCreated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.reminderManagement.Event;
     }
@@ -6017,8 +8834,17 @@ export namespace services.reminderManagement {
      */
     export interface ReminderDeletedEventRequest {
         'type' : 'Reminders.ReminderDeleted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.reminderManagement.ReminderDeletedEvent;
     }
@@ -6031,8 +8857,17 @@ export namespace services.reminderManagement {
      */
     export interface ReminderStartedEventRequest {
         'type' : 'Reminders.ReminderStarted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.reminderManagement.Event;
     }
@@ -6045,8 +8880,17 @@ export namespace services.reminderManagement {
      */
     export interface ReminderStatusChangedEventRequest {
         'type' : 'Reminders.ReminderStatusChanged';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.reminderManagement.Event;
     }
@@ -6059,8 +8903,17 @@ export namespace services.reminderManagement {
      */
     export interface ReminderUpdatedEventRequest {
         'type' : 'Reminders.ReminderUpdated';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
         'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
         'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
         'locale'?: string;
         'body'?: services.reminderManagement.Event;
     }
@@ -6173,8 +9026,8 @@ export namespace ui {
 export namespace services.deviceAddress {
 
     /**
-     *
-     */
+     * 
+    */
     export class DeviceAddressServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -6185,7 +9038,7 @@ export namespace services.deviceAddress {
         }
 
         /**
-         *
+         * Gets the country and postal code of a device 
          * @param {string} deviceId The device Id for which to get the country and postal code
          */
         async callGetCountryAndPostalCode(deviceId : string) : Promise<ApiResponse> {
@@ -6222,7 +9075,7 @@ export namespace services.deviceAddress {
         }
         
         /**
-         *
+         * Gets the country and postal code of a device 
          * @param {string} deviceId The device Id for which to get the country and postal code
          */
         async getCountryAndPostalCode(deviceId : string) : Promise<services.deviceAddress.ShortAddress> {
@@ -6230,7 +9083,7 @@ export namespace services.deviceAddress {
                 return apiResponse.body as services.deviceAddress.ShortAddress;
         }
         /**
-         *
+         * Gets the address of a device 
          * @param {string} deviceId The device Id for which to get the address
          */
         async callGetFullAddress(deviceId : string) : Promise<ApiResponse> {
@@ -6267,7 +9120,7 @@ export namespace services.deviceAddress {
         }
         
         /**
-         *
+         * Gets the address of a device 
          * @param {string} deviceId The device Id for which to get the address
          */
         async getFullAddress(deviceId : string) : Promise<services.deviceAddress.Address> {
@@ -6280,8 +9133,8 @@ export namespace services.deviceAddress {
 export namespace services.directive {
 
     /**
-     *
-     */
+     * 
+    */
     export class DirectiveServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -6292,7 +9145,7 @@ export namespace services.directive {
         }
 
         /**
-         *
+         * Send directives to Alexa.
          * @param {services.directive.SendDirectiveRequest} sendDirectiveRequest Represents the request object to send in the payload.
          */
         async callEnqueue(sendDirectiveRequest : services.directive.SendDirectiveRequest) : Promise<ApiResponse> {
@@ -6330,7 +9183,7 @@ export namespace services.directive {
         }
         
         /**
-         *
+         * Send directives to Alexa.
          * @param {services.directive.SendDirectiveRequest} sendDirectiveRequest Represents the request object to send in the payload.
          */
         async enqueue(sendDirectiveRequest : services.directive.SendDirectiveRequest) : Promise<void> {
@@ -6342,8 +9195,8 @@ export namespace services.directive {
 export namespace services.endpointEnumeration {
 
     /**
-     *
-     */
+     * 
+    */
     export class EndpointEnumerationServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -6354,7 +9207,7 @@ export namespace services.endpointEnumeration {
         }
 
         /**
-         *
+         * This API is invoked by the skill to retrieve endpoints connected to the Echo device. 
          */
         async callGetEndpoints() : Promise<ApiResponse> {
             const __operationId__ = 'callGetEndpoints';
@@ -6386,7 +9239,7 @@ export namespace services.endpointEnumeration {
         }
         
         /**
-         *
+         * This API is invoked by the skill to retrieve endpoints connected to the Echo device. 
          */
         async getEndpoints() : Promise<services.endpointEnumeration.EndpointEnumerationResponse> {
                 const apiResponse: ApiResponse = await this.callGetEndpoints();
@@ -6398,8 +9251,8 @@ export namespace services.endpointEnumeration {
 export namespace services.listManagement {
 
     /**
-     *
-     */
+     * 
+    */
     export class ListManagementServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -6410,7 +9263,7 @@ export namespace services.listManagement {
         }
 
         /**
-         *
+         * Retrieves the metadata for all customer lists, including the customer’s default lists. 
          */
         async callGetListsMetadata() : Promise<ApiResponse> {
             const __operationId__ = 'callGetListsMetadata';
@@ -6438,14 +9291,14 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * Retrieves the metadata for all customer lists, including the customer’s default lists. 
          */
         async getListsMetadata() : Promise<services.listManagement.AlexaListsMetadata> {
                 const apiResponse: ApiResponse = await this.callGetListsMetadata();
                 return apiResponse.body as services.listManagement.AlexaListsMetadata;
         }
         /**
-         *
+         * This API deletes a customer custom list.
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call
          */
         async callDeleteList(listId : string) : Promise<ApiResponse> {
@@ -6481,14 +9334,14 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API deletes a customer custom list.
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call
          */
         async deleteList(listId : string) : Promise<void> {
                 await this.callDeleteList(listId);
         }
         /**
-         *
+         * This API deletes an item in the specified list.
          * @param {string} listId The customer’s listId is retrieved from a getListsMetadata call.
          * @param {string} itemId The customer’s itemId is retrieved from a GetList call.
          */
@@ -6530,7 +9383,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API deletes an item in the specified list.
          * @param {string} listId The customer’s listId is retrieved from a getListsMetadata call.
          * @param {string} itemId The customer’s itemId is retrieved from a GetList call.
          */
@@ -6538,7 +9391,7 @@ export namespace services.listManagement {
                 await this.callDeleteListItem(listId, itemId);
         }
         /**
-         *
+         * This API can be used to retrieve single item with in any list by listId and itemId. This API can read list items from an archived list. Attempting to read list items from a deleted list return an ObjectNotFound 404 error. 
          * @param {string} listId Retrieved from a call to getListsMetadata
          * @param {string} itemId itemId within a list is retrieved from a getList call
          */
@@ -6580,7 +9433,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API can be used to retrieve single item with in any list by listId and itemId. This API can read list items from an archived list. Attempting to read list items from a deleted list return an ObjectNotFound 404 error. 
          * @param {string} listId Retrieved from a call to getListsMetadata
          * @param {string} itemId itemId within a list is retrieved from a getList call
          */
@@ -6589,7 +9442,7 @@ export namespace services.listManagement {
                 return apiResponse.body as services.listManagement.AlexaListItem;
         }
         /**
-         *
+         * API used to update an item value or item status.
          * @param {string} listId Customer’s listId
          * @param {string} itemId itemId to be updated in the list
          * @param {services.listManagement.UpdateListItemRequest} updateListItemRequest 
@@ -6640,7 +9493,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * API used to update an item value or item status.
          * @param {string} listId Customer’s listId
          * @param {string} itemId itemId to be updated in the list
          * @param {services.listManagement.UpdateListItemRequest} updateListItemRequest 
@@ -6650,7 +9503,7 @@ export namespace services.listManagement {
                 return apiResponse.body as services.listManagement.AlexaListItem;
         }
         /**
-         *
+         * This API creates an item in an active list or in a default list.
          * @param {string} listId The customer’s listId retrieved from a getListsMetadata call.
          * @param {services.listManagement.CreateListItemRequest} createListItemRequest 
          */
@@ -6695,7 +9548,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API creates an item in an active list or in a default list.
          * @param {string} listId The customer’s listId retrieved from a getListsMetadata call.
          * @param {services.listManagement.CreateListItemRequest} createListItemRequest 
          */
@@ -6704,7 +9557,7 @@ export namespace services.listManagement {
                 return apiResponse.body as services.listManagement.AlexaListItem;
         }
         /**
-         *
+         * This API updates a custom list. Only the list name or state can be updated. An Alexa customer can turn an archived list into an active one. 
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call. 
          * @param {services.listManagement.UpdateListRequest} updateListRequest 
          */
@@ -6750,7 +9603,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API updates a custom list. Only the list name or state can be updated. An Alexa customer can turn an archived list into an active one. 
          * @param {string} listId Value of the customer’s listId retrieved from a getListsMetadata call. 
          * @param {services.listManagement.UpdateListRequest} updateListRequest 
          */
@@ -6759,7 +9612,7 @@ export namespace services.listManagement {
                 return apiResponse.body as services.listManagement.AlexaListMetadata;
         }
         /**
-         *
+         * Retrieves the list metadata including the items in the list with requested status. 
          * @param {string} listId Retrieved from a call to GetListsMetadata to specify the listId in the request path. 
          * @param {string} status Specify the status of the list. 
          */
@@ -6802,7 +9655,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * Retrieves the list metadata including the items in the list with requested status. 
          * @param {string} listId Retrieved from a call to GetListsMetadata to specify the listId in the request path. 
          * @param {string} status Specify the status of the list. 
          */
@@ -6811,7 +9664,7 @@ export namespace services.listManagement {
                 return apiResponse.body as services.listManagement.AlexaList;
         }
         /**
-         *
+         * This API creates a custom list. The new list name must be different than any existing list name. 
          * @param {services.listManagement.CreateListRequest} createListRequest 
          */
         async callCreateList(createListRequest : services.listManagement.CreateListRequest) : Promise<ApiResponse> {
@@ -6850,7 +9703,7 @@ export namespace services.listManagement {
         }
         
         /**
-         *
+         * This API creates a custom list. The new list name must be different than any existing list name. 
          * @param {services.listManagement.CreateListRequest} createListRequest 
          */
         async createList(createListRequest : services.listManagement.CreateListRequest) : Promise<services.listManagement.AlexaListMetadata> {
@@ -6863,8 +9716,8 @@ export namespace services.listManagement {
 export namespace services.monetization {
 
     /**
-     *
-     */
+     * 
+    */
     export class MonetizationServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -6875,7 +9728,7 @@ export namespace services.monetization {
         }
 
         /**
-         *
+         * Gets In-Skill Products based on user's context for the Skill.
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} purchasable Filter products based on whether they are purchasable by the user or not. * &#39;PURCHASABLE&#39; - Products that are purchasable by the user. * &#39;NOT_PURCHASABLE&#39; - Products that are not purchasable by the user.
          * @param {string} entitled Filter products based on whether they are entitled to the user or not. * &#39;ENTITLED&#39; - Products that the user is entitled to. * &#39;NOT_ENTITLED&#39; - Products that the user is not entitled to.
@@ -6935,7 +9788,7 @@ export namespace services.monetization {
         }
         
         /**
-         *
+         * Gets In-Skill Products based on user's context for the Skill.
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} purchasable Filter products based on whether they are purchasable by the user or not. * &#39;PURCHASABLE&#39; - Products that are purchasable by the user. * &#39;NOT_PURCHASABLE&#39; - Products that are not purchasable by the user.
          * @param {string} entitled Filter products based on whether they are entitled to the user or not. * &#39;ENTITLED&#39; - Products that the user is entitled to. * &#39;NOT_ENTITLED&#39; - Products that the user is not entitled to.
@@ -6948,7 +9801,7 @@ export namespace services.monetization {
                 return apiResponse.body as services.monetization.InSkillProductsResponse;
         }
         /**
-         *
+         * Get In-Skill Product information based on user context for the Skill.
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} productId Product Id.
          */
@@ -6990,7 +9843,7 @@ export namespace services.monetization {
         }
         
         /**
-         *
+         * Get In-Skill Product information based on user context for the Skill.
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} productId Product Id.
          */
@@ -6999,7 +9852,7 @@ export namespace services.monetization {
                 return apiResponse.body as services.monetization.InSkillProduct;
         }
         /**
-         *
+         * Returns transactions of all in skill products purchases of the customer
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} productId Product Id.
          * @param {string} status Transaction status for in skill product purchases. * &#39;PENDING_APPROVAL_BY_PARENT&#39; - The transaction is pending approval from parent. * &#39;APPROVED_BY_PARENT&#39; - The transaction was approved by parent and fulfilled successfully.. * &#39;DENIED_BY_PARENT&#39; - The transaction was declined by parent and hence not fulfilled. * &#39;EXPIRED_NO_ACTION_BY_PARENT&#39; - The transaction was expired due to no response from parent and hence not fulfilled. * &#39;ERROR&#39; - The transaction was not fullfiled as there was an error while processing the transaction.
@@ -7068,7 +9921,7 @@ export namespace services.monetization {
         }
         
         /**
-         *
+         * Returns transactions of all in skill products purchases of the customer
          * @param {string} acceptLanguage User&#39;s locale/language in context
          * @param {string} productId Product Id.
          * @param {string} status Transaction status for in skill product purchases. * &#39;PENDING_APPROVAL_BY_PARENT&#39; - The transaction is pending approval from parent. * &#39;APPROVED_BY_PARENT&#39; - The transaction was approved by parent and fulfilled successfully.. * &#39;DENIED_BY_PARENT&#39; - The transaction was declined by parent and hence not fulfilled. * &#39;EXPIRED_NO_ACTION_BY_PARENT&#39; - The transaction was expired due to no response from parent and hence not fulfilled. * &#39;ERROR&#39; - The transaction was not fullfiled as there was an error while processing the transaction.
@@ -7082,7 +9935,7 @@ export namespace services.monetization {
                 return apiResponse.body as services.monetization.InSkillProductTransactionsResponse;
         }
         /**
-         *
+         * Returns whether or not voice purchasing is enabled for the skill
          */
         async callGetVoicePurchaseSetting() : Promise<ApiResponse> {
             const __operationId__ = 'callGetVoicePurchaseSetting';
@@ -7111,7 +9964,7 @@ export namespace services.monetization {
         }
         
         /**
-         *
+         * Returns whether or not voice purchasing is enabled for the skill
          */
         async getVoicePurchaseSetting() : Promise<boolean> {
                 const apiResponse: ApiResponse = await this.callGetVoicePurchaseSetting();
@@ -7123,8 +9976,8 @@ export namespace services.monetization {
 export namespace services.proactiveEvents {
 
     /**
-     *
-     */
+     * 
+    */
     export class ProactiveEventsServiceClient extends BaseServiceClient {
 
         private lwaServiceClient : LwaServiceClient;
@@ -7140,7 +9993,7 @@ export namespace services.proactiveEvents {
         }
 
         /**
-         *
+         * Create a new proactive event in live stage.
          * @param {services.proactiveEvents.CreateProactiveEventRequest} createProactiveEventRequest Request to create a new proactive event.
          */
         async callCreateProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<ApiResponse> {
@@ -7184,7 +10037,7 @@ export namespace services.proactiveEvents {
         }
         
         /**
-         *
+         * Create a new proactive event in live stage.
          * @param {services.proactiveEvents.CreateProactiveEventRequest} createProactiveEventRequest Request to create a new proactive event.
          */
         async createProactiveEvent(createProactiveEventRequest : services.proactiveEvents.CreateProactiveEventRequest, stage : services.proactiveEvents.SkillStage) : Promise<void> {
@@ -7196,8 +10049,8 @@ export namespace services.proactiveEvents {
 export namespace services.reminderManagement {
 
     /**
-     *
-     */
+     * 
+    */
     export class ReminderManagementServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -7208,7 +10061,7 @@ export namespace services.reminderManagement {
         }
 
         /**
-         *
+         * This API is invoked by the skill to delete a single reminder. 
          * @param {string} alertToken 
          */
         async callDeleteReminder(alertToken : string) : Promise<ApiResponse> {
@@ -7243,14 +10096,14 @@ export namespace services.reminderManagement {
         }
         
         /**
-         *
+         * This API is invoked by the skill to delete a single reminder. 
          * @param {string} alertToken 
          */
         async deleteReminder(alertToken : string) : Promise<void> {
                 await this.callDeleteReminder(alertToken);
         }
         /**
-         *
+         * This API is invoked by the skill to get a single reminder. 
          * @param {string} alertToken 
          */
         async callGetReminder(alertToken : string) : Promise<ApiResponse> {
@@ -7285,7 +10138,7 @@ export namespace services.reminderManagement {
         }
         
         /**
-         *
+         * This API is invoked by the skill to get a single reminder. 
          * @param {string} alertToken 
          */
         async getReminder(alertToken : string) : Promise<services.reminderManagement.GetReminderResponse> {
@@ -7293,7 +10146,7 @@ export namespace services.reminderManagement {
                 return apiResponse.body as services.reminderManagement.GetReminderResponse;
         }
         /**
-         *
+         * This API is invoked by the skill to update a reminder. 
          * @param {string} alertToken 
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
@@ -7338,7 +10191,7 @@ export namespace services.reminderManagement {
         }
         
         /**
-         *
+         * This API is invoked by the skill to update a reminder. 
          * @param {string} alertToken 
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
@@ -7347,7 +10200,7 @@ export namespace services.reminderManagement {
                 return apiResponse.body as services.reminderManagement.ReminderResponse;
         }
         /**
-         *
+         * This API is invoked by the skill to get a all reminders created by the caller. 
          */
         async callGetReminders() : Promise<ApiResponse> {
             const __operationId__ = 'callGetReminders';
@@ -7376,14 +10229,14 @@ export namespace services.reminderManagement {
         }
         
         /**
-         *
+         * This API is invoked by the skill to get a all reminders created by the caller. 
          */
         async getReminders() : Promise<services.reminderManagement.GetRemindersResponse> {
                 const apiResponse: ApiResponse = await this.callGetReminders();
                 return apiResponse.body as services.reminderManagement.GetRemindersResponse;
         }
         /**
-         *
+         * This API is invoked by the skill to create a new reminder. 
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
         async callCreateReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<ApiResponse> {
@@ -7423,7 +10276,7 @@ export namespace services.reminderManagement {
         }
         
         /**
-         *
+         * This API is invoked by the skill to create a new reminder. 
          * @param {services.reminderManagement.ReminderRequest} reminderRequest 
          */
         async createReminder(reminderRequest : services.reminderManagement.ReminderRequest) : Promise<services.reminderManagement.ReminderResponse> {
@@ -7436,8 +10289,8 @@ export namespace services.reminderManagement {
 export namespace services.skillMessaging {
 
     /**
-     *
-     */
+     * 
+    */
     export class SkillMessagingServiceClient extends BaseServiceClient {
 
         private lwaServiceClient : LwaServiceClient;
@@ -7453,7 +10306,7 @@ export namespace services.skillMessaging {
         }
 
         /**
-         *
+         * Send a message request to a skill for a specified user.
          * @param {string} userId The user Id for the specific user to send the message
          * @param {services.skillMessaging.SendSkillMessagingRequest} sendSkillMessagingRequest Message Request to be sent to the skill.
          */
@@ -7500,7 +10353,7 @@ export namespace services.skillMessaging {
         }
         
         /**
-         *
+         * Send a message request to a skill for a specified user.
          * @param {string} userId The user Id for the specific user to send the message
          * @param {services.skillMessaging.SendSkillMessagingRequest} sendSkillMessagingRequest Message Request to be sent to the skill.
          */
@@ -7513,8 +10366,8 @@ export namespace services.skillMessaging {
 export namespace services.timerManagement {
 
     /**
-     *
-     */
+     * 
+    */
     export class TimerManagementServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -7525,7 +10378,7 @@ export namespace services.timerManagement {
         }
 
         /**
-         *
+         * Delete all timers created by the skill. 
          */
         async callDeleteTimers() : Promise<ApiResponse> {
             const __operationId__ = 'callDeleteTimers';
@@ -7554,13 +10407,13 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Delete all timers created by the skill. 
          */
         async deleteTimers() : Promise<void> {
                 await this.callDeleteTimers();
         }
         /**
-         *
+         * Get all timers created by the skill. 
          */
         async callGetTimers() : Promise<ApiResponse> {
             const __operationId__ = 'callGetTimers';
@@ -7589,14 +10442,14 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Get all timers created by the skill. 
          */
         async getTimers() : Promise<services.timerManagement.TimersResponse> {
                 const apiResponse: ApiResponse = await this.callGetTimers();
                 return apiResponse.body as services.timerManagement.TimersResponse;
         }
         /**
-         *
+         * Delete a timer by ID. 
          * @param {string} id 
          */
         async callDeleteTimer(id : string) : Promise<ApiResponse> {
@@ -7632,14 +10485,14 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Delete a timer by ID. 
          * @param {string} id 
          */
         async deleteTimer(id : string) : Promise<void> {
                 await this.callDeleteTimer(id);
         }
         /**
-         *
+         * Get timer by ID. 
          * @param {string} id 
          */
         async callGetTimer(id : string) : Promise<ApiResponse> {
@@ -7675,7 +10528,7 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Get timer by ID. 
          * @param {string} id 
          */
         async getTimer(id : string) : Promise<services.timerManagement.TimerResponse> {
@@ -7683,7 +10536,7 @@ export namespace services.timerManagement {
                 return apiResponse.body as services.timerManagement.TimerResponse;
         }
         /**
-         *
+         * Pause a timer. 
          * @param {string} id 
          */
         async callPauseTimer(id : string) : Promise<ApiResponse> {
@@ -7720,14 +10573,14 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Pause a timer. 
          * @param {string} id 
          */
         async pauseTimer(id : string) : Promise<void> {
                 await this.callPauseTimer(id);
         }
         /**
-         *
+         * Resume a timer. 
          * @param {string} id 
          */
         async callResumeTimer(id : string) : Promise<ApiResponse> {
@@ -7764,14 +10617,14 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Resume a timer. 
          * @param {string} id 
          */
         async resumeTimer(id : string) : Promise<void> {
                 await this.callResumeTimer(id);
         }
         /**
-         *
+         * Create a new timer. 
          * @param {services.timerManagement.TimerRequest} timerRequest 
          */
         async callCreateTimer(timerRequest : services.timerManagement.TimerRequest) : Promise<ApiResponse> {
@@ -7810,7 +10663,7 @@ export namespace services.timerManagement {
         }
         
         /**
-         *
+         * Create a new timer. 
          * @param {services.timerManagement.TimerRequest} timerRequest 
          */
         async createTimer(timerRequest : services.timerManagement.TimerRequest) : Promise<services.timerManagement.TimerResponse> {
@@ -7823,8 +10676,8 @@ export namespace services.timerManagement {
 export namespace services.ups {
 
     /**
-     *
-     */
+     * 
+    */
     export class UpsServiceClient extends BaseServiceClient {
 
         private userAgent : string;
@@ -7835,7 +10688,7 @@ export namespace services.ups {
         }
 
         /**
-         *
+         * Gets the email address of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:email:read] 
          */
         async callGetProfileEmail() : Promise<ApiResponse> {
             const __operationId__ = 'callGetProfileEmail';
@@ -7866,14 +10719,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the email address of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:email:read] 
          */
         async getProfileEmail() : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetProfileEmail();
                 return apiResponse.body as string;
         }
         /**
-         *
+         * Gets the given name (first name) of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:given_name:read] 
          */
         async callGetProfileGivenName() : Promise<ApiResponse> {
             const __operationId__ = 'callGetProfileGivenName';
@@ -7904,14 +10757,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the given name (first name) of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:given_name:read] 
          */
         async getProfileGivenName() : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetProfileGivenName();
                 return apiResponse.body as string;
         }
         /**
-         *
+         * Gets the mobile phone number of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:mobile_number:read] 
          */
         async callGetProfileMobileNumber() : Promise<ApiResponse> {
             const __operationId__ = 'callGetProfileMobileNumber';
@@ -7942,14 +10795,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the mobile phone number of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:mobile_number:read] 
          */
         async getProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
                 const apiResponse: ApiResponse = await this.callGetProfileMobileNumber();
                 return apiResponse.body as services.ups.PhoneNumber;
         }
         /**
-         *
+         * Gets the full name of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:name:read] 
          */
         async callGetProfileName() : Promise<ApiResponse> {
             const __operationId__ = 'callGetProfileName';
@@ -7980,14 +10833,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the full name of the customer associated with the current enablement. Requires customer consent for scopes: [alexa::profile:name:read] 
          */
         async getProfileName() : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetProfileName();
                 return apiResponse.body as string;
         }
         /**
-         *
+         * Gets the distance measurement unit of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async callGetSystemDistanceUnits(deviceId : string) : Promise<ApiResponse> {
@@ -8024,7 +10877,7 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the distance measurement unit of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async getSystemDistanceUnits(deviceId : string) : Promise<services.ups.DistanceUnits> {
@@ -8032,7 +10885,7 @@ export namespace services.ups {
                 return apiResponse.body as services.ups.DistanceUnits;
         }
         /**
-         *
+         * Gets the temperature measurement units of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async callGetSystemTemperatureUnit(deviceId : string) : Promise<ApiResponse> {
@@ -8069,7 +10922,7 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the temperature measurement units of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async getSystemTemperatureUnit(deviceId : string) : Promise<services.ups.TemperatureUnit> {
@@ -8077,7 +10930,7 @@ export namespace services.ups {
                 return apiResponse.body as services.ups.TemperatureUnit;
         }
         /**
-         *
+         * Gets the time zone of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async callGetSystemTimeZone(deviceId : string) : Promise<ApiResponse> {
@@ -8114,7 +10967,7 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the time zone of the device. Does not require explict customer consent. 
          * @param {string} deviceId The device Id
          */
         async getSystemTimeZone(deviceId : string) : Promise<string> {
@@ -8122,7 +10975,7 @@ export namespace services.ups {
                 return apiResponse.body as string;
         }
         /**
-         *
+         * Gets the given name (first name) of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:given_name:read] 
          */
         async callGetPersonsProfileGivenName() : Promise<ApiResponse> {
             const __operationId__ = 'callGetPersonsProfileGivenName';
@@ -8153,14 +11006,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the given name (first name) of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:given_name:read] 
          */
         async getPersonsProfileGivenName() : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetPersonsProfileGivenName();
                 return apiResponse.body as string;
         }
         /**
-         *
+         * Gets the mobile phone number of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:mobile_number:read] 
          */
         async callGetPersonsProfileMobileNumber() : Promise<ApiResponse> {
             const __operationId__ = 'callGetPersonsProfileMobileNumber';
@@ -8191,14 +11044,14 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the mobile phone number of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:mobile_number:read] 
          */
         async getPersonsProfileMobileNumber() : Promise<services.ups.PhoneNumber> {
                 const apiResponse: ApiResponse = await this.callGetPersonsProfileMobileNumber();
                 return apiResponse.body as services.ups.PhoneNumber;
         }
         /**
-         *
+         * Gets the full name of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:name:read] 
          */
         async callGetPersonsProfileName() : Promise<ApiResponse> {
             const __operationId__ = 'callGetPersonsProfileName';
@@ -8229,7 +11082,7 @@ export namespace services.ups {
         }
         
         /**
-         *
+         * Gets the full name of the recognized speaker at person-level. Requires speaker consent at person-level for scopes: [alexa::profile:name:read] 
          */
         async getPersonsProfileName() : Promise<string> {
                 const apiResponse: ApiResponse = await this.callGetPersonsProfileName();
