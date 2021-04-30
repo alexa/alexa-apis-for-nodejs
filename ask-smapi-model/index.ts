@@ -14851,7 +14851,7 @@ export namespace services.skillManagement {
             errorDefinitions.set(503, "Service Unavailable.");
 
             return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
-                    pathParams, queryParams, headerParams, accountLinkingRequest, errorDefinitions);
+                    pathParams, queryParams, headerParams, { accountLinkingRequest }, errorDefinitions);
         }
         
         /**
