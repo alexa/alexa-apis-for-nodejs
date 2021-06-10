@@ -1590,6 +1590,8 @@
     "/v0/skills/{skillId}/experiments/{experimentId}/state": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots/{metricSnapshotId}": {},
+    "/v0/_burnerDeveloperAccounts": {},
+    "/v0/_burnerDeveloperAccounts/{vendorId}": {},
     "/v1/catalogs/{catalogId}/urls": {
       "post": {
         "tags": [
@@ -16118,16 +16120,19 @@
       "description": "Represents a set of attributes specific to an Alexa Skill.\n"
     },
     "v0.eventSchema.InteractionModelAttributes": {
-      "properties": {
-        "locale": {
-          "type": "string",
-          "format": "languager-region; same as BCP-47 language tag format",
-          "description": "Locale of interaction model.\n"
-        }
-      },
       "allOf": [
         {
           "$ref": "#/definitions/v0.eventSchema.SkillAttributes"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "locale": {
+              "type": "string",
+              "format": "languager-region; same as BCP-47 language tag format",
+              "description": "Locale of interaction model.\n"
+            }
+          }
         }
       ],
       "description": "Represents a set of attributes specific to interaction model of an Alexa Skill.\n"
@@ -18444,8 +18449,7 @@
     "v1.skill.interactionModel.Intent": {
       "type": "object",
       "required": [
-        "name",
-        "samples"
+        "name"
       ],
       "properties": {
         "name": {
@@ -18501,6 +18505,9 @@
     },
     "v1.skill.interactionModel.MultipleValuesConfig": {
       "type": "object",
+      "required": [
+        "enabled"
+      ],
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -18534,8 +18541,7 @@
     "v1.skill.interactionModel.DialogIntents": {
       "type": "object",
       "required": [
-        "name",
-        "slots"
+        "name"
       ],
       "properties": {
         "name": {
@@ -18801,9 +18807,6 @@
       "allOf": [
         {
           "$ref": "#/definitions/v1.skill.interactionModel.SlotValidation"
-        },
-        {
-          "type": "object"
         }
       ],
       "description": "The hasEntityResolutionMatch would allow Alexa to trigger a re-prompt when the status produced by ER is \"ER_SUCCESS_NO_MATCH\".",
@@ -20149,7 +20152,7 @@
       "properties": {
         "body": {
           "type": "object",
-          "description": "ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs)\n",
+          "description": "ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax)\n",
           "properties": {}
         }
       }
@@ -20305,18 +20308,21 @@
       "description": "Defines a client authorized for a skill."
     },
     "v1.skill.Manifest.AuthorizedClientLwa": {
-      "properties": {
-        "applications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1.skill.Manifest.AuthorizedClientLwaApplication"
-          },
-          "minItems": 1
-        }
-      },
       "allOf": [
         {
           "$ref": "#/definitions/v1.skill.Manifest.AuthorizedClient"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "applications": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/v1.skill.Manifest.AuthorizedClientLwaApplication"
+              },
+              "minItems": 1
+            }
+          }
         }
       ],
       "description": "Defines client using Login With Amazon authentication provider, corresponds to LWA Security Profile.",
@@ -20335,17 +20341,20 @@
       "description": "Defines an application for LWA security profile."
     },
     "v1.skill.Manifest.AuthorizedClientLwaApplicationAndroid": {
-      "properties": {
-        "appStoreAppId": {
-          "type": "string"
-        },
-        "clientId": {
-          "type": "string"
-        }
-      },
       "allOf": [
         {
           "$ref": "#/definitions/v1.skill.Manifest.AuthorizedClientLwaApplication"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "appStoreAppId": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            }
+          }
         }
       ],
       "description": "Defines an android application for LWA authentication provider.",
@@ -21219,7 +21228,8 @@
         "alexa::health:profile:write",
         "alexa::person_id:read",
         "alexa::skill:products:entitlements",
-        "alexa::energy:devices:state:read"
+        "alexa::energy:devices:state:read",
+        "alexa::origin_ip_address:read"
       ]
     },
     "v1.skill.Manifest.SkillManifestApis": {
@@ -21653,7 +21663,7 @@
           "$ref": "#/definitions/v1.skill.Manifest.DialogManager"
         }
       ],
-      "description": "The type of dialog manager:  * AMAZON.Conversations - The Alexa Conversations (Coltrane) model for this skill. See https://w.amazon.com/bin/view/Digital/Alexa/ConversationalAI/Coltrane",
+      "description": "The type of dialog manager:  * AMAZON.Conversations - The Alexa Conversations (Coltrane) model for this skill.",
       "x-discriminator-value": "AMAZON.Conversations"
     },
     "v1.skill.Manifest.Interface": {
@@ -22049,24 +22059,6 @@
         }
       },
       "description": "A feature of an Alexa skill."
-    },
-    "v1.skill.Manifest.VideoWebPlayerFeature": {
-      "properties": {
-        "players": {
-          "type": "array",
-          "description": "List of video web players for the skill.",
-          "items": {
-            "$ref": "#/definitions/v1.skill.Manifest.VideoWebPlayer"
-          }
-        }
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/v1.skill.Manifest.VideoFeature"
-        }
-      ],
-      "description": "Feature for allowing and supporting directives and CX for casting content to video web players.",
-      "x-discriminator-value": "VIDEO_WEB_PLAYER"
     },
     "v1.skill.Manifest.VoiceProfileFeature": {
       "allOf": [
@@ -26301,7 +26293,7 @@
       "properties": {
         "body": {
           "type": "object",
-          "description": "ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs)\n",
+          "description": "ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax)\n",
           "properties": {}
         }
       }
@@ -26320,9 +26312,9 @@
     },
     "v2.skill.invocations.InvocationResponseStatus": {
       "type": "string",
-      "description": "String that specifies the status of skill invocation. Possible values are \"SUCCEEDED\", and \"FAILED\".\n",
+      "description": "String that specifies the status of skill invocation. Possible values are \"SUCCESSFUL\", and \"FAILED\".\n",
       "enum": [
-        "SUCCEEDED",
+        "SUCCESSFUL",
         "FAILED"
       ]
     },

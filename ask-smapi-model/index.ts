@@ -2965,7 +2965,7 @@ export namespace v1.skill.Manifest {
      * Name of the required permission.
      * @enum
      */
-    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read';
+    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read';
 }
 
 export namespace v1.skill.Manifest {
@@ -3358,7 +3358,7 @@ export namespace v1.skill.Manifest {
     * A feature of an Alexa skill.
     * @interface
     */
-    export type VideoFeature = v1.skill.Manifest.VoiceProfileFeature | v1.skill.Manifest.VideoWebPlayerFeature;
+    export type VideoFeature = v1.skill.Manifest.VoiceProfileFeature;
 }
 
 export namespace v1.skill.Manifest {
@@ -5167,7 +5167,7 @@ export namespace v1.skill.interactionModel {
         /**
          * List of slots that have dialog rules.
          */
-        'slots': Array<v1.skill.interactionModel.DialogSlotItems>;
+        'slots'?: Array<v1.skill.interactionModel.DialogSlotItems>;
         /**
          * Describes whether confirmation of the intent is required.
          */
@@ -5275,7 +5275,7 @@ export namespace v1.skill.interactionModel {
         /**
          * Phrases the user can speak e.g. to trigger an intent or provide value for a slot elicitation.
          */
-        'samples': Array<string>;
+        'samples'?: Array<string>;
     }
 }
 
@@ -5325,7 +5325,7 @@ export namespace v1.skill.interactionModel {
         /**
          * Boolean that indicates whether this slot can capture multiple values.
          */
-        'enabled'?: boolean;
+        'enabled': boolean;
     }
 }
 
@@ -6563,7 +6563,7 @@ export namespace v1.skill.invocations {
      */
     export interface SkillRequest {
         /**
-         * ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+         * ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax) 
          */
         'body': any;
     }
@@ -7885,10 +7885,10 @@ export namespace v2.skill.invocations {
 
 export namespace v2.skill.invocations {
     /**
-     * String that specifies the status of skill invocation. Possible values are \"SUCCEEDED\", and \"FAILED\". 
+     * String that specifies the status of skill invocation. Possible values are \"SUCCESSFUL\", and \"FAILED\". 
      * @enum
      */
-    export type InvocationResponseStatus = 'SUCCEEDED' | 'FAILED';
+    export type InvocationResponseStatus = 'SUCCESSFUL' | 'FAILED';
 }
 
 export namespace v2.skill.invocations {
@@ -7909,7 +7909,7 @@ export namespace v2.skill.invocations {
      */
     export interface SkillRequest {
         /**
-         * ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+         * ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax) 
          */
         'body': any;
     }
@@ -8336,6 +8336,10 @@ export namespace v0.eventSchema {
          * Unique identifier of vendor account to which this skill belongs. 
          */
         'vendorId'?: string;
+        /**
+         * Locale of interaction model. 
+         */
+        'locale'?: string;
     }
 }
 
@@ -8371,7 +8375,7 @@ export namespace v1.catalog.upload {
 
 export namespace v1.skill.Manifest {
     /**
-     * The type of dialog manager:  * AMAZON.Conversations - The Alexa Conversations (Coltrane) model for this skill. See https://w.amazon.com/bin/view/Digital/Alexa/ConversationalAI/Coltrane
+     * The type of dialog manager:  * AMAZON.Conversations - The Alexa Conversations (Coltrane) model for this skill.
      * @interface
      */
     export interface AMAZONConversationsDialogManager {
@@ -8440,6 +8444,7 @@ export namespace v1.skill.Manifest {
      */
     export interface AuthorizedClientLwa {
         'authenticationProvider': string;
+        'applications'?: Array<v1.skill.Manifest.AuthorizedClientLwaApplication>;
     }
 }
 
@@ -8450,6 +8455,8 @@ export namespace v1.skill.Manifest {
      */
     export interface AuthorizedClientLwaApplicationAndroid {
         'type': string;
+        'appStoreAppId'?: string;
+        'clientId'?: string;
     }
 }
 
@@ -8502,17 +8509,6 @@ export namespace v1.skill.Manifest {
      */
     export interface VideoAppInterface {
         'type' : 'VIDEO_APP';
-    }
-}
-
-export namespace v1.skill.Manifest {
-    /**
-     * Feature for allowing and supporting directives and CX for casting content to video web players.
-     * @interface
-     */
-    export interface VideoWebPlayerFeature {
-        'name' : 'VIDEO_WEB_PLAYER';
-        'version': string;
     }
 }
 
