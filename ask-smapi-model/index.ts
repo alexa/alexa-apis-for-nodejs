@@ -2181,6 +2181,19 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
+     * Defines the structure for Sync Locales in the skill manifest. This is an optional property and Sync Locales will be disabled if not set.
+     * @interface
+     */
+    export interface AutomaticClonedLocale {
+        /**
+         * List of language specific source locale to target locales mapping.
+         */
+        'locales': Array<v1.skill.Manifest.LocalesByAutomaticClonedLocale>;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
      * optional. Used by developer to opt in to Automatic Skill Distribution, a feature where a skill will automatically be published in new eligible locales from the same language (e.g. from \"en-US\" to \"en-CA\" and \"en-GB\"). Locales that the developer has already created will not be overwritten.
      * @interface
      */
@@ -2669,6 +2682,23 @@ export namespace v1.skill.Manifest {
          */
         'domains'?: Array<string>;
         'friendlyName': v1.skill.Manifest.FriendlyName;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * maps source locale to list of target locales. Source and target locales should be with the same language.
+     * @interface
+     */
+    export interface LocalesByAutomaticClonedLocale {
+        /**
+         * Locale where the metadata and model will be copied from. For example: en-US. This locale must already exist in the skill.
+         */
+        'source': string;
+        /**
+         * Optional. List of locales where the metadata and model will be copied to. All configuration of source locale will be copied, so target locales do not have to exist before. Defaults to all locales with the same language as the sourceLocale.
+         */
+        'targets'?: Array<string>;
     }
 }
 
@@ -3201,6 +3231,7 @@ export namespace v1.skill.Manifest {
          */
         'distributionCountries'?: Array<v1.skill.Manifest.DistributionCountries>;
         'automaticDistribution'?: v1.skill.Manifest.AutomaticDistribution;
+        'automaticClonedLocale'?: v1.skill.Manifest.AutomaticClonedLocale;
     }
 }
 
@@ -7270,6 +7301,16 @@ export namespace v1.skill.simulations {
 
 export namespace v1.skill.simulations {
     /**
+     * Simulation settings for the current simulation request. 
+     * @interface
+     */
+    export interface Simulation {
+        'type'?: v1.skill.simulations.SimulationType;
+    }
+}
+
+export namespace v1.skill.simulations {
+    /**
      *
      * @interface
      */
@@ -7282,6 +7323,14 @@ export namespace v1.skill.simulations {
 
 export namespace v1.skill.simulations {
     /**
+     * String indicating the type of simulation request. Possible values are \"DEFAULT\" and \"NFI_ISOLATED_SIMULATION\". \"DEFAULT\" is used to proceed with the default skill simulation behavior. \"NFI_ISOLATED_SIMULATION\" is used to test the NFI(Name Free Interaction)  enabled skills in isolation. 
+     * @enum
+     */
+    export type SimulationType = 'DEFAULT' | 'NFI_ISOLATED_SIMULATION';
+}
+
+export namespace v1.skill.simulations {
+    /**
      *
      * @interface
      */
@@ -7289,6 +7338,7 @@ export namespace v1.skill.simulations {
         'input': v1.skill.simulations.Input;
         'device': v1.skill.simulations.Device;
         'session'?: v1.skill.simulations.Session;
+        'simulation'?: v1.skill.simulations.Simulation;
     }
 }
 
@@ -8089,6 +8139,16 @@ export namespace v2.skill.simulations {
 
 export namespace v2.skill.simulations {
     /**
+     * Simulation settings for the current simulation request. 
+     * @interface
+     */
+    export interface Simulation {
+        'type'?: v2.skill.simulations.SimulationType;
+    }
+}
+
+export namespace v2.skill.simulations {
+    /**
      *
      * @interface
      */
@@ -8101,6 +8161,14 @@ export namespace v2.skill.simulations {
 
 export namespace v2.skill.simulations {
     /**
+     * String indicating the type of simulation request. Possible values are \"DEFAULT\" and \"NFI_ISOLATED_SIMULATION\". \"DEFAULT\" is used to proceed with the default skill simulation behavior. \"NFI_ISOLATED_SIMULATION\" is used to test the NFI(Name Free Interaction)  enabled skills in isolation. 
+     * @enum
+     */
+    export type SimulationType = 'DEFAULT' | 'NFI_ISOLATED_SIMULATION';
+}
+
+export namespace v2.skill.simulations {
+    /**
      *
      * @interface
      */
@@ -8108,6 +8176,7 @@ export namespace v2.skill.simulations {
         'input': v2.skill.simulations.Input;
         'device': v2.skill.simulations.Device;
         'session'?: v2.skill.simulations.Session;
+        'simulation'?: v2.skill.simulations.Simulation;
     }
 }
 
@@ -18439,7 +18508,7 @@ export namespace services.skillManagement {
                 return apiResponse.body as v2.skill.invocations.InvocationsApiResponse;
         }
         /**
-         * This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported. 
+         * This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported. 
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
          * @param {v2.skill.simulations.SimulationsApiRequest} simulationsApiRequest Payload sent to the skill simulation API.
@@ -18494,7 +18563,7 @@ export namespace services.skillManagement {
         }
         
         /**
-         * This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported. 
+         * This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported. 
          * @param {string} skillId The skill ID.
          * @param {string} stage Stage for skill.
          * @param {v2.skill.simulations.SimulationsApiRequest} simulationsApiRequest Payload sent to the skill simulation API.

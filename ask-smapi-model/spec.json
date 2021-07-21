@@ -11829,6 +11829,7 @@
         "x-operation-name": "queryDevelopmentAuditLogsV1"
       }
     },
+    "/v1/skills/{skillId}/stages/{stage}/locales/{locale}/conversations/turnPredictions": {},
     "/v1/skills/resourceSchema/{resource}": {
       "get": {
         "tags": [
@@ -14760,7 +14761,7 @@
           "skillManagement"
         ],
         "summary": "Simulate executing a skill with the given id against a given stage.",
-        "description": "This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported.\n",
+        "description": "This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported.\n",
         "parameters": [
           {
             "name": "skillId",
@@ -20408,9 +20409,48 @@
         },
         "automaticDistribution": {
           "$ref": "#/definitions/v1.skill.Manifest.AutomaticDistribution"
+        },
+        "automaticClonedLocale": {
+          "$ref": "#/definitions/v1.skill.Manifest.AutomaticClonedLocale"
         }
       },
       "description": "Defines the structure for publishing information in the skill manifest."
+    },
+    "v1.skill.Manifest.AutomaticClonedLocale": {
+      "type": "object",
+      "required": [
+        "locales"
+      ],
+      "properties": {
+        "locales": {
+          "type": "array",
+          "description": "List of language specific source locale to target locales mapping.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.LocalesByAutomaticClonedLocale"
+          }
+        }
+      },
+      "description": "Defines the structure for Sync Locales in the skill manifest. This is an optional property and Sync Locales will be disabled if not set."
+    },
+    "v1.skill.Manifest.LocalesByAutomaticClonedLocale": {
+      "type": "object",
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Locale where the metadata and model will be copied from. For example: en-US. This locale must already exist in the skill."
+        },
+        "targets": {
+          "type": "array",
+          "description": "Optional. List of locales where the metadata and model will be copied to. All configuration of source locale will be copied, so target locales do not have to exist before. Defaults to all locales with the same language as the sourceLocale.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "maps source locale to list of target locales. Source and target locales should be with the same language."
     },
     "v1.skill.Manifest.AutomaticDistribution": {
       "type": "object",
@@ -21283,7 +21323,9 @@
       "properties": {
         "answerAttribution": {
           "type": "string",
-          "description": "enables skill developers to prepend a custom message to all of their knowledge skill's answers, which can help inform end-users of the skill and data source answering their question."
+          "description": "enables skill developers to prepend a custom message to all of their knowledge skill's answers, which can help inform end-users of the skill and data source answering their question.",
+          "maxLength": 75,
+          "pattern": "^[.a-zA-Z0-9,\"' ]*$"
         }
       },
       "description": "Defines the structure of localized knowledge information in the skill manifest."
@@ -22759,6 +22801,9 @@
         },
         "session": {
           "$ref": "#/definitions/v1.skill.simulations.Session"
+        },
+        "simulation": {
+          "$ref": "#/definitions/v1.skill.simulations.Simulation"
         }
       }
     },
@@ -22803,6 +22848,24 @@
       "enum": [
         "DEFAULT",
         "FORCE_NEW_SESSION"
+      ]
+    },
+    "v1.skill.simulations.Simulation": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/v1.skill.simulations.SimulationType",
+          "x-isEnum": true
+        }
+      },
+      "description": "Simulation settings for the current simulation request.\n"
+    },
+    "v1.skill.simulations.SimulationType": {
+      "type": "string",
+      "description": "String indicating the type of simulation request. Possible values are \"DEFAULT\" and \"NFI_ISOLATED_SIMULATION\". \"DEFAULT\" is used to proceed with the default skill simulation behavior. \"NFI_ISOLATED_SIMULATION\" is used to test the NFI(Name Free Interaction)\n enabled skills in isolation.\n",
+      "enum": [
+        "DEFAULT",
+        "NFI_ISOLATED_SIMULATION"
       ]
     },
     "v1.skill.simulations.SimulationsApiResponse": {
@@ -26012,6 +26075,9 @@
         },
         "session": {
           "$ref": "#/definitions/v2.skill.simulations.Session"
+        },
+        "simulation": {
+          "$ref": "#/definitions/v2.skill.simulations.Simulation"
         }
       }
     },
@@ -26056,6 +26122,24 @@
       "enum": [
         "DEFAULT",
         "FORCE_NEW_SESSION"
+      ]
+    },
+    "v2.skill.simulations.Simulation": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/v2.skill.simulations.SimulationType",
+          "x-isEnum": true
+        }
+      },
+      "description": "Simulation settings for the current simulation request.\n"
+    },
+    "v2.skill.simulations.SimulationType": {
+      "type": "string",
+      "description": "String indicating the type of simulation request. Possible values are \"DEFAULT\" and \"NFI_ISOLATED_SIMULATION\". \"DEFAULT\" is used to proceed with the default skill simulation behavior. \"NFI_ISOLATED_SIMULATION\" is used to test the NFI(Name Free Interaction)\n enabled skills in isolation.\n",
+      "enum": [
+        "DEFAULT",
+        "NFI_ISOLATED_SIMULATION"
       ]
     },
     "v2.skill.simulations.SimulationsApiResponse": {
