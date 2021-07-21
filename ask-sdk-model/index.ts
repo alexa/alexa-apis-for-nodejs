@@ -3154,14 +3154,6 @@ export namespace interfaces.viewport.video {
     export type Codecs = 'H_264_41' | 'H_264_42';
 }
 
-export namespace services.datastore.v1 {
-    /**
-     * the stage of the skill.
-     * @enum
-     */
-    export type SkillStage = 'DEVELOPMENT' | 'LIVE' | 'CERTIFICATION';
-}
-
 export namespace services.deviceAddress {
     /**
      * Represents the full address response from the service.
