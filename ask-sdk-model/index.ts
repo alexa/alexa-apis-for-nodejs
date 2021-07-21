@@ -3154,6 +3154,14 @@ export namespace interfaces.viewport.video {
     export type Codecs = 'H_264_41' | 'H_264_42';
 }
 
+export namespace services.datastore.v1 {
+    /**
+     * the stage of the skill.
+     * @enum
+     */
+    export type SkillStage = 'DEVELOPMENT' | 'LIVE' | 'CERTIFICATION';
+}
+
 export namespace services.deviceAddress {
     /**
      * Represents the full address response from the service.
@@ -4624,7 +4632,8 @@ export namespace ui {
      * @interface
      */
     export interface Reprompt {
-        'outputSpeech': ui.OutputSpeech;
+        'outputSpeech'?: ui.OutputSpeech;
+        'directives'?: Array<Directive>;
     }
 }
 
@@ -9128,7 +9137,7 @@ export namespace services.deviceAddress {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/devices/{deviceId}/settings/address/countryAndPostalCode";
+            let resourcePath : string = "/v1/devices/{deviceId}/settings/address/countryAndPostalCode";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the country and postal code of the deviceId");
@@ -9138,7 +9147,7 @@ export namespace services.deviceAddress {
             errorDefinitions.set(429, "The request is throttled");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9173,7 +9182,7 @@ export namespace services.deviceAddress {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/devices/{deviceId}/settings/address";
+            let resourcePath : string = "/v1/devices/{deviceId}/settings/address";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the address of the device");
@@ -9183,7 +9192,7 @@ export namespace services.deviceAddress {
             errorDefinitions.set(429, "The request is throttled");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9237,7 +9246,7 @@ export namespace services.directive {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/directives";
+            let resourcePath : string = "/v1/directives";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(204, "Directive sent successfully.");
@@ -9246,7 +9255,7 @@ export namespace services.directive {
             errorDefinitions.set(403, "The skill is not allowed to send directives at the moment.");
             errorDefinitions.set(0, "Unexpected error.");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, sendDirectiveRequest, errorDefinitions);
         }
         
@@ -9291,7 +9300,7 @@ export namespace services.endpointEnumeration {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/endpoints";
+            let resourcePath : string = "/v1/endpoints";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the list of connected endpoints.");
@@ -9302,7 +9311,7 @@ export namespace services.endpointEnumeration {
             errorDefinitions.set(503, "Service Unavailable. Returned when the server is not ready to handle the request.");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9347,14 +9356,14 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists";
+            let resourcePath : string = "/v2/householdlists";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
             errorDefinitions.set(403, "Forbidden");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", path,
+            return this.invoke("GET", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9388,7 +9397,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}";
+            let resourcePath : string = "/v2/householdlists/{listId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9397,7 +9406,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
+            return this.invoke("DELETE", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9437,7 +9446,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
+            let resourcePath : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9446,7 +9455,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("DELETE", "https://api.amazonalexa.com/", path,
+            return this.invoke("DELETE", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9487,7 +9496,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
+            let resourcePath : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9496,7 +9505,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", path,
+            return this.invoke("GET", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9546,7 +9555,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items/{itemId}";
+            let resourcePath : string = "/v2/householdlists/{listId}/items/{itemId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9556,7 +9565,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("PUT", "https://api.amazonalexa.com/", path,
+            return this.invoke("PUT", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, updateListItemRequest, errorDefinitions);
         }
         
@@ -9601,7 +9610,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/items";
+            let resourcePath : string = "/v2/householdlists/{listId}/items";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -9611,7 +9620,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("POST", "https://api.amazonalexa.com/", path,
+            return this.invoke("POST", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, createListItemRequest, errorDefinitions);
         }
         
@@ -9655,7 +9664,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}";
+            let resourcePath : string = "/v2/householdlists/{listId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9666,7 +9675,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("PUT", "https://api.amazonalexa.com/", path,
+            return this.invoke("PUT", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, updateListRequest, errorDefinitions);
         }
         
@@ -9708,7 +9717,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists/{listId}/{status}";
+            let resourcePath : string = "/v2/householdlists/{listId}/{status}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -9718,7 +9727,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("GET", "https://api.amazonalexa.com/", path,
+            return this.invoke("GET", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9756,7 +9765,7 @@ export namespace services.listManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/householdlists";
+            let resourcePath : string = "/v2/householdlists";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(201, "Success");
@@ -9766,7 +9775,7 @@ export namespace services.listManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(0, "Internal Server Error");
 
-            return this.invoke("POST", "https://api.amazonalexa.com/", path,
+            return this.invoke("POST", "https://api.amazonalexa.com/", resourcePath,
                     pathParams, queryParams, headerParams, createListRequest, errorDefinitions);
         }
         
@@ -9843,7 +9852,7 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/users/~current/skills/~current/inSkillProducts";
+            let resourcePath : string = "/v1/users/~current/skills/~current/inSkillProducts";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns a list of In-Skill products on success.");
@@ -9851,7 +9860,7 @@ export namespace services.monetization {
             errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9897,7 +9906,7 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/users/~current/skills/~current/inSkillProducts/{productId}";
+            let resourcePath : string = "/v1/users/~current/skills/~current/inSkillProducts/{productId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns an In-Skill Product on success.");
@@ -9906,7 +9915,7 @@ export namespace services.monetization {
             errorDefinitions.set(404, "Requested resource not found.");
             errorDefinitions.set(500, "Internal Server Error.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -9972,7 +9981,7 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/users/~current/skills/~current/inSkillProductsTransactions";
+            let resourcePath : string = "/v1/users/~current/skills/~current/inSkillProductsTransactions";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns a list of transactions of all in skill products purchases in last 30 days on success.");
@@ -9984,7 +9993,7 @@ export namespace services.monetization {
             errorDefinitions.set(429, "The request is throttled.");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10019,7 +10028,7 @@ export namespace services.monetization {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/users/~current/skills/~current/settings/voicePurchasing.enabled";
+            let resourcePath : string = "/v1/users/~current/skills/~current/settings/voicePurchasing.enabled";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Returns a boolean value for voice purchase setting on success.");
@@ -10027,7 +10036,7 @@ export namespace services.monetization {
             errorDefinitions.set(401, "The authentication token is invalid or doesn&#39;t have access to make this request");
             errorDefinitions.set(500, "Internal Server Error.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10086,9 +10095,9 @@ export namespace services.proactiveEvents {
             const authorizationValue = "Bearer " + accessToken;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/proactiveEvents";
+            let resourcePath : string = "/v1/proactiveEvents";
             if (stage === 'DEVELOPMENT') {
-                path += '/stages/development';
+                resourcePath += '/stages/development';
             }
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
@@ -10100,7 +10109,7 @@ export namespace services.proactiveEvents {
             errorDefinitions.set(500, "The ProactiveEvents service encounters an internal error for a valid request.");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, createProactiveEventRequest, errorDefinitions);
         }
         
@@ -10151,7 +10160,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders/{alertToken}";
+            let resourcePath : string = "/v1/alerts/reminders/{alertToken}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10159,7 +10168,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10193,7 +10202,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders/{alertToken}";
+            let resourcePath : string = "/v1/alerts/reminders/{alertToken}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10201,7 +10210,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10244,7 +10253,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders/{alertToken}";
+            let resourcePath : string = "/v1/alerts/reminders/{alertToken}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10254,7 +10263,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
         }
         
@@ -10284,7 +10293,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders";
+            let resourcePath : string = "/v1/alerts/reminders";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10292,7 +10301,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(429, "RateExceededException e.g. When the skill is throttled for exceeding the max rate");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10328,7 +10337,7 @@ export namespace services.reminderManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/reminders";
+            let resourcePath : string = "/v1/alerts/reminders";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10339,7 +10348,7 @@ export namespace services.reminderManagement {
             errorDefinitions.set(503, "Service Unavailable");
             errorDefinitions.set(504, "Gateway Timeout");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, reminderRequest, errorDefinitions);
         }
         
@@ -10405,7 +10414,7 @@ export namespace services.skillMessaging {
             const authorizationValue = "Bearer " + accessToken;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/skillmessages/users/{userId}";
+            let resourcePath : string = "/v1/skillmessages/users/{userId}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(202, "Message has been successfully accepted, and will be sent to the skill ");
@@ -10416,7 +10425,7 @@ export namespace services.skillMessaging {
             errorDefinitions.set(500, "The SkillMessaging service encountered an internal error for a valid request. ");
             errorDefinitions.set(0, "Unexpected error");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, sendSkillMessagingRequest, errorDefinitions);
         }
         
@@ -10462,7 +10471,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers";
+            let resourcePath : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10470,7 +10479,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(401, "Unauthorized");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10497,7 +10506,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers";
+            let resourcePath : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10505,7 +10514,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(401, "Unauthorized");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10539,7 +10548,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/{id}";
+            let resourcePath : string = "/v1/alerts/timers/{id}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10548,7 +10557,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(404, "Timer not found");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10582,7 +10591,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/{id}";
+            let resourcePath : string = "/v1/alerts/timers/{id}";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10591,7 +10600,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(404, "Timer not found");
             errorDefinitions.set(500, "Internal Server Error");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10626,7 +10635,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/{id}/pause";
+            let resourcePath : string = "/v1/alerts/timers/{id}/pause";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10636,7 +10645,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(504, "Device offline");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10670,7 +10679,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers/{id}/resume";
+            let resourcePath : string = "/v1/alerts/timers/{id}/resume";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10680,7 +10689,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(504, "Device offline");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10716,7 +10725,7 @@ export namespace services.timerManagement {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v1/alerts/timers";
+            let resourcePath : string = "/v1/alerts/timers";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Success");
@@ -10726,7 +10735,7 @@ export namespace services.timerManagement {
             errorDefinitions.set(500, "Internal Server Error");
             errorDefinitions.set(504, "Device offline");
 
-            return this.invoke("POST", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, timerRequest, errorDefinitions);
         }
         
@@ -10772,7 +10781,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/accounts/~current/settings/Profile.email";
+            let resourcePath : string = "/v2/accounts/~current/settings/Profile.email";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -10782,7 +10791,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10810,7 +10819,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/accounts/~current/settings/Profile.givenName";
+            let resourcePath : string = "/v2/accounts/~current/settings/Profile.givenName";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -10820,7 +10829,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10848,7 +10857,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/accounts/~current/settings/Profile.mobileNumber";
+            let resourcePath : string = "/v2/accounts/~current/settings/Profile.mobileNumber";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -10858,7 +10867,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10886,7 +10895,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/accounts/~current/settings/Profile.name";
+            let resourcePath : string = "/v2/accounts/~current/settings/Profile.name";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -10896,7 +10905,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10930,7 +10939,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/devices/{deviceId}/settings/System.distanceUnits";
+            let resourcePath : string = "/v2/devices/{deviceId}/settings/System.distanceUnits";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -10940,7 +10949,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -10975,7 +10984,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/devices/{deviceId}/settings/System.temperatureUnit";
+            let resourcePath : string = "/v2/devices/{deviceId}/settings/System.temperatureUnit";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -10985,7 +10994,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -11020,7 +11029,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/devices/{deviceId}/settings/System.timeZone";
+            let resourcePath : string = "/v2/devices/{deviceId}/settings/System.timeZone";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully get the setting");
@@ -11030,7 +11039,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -11059,7 +11068,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/persons/~current/profile/givenName";
+            let resourcePath : string = "/v2/persons/~current/profile/givenName";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -11069,7 +11078,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -11097,7 +11106,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/persons/~current/profile/mobileNumber";
+            let resourcePath : string = "/v2/persons/~current/profile/mobileNumber";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -11107,7 +11116,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
@@ -11135,7 +11144,7 @@ export namespace services.ups {
             const authorizationValue = "Bearer " +  this.apiConfiguration.authorizationValue;
             headerParams.push({key : "Authorization", value : authorizationValue});
 
-            let path : string = "/v2/persons/~current/profile/name";
+            let resourcePath : string = "/v2/persons/~current/profile/name";
 
             const errorDefinitions : Map<number, string> = new Map<number, string>();
             errorDefinitions.set(200, "Successfully retrieved the requested information.");
@@ -11145,7 +11154,7 @@ export namespace services.ups {
             errorDefinitions.set(429, "The skill has been throttled due to an excessive number of requests.");
             errorDefinitions.set(0, "An unexpected error occurred.");
 
-            return this.invoke("GET", this.apiConfiguration.apiEndpoint, path,
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
                     pathParams, queryParams, headerParams, null, errorDefinitions);
         }
         
