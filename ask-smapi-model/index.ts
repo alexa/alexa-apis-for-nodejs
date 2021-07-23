@@ -1712,10 +1712,10 @@ export namespace v1.skill.AlexaHosted {
 
 export namespace v1.skill.AlexaHosted {
     /**
-     * Hosted skill lambda runtime; Node.js 10.x is deprecated by Hosted Skill service as of April 30, 2021.
+     * Hosted skill lambda runtime; Node.js 10.x is deprecated by Hosted Skill service as of July 30, 2021.
      * @enum
      */
-    export type HostedSkillRuntime = 'NODE_10_X' | 'PYTHON_3_7';
+    export type HostedSkillRuntime = 'NODE_10_X' | 'PYTHON_3_7' | 'NODE_12_X';
 }
 
 export namespace v1.skill.AlexaHosted {
