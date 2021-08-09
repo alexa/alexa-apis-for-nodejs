@@ -448,10 +448,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -818,10 +819,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           }
         ],
@@ -1202,10 +1204,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -4219,10 +4222,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           }
         ],
@@ -4917,10 +4921,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -5403,10 +5408,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -6160,10 +6166,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -6630,10 +6637,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -6863,10 +6871,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -6968,10 +6977,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -7457,10 +7467,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -7858,10 +7869,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -8047,10 +8059,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -8844,10 +8857,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -9186,10 +9200,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           }
         ],
@@ -10004,10 +10019,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -10733,10 +10749,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           }
         ],
@@ -14293,10 +14310,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -14385,10 +14403,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -14592,10 +14611,11 @@
           {
             "name": "maxResults",
             "in": "query",
-            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "description": "Maximum number of datapoints in a single result for a query",
             "required": false,
             "type": "integer",
-            "maximum": 50,
+            "default": 100,
+            "maximum": 100,
             "minimum": 1
           },
           {
@@ -15122,7 +15142,9 @@
         },
         "x-operation-name": "invokeSkillEndPointV2"
       }
-    }
+    },
+    "/v2/skills/{skillId}/metrics": {},
+    "/v2/skills/metrics": {}
   },
   "securityDefinitions": {
     "skillManagement": {
@@ -20413,6 +20435,9 @@
         },
         "automaticClonedLocale": {
           "$ref": "#/definitions/v1.skill.Manifest.AutomaticClonedLocale"
+        },
+        "paidSkillInformation": {
+          "$ref": "#/definitions/v1.skill.Manifest.PaidSkillInformation"
         }
       },
       "description": "Defines the structure for publishing information in the skill manifest."
@@ -20594,6 +20619,9 @@
             "maxLength": 150
           },
           "maxItems": 30
+        },
+        "customProductPrompts": {
+          "$ref": "#/definitions/v1.skill.Manifest.CustomProductPrompts"
         }
       },
       "description": "Defines the structure for locale specific publishing information in the skill manifest."
@@ -22633,6 +22661,158 @@
         }
       },
       "description": "Defines the structure for demand response api of the skill."
+    },
+    "v1.skill.Manifest.PaidSkillInformation": {
+      "type": "object",
+      "required": [
+        "pricing",
+        "taxInformation"
+      ],
+      "properties": {
+        "pricing": {
+          "type": "object",
+          "description": "Defines the structure for marketplace specific pricing information in the skill manifest",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "array",
+            "description": "List of paid skill product pricing information.",
+            "items": {
+              "$ref": "#/definitions/v1.skill.Manifest.MarketplacePricing"
+            },
+            "maxItems": 1,
+            "minItems": 1
+          }
+        },
+        "taxInformation": {
+          "$ref": "#/definitions/v1.skill.Manifest.TaxInformation"
+        }
+      },
+      "description": "Defines the structure of the paid skill information of the skill."
+    },
+    "v1.skill.Manifest.CustomProductPrompts": {
+      "type": "object",
+      "required": [
+        "purchaseConfirmationDescription",
+        "purchasePromptDescription"
+      ],
+      "properties": {
+        "purchasePromptDescription": {
+          "type": "string",
+          "description": "Description of the paid skill product heard before customer is prompted for purchase."
+        },
+        "purchaseConfirmationDescription": {
+          "type": "string",
+          "description": "Description of the paid skill product that displays when the paid skill is purchased."
+        }
+      },
+      "description": "Custom prompts used for paid skill product purchasing options. Supports Speech Synthesis Markup Language (SSML), which can be used to control pronunciation, intonation, timing, and emotion."
+    },
+    "v1.skill.Manifest.MarketplacePricing": {
+      "type": "object",
+      "required": [
+        "currency",
+        "offerType",
+        "price"
+      ],
+      "properties": {
+        "offerType": {
+          "$ref": "#/definitions/v1.skill.Manifest.OfferType",
+          "x-isEnum": true
+        },
+        "price": {
+          "type": "number",
+          "description": "Defines the price of a paid skill product. The price should be your suggested price, not including any VAT or similar taxes. Taxes are included in the final price to end users."
+        },
+        "currency": {
+          "$ref": "#/definitions/v1.skill.Manifest.Currency",
+          "x-isEnum": true
+        },
+        "freeTrialInformation": {
+          "$ref": "#/definitions/v1.skill.Manifest.FreeTrialInformation"
+        },
+        "subscriptionInformation": {
+          "$ref": "#/definitions/v1.skill.Manifest.SubscriptionInformation"
+        }
+      },
+      "description": "Paid skill product pricing information."
+    },
+    "v1.skill.Manifest.OfferType": {
+      "type": "string",
+      "description": "The type of the offer.",
+      "enum": [
+        "SUBSCRIPTION",
+        "ENTITLEMENT"
+      ]
+    },
+    "v1.skill.Manifest.Currency": {
+      "type": "string",
+      "format": "ISO 4217 format",
+      "description": "Currency to use for paid skill product.",
+      "enum": [
+        "USD"
+      ]
+    },
+    "v1.skill.Manifest.TaxInformation": {
+      "type": "object",
+      "required": [
+        "category"
+      ],
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/v1.skill.Manifest.TaxInformationCategory",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the structure for paid skill product tax information."
+    },
+    "v1.skill.Manifest.TaxInformationCategory": {
+      "type": "string",
+      "description": "The tax category that best describes the paid skill product.",
+      "enum": [
+        "SOFTWARE",
+        "STREAMING_AUDIO",
+        "STREAMING_RADIO",
+        "INFORMATION_SERVICES",
+        "VIDEO",
+        "PERIODICALS",
+        "NEWSPAPERS"
+      ]
+    },
+    "v1.skill.Manifest.SubscriptionInformation": {
+      "type": "object",
+      "required": [
+        "subscriptionPaymentFrequency"
+      ],
+      "properties": {
+        "subscriptionPaymentFrequency": {
+          "$ref": "#/definitions/v1.skill.Manifest.SubscriptionPaymentFrequency",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the structure for paid skill product subscription information."
+    },
+    "v1.skill.Manifest.SubscriptionPaymentFrequency": {
+      "type": "string",
+      "description": "The frequency in which payments are collected for the subscription.",
+      "enum": [
+        "MONTHLY",
+        "YEARLY"
+      ]
+    },
+    "v1.skill.Manifest.FreeTrialInformation": {
+      "type": "object",
+      "required": [
+        "freeTrialDuration"
+      ],
+      "properties": {
+        "freeTrialDuration": {
+          "type": "string",
+          "format": "ISO_8601#Durations format",
+          "description": "Defines the free trial period for the paid skill product, in ISO_8601#Durations format.",
+          "pattern": "^P(0?[1-9]|[1-2][0-9]|3[0-1])D$"
+        }
+      },
+      "description": "Defines the structure for paid skill product free trial information."
     },
     "v1.skill.metrics.GetMetricDataResponse": {
       "type": "object",
