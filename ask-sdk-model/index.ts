@@ -6232,7 +6232,7 @@ export namespace interfaces.alexa.presentation.apl {
         /**
          * The property value to set.
          */
-        'value': string;
+        'value': string | boolean;
     }
 }
 
@@ -6919,7 +6919,7 @@ export namespace interfaces.alexa.presentation.aplt {
         /**
          * The property value to set.
          */
-        'value': string;
+        'value': string | boolean;
     }
 }
 
