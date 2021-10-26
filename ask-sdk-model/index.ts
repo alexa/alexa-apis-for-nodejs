@@ -497,6 +497,10 @@ export interface Context {
      * Provides the current state for Extensions interface
      */
     'Extensions'?: interfaces.alexa.extension.ExtensionsState;
+    /**
+     * Provides the current state for app link capability.
+     */
+    'AppLink'?: interfaces.applink.AppLinkState;
 }
 
 /**
@@ -505,7 +509,7 @@ export interface Context {
  */
 export interface Device {
     /**
-     * The deviceId property uniquely identifies the device.
+     * The deviceId property uniquely identifies the device. This identifier is scoped to a skill. Normally, disabling and re-enabling a skill generates a new identifier.
      */
     'deviceId': string;
     /**
@@ -762,6 +766,7 @@ export interface SupportedInterfaces {
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.AlexaPresentationAplInterface;
     'Alexa.Presentation.APLT'?: interfaces.alexa.presentation.aplt.AlexaPresentationApltInterface;
     'Alexa.Presentation.HTML'?: interfaces.alexa.presentation.html.AlexaPresentationHtmlInterface;
+    'AppLink'?: interfaces.applink.AppLinkInterface;
     'AudioPlayer'?: interfaces.audioplayer.AudioPlayerInterface;
     'Display'?: interfaces.display.DisplayInterface;
     'VideoApp'?: interfaces.videoapp.VideoAppInterface;
@@ -1480,7 +1485,7 @@ export namespace interfaces.alexa.presentation.apl {
         /**
          * The token specified in the RenderDocument directive which rendered the content shown on screen.
          */
-        'token': string;
+        'token'?: string;
         /**
          * The APL version of the document which rendered the content shown on screen.
          */
@@ -2248,6 +2253,56 @@ export namespace interfaces.amazonpay.v1 {
     }
 }
 
+export namespace interfaces.applink {
+    /**
+     *
+     * @interface
+     */
+    export interface AppLinkInterface {
+        'version'?: string;
+    }
+}
+
+export namespace interfaces.applink {
+    /**
+     *
+     * @interface
+     */
+    export interface AppLinkState {
+        'supportedCatalogTypes'?: Array<interfaces.applink.CatalogTypes>;
+        'directLaunch'?: interfaces.applink.DirectLaunch;
+        'sendToDevice'?: interfaces.applink.SendToDevice;
+    }
+}
+
+export namespace interfaces.applink {
+    /**
+     * Accepted catalog types.
+     * @enum
+     */
+    export type CatalogTypes = 'IOS_APP_STORE' | 'GOOGLE_PLAY_STORE';
+}
+
+export namespace interfaces.applink {
+    /**
+     * direct launch availability
+     * @interface
+     */
+    export interface DirectLaunch {
+        'IOS_APP_STORE'?: any;
+        'GOOGLE_PLAY_STORE'?: any;
+    }
+}
+
+export namespace interfaces.applink {
+    /**
+     * send to device availability
+     * @interface
+     */
+    export interface SendToDevice {
+    }
+}
+
 export namespace interfaces.audioplayer {
     /**
      *
@@ -2497,7 +2552,7 @@ export namespace interfaces.customInterfaceController {
         /**
          * Identifies where the event orginated from.
          */
-        'endpoint': interfaces.customInterfaceController.Endpoint;
+        'endpoint'?: interfaces.customInterfaceController.Endpoint;
     }
 }
 
@@ -2886,11 +2941,11 @@ export namespace interfaces.systemUnit {
      */
     export interface Unit {
         /**
-         * A string that represents unitId directed at skill level. Each skill gets a different directed identifier for same internal identifier. This is Skill enablement scoped identifier. This should be in format - amzn1.ask.unit.<skillDirectedId>
+         * A string that represents a unique identifier for the unit in the context of a request.  The length of this identifier can vary, but is never more than 255 characters.  Alexa generates this string only when a request made to your skill has a valid unit context.  This identifier is scoped to a skill. Normally, disabling and re-enabling a skill generates a new identifier.
          */
         'unitId'?: string;
         /**
-         * A string that represents a unitId directed using directedIdConfuser associated with the respective Organization's developer account. This identifier is directed at an Organization level. Same identifier is shared across Organization's backend systems (which invokes API), Skills owned by the organization and authorized 3P skills. This should be in format - amzn1.alexa.unit.did.<LWAConfuserDirectedId>
+         * A string that represents a unique identifier for the unit in the context of a request.  The length of this identifier can vary, but is never more than 255 characters.  Alexa generates this string only when the request made to your skill has a valid unit context.  This is another unit identifier associated with an organization's developer account.  Only registered Alexa for Residential and Alexa for Hospitality vendors can see the Read PersistentUnitId toggle in the Alexa skills developers console. This identifier is scoped to a vendor, therefore all skills that belong to particular vendor share this identifier, therefore it will stay the same regardless of skill enablement.
          */
         'persistentUnitId'?: string;
     }
