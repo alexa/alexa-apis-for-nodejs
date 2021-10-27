@@ -1590,6 +1590,8 @@
     "/v0/skills/{skillId}/experiments/{experimentId}/state": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots/{metricSnapshotId}": {},
+    "/v0/skills/{skillId}/_internationalize": {},
+    "/v0/skills/{skillId}/_internationalizations/{internationalizationId}": {},
     "/v0/_burnerDeveloperAccounts": {},
     "/v0/_burnerDeveloperAccounts/{vendorId}": {},
     "/v1/catalogs/{catalogId}/urls": {
@@ -11960,6 +11962,14 @@
         "x-operation-name": "getResourceSchemaV1"
       }
     },
+    "/v1/skills/{skillId}/testSetGenerations": {},
+    "/v1/skills/{skillId}/testSetGenerations/{testSetGenerationId}": {},
+    "/v1/skills/{skillId}/testSets": {},
+    "/v1/skills/{skillId}/testSets/{testSetId}/properties": {},
+    "/v1/skills/{skillId}/testSets/{testSetId}": {},
+    "/v1/skills/{skillId}/testSetExecutions": {},
+    "/v1/skills/{skillId}/testSetExecutions/{testSetExecutionId}": {},
+    "/v1/skills/{skillId}/testSetExecutions/{testSetExecutionId}/results": {},
     "/v1/skills/{skillId}/nluEvaluations": {
       "get": {
         "tags": [
@@ -22514,6 +22524,26 @@
             "$ref": "#/definitions/v1.skill.Manifest.LinkedApplication"
           },
           "minItems": 1
+        },
+        "linkedWebDomains": {
+          "type": "array",
+          "description": "Allow developer to decalre their skill to link to the declared web domains.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "linkedAndroidCommonIntents": {
+          "type": "array",
+          "description": "Allow developer to declare their skill to link to the speicified android common intents.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.LinkedAndroidCommonIntent"
+          },
+          "minItems": 1
+        },
+        "linkedCommonSchemes": {
+          "$ref": "#/definitions/v1.skill.Manifest.LinkedCommonSchemes"
         }
       },
       "description": "Details required for app linking use cases."
@@ -22548,9 +22578,105 @@
         },
         "friendlyName": {
           "$ref": "#/definitions/v1.skill.Manifest.FriendlyName"
+        },
+        "androidCustomIntents": {
+          "type": "array",
+          "description": "Supported android custom intent",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.AndroidCustomIntent"
+          },
+          "minItems": 1
         }
       },
       "description": "Applications associated with the skill."
+    },
+    "v1.skill.Manifest.LinkedCommonSchemes": {
+      "type": "object",
+      "properties": {
+        "IOS_APP_STORE": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.IOSAppStoreCommonSchemeName"
+          },
+          "minItems": 1
+        },
+        "GOOGLE_PLAY_STORE": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.skill.Manifest.PlayStoreCommonSchemeName"
+          },
+          "minItems": 1
+        }
+      },
+      "description": "Allow developer to declare their skill to link to the speicified common schemes"
+    },
+    "v1.skill.Manifest.IOSAppStoreCommonSchemeName": {
+      "type": "string",
+      "description": "supported common schemes for IOS_APP_STORE. MAPS is for \"maps:\" and TEL is for \"tel:\".",
+      "enum": [
+        "MAPS",
+        "TEL"
+      ]
+    },
+    "v1.skill.Manifest.PlayStoreCommonSchemeName": {
+      "type": "string",
+      "description": "supported common schemes for GOOGLE_PLAY_STORE. MAPS is for \"maps:\" and TEL is for \"tel:\".",
+      "enum": [
+        "MAPS",
+        "TEL"
+      ]
+    },
+    "v1.skill.Manifest.LinkedAndroidCommonIntent": {
+      "type": "object",
+      "required": [
+        "catalogType",
+        "intentName"
+      ],
+      "properties": {
+        "intentName": {
+          "$ref": "#/definitions/v1.skill.Manifest.AndroidCommonIntentName",
+          "x-isEnum": true
+        },
+        "catalogType": {
+          "$ref": "#/definitions/v1.skill.Manifest.CatalogName",
+          "x-isEnum": true
+        }
+      },
+      "description": "Android common intents associated with the skill"
+    },
+    "v1.skill.Manifest.CatalogName": {
+      "type": "string",
+      "enum": [
+        "IOS_APP_STORE",
+        "GOOGLE_PLAY_STORE"
+      ]
+    },
+    "v1.skill.Manifest.AndroidCommonIntentName": {
+      "type": "string",
+      "description": "Supported android common intent. Each of the value maps to a common intent defined in https://developer.android.com/guide/components/intents-common.",
+      "enum": [
+        "SHOW_IN_MAP",
+        "ADD_CALENDAR_EVENT",
+        "PLAY_MEDIA",
+        "START_PHONE_CALL",
+        "OPEN_SETTINGS"
+      ]
+    },
+    "v1.skill.Manifest.AndroidCustomIntent": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "type": "string",
+          "description": "android component name",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "description": "android intent action",
+          "minLength": 1
+        }
+      },
+      "description": "Android custom intent"
     },
     "v1.skill.Manifest.CatalogInfo": {
       "type": "object",

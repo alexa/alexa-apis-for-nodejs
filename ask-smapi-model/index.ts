@@ -2148,6 +2148,31 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
+     * Supported android common intent. Each of the value maps to a common intent defined in https://developer.android.com/guide/components/intents-common.
+     * @enum
+     */
+    export type AndroidCommonIntentName = 'SHOW_IN_MAP' | 'ADD_CALENDAR_EVENT' | 'PLAY_MEDIA' | 'START_PHONE_CALL' | 'OPEN_SETTINGS';
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * Android custom intent
+     * @interface
+     */
+    export interface AndroidCustomIntent {
+        /**
+         * android component name
+         */
+        'component'?: string;
+        /**
+         * android intent action
+         */
+        'action'?: string;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
      * Details required for app linking use cases.
      * @interface
      */
@@ -2156,6 +2181,15 @@ export namespace v1.skill.Manifest {
          * Allows developers to declare their Skill will use Alexa App Links, and list relevant apps. This field is required when using the APP_LINK interface.
          */
         'linkedApplications'?: Array<v1.skill.Manifest.LinkedApplication>;
+        /**
+         * Allow developer to decalre their skill to link to the declared web domains.
+         */
+        'linkedWebDomains'?: Array<string>;
+        /**
+         * Allow developer to declare their skill to link to the speicified android common intents.
+         */
+        'linkedAndroidCommonIntents'?: Array<v1.skill.Manifest.LinkedAndroidCommonIntent>;
+        'linkedCommonSchemes'?: v1.skill.Manifest.LinkedCommonSchemes;
     }
 }
 
@@ -2221,6 +2255,14 @@ export namespace v1.skill.Manifest {
          */
         'identifier': string;
     }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     *
+     * @enum
+     */
+    export type CatalogName = 'IOS_APP_STORE' | 'GOOGLE_PLAY_STORE';
 }
 
 export namespace v1.skill.Manifest {
@@ -2653,6 +2695,14 @@ export namespace v1.skill.Manifest {
 }
 
 export namespace v1.skill.Manifest {
+    /**
+     * supported common schemes for IOS_APP_STORE. MAPS is for \"maps:\" and TEL is for \"tel:\".
+     * @enum
+     */
+    export type IOSAppStoreCommonSchemeName = 'MAPS' | 'TEL';
+}
+
+export namespace v1.skill.Manifest {
    /**
     *
     * @interface
@@ -2706,6 +2756,17 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
+     * Android common intents associated with the skill
+     * @interface
+     */
+    export interface LinkedAndroidCommonIntent {
+        'intentName': v1.skill.Manifest.AndroidCommonIntentName;
+        'catalogType': v1.skill.Manifest.CatalogName;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
      * Applications associated with the skill.
      * @interface
      */
@@ -2720,6 +2781,21 @@ export namespace v1.skill.Manifest {
          */
         'domains'?: Array<string>;
         'friendlyName': v1.skill.Manifest.FriendlyName;
+        /**
+         * Supported android custom intent
+         */
+        'androidCustomIntents'?: Array<v1.skill.Manifest.AndroidCustomIntent>;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * Allow developer to declare their skill to link to the speicified common schemes
+     * @interface
+     */
+    export interface LinkedCommonSchemes {
+        'IOS_APP_STORE'?: Array<v1.skill.Manifest.IOSAppStoreCommonSchemeName>;
+        'GOOGLE_PLAY_STORE'?: Array<v1.skill.Manifest.PlayStoreCommonSchemeName>;
     }
 }
 
@@ -3073,6 +3149,14 @@ export namespace v1.skill.Manifest {
      * @enum
      */
     export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read';
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * supported common schemes for GOOGLE_PLAY_STORE. MAPS is for \"maps:\" and TEL is for \"tel:\".
+     * @enum
+     */
+    export type PlayStoreCommonSchemeName = 'MAPS' | 'TEL';
 }
 
 export namespace v1.skill.Manifest {
