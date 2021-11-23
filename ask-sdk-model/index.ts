@@ -513,6 +513,10 @@ export interface Device {
      */
     'deviceId': string;
     /**
+     * A persistent identifier for the Endpoint ID where the skill request is issued from. An endpoint represents an Alexa-connected Endpoint (like an Echo device, or an application) with which an Alexa customer can interact rather than a physical device,  so it could represent applications on your fire TV or your Alexa phone app.  The persistentEndpointId is a string that represents a unique identifier for the endpoint in the context of a request.  It is in the Amazon Common Identifier format \"amzn1.alexa.endpoint.did.{id}\". This identifier space is scoped to a vendor, therefore it will stay the same regardless of skill enablement.
+     */
+    'persistentEndpointId'?: string;
+    /**
      * Lists each interface that the device supports. For example, if supportedInterfaces includes AudioPlayer {}, then you know that the device supports streaming audio using the AudioPlayer interface
      */
     'supportedInterfaces': SupportedInterfaces;
@@ -4141,17 +4145,7 @@ export namespace services.reminderManagement {
      * @interface
      */
     export interface AlertInfo {
-        'spokenInfo'?: services.reminderManagement.AlertInfoSpokenInfo;
-    }
-}
-
-export namespace services.reminderManagement {
-    /**
-     * Parameters for VUI presentation of the reminder
-     * @interface
-     */
-    export interface AlertInfoSpokenInfo {
-        'content': Array<services.reminderManagement.SpokenText>;
+        'spokenInfo'?: services.reminderManagement.SpokenInfo;
     }
 }
 
@@ -4211,6 +4205,16 @@ export namespace services.reminderManagement {
      * @enum
      */
     export type RecurrenceFreq = 'WEEKLY' | 'DAILY';
+}
+
+export namespace services.reminderManagement {
+    /**
+     * Parameters for VUI presentation of the reminder
+     * @interface
+     */
+    export interface SpokenInfo {
+        'content': Array<services.reminderManagement.SpokenText>;
+    }
 }
 
 export namespace services.reminderManagement {
