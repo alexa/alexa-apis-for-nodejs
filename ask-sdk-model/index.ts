@@ -501,6 +501,10 @@ export interface Context {
      * Provides the current state for app link capability.
      */
     'AppLink'?: interfaces.applink.AppLinkState;
+    /**
+     * Provides the current experimentation state
+     */
+    'Experimentation'?: interfaces.alexa.experimentation.ExperimentationState;
 }
 
 /**
@@ -636,6 +640,10 @@ export interface Response {
     'apiResponse'?: any;
     'shouldEndSession'?: boolean;
     'canFulfillIntent'?: canfulfill.CanFulfillIntent;
+    /**
+     * Experiment trigger response from skill
+     */
+    'experimentation'?: interfaces.alexa.experimentation.ExperimentTriggerResponse;
 }
 
 /**
@@ -1107,6 +1115,58 @@ export namespace interfaces.alexa.comms.messagingcontroller {
          */
         'deleted'?: Array<string>;
     }
+}
+
+export namespace interfaces.alexa.experimentation {
+    /**
+     * Represents the state of an active experiment's assignment
+     * @interface
+     */
+    export interface ExperimentAssignment {
+        'id'?: string;
+        'treatmentId'?: interfaces.alexa.experimentation.Treatment;
+    }
+}
+
+export namespace interfaces.alexa.experimentation {
+    /**
+     * Experiment trigger response from skill
+     * @interface
+     */
+    export interface ExperimentTriggerResponse {
+        /**
+         * Contains array of triggered experiment ids
+         */
+        'triggeredExperiments'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.experimentation {
+    /**
+     *
+     * @interface
+     */
+    export interface ExperimentationState {
+        'activeExperiments'?: Array<interfaces.alexa.experimentation.ExperimentAssignment>;
+    }
+}
+
+export namespace interfaces.alexa.experimentation {
+    /**
+     *
+     * @interface
+     */
+    export interface Treatment {
+        'name'?: interfaces.alexa.experimentation.TreatmentId;
+    }
+}
+
+export namespace interfaces.alexa.experimentation {
+    /**
+     * Name of the experiment treatment identifier
+     * @enum
+     */
+    export type TreatmentId = 'C' | 'T1';
 }
 
 export namespace interfaces.alexa.extension {
