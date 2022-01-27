@@ -1755,10 +1755,10 @@ export namespace v1.skill {
 
 export namespace v1.skill {
     /**
-     * Name of the build step. Possible values - * `DIALOG_MODEL_BUILD` - Build status for dialog model. * `LANGUAGE_MODEL_QUICK_BUILD` - Build status for FST model. * `LANGUAGE_MODEL_FULL_BUILD` - Build status for statistical model. 
+     * Name of the build step. Possible values - * `DIALOG_MODEL_BUILD` - Build status for dialog model. * `LANGUAGE_MODEL_QUICK_BUILD` - Build status for FST model. * `LANGUAGE_MODEL_FULL_BUILD` - Build status for statistical model. * `ALEXA_CONVERSATIONS_QUICK_BUILD` - AlexaConversations LowFidelity model build status. * `ALEXA_CONVERSATIONS_FULL_BUILD` - AlexaConversations HighFidelity model build status. 
      * @enum
      */
-    export type BuildStepName = 'DIALOG_MODEL_BUILD' | 'LANGUAGE_MODEL_QUICK_BUILD' | 'LANGUAGE_MODEL_FULL_BUILD';
+    export type BuildStepName = 'DIALOG_MODEL_BUILD' | 'LANGUAGE_MODEL_QUICK_BUILD' | 'LANGUAGE_MODEL_FULL_BUILD' | 'ALEXA_CONVERSATIONS_QUICK_BUILD' | 'ALEXA_CONVERSATIONS_FULL_BUILD';
 }
 
 export namespace v1.skill {
@@ -3148,7 +3148,7 @@ export namespace v1.skill.Manifest {
      * Name of the required permission.
      * @enum
      */
-    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read';
+    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read' | 'alexa::devices:all:coarse_location:read';
 }
 
 export namespace v1.skill.Manifest {
@@ -5172,6 +5172,505 @@ export namespace v1.skill.evaluations {
          * An array of objects representing each possible authority for entity resolution. An authority represents the source for the data provided for the slot. For a custom slot type, the authority is the slot type you defined. 
          */
         'resolutionsPerAuthority'?: Array<v1.skill.evaluations.ResolutionsPerAuthorityItems>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the Experiment body used for requesting an experiment creation. Only includes fields that are editable by the user. 
+     * @interface
+     */
+    export interface CreateExperimentInput {
+        /**
+         * Name that developer assigns to the experiment for easier identification.
+         */
+        'name'?: string;
+        /**
+         * Hypothesis that developer provides to describe the experiment's purpose.
+         */
+        'description'?: string;
+        'type'?: v1.skill.experiment.ExperimentType;
+        /**
+         * The number of weeks the skill builder intends to run the experiment. Used for documentation purposes and by metric platform as a reference. Does not impact experiment execution. Format uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\") 
+         */
+        'plannedDuration'?: string;
+        /**
+         * The percentage of unique customers that will be part of the skill experiment while the experiment is running.
+         */
+        'exposurePercentage'?: number;
+        /**
+         * List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction.
+         */
+        'metricConfigurations'?: Array<v1.skill.experiment.MetricConfiguration>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the request body for creating an experiment.
+     * @interface
+     */
+    export interface CreateExperimentRequest {
+        'experiment': v1.skill.experiment.CreateExperimentInput;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * These states are for recording the destination state from a transition action (Created, Pilot, Start, Stop) on the experiment. * `CREATED`: Result state for the 'Create' action. Experiment has been created. * `ENABLED`: Result state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet. * `RUNNING`: Result state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data. * `STOPPED`: Result state for the 'Stop' action. Experiment has stopped and all experiment configurations have been removed. All customers will see the C behavior by default. 
+     * @enum
+     */
+    export type DestinationState = 'CREATED' | 'ENABLED' | 'RUNNING' | 'STOPPED';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines historical properties of a skill experiment.
+     * @interface
+     */
+    export interface ExperimentHistory {
+        'creationTime'?: string;
+        'startTime'?: string;
+        /**
+         * The reason an experiment was stopped if experiment was stopped.
+         */
+        'stoppedReason'?: string;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the full Experiment body which would contain all experiment details. 
+     * @interface
+     */
+    export interface ExperimentInformation {
+        /**
+         * Name that developer assigns to the experiment for easier identification.
+         */
+        'name'?: string;
+        /**
+         * Hypothesis that developer provides to describe the experiment's purpose.
+         */
+        'description'?: string;
+        'type'?: v1.skill.experiment.ExperimentType;
+        /**
+         * The number of weeks the skill builder intends to run the experiment. Used for documentation purposes and by metric platform as a reference. Does not impact experiment execution. Format uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\") 
+         */
+        'plannedDuration'?: string;
+        /**
+         * The percentage of unique customers that will be part of the skill experiment while the experiment is running.
+         */
+        'exposurePercentage'?: number;
+        /**
+         * The number of overrides which currently exist for the experiment. 
+         */
+        'treatmentOverrideCount'?: number;
+        /**
+         * List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction. This is required by the system that collects metrics and generates the metric reports. 
+         */
+        'metricConfigurations'?: Array<v1.skill.experiment.MetricConfiguration>;
+        'state'?: v1.skill.experiment.State;
+        'history'?: v1.skill.experiment.ExperimentHistory;
+        'trigger'?: v1.skill.experiment.ExperimentTrigger;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the last state transition information for the experiment. 
+     * @interface
+     */
+    export interface ExperimentLastStateTransition {
+        'sourceState'?: v1.skill.experiment.SourceState;
+        'targetState'?: v1.skill.experiment.DestinationState;
+        'status'?: v1.skill.experiment.StateTransitionStatus;
+        'startTime'?: string;
+        'endTime'?: string;
+        /**
+         * List of error objects which define what errors caused the state transition failure. 
+         */
+        'errors'?: Array<v1.skill.experiment.StateTransitionError>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The reason indicating why an exerpiment was stopped. If none is chosen then default to DEVELOPER_REQUEST. Only used when putting experiment into STOPPED state. 
+     * @enum
+     */
+    export type ExperimentStoppedReason = 'EXPERIMENT_SUCCESS' | 'EXPERIMENT_ISSUE';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the shortened Experiment body which would contain a summary of experiment information. 
+     * @interface
+     */
+    export interface ExperimentSummary {
+        /**
+         * Identifier for experiment within a skill.
+         */
+        'experimentId'?: string;
+        /**
+         * Name that developer assigns to the experiment for easier identification.
+         */
+        'name'?: string;
+        'state'?: v1.skill.experiment.State;
+        'experimentHistory'?: v1.skill.experiment.ExperimentHistory;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines trigger properties of a skill experiment.
+     * @interface
+     */
+    export interface ExperimentTrigger {
+        'scheduledEndTime'?: string;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Type of the experiment which directly affects the skill version used for T1. C will always point to the skill version in the skill's LIVE stage regardless of experiment type. 
+     * @enum
+     */
+    export type ExperimentType = 'ENDPOINT_BASED';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body when this customer's treatment override information is requested.
+     * @interface
+     */
+    export interface GetCustomerTreatmentOverrideResponse {
+        'treatmentId'?: v1.skill.experiment.TreatmentId;
+        /**
+         * The number of overrides which currently exist for the experiment. 
+         */
+        'treatmentOverrideCount'?: number;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body for retrieving the experiment results.
+     * @interface
+     */
+    export interface GetExperimentMetricSnapshotResponse {
+        'status'?: v1.skill.experiment.MetricSnapshotStatus;
+        /**
+         * The reason why the metric snapshot status is unreliable. 
+         */
+        'statusReason'?: string;
+        /**
+         * List of actual experiment metrics represented by a metric snapshot.
+         */
+        'metrics'?: Array<v1.skill.experiment.Metric>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body for retrieving an experiment.
+     * @interface
+     */
+    export interface GetExperimentResponse {
+        'experiment'?: v1.skill.experiment.ExperimentInformation;
+        'lastStateTransition'?: v1.skill.experiment.ExperimentLastStateTransition;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body for retrieving the current experiment state.
+     * @interface
+     */
+    export interface GetExperimentStateResponse {
+        'state'?: v1.skill.experiment.State;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body for retrieving the experiment metric snapshots.
+     * @interface
+     */
+    export interface ListExperimentMetricSnapshotsResponse {
+        'paginationContext'?: v1.skill.experiment.PaginationContext;
+        /**
+         * List of experiment metric snapshots.
+         */
+        'metricSnapshots'?: Array<v1.skill.experiment.MetricSnapshot>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the response body for retrieving all the experiments of a skill.
+     * @interface
+     */
+    export interface ListExperimentsResponse {
+        'paginationContext'?: v1.skill.experiment.PaginationContext;
+        /**
+         * List of experiments with select fields returned.
+         */
+        'experiments'?: Array<v1.skill.experiment.ExperimentSummary>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the request body for performing an experiment action to move it to a target state.
+     * @interface
+     */
+    export interface ManageExperimentStateRequest {
+        'targetState': v1.skill.experiment.TargetState;
+        'stoppedReason'?: v1.skill.experiment.ExperimentStoppedReason;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the metrics body.
+     * @interface
+     */
+    export interface Metric {
+        /**
+         * Unique name that identifies experiment metric.
+         */
+        'name'?: string;
+        'treatmentId'?: v1.skill.experiment.TreatmentId;
+        'values'?: v1.skill.experiment.MetricValues;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The direction that an experiment metric is expected to trend during the experiment. * `INCREASE` - An upward change in metric value. * `DECREASE` - A downward change in metric value. 
+     * @enum
+     */
+    export type MetricChangeDirection = 'INCREASE' | 'DECREASE';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Configures the metrics that will be captured for the skill experiment. This is required by the system that collects metrics and generates the metric reports. 
+     * @interface
+     */
+    export interface MetricConfiguration {
+        /**
+         * Unique name that identifies experiment metric.
+         */
+        'name'?: string;
+        /**
+         * List of types that the metric has been assigned.
+         */
+        'metricTypes'?: Array<v1.skill.experiment.MetricType>;
+        'expectedChange'?: v1.skill.experiment.MetricChangeDirection;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the metric snapshot body with supplemental metadata properties.
+     * @interface
+     */
+    export interface MetricSnapshot {
+        /**
+         * Identifies the experiment metric snapshot in a skill experiment.
+         */
+        'metricSnapshotId'?: string;
+        /**
+         * The start date of the metric snapshot.
+         */
+        'startDate'?: string;
+        /**
+         * The end date of the metric snapshot.
+         */
+        'endDate'?: string;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The status of the metric snapshot, whether it's RELIABLE or UNRELIABLE. 
+     * @enum
+     */
+    export type MetricSnapshotStatus = 'RELIABLE' | 'UNRELIABLE';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The metric types a specific metric can be assigned to. * `KEY` - Identified as a metric that should provide clear evidence of expected changes caused by the new treatment experience. * `GUARDRAIL` - Identified as a metric that would detect unexpected regressions caused by the new treatment experience. 
+     * @enum
+     */
+    export type MetricType = 'KEY' | 'GUARDRAIL';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the body of the metric result values.
+     * @interface
+     */
+    export interface MetricValues {
+        /**
+         * The mean (average) of each sample (T1 or C group).
+         */
+        'mean'?: number;
+        /**
+         * The relative percent difference between the mean of the T1 group and the mean of the C group.
+         */
+        'percentDiff'?: number;
+        /**
+         * The lower limit number of the confidence interval range. Confidence interval measures the probability that the mean falls within a range. 
+         */
+        'confidenceIntervalLower'?: number;
+        /**
+         * The upper limit number of the confidence interval range.
+         */
+        'confidenceIntervalUpper'?: number;
+        /**
+         * The probability that the difference between the two means (from T1 and C) is due to random sampling error.
+         */
+        'pValue'?: number;
+        /**
+         * Count of users in the treatment sample.
+         */
+        'userCount'?: number;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the body that provides pagination-related properties in the operation response to indicate that additional paginated results are available. 
+     * @interface
+     */
+    export interface PaginationContext {
+        /**
+         * Provided by server to retrieve the next set of paginated results.
+         */
+        'nextToken'?: string;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the request body for adding this customer's treatment override to an experiment.
+     * @interface
+     */
+    export interface SetCustomerTreatmentOverrideRequest {
+        'treatmentId': v1.skill.experiment.TreatmentId;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * These states are for recording the previous state from a transition action (Created, Pilot, Start, Stop) on the experiment. * `CREATED`: Result state for the 'Create' action. Experiment has been created. * `ENABLED`: Result state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet. * `RUNNING`: Result state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data. 
+     * @enum
+     */
+    export type SourceState = 'CREATED' | 'ENABLED' | 'RUNNING';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * * `CREATED` - The experiment is successfully created but has not been enabled or started. * `ENABLING` - The experiment has initiated the transition to becoming \"ENABLED\". * `ENABLED` - The experiment configurations have been deployed but only customer treatment overrides set to T1 can view the T1 experience of a skill. No metrics are collected. * `RUNNING` - The experiment has started and a percentage of skill customers defined in the exposurePercentage will be entered into the experiment. Customers will randomly get assigned the T1 or C experience. Metric collection will begin. * `STOPPING` - The experiment has initated the transition to becoming \"STOPPED\". * `STOPPED` - The experiment has ended and all customers will experience the C behavior. Metrics will stop being collected. * `FAILED` - The experiment configurations have failed to deploy while enabling or starting the experiment. 
+     * @enum
+     */
+    export type State = 'CREATED' | 'ENABLING' | 'ENABLED' | 'RUNNING' | 'STOPPING' | 'STOPPED' | 'FAILED';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The errors which caused a state transition failure. 
+     * @interface
+     */
+    export interface StateTransitionError {
+        'type'?: v1.skill.experiment.StateTransitionErrorType;
+        /**
+         * The message associated with the state transition error.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * The error type which caused a state transition failure. 
+     * @enum
+     */
+    export type StateTransitionErrorType = 'INELIGIBLITY';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Status indiciating whether the state transiton was successful, in progress, or failed. 
+     * @enum
+     */
+    export type StateTransitionStatus = 'SUCCEEDED' | 'IN_PROGRESS' | 'FAILED';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * These states are used to perform a transition action (Pilot, Start, Stop, Conclude) on the experiment. * `ENABLED`: Target state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet. * `RUNNING`: Target state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data. * `STOPPED`: Target state for the 'Stop' action. Experiment has stopped and all experiment configurations have been removed. All customers will see the C behavior by default. 
+     * @enum
+     */
+    export type TargetState = 'ENABLED' | 'RUNNING' | 'STOPPED';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Treatment identifier for an experiment. * `C` - Control. The treatment that defines the existing skill experience. * `T1` - Treatment 1. The threatment that defines the experimental skill experience. 
+     * @enum
+     */
+    export type TreatmentId = 'C' | 'T1';
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the Experiment body used for requesting an experiment update. Only includes fields that are editable by the user. 
+     * @interface
+     */
+    export interface UpdateExperimentInput {
+        /**
+         * Hypothesis that developer provides to describe the experiment's purpose.
+         */
+        'description'?: string;
+        /**
+         * The number of weeks the skill builder intends to run the experiment. Used for documentation purposes and by metric platform as a reference. Does not impact experiment execution. Format uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\") 
+         */
+        'plannedDuration'?: string;
+        /**
+         * The percentage of unique customers that will be part of the skill experiment while the experiment is running.
+         */
+        'exposurePercentage'?: number;
+        /**
+         * List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction.
+         */
+        'metricConfigurations'?: Array<v1.skill.experiment.MetricConfiguration>;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the request body for updating an experiment.
+     * @interface
+     */
+    export interface UpdateExperimentRequest {
+        'experiment': v1.skill.experiment.UpdateExperimentInput;
+    }
+}
+
+export namespace v1.skill.experiment {
+    /**
+     * Defines the request body for updating the exposure of an experiment.
+     * @interface
+     */
+    export interface UpdateExposureRequest {
+        /**
+         * The percentage of unique customers that will be part of the skill experiment while the experiment is running.
+         */
+        'exposurePercentage': number;
     }
 }
 
@@ -14878,6 +15377,723 @@ export namespace services.skillManagement {
          */
         async deleteSkillV1(skillId : string) : Promise<void> {
                 await this.callDeleteSkillV1(skillId);
+        }
+        /**
+         * Deletes an existing experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async callDeleteExperimentV1(skillId : string, experimentId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callDeleteExperimentV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success. No content.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("DELETE", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Deletes an existing experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async deleteExperimentV1(skillId : string, experimentId : string) : Promise<void> {
+                await this.callDeleteExperimentV1(skillId, experimentId);
+        }
+        /**
+         * Updates the exposure of an experiment that is in CREATED or RUNNING state. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.UpdateExposureRequest} updateExposureRequest Defines the request body for updating the exposure percentage of a running experiment.
+         */
+        async callUpdateExposureV1(skillId : string, experimentId : string, updateExposureRequest : v1.skill.experiment.UpdateExposureRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateExposureV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateExposureRequest' is not null or undefined
+            if (updateExposureRequest == null) {
+                throw new Error(`Required parameter updateExposureRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/exposurePercentage";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success. No content.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, updateExposureRequest, errorDefinitions);
+        }
+        
+        /**
+         * Updates the exposure of an experiment that is in CREATED or RUNNING state. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.UpdateExposureRequest} updateExposureRequest Defines the request body for updating the exposure percentage of a running experiment.
+         */
+        async updateExposureV1(skillId : string, experimentId : string, updateExposureRequest : v1.skill.experiment.UpdateExposureRequest) : Promise<void> {
+                await this.callUpdateExposureV1(skillId, experimentId, updateExposureRequest);
+        }
+        /**
+         * Retrieves an existing experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async callGetExperimentV1(skillId : string, experimentId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetExperimentV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned skill experiment.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Retrieves an existing experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async getExperimentV1(skillId : string, experimentId : string) : Promise<v1.skill.experiment.GetExperimentResponse> {
+                const apiResponse: ApiResponse = await this.callGetExperimentV1(skillId, experimentId);
+                return apiResponse.body as v1.skill.experiment.GetExperimentResponse;
+        }
+        /**
+         * Gets a list of all metric snapshots associated with this experiment id. The metric snapshots represent the metric data available for a time range. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListExperimentMetricSnapshotsV1(skillId : string, experimentId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListExperimentMetricSnapshotsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/metricSnapshots";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned experiment metric snapshots.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Gets a list of all metric snapshots associated with this experiment id. The metric snapshots represent the metric data available for a time range. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listExperimentMetricSnapshotsV1(skillId : string, experimentId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.experiment.ListExperimentMetricSnapshotsResponse> {
+                const apiResponse: ApiResponse = await this.callListExperimentMetricSnapshotsV1(skillId, experimentId, nextToken, maxResults);
+                return apiResponse.body as v1.skill.experiment.ListExperimentMetricSnapshotsResponse;
+        }
+        /**
+         * Gets a list of all metric data associated with this experiment's metric snapshot.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {string} metricSnapshotId Identifies the experiment metric snapshot in a skill experiment. The metric snapshot represents metric data for a date range. 
+         */
+        async callGetExperimentMetricSnapshotV1(skillId : string, experimentId : string, metricSnapshotId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetExperimentMetricSnapshotV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'metricSnapshotId' is not null or undefined
+            if (metricSnapshotId == null) {
+                throw new Error(`Required parameter metricSnapshotId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+            pathParams.set('metricSnapshotId', metricSnapshotId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/metricSnapshots/{metricSnapshotId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned experiment metric data.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Gets a list of all metric data associated with this experiment's metric snapshot.
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {string} metricSnapshotId Identifies the experiment metric snapshot in a skill experiment. The metric snapshot represents metric data for a date range. 
+         */
+        async getExperimentMetricSnapshotV1(skillId : string, experimentId : string, metricSnapshotId : string) : Promise<v1.skill.experiment.GetExperimentMetricSnapshotResponse> {
+                const apiResponse: ApiResponse = await this.callGetExperimentMetricSnapshotV1(skillId, experimentId, metricSnapshotId);
+                return apiResponse.body as v1.skill.experiment.GetExperimentMetricSnapshotResponse;
+        }
+        /**
+         * Updates an existing experiment for a skill. Can only be called while the experiment is in CREATED state. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.UpdateExperimentRequest} updateExperimentRequest Defines the request body for updating an experiment.
+         */
+        async callUpdateExperimentV1(skillId : string, experimentId : string, updateExperimentRequest : v1.skill.experiment.UpdateExperimentRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callUpdateExperimentV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'updateExperimentRequest' is not null or undefined
+            if (updateExperimentRequest == null) {
+                throw new Error(`Required parameter updateExperimentRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/properties";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success. No content.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, updateExperimentRequest, errorDefinitions);
+        }
+        
+        /**
+         * Updates an existing experiment for a skill. Can only be called while the experiment is in CREATED state. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.UpdateExperimentRequest} updateExperimentRequest Defines the request body for updating an experiment.
+         */
+        async updateExperimentV1(skillId : string, experimentId : string, updateExperimentRequest : v1.skill.experiment.UpdateExperimentRequest) : Promise<void> {
+                await this.callUpdateExperimentV1(skillId, experimentId, updateExperimentRequest);
+        }
+        /**
+         * Retrieves the current state of the experiment. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async callGetExperimentStateV1(skillId : string, experimentId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetExperimentStateV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/state";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned skill experiment state.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Retrieves the current state of the experiment. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async getExperimentStateV1(skillId : string, experimentId : string) : Promise<v1.skill.experiment.GetExperimentStateResponse> {
+                const apiResponse: ApiResponse = await this.callGetExperimentStateV1(skillId, experimentId);
+                return apiResponse.body as v1.skill.experiment.GetExperimentStateResponse;
+        }
+        /**
+         * Requests an action on the experiment to move it to the targetState. Acceptable targetState values are: * `ENABLED`: Experiment configurations are deployed and customer overrides are enabled. Actual experiment has not started yet but customers with overrides set to T1 will see the T1 behavior. Initial state must be CREATED. * `RUNNING`: Starts the experiment with the configured exposure. Skill customers selected to be in the experiment will start contributing to the metric data. Initial state must be CREATED or ENABLED. * `STOPPED`: Stops the experiment by removing the experiment configurations. All customer treatment overrides are removed. Initial state must be ENABLED or RUNNING.              Final state for ENDPOINT_BASED experiments, no further action is taken by ASK. It is expected that the skill builder updates their endpoint code to make T1 the default live behavior. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.ManageExperimentStateRequest} manageExperimentStateRequest Defines the request body for performing an experiment action to move it to a target state.
+         */
+        async callManageExperimentStateV1(skillId : string, experimentId : string, manageExperimentStateRequest : v1.skill.experiment.ManageExperimentStateRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callManageExperimentStateV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'manageExperimentStateRequest' is not null or undefined
+            if (manageExperimentStateRequest == null) {
+                throw new Error(`Required parameter manageExperimentStateRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/state";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(202, "Accepted; Returns a URL to track the experiment state in &#39;Location&#39; header.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, manageExperimentStateRequest, errorDefinitions);
+        }
+        
+        /**
+         * Requests an action on the experiment to move it to the targetState. Acceptable targetState values are: * `ENABLED`: Experiment configurations are deployed and customer overrides are enabled. Actual experiment has not started yet but customers with overrides set to T1 will see the T1 behavior. Initial state must be CREATED. * `RUNNING`: Starts the experiment with the configured exposure. Skill customers selected to be in the experiment will start contributing to the metric data. Initial state must be CREATED or ENABLED. * `STOPPED`: Stops the experiment by removing the experiment configurations. All customer treatment overrides are removed. Initial state must be ENABLED or RUNNING.              Final state for ENDPOINT_BASED experiments, no further action is taken by ASK. It is expected that the skill builder updates their endpoint code to make T1 the default live behavior. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.ManageExperimentStateRequest} manageExperimentStateRequest Defines the request body for performing an experiment action to move it to a target state.
+         */
+        async manageExperimentStateV1(skillId : string, experimentId : string, manageExperimentStateRequest : v1.skill.experiment.ManageExperimentStateRequest) : Promise<void> {
+                await this.callManageExperimentStateV1(skillId, experimentId, manageExperimentStateRequest);
+        }
+        /**
+         * Retrieves the current user's customer treatment override for an existing A/B Test experiment. The current user must be under the same skill vendor of the requested skill id to have access to the resource. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async callGetCustomerTreatmentOverrideV1(skillId : string, experimentId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callGetCustomerTreatmentOverrideV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/treatmentOverrides/~current";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned customer treatment override details.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Retrieves the current user's customer treatment override for an existing A/B Test experiment. The current user must be under the same skill vendor of the requested skill id to have access to the resource. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         */
+        async getCustomerTreatmentOverrideV1(skillId : string, experimentId : string) : Promise<v1.skill.experiment.GetCustomerTreatmentOverrideResponse> {
+                const apiResponse: ApiResponse = await this.callGetCustomerTreatmentOverrideV1(skillId, experimentId);
+                return apiResponse.body as v1.skill.experiment.GetCustomerTreatmentOverrideResponse;
+        }
+        /**
+         * Adds the requesting user's customer treatment override to an existing experiment. The current user must be under the same skill vendor of the requested skill id to have access to the resource. Only the current user can attempt to add the override of their own customer account to an experiment. Can only be called before the experiment is enabled. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.SetCustomerTreatmentOverrideRequest} setCustomerTreatmentOverrideRequest Defines the request body for adding this customer&#39;s treatment override to an experiment.
+         */
+        async callSetCustomerTreatmentOverrideV1(skillId : string, experimentId : string, setCustomerTreatmentOverrideRequest : v1.skill.experiment.SetCustomerTreatmentOverrideRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callSetCustomerTreatmentOverrideV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'experimentId' is not null or undefined
+            if (experimentId == null) {
+                throw new Error(`Required parameter experimentId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'setCustomerTreatmentOverrideRequest' is not null or undefined
+            if (setCustomerTreatmentOverrideRequest == null) {
+                throw new Error(`Required parameter setCustomerTreatmentOverrideRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+            pathParams.set('experimentId', experimentId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments/{experimentId}/treatmentOverrides/~current";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success. No content.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(409, "The request could not be completed due to a conflict with the current state of the target resource.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("PUT", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, setCustomerTreatmentOverrideRequest, errorDefinitions);
+        }
+        
+        /**
+         * Adds the requesting user's customer treatment override to an existing experiment. The current user must be under the same skill vendor of the requested skill id to have access to the resource. Only the current user can attempt to add the override of their own customer account to an experiment. Can only be called before the experiment is enabled. 
+         * @param {string} skillId The skill ID.
+         * @param {string} experimentId Identifies the experiment in a skill.
+         * @param {v1.skill.experiment.SetCustomerTreatmentOverrideRequest} setCustomerTreatmentOverrideRequest Defines the request body for adding this customer&#39;s treatment override to an experiment.
+         */
+        async setCustomerTreatmentOverrideV1(skillId : string, experimentId : string, setCustomerTreatmentOverrideRequest : v1.skill.experiment.SetCustomerTreatmentOverrideRequest) : Promise<void> {
+                await this.callSetCustomerTreatmentOverrideV1(skillId, experimentId, setCustomerTreatmentOverrideRequest);
+        }
+        /**
+         * Gets a list of all experiments associated with this skill id.
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async callListExperimentsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<ApiResponse> {
+            const __operationId__ = 'callListExperimentsV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Returned skill experiments.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Gets a list of all experiments associated with this skill id.
+         * @param {string} skillId The skill ID.
+         * @param {string} nextToken When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.
+         * @param {number} maxResults Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated &#x3D; true.
+         */
+        async listExperimentsV1(skillId : string, nextToken? : string, maxResults? : number) : Promise<v1.skill.experiment.ListExperimentsResponse> {
+                const apiResponse: ApiResponse = await this.callListExperimentsV1(skillId, nextToken, maxResults);
+                return apiResponse.body as v1.skill.experiment.ListExperimentsResponse;
+        }
+        /**
+         * Create a new experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.experiment.CreateExperimentRequest} createExperimentRequest Defines the request body for creating an experiment.
+         */
+        async callCreateExperimentV1(skillId : string, createExperimentRequest : v1.skill.experiment.CreateExperimentRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCreateExperimentV1';
+            // verify required parameter 'skillId' is not null or undefined
+            if (skillId == null) {
+                throw new Error(`Required parameter skillId was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'createExperimentRequest' is not null or undefined
+            if (createExperimentRequest == null) {
+                throw new Error(`Required parameter createExperimentRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('skillId', skillId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessToken();
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/skills/{skillId}/experiments";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(201, "Experiment created. Returns the generated experiment identifier in &#39;Location&#39; header.");
+            errorDefinitions.set(400, "Server cannot process the request due to a client error.");
+            errorDefinitions.set(401, "The auth token is invalid/expired or doesn&#39;t have access to the resource.");
+            errorDefinitions.set(403, "The operation being requested is not allowed.");
+            errorDefinitions.set(404, "The resource being requested is not found.");
+            errorDefinitions.set(429, "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.");
+            errorDefinitions.set(500, "Internal Server Error.");
+            errorDefinitions.set(503, "Service Unavailable.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, createExperimentRequest, errorDefinitions);
+        }
+        
+        /**
+         * Create a new experiment for a skill.
+         * @param {string} skillId The skill ID.
+         * @param {v1.skill.experiment.CreateExperimentRequest} createExperimentRequest Defines the request body for creating an experiment.
+         */
+        async createExperimentV1(skillId : string, createExperimentRequest : v1.skill.experiment.CreateExperimentRequest) : Promise<void> {
+                await this.callCreateExperimentV1(skillId, createExperimentRequest);
         }
         /**
          * 

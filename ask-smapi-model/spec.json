@@ -1584,9 +1584,10 @@
       }
     },
     "/v0/skills/{skillId}/experiments": {},
+    "/v0/skills/{skillId}/experiments/{experimentId}/properties": {},
     "/v0/skills/{skillId}/experiments/{experimentId}": {},
-    "/v0/skills/{skillId}/experiments/{experimentId}/updateExposure": {},
-    "/v0/skills/{skillId}/experiments/{experimentId}/customerTreatmentOverrides/~current": {},
+    "/v0/skills/{skillId}/experiments/{experimentId}/exposurePercentage": {},
+    "/v0/skills/{skillId}/experiments/{experimentId}/treatmentOverrides/~current": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/state": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots": {},
     "/v0/skills/{skillId}/experiments/{experimentId}/metricSnapshots/{metricSnapshotId}": {},
@@ -4889,6 +4890,1138 @@
           }
         },
         "x-operation-name": "profileNluV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Gets a list of all experiments associated with this skill id.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string",
+            "maxLength": 2047,
+            "minLength": 1
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "integer",
+            "maximum": 50,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned skill experiments.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.ListExperimentsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "listExperimentsV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Create a new experiment for a skill.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "in": "body",
+            "name": "createExperimentRequest",
+            "description": "Defines the request body for creating an experiment.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.CreateExperimentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Experiment created. Returns the generated experiment identifier in 'Location' header.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Content type of the response; only application/json supported."
+              },
+              "Location": {
+                "type": "string",
+                "description": "Relative url to get experiment details."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "createExperimentV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/properties": {
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Updates an existing experiment for a skill.\nCan only be called while the experiment is in CREATED state.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "in": "body",
+            "name": "updateExperimentRequest",
+            "description": "Defines the request body for updating an experiment.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.UpdateExperimentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success. No content.",
+            "headers": {}
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "updateExperimentV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieves an existing experiment for a skill.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned skill experiment.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.GetExperimentResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getExperimentV1"
+      },
+      "delete": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Deletes an existing experiment for a skill.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success. No content.",
+            "headers": {}
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "deleteExperimentV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/exposurePercentage": {
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Updates the exposure of an experiment that is in CREATED or RUNNING state.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "in": "body",
+            "name": "updateExposureRequest",
+            "description": "Defines the request body for updating the exposure percentage of a running experiment.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.UpdateExposureRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success. No content.",
+            "headers": {}
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "updateExposureV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/treatmentOverrides/~current": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieves the current user's customer treatment override for an existing A/B Test experiment.\nThe current user must be under the same skill vendor of the requested skill id to have access to the resource.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned customer treatment override details.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.GetCustomerTreatmentOverrideResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getCustomerTreatmentOverrideV1"
+      },
+      "put": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Adds the requesting user's customer treatment override to an existing experiment.\nThe current user must be under the same skill vendor of the requested skill id to have access to the resource.\nOnly the current user can attempt to add the override of their own customer account to an experiment.\nCan only be called before the experiment is enabled.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "in": "body",
+            "name": "setCustomerTreatmentOverrideRequest",
+            "description": "Defines the request body for adding this customer's treatment override to an experiment.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.SetCustomerTreatmentOverrideRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success. No content.",
+            "headers": {}
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "setCustomerTreatmentOverrideV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/state": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Retrieves the current state of the experiment.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned skill experiment state.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.GetExperimentStateResponse"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getExperimentStateV1"
+      },
+      "post": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Requests an action on the experiment to move it to the targetState.\nAcceptable targetState values are:\n* `ENABLED`: Experiment configurations are deployed and customer overrides are enabled. Actual experiment has not started yet but customers with overrides set to T1 will see the T1 behavior. Initial state must be CREATED.\n* `RUNNING`: Starts the experiment with the configured exposure. Skill customers selected to be in the experiment will start contributing to the metric data. Initial state must be CREATED or ENABLED.\n* `STOPPED`: Stops the experiment by removing the experiment configurations. All customer treatment overrides are removed. Initial state must be ENABLED or RUNNING.\n             Final state for ENDPOINT_BASED experiments, no further action is taken by ASK. It is expected that the skill builder updates their endpoint code to make T1 the default live behavior.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "in": "body",
+            "name": "manageExperimentStateRequest",
+            "description": "Defines the request body for performing an experiment action to move it to a target state.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.ManageExperimentStateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted; Returns a URL to track the experiment state in 'Location' header.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Contains content type of the response; only application/json supported."
+              },
+              "Location": {
+                "type": "string",
+                "description": "Contains relative URL to get experiment state."
+              }
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceeds the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "manageExperimentStateV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/metricSnapshots": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Gets a list of all metric snapshots associated with this experiment id. The metric snapshots\nrepresent the metric data available for a time range.\n",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.",
+            "required": false,
+            "type": "string",
+            "maxLength": 2047,
+            "minLength": 1
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.",
+            "required": false,
+            "type": "integer",
+            "maximum": 50,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned experiment metric snapshots.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.ListExperimentMetricSnapshotsResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "listExperimentMetricSnapshotsV1"
+      }
+    },
+    "/v1/skills/{skillId}/experiments/{experimentId}/metricSnapshots/{metricSnapshotId}": {
+      "get": {
+        "tags": [
+          "skillManagement"
+        ],
+        "description": "Gets a list of all metric data associated with this experiment's metric snapshot.",
+        "parameters": [
+          {
+            "name": "skillId",
+            "in": "path",
+            "description": "The skill ID.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "experimentId",
+            "in": "path",
+            "description": "Identifies the experiment in a skill.",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          {
+            "name": "metricSnapshotId",
+            "in": "path",
+            "description": "Identifies the experiment metric snapshot in a skill experiment. The metric snapshot\nrepresents metric data for a date range.\n",
+            "required": true,
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned experiment metric data.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type; only 'application/json' supported."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.experiment.GetExperimentMetricSnapshotResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "401": {
+            "description": "The auth token is invalid/expired or doesn't have access to the resource.",
+            "headers": {
+              "WWW-Authenticate": {
+                "type": "string",
+                "description": "Defines the authentication method that should be used to gain access to a resource."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "403": {
+            "description": "The operation being requested is not allowed.",
+            "schema": {
+              "$ref": "#/definitions/v1.BadRequestError"
+            }
+          },
+          "404": {
+            "description": "The resource being requested is not found.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "429": {
+            "description": "Exceed the permitted request limit. Throttling criteria includes total requests, per API, ClientId, and CustomerId.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "schema": {
+              "$ref": "#/definitions/v1.skill.StandardizedError"
+            }
+          }
+        },
+        "x-operation-name": "getExperimentMetricSnapshotV1"
       }
     },
     "/v1/skills/{skillId}/history/intentRequests": {
@@ -8963,6 +10096,10 @@
         "x-operation-name": "getSkillMetricsV1"
       }
     },
+    "/v1/skills/{skillId}/narrative/articles": {},
+    "/v1/skills/{skillId}/narrative/articles/{articleId}": {},
+    "/v1/skills/{skillId}/narrative/events": {},
+    "/v1/skills/{skillId}/narrative/events/{eventId}": {},
     "/v1/skills/{skillId}/stages/{stage}/privateDistributionAccounts/{id}": {
       "put": {
         "tags": [
@@ -18028,6 +19165,589 @@
       },
       "description": "An object representing the resolved value for the slot, based on the user's utterance and the slot type definition.\n"
     },
+    "v1.skill.experiment.PaginationContext": {
+      "type": "object",
+      "properties": {
+        "nextToken": {
+          "type": "string",
+          "description": "Provided by server to retrieve the next set of paginated results."
+        }
+      },
+      "description": "Defines the body that provides pagination-related properties in the operation response to indicate\nthat additional paginated results are available.\n"
+    },
+    "v1.skill.experiment.CreateExperimentRequest": {
+      "type": "object",
+      "required": [
+        "experiment"
+      ],
+      "properties": {
+        "experiment": {
+          "$ref": "#/definitions/v1.skill.experiment.CreateExperimentInput"
+        }
+      },
+      "description": "Defines the request body for creating an experiment."
+    },
+    "v1.skill.experiment.UpdateExperimentRequest": {
+      "type": "object",
+      "required": [
+        "experiment"
+      ],
+      "properties": {
+        "experiment": {
+          "$ref": "#/definitions/v1.skill.experiment.UpdateExperimentInput"
+        }
+      },
+      "description": "Defines the request body for updating an experiment."
+    },
+    "v1.skill.experiment.UpdateExposureRequest": {
+      "type": "object",
+      "required": [
+        "exposurePercentage"
+      ],
+      "properties": {
+        "exposurePercentage": {
+          "type": "integer",
+          "description": "The percentage of unique customers that will be part of the skill experiment while the experiment is running.",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "description": "Defines the request body for updating the exposure of an experiment."
+    },
+    "v1.skill.experiment.SetCustomerTreatmentOverrideRequest": {
+      "type": "object",
+      "required": [
+        "treatmentId"
+      ],
+      "properties": {
+        "treatmentId": {
+          "$ref": "#/definitions/v1.skill.experiment.TreatmentId",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the request body for adding this customer's treatment override to an experiment."
+    },
+    "v1.skill.experiment.GetCustomerTreatmentOverrideResponse": {
+      "type": "object",
+      "properties": {
+        "treatmentId": {
+          "$ref": "#/definitions/v1.skill.experiment.TreatmentId",
+          "x-isEnum": true
+        },
+        "treatmentOverrideCount": {
+          "type": "integer",
+          "description": "The number of overrides which currently exist for the experiment.\n"
+        }
+      },
+      "description": "Defines the response body when this customer's treatment override information is requested."
+    },
+    "v1.skill.experiment.ManageExperimentStateRequest": {
+      "type": "object",
+      "required": [
+        "targetState"
+      ],
+      "properties": {
+        "targetState": {
+          "$ref": "#/definitions/v1.skill.experiment.TargetState",
+          "x-isEnum": true
+        },
+        "stoppedReason": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentStoppedReason",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the request body for performing an experiment action to move it to a target state."
+    },
+    "v1.skill.experiment.GetExperimentStateResponse": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/v1.skill.experiment.State",
+          "x-isEnum": true
+        }
+      },
+      "description": "Defines the response body for retrieving the current experiment state."
+    },
+    "v1.skill.experiment.ListExperimentsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.skill.experiment.PaginationContext"
+        },
+        "experiments": {
+          "type": "array",
+          "description": "List of experiments with select fields returned.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.ExperimentSummary"
+          }
+        }
+      },
+      "description": "Defines the response body for retrieving all the experiments of a skill."
+    },
+    "v1.skill.experiment.GetExperimentResponse": {
+      "type": "object",
+      "properties": {
+        "experiment": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentInformation"
+        },
+        "lastStateTransition": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentLastStateTransition"
+        }
+      },
+      "description": "Defines the response body for retrieving an experiment."
+    },
+    "v1.skill.experiment.ListExperimentMetricSnapshotsResponse": {
+      "type": "object",
+      "properties": {
+        "paginationContext": {
+          "$ref": "#/definitions/v1.skill.experiment.PaginationContext"
+        },
+        "metricSnapshots": {
+          "type": "array",
+          "description": "List of experiment metric snapshots.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.MetricSnapshot"
+          }
+        }
+      },
+      "description": "Defines the response body for retrieving the experiment metric snapshots."
+    },
+    "v1.skill.experiment.GetExperimentMetricSnapshotResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1.skill.experiment.MetricSnapshotStatus",
+          "x-isEnum": true
+        },
+        "statusReason": {
+          "type": "string",
+          "description": "The reason why the metric snapshot status is unreliable.\n"
+        },
+        "metrics": {
+          "type": "array",
+          "description": "List of actual experiment metrics represented by a metric snapshot.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.Metric"
+          }
+        }
+      },
+      "description": "Defines the response body for retrieving the experiment results."
+    },
+    "v1.skill.experiment.ExperimentInformation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name that developer assigns to the experiment for easier identification."
+        },
+        "description": {
+          "type": "string",
+          "description": "Hypothesis that developer provides to describe the experiment's purpose."
+        },
+        "type": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentType",
+          "x-isEnum": true
+        },
+        "plannedDuration": {
+          "type": "string",
+          "description": "The number of weeks the skill builder intends to run the experiment.\nUsed for documentation purposes and by metric platform as a reference.\nDoes not impact experiment execution.\nFormat uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\")\n"
+        },
+        "exposurePercentage": {
+          "type": "integer",
+          "description": "The percentage of unique customers that will be part of the skill experiment while the experiment is running.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "treatmentOverrideCount": {
+          "type": "integer",
+          "description": "The number of overrides which currently exist for the experiment.\n"
+        },
+        "metricConfigurations": {
+          "type": "array",
+          "description": "List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction.\nThis is required by the system that collects metrics and generates the metric reports.\n",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.MetricConfiguration"
+          }
+        },
+        "state": {
+          "$ref": "#/definitions/v1.skill.experiment.State",
+          "x-isEnum": true
+        },
+        "history": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentHistory"
+        },
+        "trigger": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentTrigger"
+        }
+      },
+      "description": "Defines the full Experiment body which would contain all experiment details.\n"
+    },
+    "v1.skill.experiment.ExperimentLastStateTransition": {
+      "type": "object",
+      "properties": {
+        "sourceState": {
+          "$ref": "#/definitions/v1.skill.experiment.SourceState",
+          "x-isEnum": true
+        },
+        "targetState": {
+          "$ref": "#/definitions/v1.skill.experiment.DestinationState",
+          "x-isEnum": true
+        },
+        "status": {
+          "$ref": "#/definitions/v1.skill.experiment.StateTransitionStatus",
+          "x-isEnum": true
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "errors": {
+          "type": "array",
+          "description": "List of error objects which define what errors caused the state transition failure.\n",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.StateTransitionError"
+          }
+        }
+      },
+      "description": "Defines the last state transition information for the experiment.\n"
+    },
+    "v1.skill.experiment.CreateExperimentInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name that developer assigns to the experiment for easier identification.",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "description": {
+          "type": "string",
+          "description": "Hypothesis that developer provides to describe the experiment's purpose.",
+          "maxLength": 300
+        },
+        "type": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentType",
+          "x-isEnum": true
+        },
+        "plannedDuration": {
+          "type": "string",
+          "description": "The number of weeks the skill builder intends to run the experiment.\nUsed for documentation purposes and by metric platform as a reference.\nDoes not impact experiment execution.\nFormat uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\")\n",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "exposurePercentage": {
+          "type": "integer",
+          "description": "The percentage of unique customers that will be part of the skill experiment while the experiment is running.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "metricConfigurations": {
+          "type": "array",
+          "description": "List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.MetricConfiguration"
+          }
+        }
+      },
+      "description": "Defines the Experiment body used for requesting an experiment creation.\nOnly includes fields that are editable by the user.\n"
+    },
+    "v1.skill.experiment.UpdateExperimentInput": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Hypothesis that developer provides to describe the experiment's purpose.",
+          "maxLength": 300
+        },
+        "plannedDuration": {
+          "type": "string",
+          "description": "The number of weeks the skill builder intends to run the experiment.\nUsed for documentation purposes and by metric platform as a reference.\nDoes not impact experiment execution.\nFormat uses ISO-8601 representation of duration. (Example: 4 weeks = \"P4W\")\n",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "exposurePercentage": {
+          "type": "integer",
+          "description": "The percentage of unique customers that will be part of the skill experiment while the experiment is running.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "metricConfigurations": {
+          "type": "array",
+          "description": "List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.MetricConfiguration"
+          }
+        }
+      },
+      "description": "Defines the Experiment body used for requesting an experiment update.\nOnly includes fields that are editable by the user.\n"
+    },
+    "v1.skill.experiment.ExperimentSummary": {
+      "type": "object",
+      "properties": {
+        "experimentId": {
+          "type": "string",
+          "description": "Identifier for experiment within a skill."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name that developer assigns to the experiment for easier identification."
+        },
+        "state": {
+          "$ref": "#/definitions/v1.skill.experiment.State",
+          "x-isEnum": true
+        },
+        "experimentHistory": {
+          "$ref": "#/definitions/v1.skill.experiment.ExperimentHistory"
+        }
+      },
+      "description": "Defines the shortened Experiment body which would contain a summary of experiment information.\n"
+    },
+    "v1.skill.experiment.ExperimentHistory": {
+      "type": "object",
+      "properties": {
+        "creationTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "stoppedReason": {
+          "type": "string",
+          "description": "The reason an experiment was stopped if experiment was stopped."
+        }
+      },
+      "description": "Defines historical properties of a skill experiment."
+    },
+    "v1.skill.experiment.ExperimentTrigger": {
+      "type": "object",
+      "properties": {
+        "scheduledEndTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "Defines trigger properties of a skill experiment."
+    },
+    "v1.skill.experiment.MetricConfiguration": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name that identifies experiment metric.",
+          "minLength": 1,
+          "maxLength": 125
+        },
+        "metricTypes": {
+          "type": "array",
+          "description": "List of types that the metric has been assigned.",
+          "items": {
+            "$ref": "#/definitions/v1.skill.experiment.MetricType"
+          }
+        },
+        "expectedChange": {
+          "$ref": "#/definitions/v1.skill.experiment.MetricChangeDirection",
+          "x-isEnum": true
+        }
+      },
+      "description": "Configures the metrics that will be captured for the skill experiment.\nThis is required by the system that collects metrics and generates the metric reports.\n"
+    },
+    "v1.skill.experiment.MetricSnapshot": {
+      "type": "object",
+      "properties": {
+        "metricSnapshotId": {
+          "type": "string",
+          "description": "Identifies the experiment metric snapshot in a skill experiment."
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The start date of the metric snapshot."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The end date of the metric snapshot."
+        }
+      },
+      "description": "Defines the metric snapshot body with supplemental metadata properties."
+    },
+    "v1.skill.experiment.Metric": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name that identifies experiment metric."
+        },
+        "treatmentId": {
+          "$ref": "#/definitions/v1.skill.experiment.TreatmentId",
+          "x-isEnum": true
+        },
+        "values": {
+          "$ref": "#/definitions/v1.skill.experiment.MetricValues"
+        }
+      },
+      "description": "Defines the metrics body."
+    },
+    "v1.skill.experiment.MetricValues": {
+      "type": "object",
+      "properties": {
+        "mean": {
+          "type": "number",
+          "format": "double",
+          "description": "The mean (average) of each sample (T1 or C group)."
+        },
+        "percentDiff": {
+          "type": "number",
+          "format": "double",
+          "description": "The relative percent difference between the mean of the T1 group and the mean of the C group."
+        },
+        "confidenceIntervalLower": {
+          "type": "number",
+          "format": "double",
+          "description": "The lower limit number of the confidence interval range.\nConfidence interval measures the probability that the mean falls within a range.\n"
+        },
+        "confidenceIntervalUpper": {
+          "type": "number",
+          "format": "double",
+          "description": "The upper limit number of the confidence interval range."
+        },
+        "pValue": {
+          "type": "number",
+          "format": "double",
+          "description": "The probability that the difference between the two means (from T1 and C) is due to random sampling error."
+        },
+        "userCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Count of users in the treatment sample."
+        }
+      },
+      "description": "Defines the body of the metric result values."
+    },
+    "v1.skill.experiment.MetricType": {
+      "type": "string",
+      "description": "The metric types a specific metric can be assigned to.\n* `KEY` - Identified as a metric that should provide clear evidence of expected changes caused by the new treatment experience.\n* `GUARDRAIL` - Identified as a metric that would detect unexpected regressions caused by the new treatment experience.\n",
+      "enum": [
+        "KEY",
+        "GUARDRAIL"
+      ]
+    },
+    "v1.skill.experiment.MetricChangeDirection": {
+      "type": "string",
+      "description": "The direction that an experiment metric is expected to trend during the experiment.\n* `INCREASE` - An upward change in metric value.\n* `DECREASE` - A downward change in metric value.\n",
+      "enum": [
+        "INCREASE",
+        "DECREASE"
+      ]
+    },
+    "v1.skill.experiment.State": {
+      "type": "string",
+      "description": "* `CREATED` - The experiment is successfully created but has not been enabled or started.\n* `ENABLING` - The experiment has initiated the transition to becoming \"ENABLED\".\n* `ENABLED` - The experiment configurations have been deployed but only customer treatment overrides set to T1 can view the T1 experience of a skill. No metrics are collected.\n* `RUNNING` - The experiment has started and a percentage of skill customers defined in the exposurePercentage will be entered into the experiment. Customers will randomly get assigned the T1 or C experience. Metric collection will begin.\n* `STOPPING` - The experiment has initated the transition to becoming \"STOPPED\".\n* `STOPPED` - The experiment has ended and all customers will experience the C behavior. Metrics will stop being collected.\n* `FAILED` - The experiment configurations have failed to deploy while enabling or starting the experiment.\n",
+      "enum": [
+        "CREATED",
+        "ENABLING",
+        "ENABLED",
+        "RUNNING",
+        "STOPPING",
+        "STOPPED",
+        "FAILED"
+      ]
+    },
+    "v1.skill.experiment.TargetState": {
+      "type": "string",
+      "description": "These states are used to perform a transition action (Pilot, Start, Stop, Conclude) on the experiment.\n* `ENABLED`: Target state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet.\n* `RUNNING`: Target state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data.\n* `STOPPED`: Target state for the 'Stop' action. Experiment has stopped and all experiment configurations have been removed. All customers will see the C behavior by default.\n",
+      "enum": [
+        "ENABLED",
+        "RUNNING",
+        "STOPPED"
+      ]
+    },
+    "v1.skill.experiment.SourceState": {
+      "type": "string",
+      "description": "These states are for recording the previous state from a transition action (Created, Pilot, Start, Stop) on the experiment.\n* `CREATED`: Result state for the 'Create' action. Experiment has been created.\n* `ENABLED`: Result state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet.\n* `RUNNING`: Result state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data.\n",
+      "enum": [
+        "CREATED",
+        "ENABLED",
+        "RUNNING"
+      ]
+    },
+    "v1.skill.experiment.DestinationState": {
+      "type": "string",
+      "description": "These states are for recording the destination state from a transition action (Created, Pilot, Start, Stop) on the experiment.\n* `CREATED`: Result state for the 'Create' action. Experiment has been created.\n* `ENABLED`: Result state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet.\n* `RUNNING`: Result state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data.\n* `STOPPED`: Result state for the 'Stop' action. Experiment has stopped and all experiment configurations have been removed. All customers will see the C behavior by default.\n",
+      "enum": [
+        "CREATED",
+        "ENABLED",
+        "RUNNING",
+        "STOPPED"
+      ]
+    },
+    "v1.skill.experiment.TreatmentId": {
+      "type": "string",
+      "description": "Treatment identifier for an experiment.\n* `C` - Control. The treatment that defines the existing skill experience.\n* `T1` - Treatment 1. The threatment that defines the experimental skill experience.\n",
+      "enum": [
+        "C",
+        "T1"
+      ]
+    },
+    "v1.skill.experiment.ExperimentType": {
+      "type": "string",
+      "description": "Type of the experiment which directly affects the skill version used for T1.\nC will always point to the skill version in the skill's LIVE stage regardless of experiment type.\n",
+      "enum": [
+        "ENDPOINT_BASED"
+      ]
+    },
+    "v1.skill.experiment.StateTransitionStatus": {
+      "type": "string",
+      "description": "Status indiciating whether the state transiton was successful, in progress, or failed.\n",
+      "enum": [
+        "SUCCEEDED",
+        "IN_PROGRESS",
+        "FAILED"
+      ]
+    },
+    "v1.skill.experiment.ExperimentStoppedReason": {
+      "type": "string",
+      "description": "The reason indicating why an exerpiment was stopped. If none is chosen then default to DEVELOPER_REQUEST.\nOnly used when putting experiment into STOPPED state.\n",
+      "enum": [
+        "EXPERIMENT_SUCCESS",
+        "EXPERIMENT_ISSUE"
+      ]
+    },
+    "v1.skill.experiment.StateTransitionErrorType": {
+      "type": "string",
+      "description": "The error type which caused a state transition failure.\n",
+      "enum": [
+        "INELIGIBLITY"
+      ]
+    },
+    "v1.skill.experiment.MetricSnapshotStatus": {
+      "type": "string",
+      "description": "The status of the metric snapshot, whether it's RELIABLE or UNRELIABLE.\n",
+      "enum": [
+        "RELIABLE",
+        "UNRELIABLE"
+      ]
+    },
+    "v1.skill.experiment.StateTransitionError": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/v1.skill.experiment.StateTransitionErrorType",
+          "x-isEnum": true
+        },
+        "message": {
+          "type": "string",
+          "description": "The message associated with the state transition error."
+        }
+      },
+      "description": "The errors which caused a state transition failure.\n"
+    },
     "v1.skill.history.DialogActName": {
       "type": "string",
       "description": "Dialog act directive name.\n* `Dialog.ElicitSlot`: Alexa asked the user for the value of a specific slot. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#elicitslot)\n* `Dialog.ConfirmSlot`: Alexa confirmed the value of a specific slot before continuing with the dialog. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmslot)\n* `Dialog.ConfirmIntent`: Alexa confirmed the all the information the user has provided for the intent before the skill took action. (https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html#confirmintent)\n",
@@ -21288,7 +23008,8 @@
         "alexa::person_id:read",
         "alexa::skill:products:entitlements",
         "alexa::energy:devices:state:read",
-        "alexa::origin_ip_address:read"
+        "alexa::origin_ip_address:read",
+        "alexa::devices:all:coarse_location:read"
       ]
     },
     "v1.skill.Manifest.SkillManifestApis": {
@@ -21869,7 +23590,7 @@
         "uri": {
           "type": "string",
           "description": "The extension's URI.",
-          "pattern": "^(alexaext:smartmotion:10|alexaext:entitysensing:10|alexaext:datastore:10)$"
+          "pattern": "^(alexaext:smartmotion:10|alexaext:entitysensing:10|alexaext:datastore:10|alexaext:smartmotor:10)$"
         }
       },
       "description": "Represents a request for a runtime extension. Extensions are optional enhancements to a runtime that provide additional sources of data, commands, and event handlers."
@@ -23816,11 +25537,13 @@
     },
     "v1.skill.BuildStepName": {
       "type": "string",
-      "description": "Name of the build step. Possible values -\n* `DIALOG_MODEL_BUILD` - Build status for dialog model.\n* `LANGUAGE_MODEL_QUICK_BUILD` - Build status for FST model.\n* `LANGUAGE_MODEL_FULL_BUILD` - Build status for statistical model.\n",
+      "description": "Name of the build step. Possible values -\n* `DIALOG_MODEL_BUILD` - Build status for dialog model.\n* `LANGUAGE_MODEL_QUICK_BUILD` - Build status for FST model.\n* `LANGUAGE_MODEL_FULL_BUILD` - Build status for statistical model.\n* `ALEXA_CONVERSATIONS_QUICK_BUILD` - AlexaConversations LowFidelity model build status.\n* `ALEXA_CONVERSATIONS_FULL_BUILD` - AlexaConversations HighFidelity model build status.\n",
       "enum": [
         "DIALOG_MODEL_BUILD",
         "LANGUAGE_MODEL_QUICK_BUILD",
-        "LANGUAGE_MODEL_FULL_BUILD"
+        "LANGUAGE_MODEL_FULL_BUILD",
+        "ALEXA_CONVERSATIONS_QUICK_BUILD",
+        "ALEXA_CONVERSATIONS_FULL_BUILD"
       ]
     },
     "v1.skill.Status": {
