@@ -536,7 +536,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.conversations.ResetContextDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
 
 /**
  * An object that represents what the user wants.
@@ -1124,7 +1124,7 @@ export namespace interfaces.alexa.experimentation {
      */
     export interface ExperimentAssignment {
         'id'?: string;
-        'treatmentId'?: interfaces.alexa.experimentation.Treatment;
+        'treatmentId'?: interfaces.alexa.experimentation.TreatmentId;
     }
 }
 
@@ -1153,17 +1153,7 @@ export namespace interfaces.alexa.experimentation {
 
 export namespace interfaces.alexa.experimentation {
     /**
-     *
-     * @interface
-     */
-    export interface Treatment {
-        'name'?: interfaces.alexa.experimentation.TreatmentId;
-    }
-}
-
-export namespace interfaces.alexa.experimentation {
-    /**
-     * Name of the experiment treatment identifier
+     * Experiment treatment identifier
      * @enum
      */
     export type TreatmentId = 'C' | 'T1';
@@ -1234,11 +1224,19 @@ export namespace interfaces.alexa.presentation.apl {
 }
 
 export namespace interfaces.alexa.presentation.apl {
+    /**
+     * The type of back navigation to use. Defaults to count.
+     * @enum
+     */
+    export type BackType = 'count' | 'index' | 'id';
+}
+
+export namespace interfaces.alexa.presentation.apl {
    /**
     * A message that can change the visual or audio presentation of the content on the screen.
     * @interface
     */
-    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.FinishCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SelectCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ReinflateCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.ScrollToComponentCommand;
+    export type Command = interfaces.alexa.presentation.apl.SetPageCommand | interfaces.alexa.presentation.apl.ControlMediaCommand | interfaces.alexa.presentation.apl.FinishCommand | interfaces.alexa.presentation.apl.AutoPageCommand | interfaces.alexa.presentation.apl.PlayMediaCommand | interfaces.alexa.presentation.apl.GoBackCommand | interfaces.alexa.presentation.apl.ScrollCommand | interfaces.alexa.presentation.apl.IdleCommand | interfaces.alexa.presentation.apl.AnimateItemCommand | interfaces.alexa.presentation.apl.SendEventCommand | interfaces.alexa.presentation.apl.ShowOverlayCommand | interfaces.alexa.presentation.apl.SpeakListCommand | interfaces.alexa.presentation.apl.SelectCommand | interfaces.alexa.presentation.apl.HideOverlayCommand | interfaces.alexa.presentation.apl.SequentialCommand | interfaces.alexa.presentation.apl.SetStateCommand | interfaces.alexa.presentation.apl.SpeakItemCommand | interfaces.alexa.presentation.apl.ParallelCommand | interfaces.alexa.presentation.apl.OpenUrlCommand | interfaces.alexa.presentation.apl.ReinflateCommand | interfaces.alexa.presentation.apl.ClearFocusCommand | interfaces.alexa.presentation.apl.ScrollToIndexCommand | interfaces.alexa.presentation.apl.SetValueCommand | interfaces.alexa.presentation.apl.SetFocusCommand | interfaces.alexa.presentation.apl.ScrollToComponentCommand;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -5502,6 +5500,87 @@ export namespace interfaces.alexa.presentation.apl {
 
 export namespace interfaces.alexa.presentation.apl {
     /**
+     * GoBack command POJO for the backstack APL extension.
+     * @interface
+     */
+    export interface GoBackCommand {
+        'type' : 'GoBack';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
+        'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
+        'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
+        'when'?: boolean;
+        'backType': interfaces.alexa.presentation.apl.BackType;
+        /**
+         * The value of go back command.
+         */
+        'backValue': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * HideOverlay Command used by television shopping skill.
+     * @interface
+     */
+    export interface HideOverlayCommand {
+        'type' : 'HideOverlay';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
+        'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
+        'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
+        'when'?: boolean;
+        /**
+         * The id of overlay Layout.
+         */
+        'overlayLayoutId': string;
+        /**
+         * The id of underlying Layout.
+         */
+        'underlyingLayoutId'?: string;
+        /**
+         * The overlay width.
+         */
+        'overlayWidth'?: string;
+        /**
+         * The duration of HideOverlay Command.
+         */
+        'duration'?: number;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
      * The idle command does nothing. It may be a placeholder or used to insert a calculated delay in a longer series of commands.
      * @interface
      */
@@ -6352,6 +6431,52 @@ export namespace interfaces.alexa.presentation.apl {
          * The property value to set.
          */
         'value': string;
+    }
+}
+
+export namespace interfaces.alexa.presentation.apl {
+    /**
+     * ShowOverlay Command used by television shopping skill.
+     * @interface
+     */
+    export interface ShowOverlayCommand {
+        'type' : 'ShowOverlay';
+        /**
+         * The delay in milliseconds before this command starts executing; must be non-negative. Defaults to 0.
+         */
+        'delay'?: number | string;
+        /**
+         * A user-provided description of this command.
+         */
+        'description'?: string;
+        /**
+         * If true, disable the Interaction Timer.
+         */
+        'screenLock'?: boolean;
+        /**
+         * Specify the sequencer that should execute this command.
+         */
+        'sequencer'?: string;
+        /**
+         * If false, the execution of the command is skipped. Defaults to true.
+         */
+        'when'?: boolean;
+        /**
+         * The id of overlay Layout.
+         */
+        'overlayLayoutId': string;
+        /**
+         * The id of underlying Layout.
+         */
+        'underlyingLayoutId'?: string;
+        /**
+         * The overlay width.
+         */
+        'overlayWidth'?: string;
+        /**
+         * The duration of ShowOverlay Command.
+         */
+        'duration'?: number;
     }
 }
 
@@ -8104,6 +8229,16 @@ export namespace interfaces.conversations {
          */
         'locale'?: string;
         'apiRequest'?: interfaces.conversations.APIRequest;
+    }
+}
+
+export namespace interfaces.conversations {
+    /**
+     *
+     * @interface
+     */
+    export interface ResetContextDirective {
+        'type' : 'Conversations.ResetContext';
     }
 }
 
