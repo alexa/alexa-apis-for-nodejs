@@ -10096,10 +10096,6 @@
         "x-operation-name": "getSkillMetricsV1"
       }
     },
-    "/v1/skills/{skillId}/narrative/articles": {},
-    "/v1/skills/{skillId}/narrative/articles/{articleId}": {},
-    "/v1/skills/{skillId}/narrative/events": {},
-    "/v1/skills/{skillId}/narrative/events/{eventId}": {},
     "/v1/skills/{skillId}/stages/{stage}/privateDistributionAccounts/{id}": {
       "put": {
         "tags": [
@@ -23009,7 +23005,8 @@
         "alexa::skill:products:entitlements",
         "alexa::energy:devices:state:read",
         "alexa::origin_ip_address:read",
-        "alexa::devices:all:coarse_location:read"
+        "alexa::devices:all:coarse_location:read",
+        "alexa::devices:all:tokenized_geolocation:read"
       ]
     },
     "v1.skill.Manifest.SkillManifestApis": {
