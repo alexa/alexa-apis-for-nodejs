@@ -1,6 +1,6 @@
 {
   "name": "ask-sdk-model",
-  "version": "1.38.0",
+  "version": "1.38.1",
   "description": "Model package for Alexa Skills Kit SDK",
   "main": "index.js",
   "types": "index.d.ts",
