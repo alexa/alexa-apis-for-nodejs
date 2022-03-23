@@ -2724,11 +2724,20 @@ export namespace v1.skill.Manifest {
      * @interface
      */
     export interface KnowledgeApis {
+        'enablementChannel': v1.skill.Manifest.KnowledgeApisEnablementChannel;
         /**
          * Defines the structure of locale specific knowledge information in the skill manifest.
          */
         'locales'?: { [key: string]: v1.skill.Manifest.LocalizedKnowledgeInformation; };
     }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * Defines how the skill can be enabled by developers. values can be set to 'PUBLIC' (in Alexa Skill Store), 'ASP' (A4R/A4H vendor devices), or 'A4B' Public and ASP selections must have \"distributionMode\" = 'PUBLIC' and will only be eligible for distribution on personal or vendor (A4H/A4R or A4B) devices.
+     * @enum
+     */
+    export type KnowledgeApisEnablementChannel = 'PUBLIC' | 'ASP' | 'A4B';
 }
 
 export namespace v1.skill.Manifest {
