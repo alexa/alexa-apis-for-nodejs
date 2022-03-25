@@ -23044,9 +23044,6 @@
     },
     "v1.skill.Manifest.KnowledgeApis": {
       "type": "object",
-      "required": [
-        "enablementChannel"
-      ],
       "properties": {
         "enablementChannel": {
           "$ref": "#/definitions/v1.skill.Manifest.KnowledgeApisEnablementChannel",

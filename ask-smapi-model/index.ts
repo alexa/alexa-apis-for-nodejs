@@ -2724,7 +2724,7 @@ export namespace v1.skill.Manifest {
      * @interface
      */
     export interface KnowledgeApis {
-        'enablementChannel': v1.skill.Manifest.KnowledgeApisEnablementChannel;
+        'enablementChannel'?: v1.skill.Manifest.KnowledgeApisEnablementChannel;
         /**
          * Defines the structure of locale specific knowledge information in the skill manifest.
          */
