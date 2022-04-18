@@ -2750,6 +2750,7 @@ export namespace v1.skill.Manifest {
          * Amazon Resource Name (ARN) of the Lambda function.
          */
         'uri': string;
+        'sslCertificateType'?: v1.skill.Manifest.LambdaSSLCertificateType;
     }
 }
 
@@ -2761,6 +2762,14 @@ export namespace v1.skill.Manifest {
     export interface LambdaRegion {
         'endpoint': v1.skill.Manifest.LambdaEndpoint;
     }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     * The SSL certificate type of the skill's HTTPS endpoint. Only valid for HTTPS endpoint not for AWS Lambda ARN.
+     * @enum
+     */
+    export type LambdaSSLCertificateType = 'SelfSigned' | 'Wildcard' | 'Trusted';
 }
 
 export namespace v1.skill.Manifest {

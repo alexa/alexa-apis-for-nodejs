@@ -23771,9 +23771,22 @@
           "type": "string",
           "description": "Amazon Resource Name (ARN) of the Lambda function.",
           "pattern": "^(arn)"
+        },
+        "sslCertificateType": {
+          "$ref": "#/definitions/v1.skill.Manifest.LambdaSSLCertificateType",
+          "x-isEnum": true
         }
       },
       "description": "Contains the uri field. This sets the global default endpoint."
+    },
+    "v1.skill.Manifest.LambdaSSLCertificateType": {
+      "type": "string",
+      "description": "The SSL certificate type of the skill's HTTPS endpoint. Only valid for HTTPS endpoint not for AWS Lambda ARN.",
+      "enum": [
+        "SelfSigned",
+        "Wildcard",
+        "Trusted"
+      ]
     },
     "v1.skill.Manifest.LambdaRegion": {
       "type": "object",
