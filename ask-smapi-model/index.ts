@@ -4725,15 +4725,6 @@ export namespace v1.skill.betaTest {
     }
 }
 
-export namespace v1.skill.betaTest {
-    /**
-     *
-     * @interface
-     */
-    export interface UpdateBetaTestResponse {
-    }
-}
-
 export namespace v1.skill.betaTest.testers {
     /**
      * Indicates whether the tester has accepted the invitation.
@@ -14859,9 +14850,8 @@ export namespace services.skillManagement {
          * @param {string} skillId The skill ID.
          * @param {v1.skill.betaTest.TestBody} createTestBody JSON object containing the details of a beta test used to create the test.
          */
-        async updateBetaTestV1(skillId : string, createTestBody? : v1.skill.betaTest.TestBody) : Promise<v1.skill.betaTest.UpdateBetaTestResponse> {
-                const apiResponse: ApiResponse = await this.callUpdateBetaTestV1(skillId, createTestBody);
-                return apiResponse.body as v1.skill.betaTest.UpdateBetaTestResponse;
+        async updateBetaTestV1(skillId : string, createTestBody? : v1.skill.betaTest.TestBody) : Promise<void> {
+                await this.callUpdateBetaTestV1(skillId, createTestBody);
         }
         /**
          * Start a beta test for a given Alexa skill. System will send invitation emails to each tester in the test, and add entitlement on the acceptance. 

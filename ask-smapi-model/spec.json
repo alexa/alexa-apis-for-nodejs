@@ -3557,9 +3557,6 @@
                 "type": "string",
                 "description": "Content type of the response; only application/json supported."
               }
-            },
-            "schema": {
-              "$ref": "#/definitions/v1.skill.betaTest.UpdateBetaTestResponse"
             }
           },
           "400": {
@@ -18680,9 +18677,6 @@
         "STOPPING",
         "ENDED"
       ]
-    },
-    "v1.skill.betaTest.UpdateBetaTestResponse": {
-      "type": "object"
     },
     "v1.skill.betaTest.TestBody": {
       "type": "object",
