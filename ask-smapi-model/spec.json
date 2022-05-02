@@ -22800,6 +22800,7 @@
         "Legacy.MediaGrouping.GroupChangeNotificationEvent",
         "LocalApplication.Sentry.Event",
         "SKILL_PROACTIVE_SUBSCRIPTION_CHANGED",
+        "SKILL_NOTIFICATION_SUBSCRIPTION_CHANGED",
         "REMINDER_CREATED",
         "Alexa.Presentation.HTML.Event",
         "FitnessSessionController.FitnessSessionError",
