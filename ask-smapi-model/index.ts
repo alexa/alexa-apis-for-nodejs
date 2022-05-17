@@ -3197,6 +3197,19 @@ export namespace v1.skill.Manifest {
 
 export namespace v1.skill.Manifest {
     /**
+     * Defines the structure for Shopping Kit related information in the skill manifest.
+     * @interface
+     */
+    export interface ShoppingKit {
+        /**
+         * True if the skill uses Alexa Shopping Actions, false otherwise.
+         */
+        'isShoppingActionsEnabled'?: boolean;
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
      * Defines the structure for a skill's metadata.
      * @interface
      */
@@ -3371,6 +3384,7 @@ export namespace v1.skill.Manifest {
          * True if the skill developer is a Covered Entity (CE) or Business Associate (BA) as defined by the Health Insurance Portability And Accountability Act (HIPAA) and the skill requires Amazon to process PHI on their behalf, false otherwise. This is an optional property and treated as false if not set.
          */
         'usesHealthInfo'?: boolean;
+        'shoppingKit'?: v1.skill.Manifest.ShoppingKit;
     }
 }
 
@@ -4793,6 +4807,19 @@ export namespace v1.skill.betaTest.testers {
     }
 }
 
+export namespace v1.skill.blueprint {
+    /**
+     * Defines the structure for Shopping Kit related information in the skill manifest.
+     * @interface
+     */
+    export interface ShoppingKit {
+        /**
+         * True if the skill uses Alexa Shopping Actions, false otherwise.
+         */
+        'isShoppingActionsEnabled'?: boolean;
+    }
+}
+
 export namespace v1.skill.certification {
     /**
      *
@@ -6007,6 +6034,10 @@ export namespace v1.skill.interactionModel {
          */
         'name': string;
         /**
+         * Name of the generator used to generate this object.
+         */
+        'generatedBy'?: string;
+        /**
          * List of slots within the intent.
          */
         'slots'?: Array<v1.skill.interactionModel.SlotDefinition>;
@@ -6120,6 +6151,10 @@ export namespace v1.skill.interactionModel {
          * The type of the slot. It can be a built-in or custom type.
          */
         'type'?: string;
+        /**
+         * Name of the generator used to generate this object.
+         */
+        'generatedBy'?: string;
         /**
          * Configuration object for multiple values capturing behavior for this slot.
          */

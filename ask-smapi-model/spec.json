@@ -18758,6 +18758,16 @@
         }
       }
     },
+    "v1.skill.blueprint.ShoppingKit": {
+      "type": "object",
+      "properties": {
+        "isShoppingActionsEnabled": {
+          "type": "boolean",
+          "description": "True if the skill uses Alexa Shopping Actions, false otherwise."
+        }
+      },
+      "description": "Defines the structure for Shopping Kit related information in the skill manifest."
+    },
     "v1.skill.certification.CertificationSummary": {
       "type": "object",
       "properties": {
@@ -20181,6 +20191,12 @@
           "description": "Name to identify the intent.",
           "minLength": 1
         },
+        "generatedBy": {
+          "type": "string",
+          "description": "Name of the generator used to generate this object.",
+          "minLength": 1,
+          "maxLength": 100
+        },
         "slots": {
           "type": "array",
           "description": "List of slots within the intent.",
@@ -20212,6 +20228,12 @@
         "type": {
           "type": "string",
           "description": "The type of the slot. It can be a built-in or custom type."
+        },
+        "generatedBy": {
+          "type": "string",
+          "description": "Name of the generator used to generate this object.",
+          "minLength": 1,
+          "maxLength": 100
         },
         "multipleValues": {
           "description": "Configuration object for multiple values capturing behavior for this slot.",
@@ -22605,9 +22627,22 @@
         "usesHealthInfo": {
           "type": "boolean",
           "description": "True if the skill developer is a Covered Entity (CE) or Business Associate (BA) as defined by the Health Insurance Portability And Accountability Act (HIPAA) and the skill requires Amazon to process PHI on their behalf, false otherwise. This is an optional property and treated as false if not set."
+        },
+        "shoppingKit": {
+          "$ref": "#/definitions/v1.skill.Manifest.ShoppingKit"
         }
       },
       "description": "Defines the structure for privacy & compliance information in the skill manifest."
+    },
+    "v1.skill.Manifest.ShoppingKit": {
+      "type": "object",
+      "properties": {
+        "isShoppingActionsEnabled": {
+          "type": "boolean",
+          "description": "True if the skill uses Alexa Shopping Actions, false otherwise."
+        }
+      },
+      "description": "Defines the structure for Shopping Kit related information in the skill manifest."
     },
     "v1.skill.Manifest.SkillManifestLocalizedPrivacyAndCompliance": {
       "type": "object",
