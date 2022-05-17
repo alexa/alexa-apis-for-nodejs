@@ -582,12 +582,12 @@ export interface Permissions {
 }
 
 /**
- * An object that describes the user (person) who is making the request.
+ * An object that describes the user (person) who is interacting with Alexa.
  * @interface
  */
 export interface Person {
     /**
-     * A string that represents a unique identifier for the person who is making the request. The length of this identifier can vary, but is never more than 255 characters. It is generated when a recognized user makes a request to your skill.
+     * A string that represents a unique identifier for the person who is interacting with Alexa. The length of this identifier can vary, but is never more than 255 characters. It is generated when a recognized user makes a request to your skill.
      */
     'personId'?: string;
     /**
@@ -1220,7 +1220,7 @@ export namespace interfaces.alexa.presentation.apl {
      * The audio track to play on. Defaults to “foreground”
      * @enum
      */
-    export type AudioTrack = 'foreground';
+    export type AudioTrack = 'foreground' | 'background' | 'none';
 }
 
 export namespace interfaces.alexa.presentation.apl {
