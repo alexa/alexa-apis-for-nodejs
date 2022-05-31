@@ -20058,6 +20058,12 @@
           "type": "string",
           "description": "The name of the custom slot type."
         },
+        "generatedBy": {
+          "type": "string",
+          "description": "Name of the generator used to generate this object.",
+          "minLength": 1,
+          "maxLength": 100
+        },
         "values": {
           "type": "array",
           "description": "List of expected values. Values outside the list are still returned.",
@@ -20228,12 +20234,6 @@
         "type": {
           "type": "string",
           "description": "The type of the slot. It can be a built-in or custom type."
-        },
-        "generatedBy": {
-          "type": "string",
-          "description": "Name of the generator used to generate this object.",
-          "minLength": 1,
-          "maxLength": 100
         },
         "multipleValues": {
           "description": "Configuration object for multiple values capturing behavior for this slot.",

@@ -6152,10 +6152,6 @@ export namespace v1.skill.interactionModel {
          */
         'type'?: string;
         /**
-         * Name of the generator used to generate this object.
-         */
-        'generatedBy'?: string;
-        /**
          * Configuration object for multiple values capturing behavior for this slot.
          */
         'multipleValues'?: v1.skill.interactionModel.MultipleValuesConfig;
@@ -6176,6 +6172,10 @@ export namespace v1.skill.interactionModel {
          * The name of the custom slot type.
          */
         'name': string;
+        /**
+         * Name of the generator used to generate this object.
+         */
+        'generatedBy'?: string;
         /**
          * List of expected values. Values outside the list are still returned.
          */
