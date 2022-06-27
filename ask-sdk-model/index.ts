@@ -1556,6 +1556,10 @@ export namespace interfaces.alexa.presentation.apl {
          * List of the visible APL components currently shown on screen.
          */
         'componentsVisibleOnScreen'?: Array<interfaces.alexa.presentation.apl.ComponentVisibleOnScreen>;
+        /**
+         * List of registered data sources' associated metadata
+         */
+        'dataSources'?: Array<any>;
     }
 }
 
@@ -5620,6 +5624,10 @@ export namespace interfaces.alexa.presentation.apl {
          * A human-readable description of the error.
          */
         'message': string;
+        /**
+         * The token as specified in the presentation's RenderDocument directive.
+         */
+        'token'?: string;
         'reason': interfaces.alexa.presentation.apl.ListRuntimeErrorReason;
         /**
          * The identifier of the list in which the error occurred.
