@@ -3166,7 +3166,7 @@ export namespace v1.skill.Manifest {
      * Name of the required permission.
      * @enum
      */
-    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read' | 'alexa::devices:all:coarse_location:read' | 'alexa::devices:all:tokenized_geolocation:read';
+    export type PermissionName = 'alexa::device_id:read' | 'alexa::personality:explicit:read' | 'alexa::authenticate:2:mandatory' | 'alexa:devices:all:address:country_and_postal_code:read' | 'alexa::profile:mobile_number:read' | 'alexa::async_event:write' | 'alexa::device_type:read' | 'alexa::skill:proactive_enablement' | 'alexa::personality:explicit:write' | 'alexa::household:lists:read' | 'alexa::utterance_id:read' | 'alexa::user_experience_guidance:read' | 'alexa::devices:all:notifications:write' | 'avs::distributed_audio' | 'alexa::devices:all:address:full:read' | 'alexa::devices:all:notifications:urgent:write' | 'payments:autopay_consent' | 'alexa::alerts:timers:skill:readwrite' | 'alexa::customer_id:read' | 'alexa::skill:cds:monetization' | 'alexa::music:cast' | 'alexa::profile:given_name:read' | 'alexa::alerts:reminders:skill:readwrite' | 'alexa::household:lists:write' | 'alexa::profile:email:read' | 'alexa::profile:name:read' | 'alexa::devices:all:geolocation:read' | 'alexa::raw_person_id:read' | 'alexa::authenticate:2:optional' | 'alexa::health:profile:write' | 'alexa::person_id:read' | 'alexa::skill:products:entitlements' | 'alexa::energy:devices:state:read' | 'alexa::origin_ip_address:read' | 'alexa::devices:all:coarse_location:read' | 'alexa::devices:all:tokenized_geolocation:read' | 'alexa::measurement_system::readwrite';
 }
 
 export namespace v1.skill.Manifest {
@@ -4247,6 +4247,7 @@ export namespace v1.skill.accountLinking {
          * Set to true to let users enable the skill without starting the account linking flow. Set to false to require the normal account linking flow when users enable the skill.
          */
         'skipOnEnablement'?: boolean;
+        'voiceForwardAccountLinking'?: v1.skill.accountLinking.VoiceForwardAccountLinkingStatus;
     }
 }
 
@@ -4290,6 +4291,7 @@ export namespace v1.skill.accountLinking {
          * The list of valid authorization urls for allowed platforms to initiate account linking.
          */
         'authorizationUrlsByPlatform'?: Array<v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl>;
+        'voiceForwardAccountLinking'?: v1.skill.accountLinking.VoiceForwardAccountLinkingStatus;
     }
 }
 
@@ -4307,6 +4309,14 @@ export namespace v1.skill.accountLinking {
      * @enum
      */
     export type PlatformType = 'iOS' | 'Android';
+}
+
+export namespace v1.skill.accountLinking {
+    /**
+     * Defines the voice forward account linking status of a skill.
+     * @enum
+     */
+    export type VoiceForwardAccountLinkingStatus = 'ENABLED' | 'DISABLED';
 }
 
 export namespace v1.skill.asr.annotationSets {

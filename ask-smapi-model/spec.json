@@ -3076,7 +3076,13 @@
         ],
         "responses": {
           "204": {
-            "description": "Success. No content."
+            "description": "Success. No content.",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+                "description": "Returned content type, only \"application/json\" supported"
+              }
+            }
           },
           "401": {
             "description": "The auth token is invalid/expired or doesn't have access to the resource.",
@@ -18359,6 +18365,10 @@
           "items": {
             "$ref": "#/definitions/v1.skill.accountLinking.AccountLinkingPlatformAuthorizationUrl"
           }
+        },
+        "voiceForwardAccountLinking": {
+          "$ref": "#/definitions/v1.skill.accountLinking.VoiceForwardAccountLinkingStatus",
+          "x-isEnum": true
         }
       },
       "description": "The account linking information of a skill."
@@ -18403,6 +18413,14 @@
       "enum": [
         "iOS",
         "Android"
+      ]
+    },
+    "v1.skill.accountLinking.VoiceForwardAccountLinkingStatus": {
+      "type": "string",
+      "description": "Defines the voice forward account linking status of a skill.",
+      "enum": [
+        "ENABLED",
+        "DISABLED"
       ]
     },
     "v1.skill.accountLinking.AccountLinkingRequest": {
@@ -18480,6 +18498,10 @@
         "skipOnEnablement": {
           "type": "boolean",
           "description": "Set to true to let users enable the skill without starting the account linking flow. Set to false to require the normal account linking flow when users enable the skill."
+        },
+        "voiceForwardAccountLinking": {
+          "$ref": "#/definitions/v1.skill.accountLinking.VoiceForwardAccountLinkingStatus",
+          "x-isEnum": true
         }
       },
       "description": "The payload for creating the account linking partner."
@@ -23036,7 +23058,8 @@
         "alexa::energy:devices:state:read",
         "alexa::origin_ip_address:read",
         "alexa::devices:all:coarse_location:read",
-        "alexa::devices:all:tokenized_geolocation:read"
+        "alexa::devices:all:tokenized_geolocation:read",
+        "alexa::measurement_system::readwrite"
       ]
     },
     "v1.skill.Manifest.SkillManifestApis": {
@@ -24512,7 +24535,7 @@
           "type": "string",
           "description": "locale",
           "minLength": 1,
-          "pattern": "^(en-US|en-GB|en-IN|ja-JP|de-DE|en-CA|en-AU|fr-FR|fr-CA|it-IT|es-ES|es-MX|pt-BR|hi-IN|es-US|ar-SA)$"
+          "pattern": "^(en-US|en-GB|en-IN|ja-JP|de-DE|en-CA|en-AU|fr-FR|fr-CA|it-IT|es-ES|es-MX|pt-BR|hi-IN|es-US|ar-SA|nl-NL)$"
         },
         "name": {
           "type": "string",
