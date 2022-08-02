@@ -22353,7 +22353,7 @@
             "type": "string",
             "maxLength": 200
           },
-          "maxItems": 3
+          "maxItems": 4
         },
         "keywords": {
           "type": "array",
@@ -23059,7 +23059,8 @@
         "alexa::origin_ip_address:read",
         "alexa::devices:all:coarse_location:read",
         "alexa::devices:all:tokenized_geolocation:read",
-        "alexa::measurement_system::readwrite"
+        "alexa::measurement_system::readwrite",
+        "dash::vendor:read:endpoints"
       ]
     },
     "v1.skill.Manifest.SkillManifestApis": {
