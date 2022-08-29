@@ -1712,7 +1712,7 @@ export namespace v1.skill.AlexaHosted {
 
 export namespace v1.skill.AlexaHosted {
     /**
-     * Hosted skill lambda runtime; Node.js 10.x is deprecated by Hosted Skill service as of July 30, 2021.
+     * Hosted skill lambda runtime; Node.js 12.x is deprecated by Hosted Skill service as of September 28, 2022.
      * @enum
      */
     export type HostedSkillRuntime = 'NODE_10_X' | 'PYTHON_3_7' | 'NODE_12_X';
@@ -2707,7 +2707,7 @@ export namespace v1.skill.Manifest {
     *
     * @interface
     */
-    export type Interface = v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.AppLinkInterface | v1.skill.Manifest.AlexaPresentationHtmlInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.AppLinkV2Interface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface | v1.skill.Manifest.VideoAppInterface;
+    export type Interface = v1.skill.Manifest.AlexaSearch | v1.skill.Manifest.AlexaPresentationAplInterface | v1.skill.Manifest.AppLinkInterface | v1.skill.Manifest.AlexaPresentationHtmlInterface | v1.skill.Manifest.AudioInterface | v1.skill.Manifest.GameEngineInterface | v1.skill.Manifest.AppLinkV2Interface | v1.skill.Manifest.DisplayInterface | v1.skill.Manifest.GadgetControllerInterface | v1.skill.Manifest.VideoAppInterface;
 }
 
 export namespace v1.skill.Manifest {
@@ -2715,7 +2715,7 @@ export namespace v1.skill.Manifest {
      * Name of the interface.
      * @enum
      */
-    export type InterfaceType = 'AUDIO_PLAYER' | 'VIDEO_APP' | 'RENDER_TEMPLATE' | 'GAME_ENGINE' | 'GADGET_CONTROLLER' | 'CAN_FULFILL_INTENT_REQUEST' | 'ALEXA_PRESENTATION_APL' | 'ALEXA_CAMERA_PHOTO_CAPTURE_CONTROLLER' | 'ALEXA_CAMERA_VIDEO_CAPTURE_CONTROLLER' | 'ALEXA_FILE_MANAGER_UPLOAD_CONTROLLER' | 'CUSTOM_INTERFACE' | 'ALEXA_AUGMENTATION_EFFECTS_CONTROLLER' | 'APP_LINKS' | 'ALEXA_EXTENSION' | 'APP_LINKS_V2';
+    export type InterfaceType = 'AUDIO_PLAYER' | 'VIDEO_APP' | 'RENDER_TEMPLATE' | 'GAME_ENGINE' | 'GADGET_CONTROLLER' | 'CAN_FULFILL_INTENT_REQUEST' | 'ALEXA_PRESENTATION_APL' | 'ALEXA_CAMERA_PHOTO_CAPTURE_CONTROLLER' | 'ALEXA_CAMERA_VIDEO_CAPTURE_CONTROLLER' | 'ALEXA_FILE_MANAGER_UPLOAD_CONTROLLER' | 'CUSTOM_INTERFACE' | 'ALEXA_AUGMENTATION_EFFECTS_CONTROLLER' | 'APP_LINKS' | 'ALEXA_EXTENSION' | 'APP_LINKS_V2' | 'ALEXA_SEARCH';
 }
 
 export namespace v1.skill.Manifest {
@@ -9225,6 +9225,16 @@ export namespace v1.skill.Manifest {
      */
     export interface AlexaPresentationHtmlInterface {
         'type' : 'ALEXA_PRESENTATION_HTML';
+    }
+}
+
+export namespace v1.skill.Manifest {
+    /**
+     *
+     * @interface
+     */
+    export interface AlexaSearch {
+        'type' : 'ALEXA_SEARCH';
     }
 }
 

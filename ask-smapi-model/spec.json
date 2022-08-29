@@ -18614,7 +18614,7 @@
     },
     "v1.skill.AlexaHosted.HostedSkillRuntime": {
       "type": "string",
-      "description": "Hosted skill lambda runtime; Node.js 10.x is deprecated by Hosted Skill service as of July 30, 2021.",
+      "description": "Hosted skill lambda runtime; Node.js 12.x is deprecated by Hosted Skill service as of September 28, 2022.",
       "enum": [
         "NODE_10_X",
         "PYTHON_3_7",
@@ -23543,7 +23543,8 @@
         "ALEXA_AUGMENTATION_EFFECTS_CONTROLLER",
         "APP_LINKS",
         "ALEXA_EXTENSION",
-        "APP_LINKS_V2"
+        "APP_LINKS_V2",
+        "ALEXA_SEARCH"
       ]
     },
     "v1.skill.Manifest.AudioInterface": {
@@ -23832,6 +23833,14 @@
         }
       },
       "description": "Contains the uri field. This sets the global default endpoint."
+    },
+    "v1.skill.Manifest.AlexaSearch": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/v1.skill.Manifest.Interface"
+        }
+      ],
+      "x-discriminator-value": "ALEXA_SEARCH"
     },
     "v1.skill.Manifest.LambdaSSLCertificateType": {
       "type": "string",
