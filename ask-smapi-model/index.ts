@@ -3205,6 +3205,10 @@ export namespace v1.skill.Manifest {
          * True if the skill uses Alexa Shopping Actions, false otherwise.
          */
         'isShoppingActionsEnabled'?: boolean;
+        /**
+         * True if the skill uses Shopping Actions with Amazon Associates, false otherwise.
+         */
+        'isAmazonAssociatesOnAlexaEnabled'?: boolean;
     }
 }
 
@@ -4827,6 +4831,10 @@ export namespace v1.skill.blueprint {
          * True if the skill uses Alexa Shopping Actions, false otherwise.
          */
         'isShoppingActionsEnabled'?: boolean;
+        /**
+         * True if the skill uses Shopping Actions with Amazon Associates, false otherwise.
+         */
+        'isAmazonAssociatesOnAlexaEnabled'?: boolean;
     }
 }
 

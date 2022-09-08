@@ -18786,6 +18786,10 @@
         "isShoppingActionsEnabled": {
           "type": "boolean",
           "description": "True if the skill uses Alexa Shopping Actions, false otherwise."
+        },
+        "isAmazonAssociatesOnAlexaEnabled": {
+          "type": "boolean",
+          "description": "True if the skill uses Shopping Actions with Amazon Associates, false otherwise."
         }
       },
       "description": "Defines the structure for Shopping Kit related information in the skill manifest."
@@ -22662,6 +22666,10 @@
         "isShoppingActionsEnabled": {
           "type": "boolean",
           "description": "True if the skill uses Alexa Shopping Actions, false otherwise."
+        },
+        "isAmazonAssociatesOnAlexaEnabled": {
+          "type": "boolean",
+          "description": "True if the skill uses Shopping Actions with Amazon Associates, false otherwise."
         }
       },
       "description": "Defines the structure for Shopping Kit related information in the skill manifest."
