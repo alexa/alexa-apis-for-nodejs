@@ -18614,11 +18614,12 @@
     },
     "v1.skill.AlexaHosted.HostedSkillRuntime": {
       "type": "string",
-      "description": "Hosted skill lambda runtime; Node.js 12.x is deprecated by Hosted Skill service as of September 28, 2022.",
+      "description": "Hosted skill lambda runtime; Node.js 12.x is deprecated by Hosted Skill service as of October 24, 2022.",
       "enum": [
         "NODE_10_X",
         "PYTHON_3_7",
-        "NODE_12_X"
+        "NODE_12_X",
+        "NODE_16_X"
       ]
     },
     "v1.skill.AlexaHosted.HostedSkillRegion": {
@@ -23663,7 +23664,7 @@
         "uri": {
           "type": "string",
           "description": "The extension's URI.",
-          "pattern": "^(alexaext:smartmotion:10|alexaext:entitysensing:10|alexaext:datastore:10|alexaext:smartmotor:10)$"
+          "pattern": "^(alexaext:smartmotion:10|alexaext:entitysensing:10|alexaext:datastore:10|alexaext:smartmotor:10|alexaext:gadgets:10)$"
         }
       },
       "description": "Represents a request for a runtime extension. Extensions are optional enhancements to a runtime that provide additional sources of data, commands, and event handlers."
