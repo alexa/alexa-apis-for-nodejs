@@ -2835,19 +2835,10 @@ export namespace interfaces.geolocation {
 
 export namespace interfaces.geolocation {
     /**
-     *
+     * The common object to define the basic geolocation states
      * @interface
      */
-    export interface GeolocationInterface {
-    }
-}
-
-export namespace interfaces.geolocation {
-    /**
-     *
-     * @interface
-     */
-    export interface GeolocationState {
+    export interface GeolocationCommonState {
         /**
          * Specifies the time when the geolocation data was last collected on the device.
          */
@@ -2856,7 +2847,15 @@ export namespace interfaces.geolocation {
         'altitude'?: interfaces.geolocation.Altitude;
         'heading'?: interfaces.geolocation.Heading;
         'speed'?: interfaces.geolocation.Speed;
-        'locationServices'?: interfaces.geolocation.LocationServices;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     *
+     * @interface
+     */
+    export interface GeolocationInterface {
     }
 }
 
@@ -8630,6 +8629,24 @@ export namespace interfaces.gameEngine {
          * The `requestId` of the request that started the input handler.
          */
         'originatingRequestId'?: string;
+    }
+}
+
+export namespace interfaces.geolocation {
+    /**
+     * The geolocation object used in the Context of API
+     * @interface
+     */
+    export interface GeolocationState {
+        /**
+         * Specifies the time when the geolocation data was last collected on the device.
+         */
+        'timestamp'?: string;
+        'coordinate'?: interfaces.geolocation.Coordinate;
+        'altitude'?: interfaces.geolocation.Altitude;
+        'heading'?: interfaces.geolocation.Heading;
+        'speed'?: interfaces.geolocation.Speed;
+        'locationServices'?: interfaces.geolocation.LocationServices;
     }
 }
 
