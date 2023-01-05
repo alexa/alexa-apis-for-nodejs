@@ -600,7 +600,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
+export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | interfaces.alexa.datastore.DataStoreError | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -1114,6 +1114,52 @@ export namespace interfaces.alexa.comms.messagingcontroller {
          * List of deleted messages
          */
         'deleted'?: Array<string>;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+   /**
+    * DataStore error object payload.
+    * @interface
+    */
+    export type CommandsError = interfaces.alexa.datastore.DeviceUnavailableError | interfaces.alexa.datastore.DevicePermanantlyUnavailableError | interfaces.alexa.datastore.DataStoreInternalError | interfaces.alexa.datastore.StorageLimitExeceededError;
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Content of a commands dispatch error.
+     * @interface
+     */
+    export interface DispatchErrorContent {
+        /**
+         * Identifier of the device where execution error happens.
+         */
+        'deviceId': string;
+        /**
+         * Commands in the same order of request time so that skill can extend deliver expiry.
+         */
+        'commands': Array<services.datastore.v1.Command>;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Content of an execution error.
+     * @interface
+     */
+    export interface ExecutionErrorContent {
+        /**
+         * Identifier of the device where execution error happens.
+         */
+        'deviceId': string;
+        /**
+         * the command that was not executed successfully because of the error.
+         */
+        'failedCommand': services.datastore.v1.Command;
+        /**
+         * Opaque message describing the error.
+         */
+        'message'?: string;
     }
 }
 
@@ -3274,6 +3320,165 @@ export namespace interfaces.viewport.video {
     export type Codecs = 'H_264_41' | 'H_264_42';
 }
 
+export namespace services.datastore.v1 {
+   /**
+    * DataStore command which will run in DataStore.
+    * @interface
+    */
+    export type Command = services.datastore.v1.RemoveNamespaceCommand | services.datastore.v1.RemoveObjectCommand | services.datastore.v1.PutObjectCommand | services.datastore.v1.ClearCommand | services.datastore.v1.PutNamespaceCommand;
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface CommandsDispatchResult {
+        /**
+         * identifier of a device.
+         */
+        'deviceId': string;
+        'type': services.datastore.v1.DispatchResultType;
+        /**
+         * Opaque description of the error.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface CommandsRequest {
+        /**
+         * Collection of ordered commands which needs to be executed in DataStore.
+         */
+        'commands': Array<services.datastore.v1.Command>;
+        /**
+         * Target where update needs to be published.
+         */
+        'target': services.datastore.v1.Target;
+        /**
+         * Date and time, in ISO-8601 representation, when to halt the attempt to deliver the commands.
+         */
+        'attemptDeliveryUntil'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface CommandsRequestError {
+        'type': services.datastore.v1.CommandsRequestErrorType;
+        /**
+         * Descriptive error message.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Error code of the response. * `COMMANDS_PAYLOAD_EXCEEDS_LIMIT` - The total size of commands cannot exceed maximum size in UTF-encoding. * `TOO_MANY_TARGETS` - Number of target exceeds limits. * `NO_TARGET_DEFINED` - There is no target defined. * `INVALID_REQUEST` - request payload does not compliant with JSON schema. * `INVALID_ACCESS_TOKEN` - Access token is expire or invalid. * `DATASTORE_SUPPORT_REQUIRED` - Client has not opted into DataStore interface in skill manifest. * `TOO_MANY_REQUESTS` - The request has been throttled because client has exceed maximum allowed request rate. * `DATASTORE_UNAVAILABLE` - Internal service error.
+     * @enum
+     */
+    export type CommandsRequestErrorType = 'COMMANDS_PAYLOAD_EXCEEDS_LIMIT' | 'TOO_MANY_TARGETS' | 'NO_TARGET_DEFINED' | 'INVALID_REQUEST' | 'INVALID_ACCESS_TOKEN' | 'DATASTORE_SUPPORT_REQUIRED' | 'TOO_MANY_REQUESTS' | 'DATASTORE_UNAVAILABLE';
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface CommandsResponse {
+        /**
+         * List of results for each dispatch to a device target. This indicates the results of 1st attempt of deliveries. 
+         */
+        'results': Array<services.datastore.v1.CommandsDispatchResult>;
+        /**
+         * A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE). If there is no offline device, this value is not specified. The result will be available for query at least one hour after attemptDeliveryUntil. 
+         */
+        'queuedResultId'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Defines success or a type of error from dispatch. * `SUCCESS` - device has received the payload. * `INVALID_DEVICE` - device is not capable of processing the payload. * `DEVICE_UNAVAILABLE` - dispatch failed because device is offline. * `DEVICE_PERMANENTLY_UNAVAILABLE` - target no longer available to receive data. This is reported for a failed delivery attempt related to an unregistered device. * `CONCURRENCY_ERROR` - there are concurrent attempts to update to the same device. * `INTERNAL_ERROR`- dispatch failed because of unknown error - see message. 
+     * @enum
+     */
+    export type DispatchResultType = 'SUCCESS' | 'INVALID_DEVICE' | 'DEVICE_UNAVAILABLE' | 'DEVICE_PERMANENTLY_UNAVAILABLE' | 'CONCURRENCY_ERROR' | 'INTERNAL_ERROR';
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface QueuedResultRequestError {
+        'type': services.datastore.v1.QueuedResultRequestErrorType;
+        /**
+         * Descriptive error message.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Error code of the response. * `NOT_FOUND` - queuedResultId is not found for the skill. * `INVALID_REQUEST` - One or more request parameters are invalid, see message for more details. * `INVALID_ACCESS_TOKEN` - Access token is expire or invalid. * `DATASTORE_SUPPORT_REQUIRED` - Client has not opted into DataStore interface in skill manifest. * `TOO_MANY_REQUESTS` - The request has been throttled because client has exceed maximum allowed request rate. * `DATASTORE_UNAVAILABLE` - Internal service error.
+     * @enum
+     */
+    export type QueuedResultRequestErrorType = 'NOT_FOUND' | 'INVALID_REQUEST' | 'INVALID_ACCESS_TOKEN' | 'DATASTORE_SUPPORT_REQUIRED' | 'TOO_MANY_REQUESTS' | 'DATASTORE_UNAVAILABLE';
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Response for queued deliveries query.
+     * @interface
+     */
+    export interface QueuedResultResponse {
+        /**
+         * The array only contains results which have not been a SUCCESS delivery. An empty response means that all targeted devices has been received the commands payload. 
+         */
+        'items': Array<services.datastore.v1.CommandsDispatchResult>;
+        'paginationContext'?: services.datastore.v1.ResponsePaginationContext;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface ResponsePaginationContext {
+        /**
+         * The total number of results at the time of current response.
+         */
+        'totalCount': number;
+        /**
+         * The token of previous page - Not specified for the response of first page.
+         */
+        'previousToken'?: string;
+        /**
+         * The token of next page - Not specified for the response of last page.
+         */
+        'nextToken'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+   /**
+    *
+    * @interface
+    */
+    export type Target = services.datastore.v1.User | services.datastore.v1.Devices;
+}
+
 export namespace services.deviceAddress {
     /**
      * Represents the full address response from the service.
@@ -5249,6 +5454,73 @@ export namespace events.skillevents {
         'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * This event is sent by DSCS to forward ExecutionError from device or to inform about delivery error.
+     * @interface
+     */
+    export interface DataStoreError {
+        'type' : 'Alexa.DataStore.Error';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        'error': interfaces.alexa.datastore.CommandsError;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Describes an execution error for unknown error from device DataStore.
+     * @interface
+     */
+    export interface DataStoreInternalError {
+        'type' : 'DATASTORE_INTERNAL_ERROR';
+        'content': interfaces.alexa.datastore.ExecutionErrorContent;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Describes a dispatch error when device is no longer available. Skill must stop pushing data to this device in the future. 
+     * @interface
+     */
+    export interface DevicePermanantlyUnavailableError {
+        'type' : 'DEVICE_PERMANENTLY_UNAVAILABLE';
+        'content': interfaces.alexa.datastore.DispatchErrorContent;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Describes a dispatch error when device is not available.
+     * @interface
+     */
+    export interface DeviceUnavailableError {
+        'type' : 'DEVICE_UNAVAILABLE';
+        'content': interfaces.alexa.datastore.DispatchErrorContent;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
+     * Describes an execution error for exceeding storage limit.
+     * @interface
+     */
+    export interface StorageLimitExeceededError {
+        'type' : 'STORAGE_LIMIT_EXCEEDED';
+        'content': interfaces.alexa.datastore.ExecutionErrorContent;
     }
 }
 
@@ -8903,6 +9175,112 @@ export namespace interfaces.viewport.size {
     }
 }
 
+export namespace services.datastore.v1 {
+    /**
+     * Remove all existing data in skill's DataStore.
+     * @interface
+     */
+    export interface ClearCommand {
+        'type' : 'CLEAR';
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface Devices {
+        'type' : 'DEVICES';
+        /**
+         * Unordered array of device identifiers.
+         */
+        'items': Array<string>;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Creates a new namespace. If the namespace already exists, the command succeeds without any change.
+     * @interface
+     */
+    export interface PutNamespaceCommand {
+        'type' : 'PUT_NAMESPACE';
+        /**
+         * Namespace where object needs to be created. Its unique identifier within skill's DataStore.
+         */
+        'namespace': string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Creates or updates an object.
+     * @interface
+     */
+    export interface PutObjectCommand {
+        'type' : 'PUT_OBJECT';
+        /**
+         * Namespace where object needs to be created. Its unique identifier within skill's DataStore.
+         */
+        'namespace': string;
+        /**
+         * Unique identifier of the objects. Needs to be unique only within client's namespace not globally unique.
+         */
+        'key': string;
+        /**
+         * Open content payload that is not inspected by the DataStore.
+         */
+        'content': any;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Deletes an existing namespace. If the namespace doesn't exist, this command succeeds without any change.
+     * @interface
+     */
+    export interface RemoveNamespaceCommand {
+        'type' : 'REMOVE_NAMESPACE';
+        /**
+         * Namespace which needs to be removed. It's unique identifier within skill's DataStore.
+         */
+        'namespace': string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Deletes an existing object. If the object doesn't exist, this command succeeds without any change.
+     * @interface
+     */
+    export interface RemoveObjectCommand {
+        'type' : 'REMOVE_OBJECT';
+        /**
+         * Namespace where the object is stored. Its unique identifier within skill's DataStore.
+         */
+        'namespace': string;
+        /**
+         * Unique identifier of the objects. Needs to be unique only within client's namespace not globally unique.
+         */
+        'key': string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface User {
+        'type' : 'USER';
+        /**
+         * User ID in request envelope (context.System.user.userId).
+         */
+        'id': string;
+    }
+}
+
 export namespace services.directive {
     /**
      *
@@ -9370,6 +9748,148 @@ export namespace ui {
     }
 }
 
+
+export namespace services.datastore {
+
+    /**
+     * 
+    */
+    export class DatastoreServiceClient extends BaseServiceClient {
+
+        private lwaServiceClient : LwaServiceClient;
+        private userAgent : string;
+
+        constructor(apiConfiguration : ApiConfiguration, authenticationConfiguration : AuthenticationConfiguration, customUserAgent : string = null) {
+            super(apiConfiguration);
+            this.lwaServiceClient = new LwaServiceClient({
+                apiConfiguration,
+                authenticationConfiguration,
+            });
+            this.userAgent = createUserAgent(`${require('./package.json').version}`, customUserAgent);
+        }
+
+        /**
+         * Send DataStore commands to Alexa device.
+         * @param {string} authorization 
+         * @param {services.datastore.v1.CommandsRequest} commandsRequest 
+         */
+        async callCommandsV1(authorization : string, commandsRequest : services.datastore.v1.CommandsRequest) : Promise<ApiResponse> {
+            const __operationId__ = 'callCommandsV1';
+            // verify required parameter 'authorization' is not null or undefined
+            if (authorization == null) {
+                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'commandsRequest' is not null or undefined
+            if (commandsRequest == null) {
+                throw new Error(`Required parameter commandsRequest was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Authorization', value : authorization });
+
+            if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
+                headerParams.push({ key : 'Content-type', value : 'application/json' });
+            }
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+
+            const accessToken : string = await this.lwaServiceClient.getAccessTokenForScope("alexa::datastore");
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/datastore/commands";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Multiple CommandsDispatchResults in response.");
+            errorDefinitions.set(400, "Request validation fails.");
+            errorDefinitions.set(401, "Not Authorized.");
+            errorDefinitions.set(403, "The skill is not allowed to execute commands.");
+            errorDefinitions.set(429, "The client has made more calls than the allowed limit.");
+            errorDefinitions.set(0, "Unexpected error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, commandsRequest, errorDefinitions);
+        }
+        
+        /**
+         * Send DataStore commands to Alexa device.
+         * @param {string} authorization 
+         * @param {services.datastore.v1.CommandsRequest} commandsRequest 
+         */
+        async commandsV1(authorization : string, commandsRequest : services.datastore.v1.CommandsRequest) : Promise<services.datastore.v1.CommandsResponse> {
+                const apiResponse: ApiResponse = await this.callCommandsV1(authorization, commandsRequest);
+                return apiResponse.body as services.datastore.v1.CommandsResponse;
+        }
+        /**
+         * Query statuses of deliveries to offline devices returned by commands API.
+         * @param {string} authorization 
+         * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
+         * @param {number} maxResults Maximum number of CommandsDispatchResult items to return.
+         * @param {string} nextToken The value of nextToken in the response to fetch next page. If not specified, the request fetches result for the first page. 
+         */
+        async callQueuedResultV1(authorization : string, queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callQueuedResultV1';
+            // verify required parameter 'authorization' is not null or undefined
+            if (authorization == null) {
+                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'queuedResultId' is not null or undefined
+            if (queuedResultId == null) {
+                throw new Error(`Required parameter queuedResultId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+            if(maxResults != null) {
+                const maxResultsValues: any[] = Array.isArray(maxResults) ? maxResults : [maxResults];
+                maxResultsValues.forEach(val => queryParams.push({ key: 'maxResults', value: val!.toString() }));
+            }
+            if(nextToken != null) {
+                const nextTokenValues: any[] = Array.isArray(nextToken) ? nextToken : [nextToken];
+                nextTokenValues.forEach(val => queryParams.push({ key: 'nextToken', value: val }));
+            }
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Authorization', value : authorization });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('queuedResultId', queuedResultId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessTokenForScope("alexa::datastore");
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/datastore/queue/{queuedResultId}";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(200, "Unordered array of CommandsDispatchResult and pagination details.");
+            errorDefinitions.set(400, "Request validation fails.");
+            errorDefinitions.set(401, "Not Authorized.");
+            errorDefinitions.set(403, "The skill is not allowed to call this API commands.");
+            errorDefinitions.set(429, "The client has made more calls than the allowed limit.");
+            errorDefinitions.set(0, "Unexpected error.");
+
+            return this.invoke("GET", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Query statuses of deliveries to offline devices returned by commands API.
+         * @param {string} authorization 
+         * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
+         * @param {number} maxResults Maximum number of CommandsDispatchResult items to return.
+         * @param {string} nextToken The value of nextToken in the response to fetch next page. If not specified, the request fetches result for the first page. 
+         */
+        async queuedResultV1(authorization : string, queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<services.datastore.v1.QueuedResultResponse> {
+                const apiResponse: ApiResponse = await this.callQueuedResultV1(authorization, queuedResultId, maxResults, nextToken);
+                return apiResponse.body as services.datastore.v1.QueuedResultResponse;
+        }
+    }
+}
 
 export namespace services.deviceAddress {
 
