@@ -498,6 +498,10 @@ export interface Context {
      */
     'Extensions'?: interfaces.alexa.extension.ExtensionsState;
     /**
+     * Provides the current state for the Alexa.DataStore.PackageManager interface.
+     */
+    'Alexa.DataStore.PackageManager'?: interfaces.alexa.datastore.packagemanager.PackageManagerState;
+    /**
      * Provides the current state for app link capability.
      */
     'AppLink'?: interfaces.applink.AppLinkState;
@@ -1160,6 +1164,36 @@ export namespace interfaces.alexa.datastore {
          * Opaque message describing the error.
          */
         'message'?: string;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Provides context about the list of packages installed on the device.
+     * @interface
+     */
+    export interface PackageManagerState {
+        /**
+         * Includes all installed packages on the device.
+         */
+        'installedPackages'?: Array<interfaces.alexa.datastore.packagemanager.PackageStateInformation>;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * State information of the DataStore package version installed on the device.
+     * @interface
+     */
+    export interface PackageStateInformation {
+        /**
+         * Unique package identifier for a client.
+         */
+        'packageId': string;
+        /**
+         * Unique version of a package.
+         */
+        'version': string;
     }
 }
 
@@ -3321,6 +3355,28 @@ export namespace interfaces.viewport.video {
 }
 
 export namespace services.datastore.v1 {
+    /**
+     *
+     * @interface
+     */
+    export interface CancelCommandsRequestError {
+        'type': services.datastore.v1.CancelCommandsRequestErrorType;
+        /**
+         * Descriptive error message.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace services.datastore.v1 {
+    /**
+     * Error code of the response. * `COMMANDS_DELIVERED` - The pending commands have been delivered. * `CONCURRENCY_ERROR` - There are concurrent attempts to deliver the pending commands. * `NOT_FOUND` - Unable to find pending request for the given queuedResultId. * `INVALID_ACCESS_TOKEN` - Access token is expire or invalid. * `DATASTORE_SUPPORT_REQUIRED` - Client has not opted into DataStore interface in skill manifest. * `TOO_MANY_REQUESTS` - The request has been throttled because client has exceed maximum allowed request rate. * `DATASTORE_UNAVAILABLE` - Internal service error.
+     * @enum
+     */
+    export type CancelCommandsRequestErrorType = 'COMMANDS_DELIVERED' | 'CONCURRENCY_ERROR' | 'NOT_FOUND' | 'INVALID_ACCESS_TOKEN' | 'DATASTORE_SUPPORT_REQUIRED' | 'TOO_MANY_REQUESTS' | 'DATASTORE_UNAVAILABLE';
+}
+
+export namespace services.datastore.v1 {
    /**
     * DataStore command which will run in DataStore.
     * @interface
@@ -3408,10 +3464,10 @@ export namespace services.datastore.v1 {
 
 export namespace services.datastore.v1 {
     /**
-     * Defines success or a type of error from dispatch. * `SUCCESS` - device has received the payload. * `INVALID_DEVICE` - device is not capable of processing the payload. * `DEVICE_UNAVAILABLE` - dispatch failed because device is offline. * `DEVICE_PERMANENTLY_UNAVAILABLE` - target no longer available to receive data. This is reported for a failed delivery attempt related to an unregistered device. * `CONCURRENCY_ERROR` - there are concurrent attempts to update to the same device. * `INTERNAL_ERROR`- dispatch failed because of unknown error - see message. 
+     * Defines success or a type of error from dispatch. * `SUCCESS` - device has received the payload. * `INVALID_DEVICE` - device is not capable of processing the payload. * `DEVICE_UNAVAILABLE` - dispatch failed because device is offline. * `DEVICE_PERMANENTLY_UNAVAILABLE` - target no longer available to receive data. This is reported for a failed delivery attempt related to an unregistered device. * `CONCURRENCY_ERROR` - there are concurrent attempts to update to the same device. * `INTERNAL_ERROR`- dispatch failed because of unknown error - see message. * `PENDING_REQUEST_COUNT_EXCEEDS_LIMIT` - the count of pending requests exceeds the limit. 
      * @enum
      */
-    export type DispatchResultType = 'SUCCESS' | 'INVALID_DEVICE' | 'DEVICE_UNAVAILABLE' | 'DEVICE_PERMANENTLY_UNAVAILABLE' | 'CONCURRENCY_ERROR' | 'INTERNAL_ERROR';
+    export type DispatchResultType = 'SUCCESS' | 'INVALID_DEVICE' | 'DEVICE_UNAVAILABLE' | 'DEVICE_PERMANENTLY_UNAVAILABLE' | 'CONCURRENCY_ERROR' | 'INTERNAL_ERROR' | 'PENDING_REQUEST_COUNT_EXCEEDS_LIMIT';
 }
 
 export namespace services.datastore.v1 {
@@ -9822,6 +9878,59 @@ export namespace services.datastore {
         async commandsV1(authorization : string, commandsRequest : services.datastore.v1.CommandsRequest) : Promise<services.datastore.v1.CommandsResponse> {
                 const apiResponse: ApiResponse = await this.callCommandsV1(authorization, commandsRequest);
                 return apiResponse.body as services.datastore.v1.CommandsResponse;
+        }
+        /**
+         * Cancel pending DataStore commands.
+         * @param {string} authorization 
+         * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
+         */
+        async callCancelCommandsV1(authorization : string, queuedResultId : string) : Promise<ApiResponse> {
+            const __operationId__ = 'callCancelCommandsV1';
+            // verify required parameter 'authorization' is not null or undefined
+            if (authorization == null) {
+                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
+            }
+            // verify required parameter 'queuedResultId' is not null or undefined
+            if (queuedResultId == null) {
+                throw new Error(`Required parameter queuedResultId was null or undefined when calling ${__operationId__}.`);
+            }
+
+            const queryParams : Array<{ key : string, value : string }> = [];
+
+            const headerParams : Array<{ key : string, value : string }> = [];
+            headerParams.push({ key : 'User-Agent', value : this.userAgent });
+            headerParams.push({ key : 'Authorization', value : authorization });
+
+
+            const pathParams : Map<string, string> = new Map<string, string>();
+            pathParams.set('queuedResultId', queuedResultId);
+
+            const accessToken : string = await this.lwaServiceClient.getAccessTokenForScope("alexa::datastore");
+            const authorizationValue = "Bearer " + accessToken;
+            headerParams.push({key : "Authorization", value : authorizationValue});
+
+            let resourcePath : string = "/v1/datastore/queue/{queuedResultId}/cancel";
+
+            const errorDefinitions : Map<number, string> = new Map<number, string>();
+            errorDefinitions.set(204, "Success. No content.");
+            errorDefinitions.set(400, "Request validation fails.");
+            errorDefinitions.set(401, "Not Authorized.");
+            errorDefinitions.set(403, "The skill is not allowed to call this API commands.");
+            errorDefinitions.set(404, "Unable to find the pending request.");
+            errorDefinitions.set(429, "The client has made more calls than the allowed limit.");
+            errorDefinitions.set(0, "Unexpected error.");
+
+            return this.invoke("POST", this.apiConfiguration.apiEndpoint, resourcePath,
+                    pathParams, queryParams, headerParams, null, errorDefinitions);
+        }
+        
+        /**
+         * Cancel pending DataStore commands.
+         * @param {string} authorization 
+         * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
+         */
+        async cancelCommandsV1(authorization : string, queuedResultId : string) : Promise<void> {
+                await this.callCancelCommandsV1(authorization, queuedResultId);
         }
         /**
          * Query statuses of deliveries to offline devices returned by commands API.
