@@ -9826,15 +9826,10 @@ export namespace services.datastore {
 
         /**
          * Send DataStore commands to Alexa device.
-         * @param {string} authorization 
          * @param {services.datastore.v1.CommandsRequest} commandsRequest 
          */
-        async callCommandsV1(authorization : string, commandsRequest : services.datastore.v1.CommandsRequest) : Promise<ApiResponse> {
+        async callCommandsV1(commandsRequest : services.datastore.v1.CommandsRequest) : Promise<ApiResponse> {
             const __operationId__ = 'callCommandsV1';
-            // verify required parameter 'authorization' is not null or undefined
-            if (authorization == null) {
-                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
-            }
             // verify required parameter 'commandsRequest' is not null or undefined
             if (commandsRequest == null) {
                 throw new Error(`Required parameter commandsRequest was null or undefined when calling ${__operationId__}.`);
@@ -9844,7 +9839,6 @@ export namespace services.datastore {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
-            headerParams.push({ key : 'Authorization', value : authorization });
 
             if(!headerParams.find((param) => param.key.toLowerCase() === 'content-type')) {
                 headerParams.push({ key : 'Content-type', value : 'application/json' });
@@ -9872,24 +9866,18 @@ export namespace services.datastore {
         
         /**
          * Send DataStore commands to Alexa device.
-         * @param {string} authorization 
          * @param {services.datastore.v1.CommandsRequest} commandsRequest 
          */
-        async commandsV1(authorization : string, commandsRequest : services.datastore.v1.CommandsRequest) : Promise<services.datastore.v1.CommandsResponse> {
-                const apiResponse: ApiResponse = await this.callCommandsV1(authorization, commandsRequest);
+        async commandsV1(commandsRequest : services.datastore.v1.CommandsRequest) : Promise<services.datastore.v1.CommandsResponse> {
+                const apiResponse: ApiResponse = await this.callCommandsV1(commandsRequest);
                 return apiResponse.body as services.datastore.v1.CommandsResponse;
         }
         /**
          * Cancel pending DataStore commands.
-         * @param {string} authorization 
          * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
          */
-        async callCancelCommandsV1(authorization : string, queuedResultId : string) : Promise<ApiResponse> {
+        async callCancelCommandsV1(queuedResultId : string) : Promise<ApiResponse> {
             const __operationId__ = 'callCancelCommandsV1';
-            // verify required parameter 'authorization' is not null or undefined
-            if (authorization == null) {
-                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
-            }
             // verify required parameter 'queuedResultId' is not null or undefined
             if (queuedResultId == null) {
                 throw new Error(`Required parameter queuedResultId was null or undefined when calling ${__operationId__}.`);
@@ -9899,7 +9887,6 @@ export namespace services.datastore {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
-            headerParams.push({ key : 'Authorization', value : authorization });
 
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -9926,25 +9913,19 @@ export namespace services.datastore {
         
         /**
          * Cancel pending DataStore commands.
-         * @param {string} authorization 
          * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
          */
-        async cancelCommandsV1(authorization : string, queuedResultId : string) : Promise<void> {
-                await this.callCancelCommandsV1(authorization, queuedResultId);
+        async cancelCommandsV1(queuedResultId : string) : Promise<void> {
+                await this.callCancelCommandsV1(queuedResultId);
         }
         /**
          * Query statuses of deliveries to offline devices returned by commands API.
-         * @param {string} authorization 
          * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
          * @param {number} maxResults Maximum number of CommandsDispatchResult items to return.
          * @param {string} nextToken The value of nextToken in the response to fetch next page. If not specified, the request fetches result for the first page. 
          */
-        async callQueuedResultV1(authorization : string, queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
+        async callQueuedResultV1(queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<ApiResponse> {
             const __operationId__ = 'callQueuedResultV1';
-            // verify required parameter 'authorization' is not null or undefined
-            if (authorization == null) {
-                throw new Error(`Required parameter authorization was null or undefined when calling ${__operationId__}.`);
-            }
             // verify required parameter 'queuedResultId' is not null or undefined
             if (queuedResultId == null) {
                 throw new Error(`Required parameter queuedResultId was null or undefined when calling ${__operationId__}.`);
@@ -9962,7 +9943,6 @@ export namespace services.datastore {
 
             const headerParams : Array<{ key : string, value : string }> = [];
             headerParams.push({ key : 'User-Agent', value : this.userAgent });
-            headerParams.push({ key : 'Authorization', value : authorization });
 
 
             const pathParams : Map<string, string> = new Map<string, string>();
@@ -9988,13 +9968,12 @@ export namespace services.datastore {
         
         /**
          * Query statuses of deliveries to offline devices returned by commands API.
-         * @param {string} authorization 
          * @param {string} queuedResultId A unique identifier to query result for queued delivery for offline devices (DEVICE_UNAVAILABLE).
          * @param {number} maxResults Maximum number of CommandsDispatchResult items to return.
          * @param {string} nextToken The value of nextToken in the response to fetch next page. If not specified, the request fetches result for the first page. 
          */
-        async queuedResultV1(authorization : string, queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<services.datastore.v1.QueuedResultResponse> {
-                const apiResponse: ApiResponse = await this.callQueuedResultV1(authorization, queuedResultId, maxResults, nextToken);
+        async queuedResultV1(queuedResultId : string, maxResults? : number, nextToken? : string) : Promise<services.datastore.v1.QueuedResultResponse> {
+                const apiResponse: ApiResponse = await this.callQueuedResultV1(queuedResultId, maxResults, nextToken);
                 return apiResponse.body as services.datastore.v1.QueuedResultResponse;
         }
     }
