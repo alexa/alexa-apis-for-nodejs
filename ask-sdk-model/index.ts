@@ -466,6 +466,10 @@ export interface Context {
      */
     'System': interfaces.system.SystemState;
     /**
+     * Provides the current state for the Alexa.Presentation interface.
+     */
+    'Alexa.Presentation'?: interfaces.alexa.presentation.PresentationState;
+    /**
      * Provides the current state for the Alexa.Presentation.APL interface.
      */
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.RenderedDocumentState;
@@ -604,7 +608,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | interfaces.alexa.datastore.DataStoreError | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
+export type Request = interfaces.alexa.datastore.packagemanager.InstallationError | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | interfaces.alexa.datastore.DataStoreError | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.datastore.packagemanager.UpdateRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.alexa.datastore.packagemanager.UsagesRemoved | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | interfaces.alexa.datastore.packagemanager.UsagesInstalled | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -1148,6 +1152,23 @@ export namespace interfaces.alexa.datastore {
 
 export namespace interfaces.alexa.datastore {
     /**
+     * Type of error. Modules can also use this event to report global error like permission denied. Supported values [STORAGE_LIMIT_EXCEEDED, PERMISSION_DENIED, VALIDATION_ERROR, DATASTORE_INTERNAL_ERROR]
+     * @interface
+     */
+    export interface Error {
+        /**
+         * Type of error. Modules can also use this event to report global error like permission denied
+         */
+        'type': string;
+        /**
+         * Opaque payload which will contain additional details about error.
+         */
+        'content'?: any;
+    }
+}
+
+export namespace interfaces.alexa.datastore {
+    /**
      * Content of an execution error.
      * @interface
      */
@@ -1169,6 +1190,72 @@ export namespace interfaces.alexa.datastore {
 
 export namespace interfaces.alexa.datastore.packagemanager {
     /**
+     * Interface using which skills communicate with DataStore Package Manager on the device.
+     * @interface
+     */
+    export interface AlexaDataStorePackageManagerInterface {
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Type of package error. Allowed values are [INTERNAL_ERROR]
+     * @enum
+     */
+    export type ErrorType = 'INTERNAL_ERROR';
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Location where the package can be rendered on the device.
+     * @enum
+     */
+    export type Locations = 'FAVORITE';
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Information of the package that is being installed on the device.
+     * @interface
+     */
+    export interface Package {
+        /**
+         * Version of a package manifest schema. Currently supported schema version is 1.0.
+         */
+        'packageVersion': string;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Additional information about the package installation/update error.
+     * @interface
+     */
+    export interface PackageError {
+        'type': interfaces.alexa.datastore.packagemanager.ErrorType;
+        /**
+         * Opaque payload which will contain additional details about error.
+         */
+        'content'?: any;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Places where the package is going to be used on the device. This object is passed as part of the InstallRequest to the skill.
+     * @interface
+     */
+    export interface PackageInstallUsage {
+        'location': interfaces.alexa.datastore.packagemanager.Locations;
+        /**
+         * Identifier of the instance of the package.
+         */
+        'instanceId'?: string;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
      * Provides context about the list of packages installed on the device.
      * @interface
      */
@@ -1177,6 +1264,20 @@ export namespace interfaces.alexa.datastore.packagemanager {
          * Includes all installed packages on the device.
          */
         'installedPackages'?: Array<interfaces.alexa.datastore.packagemanager.PackageStateInformation>;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Places where the package is going to be not used anymore on the device. This object is passed as part of the PackageRemovedRequest to the skill.
+     * @interface
+     */
+    export interface PackageRemoveUsage {
+        'location': interfaces.alexa.datastore.packagemanager.Locations;
+        /**
+         * Identifier of the instance of the package.
+         */
+        'instanceId'?: string;
     }
 }
 
@@ -1194,6 +1295,48 @@ export namespace interfaces.alexa.datastore.packagemanager {
          * Unique version of a package.
          */
         'version': string;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Information about the package that is going to be installed on the device and also where its going to be used on the device.
+     * @interface
+     */
+    export interface UsagesInstallRequest {
+        /**
+         * Unique package identifier for a client.
+         */
+        'packageId': string;
+        /**
+         * Version of a package being installed on the device.
+         */
+        'packageVersion': string;
+        /**
+         * Areas where package is going to be used on the device.
+         */
+        'usages': Array<interfaces.alexa.datastore.packagemanager.PackageInstallUsage>;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * Information about where the package has been removed and where its not being used anymore.
+     * @interface
+     */
+    export interface UsagesRemovedRequest {
+        /**
+         * Unique package identifier for a client.
+         */
+        'packageId': string;
+        /**
+         * Version of a package being removed from the device.
+         */
+        'packageVersion': string;
+        /**
+         * Areas where package is going to be not used on the device.
+         */
+        'usages': Array<interfaces.alexa.datastore.packagemanager.PackageRemoveUsage>;
     }
 }
 
@@ -1259,6 +1402,27 @@ export namespace interfaces.alexa.extension {
          */
         'available': { [key: string]: interfaces.alexa.extension.AvailableExtension; };
     }
+}
+
+export namespace interfaces.alexa.presentation {
+    /**
+     * Provides context about presentations at the time of the request.
+     * @interface
+     */
+    export interface PresentationState {
+        /**
+         * Includes all presentation contexts owned by the skill which were perceptible at the time of the request.
+         */
+        'contexts'?: Array<interfaces.alexa.presentation.PresentationStateContext>;
+    }
+}
+
+export namespace interfaces.alexa.presentation {
+   /**
+    *
+    * @interface
+    */
+    export type PresentationStateContext = interfaces.alexa.presentation.AplPresentationStateContext;
 }
 
 export namespace interfaces.alexa.presentation.apl {
@@ -5577,6 +5741,128 @@ export namespace interfaces.alexa.datastore {
     export interface StorageLimitExeceededError {
         'type' : 'STORAGE_LIMIT_EXCEEDED';
         'content': interfaces.alexa.datastore.ExecutionErrorContent;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * This event is sent by device DataStore Package Manager to let the skill developer know that there was a problem installing/updating the package.
+     * @interface
+     */
+    export interface InstallationError {
+        'type' : 'Alexa.DataStore.PackageManager.InstallationError';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        /**
+         * Unique package identifier for a client.
+         */
+        'packageId': string;
+        /**
+         * Current version of the package trying to be installed/updated on the device.
+         */
+        'version': string;
+        'error': interfaces.alexa.datastore.packagemanager.PackageError;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * This event is request sent by device DataStore Package Manager asking the skill developer them to update the version of the package on device.
+     * @interface
+     */
+    export interface UpdateRequest {
+        'type' : 'Alexa.DataStore.PackageManager.UpdateRequest';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        /**
+         * Unique package identifier for a client.
+         */
+        'packageId': string;
+        /**
+         * Current version of a package installed on the device.
+         */
+        'fromVersion': string;
+        /**
+         * Latest version of a package being installed on the device.
+         */
+        'toVersion': string;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * This event is sent by device DataStore Package Manager to the skill developer to let them know about the usages of the packages being installed on the device.
+     * @interface
+     */
+    export interface UsagesInstalled {
+        'type' : 'Alexa.DataStore.PackageManager.UsagesInstalled';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        'payload': interfaces.alexa.datastore.packagemanager.UsagesInstallRequest;
+    }
+}
+
+export namespace interfaces.alexa.datastore.packagemanager {
+    /**
+     * This event is sent by device DataStore Package Manager to let the skill developer know about the usages of packages removed from the device.
+     * @interface
+     */
+    export interface UsagesRemoved {
+        'type' : 'Alexa.DataStore.PackageManager.UsagesRemoved';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        'payload': interfaces.alexa.datastore.packagemanager.UsagesRemovedRequest;
+    }
+}
+
+export namespace interfaces.alexa.presentation {
+    /**
+     *
+     * @interface
+     */
+    export interface AplPresentationStateContext {
+        'type' : 'Alexa.Presentation.APL';
+        'context'?: interfaces.alexa.presentation.apl.RenderedDocumentState;
     }
 }
 
