@@ -544,7 +544,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.conversations.ResetContextDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.alexa.smartvision.snapshotprovider.GetSnapshotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.conversations.ResetContextDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
 
 /**
  * An object that represents what the user wants.
@@ -7955,6 +7955,20 @@ export namespace interfaces.alexa.presentation.html {
         'transformers'?: Array<interfaces.alexa.presentation.html.Transformer>;
         'request': interfaces.alexa.presentation.html.StartRequest;
         'configuration': interfaces.alexa.presentation.html.Configuration;
+    }
+}
+
+export namespace interfaces.alexa.smartvision.snapshotprovider {
+    /**
+     * This directive is used to request latest snapshot from camera skill on a particular endpoint.
+     * @interface
+     */
+    export interface GetSnapshotDirective {
+        'type' : 'Alexa.SmartVision.SnapshotProvider.GetSnapshotDirective';
+        /**
+         * This property defines that an on-demand snapshot is preferred over  a cached snapshot from camera skill.
+         */
+        'preferOnDemandSnapshot'?: boolean;
     }
 }
 
