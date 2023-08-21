@@ -544,7 +544,7 @@ export type DialogState = 'STARTED' | 'IN_PROGRESS' | 'COMPLETED';
  *
  * @interface
  */
-export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.alexa.smartvision.snapshotprovider.GetSnapshotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.conversations.ResetContextDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
+export type Directive = interfaces.customInterfaceController.StopEventHandlerDirective | interfaces.navigation.assistance.AnnounceRoadRegulation | interfaces.connections.SendRequestDirective | dialog.DynamicEntitiesDirective | interfaces.customInterfaceController.StartEventHandlerDirective | interfaces.gadgetController.SetLightDirective | interfaces.alexa.presentation.apl.SendIndexListDataDirective | dialog.DelegateDirective | dialog.ConfirmIntentDirective | interfaces.alexa.advertisement.InjectAds | interfaces.customInterfaceController.SendDirectiveDirective | interfaces.alexa.presentation.html.HandleMessageDirective | interfaces.alexa.presentation.apla.RenderDocumentDirective | dialog.ElicitSlotDirective | interfaces.alexa.presentation.html.StartDirective | interfaces.alexa.smartvision.snapshotprovider.GetSnapshotDirective | interfaces.audioplayer.StopDirective | dialog.ConfirmSlotDirective | interfaces.audioplayer.PlayDirective | interfaces.alexa.presentation.apl.ExecuteCommandsDirective | interfaces.display.RenderTemplateDirective | interfaces.conversations.ResetContextDirective | dialog.DelegateRequestDirective | interfaces.display.HintDirective | interfaces.connections.V1.StartConnectionDirective | interfaces.alexa.presentation.aplt.RenderDocumentDirective | interfaces.gameEngine.StartInputHandlerDirective | interfaces.videoapp.LaunchDirective | interfaces.alexa.presentation.aplt.ExecuteCommandsDirective | interfaces.gameEngine.StopInputHandlerDirective | interfaces.tasks.CompleteTaskDirective | interfaces.alexa.presentation.apl.RenderDocumentDirective | interfaces.connections.SendResponseDirective | interfaces.alexa.presentation.apl.SendTokenListDataDirective | interfaces.audioplayer.ClearQueueDirective | interfaces.alexa.presentation.apl.UpdateIndexListDataDirective;
 
 /**
  * An object that represents what the user wants.
@@ -608,7 +608,7 @@ export interface Person {
  * A request object that provides the details of the user’s request. The request body contains the parameters necessary for the service to perform its logic and generate a response.
  * @interface
  */
-export type Request = interfaces.alexa.datastore.packagemanager.InstallationError | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | interfaces.alexa.datastore.DataStoreError | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.datastore.packagemanager.UpdateRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.alexa.datastore.packagemanager.UsagesRemoved | events.skillevents.NotificationSubscriptionChangedRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | interfaces.alexa.datastore.packagemanager.UsagesInstalled | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
+export type Request = interfaces.alexa.advertisement.AdNotRendered | interfaces.alexa.datastore.packagemanager.InstallationError | events.skillevents.SkillEnabledRequest | services.listManagement.ListUpdatedEventRequest | interfaces.alexa.presentation.apl.UserEvent | events.skillevents.SkillDisabledRequest | services.listManagement.ListItemsCreatedEventRequest | SessionResumedRequest | SessionEndedRequest | interfaces.alexa.presentation.apl.LoadIndexListDataEvent | interfaces.alexa.presentation.apl.LoadTokenListDataEvent | interfaces.audioplayer.PlaybackFailedRequest | canfulfill.CanFulfillIntentRequest | interfaces.customInterfaceController.ExpiredRequest | interfaces.alexa.presentation.html.MessageRequest | interfaces.alexa.datastore.DataStoreError | LaunchRequest | authorization.AuthorizationGrantRequest | services.reminderManagement.ReminderCreatedEventRequest | interfaces.alexa.presentation.aplt.UserEvent | interfaces.alexa.advertisement.ReadyToEnqueueAudio | services.listManagement.ListItemsUpdatedEventRequest | services.listManagement.ListCreatedEventRequest | interfaces.audioplayer.PlaybackStartedRequest | interfaces.audioplayer.PlaybackNearlyFinishedRequest | interfaces.customInterfaceController.EventsReceivedRequest | services.reminderManagement.ReminderStatusChangedEventRequest | services.listManagement.ListItemsDeletedEventRequest | services.reminderManagement.ReminderDeletedEventRequest | interfaces.connections.ConnectionsResponse | services.listManagement.ListDeletedEventRequest | interfaces.gameEngine.InputHandlerEventRequest | interfaces.playbackcontroller.PauseCommandIssuedRequest | interfaces.playbackcontroller.PlayCommandIssuedRequest | interfaces.audioplayer.PlaybackFinishedRequest | events.skillevents.ProactiveSubscriptionChangedRequest | interfaces.display.ElementSelectedRequest | events.skillevents.PermissionChangedRequest | services.reminderManagement.ReminderUpdatedEventRequest | interfaces.alexa.advertisement.AdCompleted | interfaces.alexa.datastore.packagemanager.UpdateRequest | interfaces.alexa.presentation.apl.RuntimeErrorEvent | interfaces.alexa.presentation.html.RuntimeErrorRequest | dialog.InputRequest | IntentRequest | interfaces.alexa.datastore.packagemanager.UsagesRemoved | events.skillevents.NotificationSubscriptionChangedRequest | interfaces.conversations.APIInvocationRequest | services.reminderManagement.ReminderStartedEventRequest | interfaces.audioplayer.PlaybackStoppedRequest | interfaces.playbackcontroller.PreviousCommandIssuedRequest | interfaces.alexa.datastore.packagemanager.UsagesInstalled | events.skillevents.AccountLinkedRequest | interfaces.messaging.MessageReceivedRequest | interfaces.connections.ConnectionsRequest | interfaces.system.ExceptionEncounteredRequest | events.skillevents.PermissionAcceptedRequest | interfaces.playbackcontroller.NextCommandIssuedRequest | interfaces.alexa.presentation.apla.RuntimeErrorEvent;
 
 /**
  * Request wrapper for all requests sent to your Skill.
@@ -783,6 +783,7 @@ export interface Status {
  * @interface
  */
 export interface SupportedInterfaces {
+    'Alexa.Advertisement'?: interfaces.alexa.advertisement.AlexaAdvertisementInterface;
     'Alexa.Presentation.APL'?: interfaces.alexa.presentation.apl.AlexaPresentationAplInterface;
     'Alexa.Presentation.APLT'?: interfaces.alexa.presentation.aplt.AlexaPresentationApltInterface;
     'Alexa.Presentation.HTML'?: interfaces.alexa.presentation.html.AlexaPresentationHtmlInterface;
@@ -1132,6 +1133,40 @@ export namespace events.skillevents {
     export interface ProactiveSubscriptionEvent {
         'eventName'?: string;
     }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * The interface provides skills with the ability to seamlessly integrate advertisements during their interactions with users.
+     * @interface
+     */
+    export interface AlexaAdvertisementInterface {
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * The object encapsulates information regarding the reasons why the ad is not being rendered.
+     * @interface
+     */
+    export interface Reason {
+        /**
+         * The enum represents various details explaining why the ad is not being rendered.
+         */
+        'type'?: interfaces.alexa.advertisement.ReasonCode;
+        /**
+         * The message provides an explanation of the specific details as to why the ad is not being rendered.
+         */
+        'message'?: string;
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * The enum represents various details explaining why the ad is not being rendered.
+     * @enum
+     */
+    export type ReasonCode = 'DEVICE_OCCUPIED' | 'UNSUPPORTED_DEVICE' | 'SKILL_DAILY_CAP_LIMIT_REACHED' | 'DOMAIN_DAILY_CAP_LIMIT_REACHED' | 'INTERNAL_SERVER_ERROR' | 'AD_NOT_AVAILABLE';
 }
 
 export namespace interfaces.alexa.comms.messagingcontroller {
@@ -5723,6 +5758,102 @@ export namespace events.skillevents {
         'locale'?: string;
         'eventCreationTime'?: string;
         'eventPublishingTime'?: string;
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * The skill receives this event when the ad playback is finished. More details: https://tiny.amazon.com/tbfio2ru/wamazbinviewAlexTeamASKTInSk
+     * @interface
+     */
+    export interface AdCompleted {
+        'type' : 'Alexa.Advertisement.AdCompleted';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        /**
+         * The current token representing the ad stream being played.
+         */
+        'token'?: string;
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * The skill receives this event when the ad cannot be displayed or played due to certain reasons. More details: https://tiny.amazon.com/16bnoj5db/wamazbinviewAlexTeamASKTInSk
+     * @interface
+     */
+    export interface AdNotRendered {
+        'type' : 'Alexa.Advertisement.AdNotRendered';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        /**
+         * The object encapsulates information regarding the reasons why the ad is not being rendered.
+         */
+        'reason'?: interfaces.alexa.advertisement.Reason;
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     *
+     * @interface
+     */
+    export interface InjectAds {
+        'type' : 'Alexa.Advertisement.InjectAds';
+        /**
+         * The optional expected previous token represents the content currently being played, and it is utilized to enqueue the advertisement after the ongoing audio content. More details: https://tiny.amazon.com/l9h6ejjr/wamazbinviewAlexTeamASKTInSk
+         */
+        'expectedPreviousToken'?: string;
+    }
+}
+
+export namespace interfaces.alexa.advertisement {
+    /**
+     * This event is sent to the skill as a signal that it can enqueue the next audio content in the audio player. This allows the third-party skill to resume content playback after the advertisement.
+     * @interface
+     */
+    export interface ReadyToEnqueueAudio {
+        'type' : 'Alexa.Advertisement.ReadyToEnqueueAudio';
+        /**
+         * Represents the unique identifier for the specific request.
+         */
+        'requestId': string;
+        /**
+         * Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
+         */
+        'timestamp': string;
+        /**
+         * A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
+         */
+        'locale'?: string;
+        /**
+         * The token currently representing the ad stream being played can be used as the expectedPreviousToken in the AudioPlayer.Play directive. This allows the skill to enqueue the next content seamlessly after the ad stream.
+         */
+        'token'?: string;
+        /**
+         * The expectedPreviousToken passed in the InjectAds request, which can be utilized by a skill to maintain an ordered list and find the next content from the current content.
+         */
+        'previousToken'?: string;
     }
 }
 
